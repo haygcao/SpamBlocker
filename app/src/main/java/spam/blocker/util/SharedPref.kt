@@ -79,9 +79,8 @@ class Global(ctx: Context) : SharedPref(ctx) {
     fun isSmsEnabled(): Boolean { return readBoolean(Def.SETTING_SMS_ENABLED, true) }
     fun setSmsEnabled(enabled: Boolean) { writeBoolean(Def.SETTING_SMS_ENABLED, enabled) }
 
-    fun isDarkTheme(): Boolean { return readBoolean(Def.SETTING_DARK_THEME, false) }
-    fun setDarkTheme(enabled: Boolean) { writeBoolean(Def.SETTING_DARK_THEME, enabled) }
-    fun toggleDarkTheme() { setDarkTheme(!isDarkTheme()) }
+    fun getThemeType(): Int { return readInt(Def.SETTING_THEME_TYPE, 0) }
+    fun setThemeType(type: Int) { writeInt(Def.SETTING_THEME_TYPE, type) }
 
     fun getLanguage(): String { return readString(Def.SETTING_LANGUAGE, "en") }
     fun setLanguage(lang: String) { writeString(Def.SETTING_LANGUAGE, lang) }
@@ -94,6 +93,12 @@ class Global(ctx: Context) : SharedPref(ctx) {
     }
     fun setAskedForAllPermission() {
         writeBoolean(Def.SETTING_REQUIRE_PERMISSION_ONCE, true)
+    }
+    fun hasPromptedForRunningInWorkProfile(): Boolean {
+        return readBoolean(Def.SETTING_WARN_RUNNING_IN_WORK_PROFILE_ONCE, false)
+    }
+    fun setPromptedForRunningInWorkProfile() {
+        writeBoolean(Def.SETTING_WARN_RUNNING_IN_WORK_PROFILE_ONCE, true)
     }
 
     fun getShowPassed(): Boolean {
