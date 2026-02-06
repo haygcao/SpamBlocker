@@ -33,6 +33,7 @@ import spam.blocker.service.bot.QuickTile
 import spam.blocker.service.bot.SmsEvent
 import spam.blocker.service.bot.SmsThrottling
 import spam.blocker.service.bot.executeAll
+import spam.blocker.ui.theme.DimGrey
 import spam.blocker.ui.theme.Emerald
 import spam.blocker.ui.theme.LightMagenta
 import spam.blocker.ui.theme.Salmon
@@ -193,7 +194,7 @@ class Checker { // for namespace only
                 ctx.getString(R.string.checking_template)
                     .formatAnnotated(
                         ctx.getString(R.string.emergency_call).A(SkyBlue),
-                        priority().toString().A(LightMagenta)
+                        ctx.getString(R.string.max).A(LightMagenta)
                     )
             )
             if (callDetails == null) {// there is no callDetail when testing
@@ -226,7 +227,7 @@ class Checker { // for namespace only
 
         override fun check(cCtx: CheckContext): ICheckResult? {
             val spf = spf.EmergencySituation(ctx)
-            if (!spf.isEnabled())
+            if (!spf.isEnabled)
                 return null
 
             val logger = cCtx.logger
@@ -235,20 +236,20 @@ class Checker { // for namespace only
                 ctx.getString(R.string.checking_template)
                     .formatAnnotated(
                         ctx.getString(R.string.emergency_situation).A(SkyBlue),
-                        priority().toString().A(LightMagenta)
+                        ctx.getString(R.string.max).A(LightMagenta)
                     )
             )
 
             // 1. check time
-            val lastEccCallTime: Long = spf.getTimestamp()
-            val duration: Long = (spf.getDuration() * 60 * 1000).toLong()
+            val lastEccCallTime: Long = spf.timestamp
+            val duration: Long = (spf.duration * 60 * 1000).toLong()
             val now = System.currentTimeMillis()
             if (lastEccCallTime + duration < now) {
                 return null
             }
 
             // 2. check STIR
-            val isStirEnabled = spf.isStirEnabled()
+            val isStirEnabled = spf.isStirEnabled
             if (isStirEnabled && callDetails != null) { // only check for real call, there is no `callDetails` when testing
                 val stir = callDetails.callerNumberVerificationStatus
                 val fail = stir == Connection.VERIFICATION_STATUS_FAILED
@@ -269,7 +270,7 @@ class Checker { // for namespace only
         private val ctx: Context,
     ) : IChecker {
         override fun priority(): Int {
-            return spf.Stir(ctx).getPriority()
+            return spf.Stir(ctx).priority
         }
 
         override fun check(cCtx: CheckContext): ICheckResult? {
@@ -277,7 +278,7 @@ class Checker { // for namespace only
             val callDetails = cCtx.callDetails
 
             val spf = spf.Stir(ctx)
-            if (!spf.isEnabled())
+            if (!spf.isEnabled)
                 return null
 
             logger?.debug(
@@ -300,7 +301,7 @@ class Checker { // for namespace only
                 return null
             }
 
-            val includeUnverified = spf.isIncludeUnverified()
+            val includeUnverified = spf.isIncludeUnverified
 
             val stir = callDetails.callerNumberVerificationStatus
 
@@ -326,14 +327,14 @@ class Checker { // for namespace only
         private val ctx: Context,
     ) : IChecker {
         override fun priority(): Int {
-            return spf.SpamDB(ctx).getPriority()
+            return spf.SpamDB(ctx).priority
         }
 
         override fun check(cCtx: CheckContext): ICheckResult? {
             val rawNumber = cCtx.rawNumber
             val logger = cCtx.logger
 
-            val enabled = spf.SpamDB(ctx).isEnabled()
+            val enabled = spf.SpamDB(ctx).isEnabled
             if (!enabled)
                 return null
 
@@ -383,11 +384,11 @@ class Checker { // for namespace only
     ) : IChecker {
         override fun priority(): Int {
             val spf = spf.Contact(ctx)
-            val isStrict = spf.isStrict()
+            val isStrict = spf.isStrict
             return if (isStrict)
-                spf.getStrictPriority()
+                spf.strictPriority
             else
-                spf.getLenientPriority()
+                spf.lenientPriority
         }
 
         override fun check(cCtx: CheckContext): ICheckResult? {
@@ -396,7 +397,7 @@ class Checker { // for namespace only
 
             val spf = spf.Contact(ctx)
 
-            if (!spf.isEnabled() or !Permission.contacts.isGranted) {
+            if (!spf.isEnabled or !Permission.contacts.isGranted) {
                 return null
             }
             logger?.debug(
@@ -415,7 +416,7 @@ class Checker { // for namespace only
                 )
                 return ByContact(Def.RESULT_ALLOWED_BY_CONTACT, contact.name)
             } else { // not contact
-                if (spf.isStrict()) {
+                if (spf.isStrict) {
                     val ret = ByContact(RESULT_BLOCKED_BY_NON_CONTACT)
                     logger?.error(
                         ctx.getString(R.string.blocked_by).format(
@@ -445,7 +446,7 @@ class Checker { // for namespace only
             val canReadSMSs = Permission.readSMS.isGranted
 
             val spf = spf.RepeatedCall(ctx)
-            if (!spf.isEnabled() || (!canReadCalls && !canReadSMSs)) {
+            if (!spf.isEnabled || (!canReadCalls && !canReadSMSs)) {
                 return null
             }
             logger?.debug(
@@ -456,9 +457,9 @@ class Checker { // for namespace only
                     )
             )
 
-            val times = spf.getTimes()
-            val durationMinutes = spf.getInXMin()
-            val smsEnabled = spf.isSmsEnabled()
+            val times = spf.times
+            val durationMinutes = spf.inXMin
+            val smsEnabled = spf.isSmsEnabled
 
             val durationMillis = durationMinutes.toLong() * 60 * 1000
 
@@ -506,7 +507,7 @@ class Checker { // for namespace only
             }
 
 
-            logger?.debug("${ctx.getString(R.string.call)}: $nCalls, ${ctx.getString(R.string.sms)}: $nSMSs")
+            logger?.debug("${ctx.getString(R.string.call)}: $nCalls, ${ctx.getString(R.string.sms)}: $nSMSs".A(DimGrey))
 
             // check
             if (nCalls + nSMSs >= times) {
@@ -531,7 +532,7 @@ class Checker { // for namespace only
             val logger = cCtx.logger
 
             val spf = spf.Dialed(ctx)
-            if (!spf.isEnabled())
+            if (!spf.isEnabled)
                 return null
 
             logger?.debug(
@@ -542,8 +543,8 @@ class Checker { // for namespace only
                     )
             )
 
-            val smsEnabled = spf.isSmsEnabled()
-            val durationDays = spf.getDays()
+            val smsEnabled = spf.isSmsEnabled
+            val durationDays = spf.days
 
             val durationMillis = durationDays.toLong() * 24 * 3600 * 1000
 
@@ -564,7 +565,7 @@ class Checker { // for namespace only
                 )
             else
                 0
-            logger?.debug("${ctx.getString(R.string.call)}: $nCalls, ${ctx.getString(R.string.sms)}: $nSMSs")
+            logger?.debug("${ctx.getString(R.string.call)}: $nCalls, ${ctx.getString(R.string.sms)}: $nSMSs".A(DimGrey))
 
             if (nCalls + nSMSs > 0) {
                 logger?.success(
@@ -588,7 +589,7 @@ class Checker { // for namespace only
             val logger = cCtx.logger
 
             val spf = spf.Answered(ctx)
-            if (!spf.isEnabled())
+            if (!spf.isEnabled)
                 return null
 
             logger?.debug(
@@ -599,8 +600,8 @@ class Checker { // for namespace only
                     )
             )
 
-            val minDuration = spf.getMinDuration()
-            val durationDays = spf.getDays()
+            val minDuration = spf.minDuration
+            val durationDays = spf.days
 
             val durationMillis = durationDays.toLong() * 24 * 3600 * 1000
 
@@ -615,7 +616,7 @@ class Checker { // for namespace only
                 it.duration >= minDuration
             }.size
 
-            logger?.debug("${ctx.getString(R.string.call)}: $nCalls")
+            logger?.debug("${ctx.getString(R.string.call)}: $nCalls".A(DimGrey))
 
             if (nCalls > 0) {
                 logger?.success(
@@ -638,7 +639,7 @@ class Checker { // for namespace only
             val logger = cCtx.logger
 
             val spf = spf.OffTime(ctx)
-            if (!spf.isEnabled()) {
+            if (!spf.isEnabled) {
                 return null
             }
             logger?.debug(
@@ -649,10 +650,10 @@ class Checker { // for namespace only
                     )
             )
 
-            val stHour = spf.getStartHour()
-            val stMin = spf.getStartMin()
-            val etHour = spf.getEndHour()
-            val etMin = spf.getEndMin()
+            val stHour = spf.startHour
+            val stMin = spf.startMin
+            val etHour = spf.endHour
+            val etMin = spf.endMin
 
             // Entire day
             if (stHour == etHour && stMin == etMin) {
@@ -698,7 +699,7 @@ class Checker { // for namespace only
                     )
             )
 
-            val duration = spf.getInXMin() // in minutes
+            val duration = spf.inXMin // in minutes
 
             // To avoid querying db for each app, aggregate them by duration, like:
             //  pkg.a,pkg.b@20,pkg.c
@@ -736,7 +737,7 @@ class Checker { // for namespace only
     ) : IChecker {
         override fun priority(): Int {
             val spf = spf.MeetingMode(ctx)
-            return spf.getPriority()
+            return spf.priority
         }
 
         override fun check(cCtx: CheckContext): ICheckResult? {
@@ -786,7 +787,7 @@ class Checker { // for namespace only
         private val forType: Int, // for call or sms
     ) : IChecker {
         override fun priority(): Int {
-            return spf.ApiQueryOptions(ctx).getPriority()
+            return spf.ApiQueryOptions(ctx).priority
         }
 
         override fun check(cCtx: CheckContext): ICheckResult? {
@@ -1304,9 +1305,9 @@ class Checker { // for namespace only
             val spf = spf.PushAlert(ctx)
 
             // Following information is updated by NotificationMonitorService when receiving notifications.
-            val pkgName = spf.getPkgName()
-            val body = spf.getBody()
-            val expireTime: Long = spf.getExpireTime() // millis
+            val pkgName = spf.pkgName
+            val body = spf.body
+            val expireTime: Long = spf.expireTime // millis
 
             val now = System.currentTimeMillis()
 
@@ -1335,7 +1336,7 @@ class Checker { // for namespace only
             val logger = cCtx.logger
 
             val spf = spf.SmsAlert(ctx)
-            if (!spf.isEnabled()) {
+            if (!spf.isEnabled) {
                 return null
             }
             logger?.debug(
@@ -1346,8 +1347,8 @@ class Checker { // for namespace only
                     )
             )
 
-            val duration = spf.getDuration().toLong() * 1000 // second * 1000 -> millis
-            val receiveSmsTimestamp = spf.getTimestamp() // the time it received that SMS
+            val duration = spf.duration.toLong() * 1000 // second * 1000 -> millis
+            val receiveSmsTimestamp = spf.timestamp // the time it received that SMS
             val expire = receiveSmsTimestamp + duration
 
             val now = Now.currentMillis()
@@ -1374,7 +1375,7 @@ class Checker { // for namespace only
             val logger = cCtx.logger
 
             val spf = spf.SmsBomb(ctx)
-            if (!spf.isEnabled()) {
+            if (!spf.isEnabled) {
                 return null
             }
             logger?.debug(
@@ -1386,8 +1387,8 @@ class Checker { // for namespace only
             )
 
             // 1. check if regex matches
-            val regex = spf.getRegexStr()
-            val flags = spf.getRegexFlags()
+            val regex = spf.regexStr
+            val flags = spf.regexFlags
             val matches = regex.regexMatches(cCtx.smsContent!!, flags)
             if (!matches) {
                 return null
@@ -1395,21 +1396,21 @@ class Checker { // for namespace only
 
             var blockIt = false
             // 2. check if lockscreen protect on
-            if (spf.isLockScreenProtectionEnabled() && Util.isDeviceLocked(ctx)) {
+            if (spf.isLockScreenProtectionEnabled && Util.isDeviceLocked(ctx)) {
                 blockIt = true
             }
 
             // 3. check if within interval
             val now = Now.currentMillis()
-            val lastBombTime = spf.getTimestamp()
-            val interval = spf.getInterval() // in seconds
+            val lastBombTime = spf.timestamp
+            val interval = spf.interval // in seconds
 
             if (lastBombTime + interval*1000 > now) {
                 blockIt = true
             }
 
             // 4. save the last bomb time
-            spf.setTimestamp(Now.currentMillis())
+            spf.timestamp = Now.currentMillis()
 
             if (blockIt) {
                 logger?.error(
