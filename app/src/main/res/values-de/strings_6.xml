@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        Es tut uns leid, die App ist abgestürzt.\n\n
-        Bitte kopieren Sie den Inhalt unten und melden Sie dieses Problem auf Github,
-        entfernen Sie alle sensiblen Informationen, bevor Sie sie melden.
+    <![CDATA[
+        Entschuldigung, die App ist abgestürzt. <br>
+        <br>
+        Bitte kopieren Sie den untenstehenden Inhalt und melden Sie dieses Problem auf GitHub,
+        entfernen Sie vorher alle sensiblen Informationen.
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>So</item>
@@ -21,13 +24,7 @@
     <string name="days">Tage</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        Wenn aktiviert, wird der SMS-Inhalt ebenfalls in der Datenbank protokolliert und in dieser Liste angezeigt, er wird nicht in der Datenbank protokolliert, wenn er deaktiviert ist.<br>
-        <br>
-        - Wenn aktiviert:<br>
-        &emsp; <b>Tippen</b> Sie, um die vollständige Nachricht zu erweitern/einzuklappen.<br>
-        <br>
-        - Wenn deaktiviert:<br>
-        &emsp; <b>Tippen</b> Sie, um die Konversation in der Standard-App zu öffnen.
+        Wenn aktiviert, wird der SMS-Inhalt ebenfalls in der Datenbank protokolliert und in dieser Liste angezeigt, er wird nicht in der Datenbank protokolliert, wenn er deaktiviert ist.
         ]]>
     </string>
 
@@ -73,5 +70,4 @@
     <string name="copy_number">Nummer kopieren</string>
     <string name="add_num_to_regex_rule">Nummer zu Regex-Regel hinzufügen</string>
     <string name="add_num_to_db">Nummer zur Spam-Datenbank hinzufügen</string>
-    <string name="mark_all_as_read">Alle als gelesen markieren</string>
 </resources>

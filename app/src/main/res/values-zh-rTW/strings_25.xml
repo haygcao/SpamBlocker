@@ -54,4 +54,61 @@
          那麼您可以在後續的 HTTP 查詢中使用 <font color="#03DAC5">{my_token}</font>。<br>
     ]]>
     </string>
+    <string name="max"><short>最大</short></string>
+    <string name="exporting_database">
+    <![CDATA[
+        正在從資料庫匯出 %s 個號碼，這可能需要大約 %s 秒。
+    ]]>
+    </string>
+    <string name="time_color">時間顏色</string>
+    <string name="help_time_color">
+    <![CDATA[
+        根據記錄的新舊程度，以不同顏色突顯時間戳記。 <br>
+        <br>
+        <b>使用情境</b>: <br>
+        &ensp; <font color="#888888">在夜間檢視今天的通話，透過檢查所有藍色時間戳記的記錄。 </font>
+    ]]>
+    </string>
+    <string name="help_time_color_values">
+    <![CDATA[
+        必須是 <font color="#00BFFF"><no_translate>today</no_translate></font> 或者是一個數字後接 <b><no_translate>min</no_translate></b>
+        （例如 <font color="#00BFFF"><no_translate>5min</no_translate></font>，
+        <font color="#00BFFF"><no_translate>120min</no_translate></font>）
+    ]]>
+    </string>
+    <string name="invalid_value_see_tooltip">無效的值，請參閱工具提示以獲得說明</string>
+    <string name="faq"><short>常見問答</short></string>
+    <string name="faq_priority">
+    <![CDATA[
+        每個過濾器都有其優先權值，顧名思義，它決定檢查通話的順序。 <br>
+        <br>
+        預設情況下， <br>
+        <br>
+        - <font color="#03DAC5">白名單規則</font> 的優先權為 <font color="#ea86ff">10</font> <br>
+        &ensp; <font color="#888888">例如：聯絡人、重複通話、最近使用的應用程式等 </font><br>
+        <br>
+        - <font color="#fa7f71">黑名單規則</font> 的優先權為 <font color="#ea86ff">0</font> <br>
+        &ensp; <font color="#888888">例如：STIR、資料庫等 </font> <br>
+        <br>
+        當兩者同時啟用時，白名單規則會覆蓋黑名單規則，因為 10 > 0。 <br>
+        <br>
+        對於正規表達式規則，優先權可設定為介於 <font color="#ea86ff">-2147483648</font>
+          與 <font color="#ea86ff">2147483647</font> 之間的任意數字。 <br>
+        只要屬於相同類型，不同規則可以擁有相同的優先權，然而，<font color="#ffa500"><b>千萬不要同時為白名單與黑名單規則設定相同的優先權</b></font>，否則可能導致不穩定的行為。 <br>
+        <br>
+        功能 <font color="#00BFFF">會議模式</font> 的預設優先權為 <font color="#ea86ff">20</font>，因為它應在會議期間阻擋所有通話。 <br>
+        而 <font color="#00BFFF">即時查詢</font> 的優先權為 <font color="#ea86ff">-1</font>，因此僅在通話通過所有本地過濾器後才會被檢查。 <br>
+        <br>
+        <b>自訂優先權的使用情境</b>： <br>
+        <br>
+        - <font color="#888888">始終阻擋特定號碼，無論是否重複</font> <br>
+         &ensp; 設定優先權大於 10 的規則以覆蓋 <font color="#00BFFF">重複通話</font>。 <br>
+        <br>
+        - <font color="#888888">始終允許某個號碼</font> <br>
+         &ensp; 設定優先權大於 20 以覆蓋 <font color="#00BFFF">會議模式</font>。 <br>
+        <br>
+        - <font color="#888888">測試正規表達式規則</font> <br>
+         &ensp; 設定為 999 可覆蓋所有其他過濾器，免於逐一暫時停用它們。
+    ]]>
+    </string>
 </resources>

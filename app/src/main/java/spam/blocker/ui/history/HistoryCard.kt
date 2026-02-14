@@ -34,7 +34,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.db.HistoryRecord
 import spam.blocker.db.listReportableAPIs
@@ -42,6 +41,8 @@ import spam.blocker.service.bot.ActionContext
 import spam.blocker.service.bot.executeAll
 import spam.blocker.service.checker.parseCheckResultFromDb
 import spam.blocker.ui.M
+import spam.blocker.ui.history.HistoryOptions.forceShowSIM
+import spam.blocker.ui.history.HistoryOptions.showHistoryGeoLocation
 import spam.blocker.ui.setting.api.spamCategoryNamesMap
 import spam.blocker.ui.setting.api.tagValid
 import spam.blocker.ui.theme.LocalPalette
@@ -57,6 +58,9 @@ import spam.blocker.ui.widgets.SimCardIcon
 import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.util.Contacts
 import spam.blocker.util.JetpackTextLogger
+import spam.blocker.util.TimeUtils.FreshnessColor
+import spam.blocker.util.TimeUtils.formatTime
+import spam.blocker.util.TimeUtils.timeColor
 import spam.blocker.util.Util
 import spam.blocker.util.logi
 import androidx.compose.foundation.Image as ComposeImage
@@ -131,6 +135,7 @@ fun HistoryCard(
     record: HistoryRecord,
     indicators: Indicators,
     simCount: Int,
+    timeColors: List<FreshnessColor>?,
     modifier: Modifier,
 ) {
     val C = LocalPalette.current
@@ -193,7 +198,7 @@ fun HistoryCard(
                     }
 
                     // Row 2: Geo Location
-                    if (G.showHistoryGeoLocation.value) {
+                    if (showHistoryGeoLocation.value) {
                         val loc = Util.numberGeoLocation(ctx, record.peer)
                         loc?.let {
                             Text(
@@ -224,17 +229,22 @@ fun HistoryCard(
                         .heightIn(ItemHeight.dp)
                 ) {
                     // SIM slot icon
-                    if ((simCount >= 2 || G.forceShowSIM.value) && record.simSlot != null) {
+                    if ((simCount >= 2 || forceShowSIM.value) && record.simSlot != null) {
                         SimCardIcon(
                             record.simSlot,
                         )
                     }
 
                     // time
+                    val color = if (timeColors.isNullOrEmpty()) {
+                        C.textGrey
+                    } else {
+                        timeColor(record.time, timeColors) ?: C.textGrey
+                    }
                     Text(
-                        text = Util.formatTime(ctx, record.time),
+                        text = formatTime(ctx, record.time),
                         fontSize = 14.sp,
-                        color = C.textGrey,
+                        color = color,
                         textAlign = TextAlign.Center,
                     )
                 }

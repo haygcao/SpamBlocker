@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        Maaf, aplikasi mengalami masalah.\n\n
-        Silakan salin isian di bawah ini dan laporkan masalah ini di github,
-        hapus informasi sensitif apa pun sebelum melaporkan.
+    <![CDATA[
+        Maaf, aplikasi telah mengalami crash. <br>
+        <br>
+        Silakan salin konten di bawah ini dan laporkan masalah ini di GitHub,
+        hapus informasi sensitif sebelum melaporkan.
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>Minggu</item>
@@ -21,19 +24,12 @@
     <string name="days">Hari</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        Jika diaktifkan, isi SMS juga akan masuk ke dalam basis data dan ditampilkan dalam daftar ini, namun tidak akan masuk ke dalam basis data jika dinonaktifkan.<br>
-        <br>
-        - Jika diaktifkan:<br>
-        &emsp; <b>Ketuk</b> untuk memperluas/memperkecil pesan keseluruhan.<br>
-        <br>
-        - Jika dinonaktifkan:<br>
-        &emsp; <b>Ketuk</b> untuk membuka percakapan di aplikasi default.
+        Jika diaktifkan, isi SMS juga akan masuk ke dalam basis data dan ditampilkan dalam daftar ini, namun tidak akan masuk ke dalam basis data jika dinonaktifkan.
         ]]>
     </string>
     <string name="copy_number">Salin nomor</string>
     <string name="add_num_to_regex_rule">Tambahkan nomor ke aturan regex</string>
     <string name="add_num_to_db">Tambahkan nomor ke basis data spam</string>
-    <string name="mark_all_as_read">Tandai semua telah dibaca</string>
     <string name="remove_db_number">Hapus nomor dari basis data spam</string>
 
     <string name="language">Bahasa</string>

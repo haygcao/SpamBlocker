@@ -54,4 +54,63 @@
          dann können Sie <font color="#03DAC5">{my_token}</font> in nachfolgenden HTTP-Anfragen verwenden. <br>
     ]]>
     </string>
+    <string name="max"><short>Max</short></string>
+    <string name="exporting_database">
+    <![CDATA[
+        Exportiere %s Nummern aus der Datenbank, das kann etwa %s Sekunden dauern.
+    ]]>
+    </string>
+    <string name="time_color">Zeitfarbe</string>
+    <string name="help_time_color">
+    <![CDATA[
+        Markieren Sie den Zeitstempel in verschiedenen Farben, basierend darauf, wie aktuell der Eintrag ist. <br>
+        <br>
+        <b>Anwendungsfall</b>: <br>
+        &ensp; <font color="#888888">Überprüfen Sie die heutigen Anrufe nachts, indem Sie alle Einträge mit einem blauen Zeitstempel prüfen. </font>
+    ]]>
+    </string>
+    <string name="help_time_color_values">
+    <![CDATA[
+        Muss entweder <font color="#00BFFF"><no_translate>today</no_translate></font> oder
+        eine Zahl gefolgt von <b><no_translate>min</no_translate></b>
+        (z. B. <font color="#00BFFF"><no_translate>5min</no_translate></font>,
+        <font color="#00BFFF"><no_translate>120min</no_translate></font>)
+    ]]>
+    </string>
+    <string name="invalid_value_see_tooltip">Ungültiger Wert, siehe den Tooltip für Hilfe</string>
+    <string name="faq"><short>FAQ</short></string>
+    <string name="faq_priority">
+    <![CDATA[
+        Jeder Filter hat einen Prioritätswert, wie der Begriff impliziert, bestimmt er die Reihenfolge, in der der Anruf geprüft wird. <br>
+        <br>
+        Standardmäßig, <br>
+        <br>
+        - <font color="#03DAC5">Whitelist-Regeln</font> haben Priorität <font color="#ea86ff">10</font> <br>
+        &ensp; <font color="#888888">z. B. Kontakte, RepeatedCall, RecentApps, usw. </font><br>
+        <br>
+        - <font color="#fa7f71">Blacklist-Regeln</font> haben Priorität <font color="#ea86ff">0</font> <br>
+        &ensp; <font color="#888888">z. B. STIR, Datenbank, usw. </font> <br>
+        <br>
+        Wenn beide aktiviert sind, überschreiben Whitelist-Regeln die Blacklist-Regeln, da 10 > 0. <br>
+        <br>
+        Für Regex-Regeln kann die Priorität auf jede Zahl zwischen <font color="#ea86ff">-2147483648</font>
+          und <font color="#ea86ff">2147483647</font> gesetzt werden. <br>
+        Verschiedene Regeln können dieselbe Priorität haben, solange sie vom gleichen Typ sind, jedoch <font color="#ffa500"><b>niemals dieselbe Priorität sowohl für Whitelist- als auch für Blacklist-Regeln vergeben</b></font>, da dies zu zufälligem Verhalten führen kann. <br>
+        <br>
+        Die Funktion <font color="#00BFFF">Meeting Mode</font> hat standardmäßig Priorität <font color="#ea86ff">20</font>, weil sie alle Anrufe während einer Besprechung blockieren soll. <br>
+        Und <font color="#ea86ff">-1</font> für <font color="#00BFFF">Instant Query</font>,
+          sodass sie erst geprüft wird, nachdem der Anruf alle lokalen Filter durchlaufen hat. <br>
+        <br>
+        <b>Anwendungsfälle</b> für die Anpassung der Priorität: <br>
+        <br>
+        - <font color="#888888">Immer eine bestimmte Nummer blockieren, egal ob sie wiederholt wird</font> <br>
+         &ensp; Setze eine Regel mit Priorität > 10, um <font color="#00BFFF">Repeated Call</font> zu überschreiben. <br>
+        <br>
+        - <font color="#888888">Immer eine Nummer zulassen</font> <br>
+         &ensp; Setze sie auf > 20, um <font color="#00BFFF">Meeting Mode</font> zu überschreiben. <br>
+        <br>
+        - <font color="#888888">Eine Regex-Regel testen</font> <br>
+         &ensp; Setze sie auf 999, um alle anderen Filter zu überschreiben, damit du sie nicht einzeln temporär deaktivieren musst.
+    ]]>
+    </string>
 </resources>

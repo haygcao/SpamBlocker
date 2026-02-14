@@ -54,4 +54,65 @@
          alors vous pouvez utiliser <font color="#03DAC5">{my_token}</font> dans les requêtes HTTP suivantes. <br>
     ]]>
     </string>
+    <string name="max"><short>Max</short></string>
+    <string name="exporting_database">
+    <![CDATA[
+        Exportation de %s numéros depuis la base de données, cela peut prendre environ %s secondes.
+    ]]>
+    </string>
+    <string name="time_color">Couleur du temps</string>
+    <string name="help_time_color">
+    <![CDATA[
+        Mettre en surbrillance l\'horodatage avec différentes couleurs en fonction de la récence de l\'enregistrement. <br>
+        <br>
+        <b>Cas d\'utilisation</b> : <br>
+        &ensp; <font color="#888888">Revoir les appels d\'aujourd\'hui la nuit en vérifiant tous les enregistrements avec un horodatage bleu. </font>
+    ]]>
+    </string>
+    <string name="help_time_color_values">
+    <![CDATA[
+        Doit être soit <font color="#00BFFF"><no_translate>today</no_translate></font> ou
+        un nombre suivi de <b><no_translate>min</no_translate></b>
+        (par ex. <font color="#00BFFF"><no_translate>5min</no_translate></font>,
+        <font color="#00BFFF"><no_translate>120min</no_translate></font>)
+    ]]>
+    </string>
+    <string name="invalid_value_see_tooltip">Valeur invalide, voir l\'infobulle pour obtenir de l\'aide</string>
+    <string name="faq"><short>FAQ</short></string>
+    <string name="faq_priority">
+    <![CDATA[
+        Chaque filtre possède une valeur de priorité, comme le terme l\'indique, elle détermine l\'ordre dans lequel l\'appel est vérifié. <br>
+        <br>
+        Par défaut, <br>
+        <br>
+        - <font color="#03DAC5">règles de liste blanche</font> ont une priorité <font color="#ea86ff">10</font> <br>
+        &ensp; <font color="#888888">Par ex. Contacts, RepeatedCall, RecentApps, etc </font><br>
+        <br>
+        - <font color="#fa7f71">règles de liste noire</font> ont une priorité <font color="#ea86ff">0</font> <br>
+        &ensp; <font color="#888888">Par ex. STIR, Database, etc </font> <br>
+        <br>
+        Lorsqu\'elles sont toutes les deux activées, les règles de liste blanche prévalent sur les règles de liste noire car 10 > 0. <br>
+        <br>
+        Pour les règles regex, la priorité peut être définie à n\'importe quel nombre entre <font color="#ea86ff">-2147483648</font>
+          et <font color="#ea86ff">2147483647</font>. <br>
+        Des règles différentes peuvent avoir la même priorité tant qu\'elles sont du même type, cependant,
+          <font color="#ffa500"><b>n\'attribuez jamais la même priorité aux règles de liste blanche et de liste noire</b></font>, cela peut entraîner un comportement aléatoire. <br>
+        <br>
+        La fonctionnalité <font color="#00BFFF">Mode Réunion</font> a une priorité <font color="#ea86ff">20</font> par défaut,
+          car elle doit bloquer tous les appels pendant une réunion. <br>
+        Et <font color="#ea86ff">-1</font> pour <font color="#00BFFF">Recherche Instantanée</font>,
+          de sorte qu\'elle ne soit vérifiée qu\'après que l\'appel a traversé tous les filtres locaux. <br>
+        <br>
+        <b>Cas d\'utilisation</b> de la personnalisation de la priorité : <br>
+        <br>
+        - <font color="#888888">Bloquer toujours un number particulier, quel que soit le nombre de répétitions</font> <br>
+         &ensp; Définissez une règle avec une priorité > 10 pour remplacer <font color="#00BFFF">Appel Répété</font>. <br>
+        <br>
+        - <font color="#888888">Autoriser toujours un number</font> <br>
+         &ensp; Définissez-la à > 20 pour remplacer <font color="#00BFFF">Mode Réunion</font>. <br>
+        <br>
+        - <font color="#888888">Tester une règle regex</font> <br>
+         &ensp; Définissez-la à 999 pour remplacer tous les autres filtres afin de ne pas devoir les désactiver temporairement un par un.
+    ]]>
+    </string>
 </resources>

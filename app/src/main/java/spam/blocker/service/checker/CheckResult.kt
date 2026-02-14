@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -68,16 +69,18 @@ import spam.blocker.ui.widgets.GreyText
 import spam.blocker.ui.widgets.RowVCenterSpaced
 import spam.blocker.ui.widgets.Str
 import spam.blocker.ui.widgets.StrokeButton
+import spam.blocker.util.A
 import spam.blocker.util.AppIcon
 import spam.blocker.util.Notification.ShowType
 import spam.blocker.util.Notification.missingChannel
 import spam.blocker.util.PermissiveJson
 import spam.blocker.util.PermissivePrettyJson
+import spam.blocker.util.Util.highlightMatchedText
 import spam.blocker.util.spf
 
 
 @Composable
-fun ExtraInfoWithDivider(text: String, maxLines: Int) {
+fun ExtraInfoWithDivider(text: AnnotatedString, maxLines: Int) {
     val C = LocalPalette.current
 
     if(text.isNotEmpty() && maxLines > 0) {
@@ -121,6 +124,7 @@ interface ICheckResult {
     @Composable
     fun ExpandedContent(forType: Int, record: HistoryRecord) {
         val ctx = LocalContext.current
+        val C = LocalPalette.current
 
         when(forType) {
             // "Report Number" button
@@ -147,10 +151,9 @@ interface ICheckResult {
             Def.ForSms -> {
                 val smsContent = record.extraInfo
                 if (smsContent != null) {
-                    val initialSmsRows = spf.HistoryOptions(ctx).getInitialSmsRowCount()
                     ExtraInfoWithDivider(
-                        text = smsContent,
-                        maxLines = if (record.expanded) Int.MAX_VALUE else initialSmsRows,
+                        text = smsContent.A(),
+                        maxLines = if (record.expanded) Int.MAX_VALUE else spf.HistoryOptions(ctx).initialSmsRowCount,
                     )
                 }
             }
@@ -163,7 +166,7 @@ interface ICheckResult {
 
     // For "Answer + Hang up", returns the delay before "Hang Up"
     fun hangUpDelay(ctx: Context): Int {
-        return spf.BlockType(ctx).getDelay().toIntOrNull() ?: DEFAULT_HANG_UP_DELAY
+        return spf.BlockType(ctx).delay.toIntOrNull() ?: DEFAULT_HANG_UP_DELAY
     }
 
     // Prepare the content to be saved in database, as the `HistoryTable.reason` column
@@ -173,7 +176,7 @@ interface ICheckResult {
 
     // The default block type when it's not overridden by per rule block type.
     fun getBlockType(ctx: Context): Int {
-        return spf.BlockType(ctx).getType()
+        return spf.BlockType(ctx).type
     }
 
     // The default notification channel for default call/sms, when it's not overridden by per rule type
@@ -182,9 +185,9 @@ interface ICheckResult {
         val spf = spf.Notification(ctx)
 
         val channelId = when (showType) {
-            ShowType.SPAM_CALL -> spf.getSpamCallChannelId()
-            ShowType.SPAM_SMS -> spf.getSpamSmsChannelId()
-            ShowType.VALID_SMS -> spf.getValidSmsChannelId()
+            ShowType.SPAM_CALL -> spf.spamCallChannelId
+            ShowType.SPAM_SMS -> spf.spamSmsChannelId
+            ShowType.VALID_SMS -> spf.validSmsChannelId
         }
 
         val channel = ChannelTable.findByChannelId(ctx, channelId)
@@ -232,9 +235,9 @@ class ByContact(
 
     override fun resultReasonStr(ctx: Context): String {
         return if (type == RESULT_ALLOWED_BY_CONTACT)
-            ctx.getString(R.string.contacts)
+            ctx.getString(R.string.contact)
         else
-            ctx.getString(R.string.non_contacts)
+            ctx.getString(R.string.non_contact)
     }
 }
 
@@ -404,7 +407,7 @@ class ByApiQuery(
                 echo
             }
             ExtraInfoWithDivider(
-                text = prettyEcho,
+                text = prettyEcho.A(),
                 maxLines = 20,
             )
         }
@@ -457,6 +460,39 @@ class ByRegexRule(
 
         return ChannelTable.findByChannelId(ctx, rule.channel)
             ?: missingChannel()
+    }
+
+    // Highlight keywords that blocked the SMS (if it's blocked by content regex rule)
+    @Composable
+    override fun ExpandedContent(forType: Int, record: HistoryRecord) {
+        val ctx = LocalContext.current
+        val C = LocalPalette.current
+
+        when(forType) {
+            Def.ForSms -> {
+                val smsContent = record.extraInfo
+                val isBySmsRule = type in listOf(
+                    RESULT_ALLOWED_BY_CONTENT_RULE,
+                    RESULT_BLOCKED_BY_CONTENT_RULE
+                )
+
+                if (smsContent != null && isBySmsRule && rule != null) {
+                    ExtraInfoWithDivider(
+                        text = highlightMatchedText(
+                            text = smsContent,
+                            regexStr = rule.pattern,
+                            regexFlags = rule.patternFlags,
+                            wildcardColor = if(rule.isBlacklist) C.block else C.pass,
+                            textColor = C.textGrey
+                        ),
+                        maxLines = if (record.expanded) Int.MAX_VALUE else spf.HistoryOptions(ctx).initialSmsRowCount,
+                    )
+                } else {
+                    super.ExpandedContent(forType, record)
+                }
+            }
+            else -> super.ExpandedContent(forType, record)
+        }
     }
 
     override fun resultReasonStr(ctx: Context): String {

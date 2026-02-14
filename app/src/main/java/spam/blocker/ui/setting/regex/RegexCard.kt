@@ -19,6 +19,9 @@ import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.db.RegexRule
 import spam.blocker.def.Def
+import spam.blocker.def.Def.FLAG_REGEX_FOR_CNAP
+import spam.blocker.def.Def.ForNumber
+import spam.blocker.def.Def.ForSms
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.quick.ChannelIcons
 import spam.blocker.ui.theme.LightMagenta
@@ -65,7 +68,7 @@ fun RegexCard(
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         modifier = M.padding(top = 2.dp),
-                        maxLines = spf.getMaxRegexRows(),
+                        maxLines = spf.maxRegexRows,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
@@ -75,7 +78,7 @@ fun RegexCard(
                     Text(
                         text = rule.description,
                         fontSize = 18.sp,
-                        maxLines = spf.getMaxDescRows(),
+                        maxLines = spf.maxDescRows,
                         overflow = TextOverflow.Ellipsis,
                         color = C.textGrey,
                         modifier = M.padding(start = 10.dp),
@@ -124,8 +127,19 @@ fun RegexCard(
                 RowVCenterSpaced(space = 8) {
 
                     // [NotifyType]
-                    val ch = G.notificationChannels.find { it.channelId == rule.channel }
-                    ChannelIcons(ch?.importance, ch?.mute)
+                    val forCNAP = forType == ForNumber && rule.patternFlags.hasFlag(FLAG_REGEX_FOR_CNAP)
+                    val applyToSms = rule.isForSms()
+
+                    val visible = when (forType) {
+                        ForNumber -> rule.isBlacklist || (!forCNAP && applyToSms)
+                        ForSms   -> true
+                        else     -> false
+                    }
+
+                    if (visible) {
+                        val ch = G.notificationChannels.find { it.channelId == rule.channel }
+                        ChannelIcons(ch?.importance, ch?.mute)
+                    }
 
                     // [Priority]
                     ResIcon(R.drawable.ic_priority, color = LightMagenta, modifier = M.size(18.dp).offset(6.dp))

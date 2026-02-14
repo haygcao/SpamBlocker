@@ -54,4 +54,64 @@
          то ви можете використовувати <font color="#03DAC5">{my_token}</font> у наступних HTTP-запитах. <br>
     ]]>
     </string>
+    <string name="max"><short>Макс</short></string>
+    <string name="exporting_database">
+    <![CDATA[
+        Експортування %s номерів з бази даних, це може зайняти приблизно %s секунд.
+    ]]>
+    </string>
+    <string name="time_color">Колір часу</string>
+    <string name="help_time_color">
+    <![CDATA[
+        Виділіть мітку часу різними кольорами залежно від того, наскільки нещодавній запис. <br>
+        <br>
+        <b>Випадок використання</b>: <br>
+        &ensp; <font color="#888888">Перегляньте сьогоднішні дзвінки вночі, перевіряючи всі записи з синьою міткою часу. </font>
+    ]]>
+    </string>
+    <string name="help_time_color_values">
+    <![CDATA[
+        Повинно бути або <font color="#00BFFF"><no_translate>today</no_translate></font>, або число, за яким слідує <b><no_translate>min</no_translate></b>
+        (наприклад, <font color="#00BFFF"><no_translate>5min</no_translate></font>,
+        <font color="#00BFFF"><no_translate>120min</no_translate></font>)
+    ]]>
+    </string>
+    <string name="invalid_value_see_tooltip">Недійсне значення, перегляньте підказку для допомоги</string>
+    <string name="faq"><short>ЧаП</short></string>
+    <string name="faq_priority">
+    <![CDATA[
+        Кожен фільтр має значення пріоритету, як випливає з назви, воно визначає порядок, у якому перевіряється дзвінок. <br>
+        <br>
+        За замовчуванням, <br>
+        <br>
+        - <font color="#03DAC5">Whitelist rules</font> мають пріоритет <font color="#ea86ff">10</font> <br>
+        &ensp; <font color="#888888">Напр. Контакти, RepeatedCall, RecentApps тощо </font><br>
+        <br>
+        - <font color="#fa7f71">Blacklist rules</font> мають пріоритет <font color="#ea86ff">0</font> <br>
+        &ensp; <font color="#888888">Напр. STIR, Database тощо </font> <br>
+        <br>
+        Коли вони обидва ввімкнені, правила білого списку переважають правила чорного списку, оскільки 10 > 0. <br>
+        <br>
+        Для правил regex пріоритет можна встановити будь‑яким числом між <font color="#ea86ff">-2147483648</font>
+          і <font color="#ea86ff">2147483647</font>. <br>
+        Різні правила можуть мати однаковий пріоритет, доки вони одного типу, проте
+          <font color="#ffa500"><b>ніколи не присвоюйте однаковий пріоритет одночасно правилам білого та чорного списків</b></font>, це може спричинити випадкову поведінку. <br>
+        <br>
+        Функція <font color="#00BFFF">Meeting Mode</font> має пріоритет <font color="#ea86ff">20</font> за замовчуванням,
+          тому вона повинна блокувати будь‑які дзвінки під час зустрічі. <br>
+        А <font color="#ea86ff">-1</font> для <font color="#00BFFF">Instant Query</font>,
+          тому вона перевіряється лише після того, як дзвінок пройшов усі локальні фільтри. <br>
+        <br>
+        <b>Випадки використання</b> налаштування пріоритету: <br>
+        <br>
+        - <font color="#888888">Завжди блокувати певний номер, незалежно від того, чи повторюється</font> <br>
+         &ensp; Встановіть правило з пріоритетом > 10, щоб переважити <font color="#00BFFF">Repeated Call</font>. <br>
+        <br>
+        - <font color="#888888">Завжди дозволяти номер</font> <br>
+         &ensp; Встановіть його > 20, щоб переважити <font color="#00BFFF">Meeting Mode</font>. <br>
+        <br>
+        - <font color="#888888">Перевірити правило regex</font> <br>
+         &ensp; Встановіть його 999, щоб переважити всі інші фільтри, щоб не доводилось тимчасово вимикати їх по одному.
+    ]]>
+    </string>
 </resources>

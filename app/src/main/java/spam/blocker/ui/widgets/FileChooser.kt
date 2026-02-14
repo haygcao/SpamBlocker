@@ -10,7 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import spam.blocker.util.Lambda1
 import spam.blocker.util.Lambda2
 import spam.blocker.util.Util.basename
 import spam.blocker.util.Util.getFilename
@@ -29,7 +28,6 @@ class FileWriteChooser {
     private lateinit var launcher : ManagedActivityResultLauncher<Intent, ActivityResult>
 
     private lateinit var content: ByteArray
-    private var onResult: Lambda1<Boolean>? = null
 
     @Composable
     fun Compose() {
@@ -41,10 +39,7 @@ class FileWriteChooser {
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data?.also { uri ->
                     writeDataToUri(ctx, uri, content)
-                    onResult?.invoke(true)
                 }
-            } else {
-                onResult?.invoke(false)
             }
         }
     }
@@ -52,10 +47,8 @@ class FileWriteChooser {
     fun popup(
         filename: String,
         content: ByteArray,
-        onResult: Lambda1<Boolean>? = null
     ) {
         this.content = content
-        this.onResult = onResult
 
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
@@ -72,6 +65,7 @@ class FileWriteChooser {
 fun rememberFileWriteChooser() : FileWriteChooser {
     return remember { FileWriteChooser() }
 }
+
 
 
 // Show file choose dialog, load data from the selected file

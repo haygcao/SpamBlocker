@@ -27,8 +27,6 @@ import spam.blocker.util.BotJson
 import spam.blocker.util.Lambda1
 import java.util.UUID
 
-// The row:
-//         ? [Test] [New]
 @Composable
 fun BotHeader(
     vm: BotViewModel,
@@ -46,7 +44,8 @@ fun BotHeader(
         G.botVM.reload(ctx)
 
         // 3. expand the list
-        vm.listCollapsed.value = false
+        if(vm.listCollapsed.value)
+            vm.toggleCollapse(ctx)
 
         // 4. re-schedule it
         reScheduleBot(ctx, newBot)
@@ -118,7 +117,7 @@ fun BotHeader(
             },
             LabelItem(
                 label = ctx.getString(R.string.import_),
-                leadingIcon = { GreyIcon(R.drawable.ic_backup_import) }
+                leadingIcon = { GreyIcon(R.drawable.ic_import) }
             ) {
                 importTrigger.value = true
             },

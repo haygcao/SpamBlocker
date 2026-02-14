@@ -54,4 +54,65 @@
          allora puoi usare <font color="#03DAC5">{my_token}</font> nelle query HTTP successive. <br>
     ]]>
     </string>
+    <string name="max"><short>Max</short></string>
+    <string name="exporting_database">
+    <![CDATA[
+        Esportazione di %s numeri dal database, potrebbe richiedere circa %s secondi.
+    ]]>
+    </string>
+    <string name="time_color">Colore del tempo</string>
+    <string name="help_time_color">
+    <![CDATA[
+        Evidenzia il timestamp in colori diversi in base a quanto è recente il record. <br>
+        <br>
+        <b>Caso d\'uso</b>: <br>
+        &ensp; <font color="#888888">Rivedi le chiamate di oggi di notte controllando tutti i record con un timestamp blu. </font>
+    ]]>
+    </string>
+    <string name="help_time_color_values">
+    <![CDATA[
+        Deve essere o <font color="#00BFFF"><no_translate>today</no_translate></font> o
+        un numero seguito da <b><no_translate>min</no_translate></b>
+        (ad es. <font color="#00BFFF"><no_translate>5min</no_translate></font>,
+        <font color="#00BFFF"><no_translate>120min</no_translate></font>)
+    ]]>
+    </string>
+    <string name="invalid_value_see_tooltip">Valore non valido, vedere il tooltip per aiuto</string>
+    <string name="faq"><short>FAQ</short></string>
+    <string name="faq_priority">
+    <![CDATA[
+        Ogni filtro ha il suo valore di priorità; come suggerisce il termine, determina l\'ordine in cui la chiamata viene controllata. <br>
+        <br>
+        Per impostazione predefinita, <br>
+        <br>
+        - <font color="#03DAC5">Whitelist rules</font> hanno priorità <font color="#ea86ff">10</font> <br>
+        &ensp; <font color="#888888">Ad es. Contatti, RepeatedCall, RecentApps, ecc </font><br>
+        <br>
+        - <font color="#fa7f71">Blacklist rules</font> hanno priorità <font color="#ea86ff">0</font> <br>
+        &ensp; <font color="#888888">Ad es. STIR, Database, ecc </font> <br>
+        <br>
+        Quando sono entrambe abilitate, le regole della whitelist sovrascrivono quelle della blacklist poiché 10 > 0. <br>
+        <br>
+        Per le regole regex, la priorità può essere impostata a qualsiasi numero compreso tra <font color="#ea86ff">-2147483648</font>
+          e <font color="#ea86ff">2147483647</font>. <br>
+        Regole diverse possono avere la stessa priorità finché sono dello stesso tipo, tuttavia,
+          <font color="#ffa500"><b>non assegnare mai la stessa priorità sia alle regole della whitelist sia a quelle della blacklist</b></font>, poiché può causare comportamenti casuali. <br>
+        <br>
+        La funzionalità <font color="#00BFFF">Meeting Mode</font> ha priorità <font color="#ea86ff">20</font> per impostazione predefinita,
+          poiché dovrebbe bloccare tutte le chiamate durante una riunione. <br>
+        E <font color="#ea86ff">-1</font> per <font color="#00BFFF">Instant Query</font>,
+          così viene controllata solo dopo che la chiamata ha superato tutti i filtri locali. <br>
+        <br>
+        <b>Casi d\'uso</b> per personalizzare la priorità: <br>
+        <br>
+        - <font color="#888888">Blocca sempre un numero specifico, indipendentemente dal fatto che si ripeta</font> <br>
+         &ensp; Imposta una regola con priorità > 10 per sovrascrivere <font color="#00BFFF">Repeated Call</font>. <br>
+        <br>
+        - <font color="#888888">Consenti sempre un numero</font> <br>
+         &ensp; Impostala a > 20 per sovrascrivere <font color="#00BFFF">Meeting Mode</font>. <br>
+        <br>
+        - <font color="#888888">Testa una regola regex</font> <br>
+         &ensp; Impostala a 999 per sovrascrivere tutti gli altri filtri, così non dovrai disabilitarli temporaneamente uno per uno.
+    ]]>
+    </string>
 </resources>

@@ -29,6 +29,8 @@ import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.def.Def
 import spam.blocker.ui.M
+import spam.blocker.ui.history.HistoryOptions.showHistoryBlocked
+import spam.blocker.ui.history.HistoryOptions.showHistoryPassed
 import spam.blocker.ui.history.HistoryScreen
 import spam.blocker.ui.setting.SettingScreen
 import spam.blocker.ui.theme.AppTheme
@@ -70,16 +72,22 @@ class MainActivity : ComponentActivity() {
         val spf = spf.Global(ctx)
 
         // language
-        Util.setLocale(ctx, spf.getLanguage())
+        Util.setLocale(ctx, spf.language)
 
-        val lastTab = spf.getActiveTab()
+        val lastTab = spf.activeTab
 
         G.bottomBarVM = BottomBarViewModel(
-            onTabSelected = { spf.setActiveTab(it) },
+            onTabSelected = { spf.activeTab = it },
             onTabReSelected = {
                 when (it) {
-                    Def.CALL_TAB_ROUTE -> Launcher.launchCallApp(this)
-                    Def.SMS_TAB_ROUTE -> Launcher.launchSMSApp(this)
+                    Def.CALL_TAB_ROUTE -> {Launcher.launchCallApp(this)}
+                    Def.SMS_TAB_ROUTE -> {Launcher.launchSMSApp(this)}
+                }
+            },
+            onTabLeave = {
+                when (it) {
+                    Def.CALL_TAB_ROUTE -> G.callVM.markAllAsRead(this)
+                    Def.SMS_TAB_ROUTE -> G.smsVM.markAllAsRead(this)
                 }
             },
             tabItems = listOf(
@@ -146,7 +154,7 @@ class MainActivity : ComponentActivity() {
         val ctx = LocalContext.current
 
         // Load all records to show unread badge in the bottom bar.
-        LaunchedEffect(G.showHistoryPassed.value, G.showHistoryBlocked.value) {
+        LaunchedEffect(showHistoryPassed.value, showHistoryBlocked.value) {
             G.callVM.reload(ctx)
             G.smsVM.reload(ctx)
         }
@@ -201,7 +209,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun checkWorkProfile() {
         val spf = spf.Global(this)
-        val alreadyShown by remember { mutableStateOf(spf.hasPromptedForRunningInWorkProfile()) }
+        val alreadyShown by remember { mutableStateOf(spf.hasPromptedForRunningInWorkProfile) }
         val runningInWorkProf by remember { mutableStateOf(Util.isRunningInWorkProfile(this)) }
 
         val trigger = remember {
@@ -220,7 +228,7 @@ class MainActivity : ComponentActivity() {
                         color = DarkOrange,
                     ) {
                         trigger.value = false
-                        spf.setPromptedForRunningInWorkProfile()
+                        spf.hasPromptedForRunningInWorkProfile = true
                     }
                 }
             )

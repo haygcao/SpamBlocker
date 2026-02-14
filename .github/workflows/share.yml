@@ -3,29 +3,34 @@ name: Share regex/workflow on wiki
 on:
   issues:
     types: [opened, edited, deleted]
+  workflow_dispatch:
+
 
 permissions:
   contents: write
 
 jobs:
   collect-issues:
-    if: github.event.action == 'deleted' || contains(github.event.issue.labels.*.name, 'share regex/workflow') 
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event.action == 'deleted' ||
+      contains(github.event.issue.labels.*.name, 'share regex/workflow') 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version: '24'
 
       - name: Install Dependencies
-        run: npm install @actions/core @actions/github
+        run: npm install @actions/core@1.11.1 @actions/github@6.0.0
 
       - name: Run Collection Script
         id: collect
-        run: node .github/workflows/share.js
+        run: node .github/workflows/share.cjs
         env:
           GITHUB_TOKEN: ${{ secrets.SYNC_TOKEN }}
 

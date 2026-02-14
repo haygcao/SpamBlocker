@@ -36,6 +36,7 @@ import spam.blocker.ui.setting.bot.BotHeader
 import spam.blocker.ui.setting.bot.BotList
 import spam.blocker.ui.setting.misc.About
 import spam.blocker.ui.setting.misc.BackupRestore
+import spam.blocker.ui.setting.misc.FAQ
 import spam.blocker.ui.setting.misc.Language
 import spam.blocker.ui.setting.misc.Theme
 import spam.blocker.ui.setting.quick.Answered
@@ -97,7 +98,7 @@ fun SettingScreen() {
     val spf = spf.Global(ctx)
     var alsoShowText by remember {
         mutableStateOf(
-            isFreshInstall(ctx) && !spf.isTestIconClicked()
+            isFreshInstall(ctx) && !spf.isTestIconClicked
         )
     }
     FabWrapper(
@@ -108,13 +109,12 @@ fun SettingScreen() {
                     text = if (alsoShowText) ctx.getString(R.string.title_rule_testing) else null,
                     iconId = R.drawable.ic_tube,
                     iconColor = White,
-                    iconSize = 36,
                     bgColor = Teal200,
                     modifier = positionModifier
                 ) {
                     testingTrigger.value = true
 
-                    spf.setTestIconClicked(true)
+                    spf.isTestIconClicked = true
                     alsoShowText = false
                 }
             }
@@ -254,7 +254,12 @@ fun SettingScreen() {
                         Theme()
                         Language()
                         BackupRestore()
-                        About()
+                        SettingRow {
+                            RowVCenterSpaced(8) {
+                                FAQ()
+                                About()
+                            }
+                        }
                     }
                 }
             }

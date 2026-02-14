@@ -72,8 +72,6 @@ import spam.blocker.ui.widgets.SummaryLabel
 import spam.blocker.ui.widgets.SwitchBox
 import spam.blocker.util.A
 import spam.blocker.util.AdbLogger
-import spam.blocker.util.Algorithm.compressString
-import spam.blocker.util.Algorithm.decompressToString
 import spam.blocker.util.CSVParser
 import spam.blocker.util.CountryCode
 import spam.blocker.util.Now
@@ -100,6 +98,7 @@ import spam.blocker.util.resolveTimeTags
 import spam.blocker.util.spf
 import spam.blocker.util.toMap
 import spam.blocker.util.toStringMap
+import spam.blocker.util.unescapeUnicode
 import java.io.BufferedReader
 import java.io.ByteArrayInputStream
 import java.io.InputStreamReader
@@ -517,7 +516,7 @@ class BackupExport(
         // Generate config data bytes
         val curr = Configs()
         curr.load(ctx, includeSpamDB)
-        val compressed = compressString(curr.toJsonString())
+        val compressed = curr.toByteArray()
 
         aCtx.logger?.debug(ctx.getString(R.string.action_backup_export))
 
@@ -531,8 +530,6 @@ class BackupExport(
 
     @Composable
     override fun Summary(showIcon: Boolean) {
-        val ctx = LocalContext.current
-
         val yes = Str(R.string.yes)
         val no = Str(R.string.no)
         SummaryLabel(Str(R.string.include_spam_db) + ": ${if (includeSpamDB) yes else no}")
@@ -552,7 +549,7 @@ class BackupExport(
 
     @Composable
     override fun Icon() {
-        GreyIcon(R.drawable.ic_backup_export)
+        GreyIcon(R.drawable.ic_export)
     }
 
     @Composable
@@ -579,8 +576,7 @@ class BackupImport(
         val input = aCtx.lastOutput as ByteArray
 
         try {
-            val jsonStr = decompressToString(input)
-            val newCfg = Configs.createFromJson(jsonStr)
+            val newCfg = Configs.fromByteArray(input)
             newCfg.apply(ctx, includeSpamDB)
 
             aCtx.logger?.debug(ctx.getString(R.string.action_backup_import))
@@ -620,7 +616,7 @@ class BackupImport(
 
     @Composable
     override fun Icon() {
-        GreyIcon(R.drawable.ic_backup_import)
+        GreyIcon(R.drawable.ic_import)
     }
 
     @Composable
@@ -1778,7 +1774,7 @@ class EnableApp(
 ) : IPermissiveAction {
 
     override fun execute(ctx: Context, aCtx: ActionContext): Boolean {
-        spf.Global(ctx).setGloballyEnabled(enable)
+        spf.Global(ctx).isGloballyEnabled = enable
         G.globallyEnabled.value = enable
 
         aCtx.logger?.debug("${ctx.getString(R.string.action_enable_app)}: $enable")
@@ -2086,14 +2082,14 @@ class ParseQueryResult(
 ) : IPermissiveAction {
 
     override fun execute(ctx: Context, aCtx: ActionContext): Boolean {
-        var input = if (aCtx.lastOutput is ByteArray) {
+        val input = if (aCtx.lastOutput is ByteArray) {
             aCtx.lastOutput as ByteArray
         } else {
             aCtx.lastParsedQueryData!!
         }
         aCtx.lastParsedQueryData = input // Save for following `ParseQueryResult` actions
 
-        val html = String(input)
+        val html = String(input).unescapeUnicode()
 
         aCtx.logger?.debug(label(ctx))
 

@@ -54,4 +54,66 @@
          llavors pots utilitzar <font color="#03DAC5">{my_token}</font> en consultes HTTP posteriors. <br>
     ]]>
     </string>
+    <string name="max"><short>Màx</short></string>
+    <string name="exporting_database">
+    <![CDATA[
+        Exportant %s números de la base de dades, això pot trigar uns %s segons.
+    ]]>
+    </string>
+    <string name="time_color">Color del temps</string>
+    <string name="help_time_color">
+    <![CDATA[
+        Ressalteu la marca de temps amb colors diferents segons com de recent és el registre. <br>
+        <br>
+        <b>Cas d\'ús</b>: <br>
+        &ensp; <font color="#888888">Reviseu les trucades d\'avui a la nit comprovant tots els registres amb una marca de temps blava. </font>
+    ]]>
+    </string>
+    <string name="help_time_color_values">
+    <![CDATA[
+        Ha de ser o bé <font color="#00BFFF"><no_translate>today</no_translate></font> o
+        un número seguit de <b><no_translate>min</no_translate></b>
+        (p. ex. <font color="#00BFFF"><no_translate>5min</no_translate></font>,
+        <font color="#00BFFF"><no_translate>120min</no_translate></font>)
+    ]]>
+    </string>
+    <string name="invalid_value_see_tooltip">Valor invàlid, vegeu la informació emergent per obtenir ajuda</string>
+    <string name="faq"><short>PMF</short></string>
+    <string name="faq_priority">
+    <![CDATA[
+        Cada filtre té el seu valor de prioritat, com indica el terme, determina l\'ordre en què es comprova la trucada. <br>
+        <br>
+        Per defecte, <br>
+        <br>
+        - <font color="#03DAC5">Regles de la llista blanca</font> tenen prioritat <font color="#ea86ff">10</font> <br>
+        &ensp; <font color="#888888">Per exemple: Contactes, Trucada repetida, Aplicacions recents, etc </font><br>
+        <br>
+        - <font color="#fa7f71">Regles de la llista negra</font> tenen prioritat <font color="#ea86ff">0</font> <br>
+        &ensp; <font color="#888888">Per exemple: STIR, Base de dades, etc </font> <br>
+        <br>
+        Quan ambdues estan habilitades, les regles de la llista blanca sobreescriuen les de la llista negra ja que 10 > 0. <br>
+        <br>
+        Per a regles regex, la prioritat es pot establir a qualsevol número entre <font color="#ea86ff">-2147483648</font>
+          i <font color="#ea86ff">2147483647</font>. <br>
+        Regles diferents poden tenir la mateixa prioritat sempre que siguin del mateix tipus, però,
+          <font color="#ffa500"><b>mai assignis la mateixa prioritat tant a les regles de la llista blanca
+          com a les de la llista negra</b></font>, ja que pot provocar un comportament aleatori. <br>
+        <br>
+        La funció <font color="#00BFFF">Mode de reunió</font> té prioritat <font color="#ea86ff">20</font> per defecte,
+          perquè ha de bloquejar qualsevol trucada durant una reunió. <br>
+        I <font color="#ea86ff">-1</font> per a <font color="#00BFFF">Consulta instantània</font>,
+          de manera que només es comprova després que la trucada hagi superat tots els filtres locals. <br>
+        <br>
+        <b>Casos d\'ús</b> de personalització de la prioritat: <br>
+        <br>
+        - <font color="#888888">Bloqueja sempre un número concret, independentment de si es repeteix</font> <br>
+         &ensp; Estableix una regla amb prioritat > 10 per sobreescriure <font color="#00BFFF">Trucada repetida</font>. <br>
+        <br>
+        - <font color="#888888">Permet sempre un número</font> <br>
+         &ensp; Estableix-la a > 20 per sobreescriure <font color="#00BFFF">Mode de reunió</font>. <br>
+        <br>
+        - <font color="#888888">Prova una regla regex</font> <br>
+         &ensp; Estableix-la a 999 per sobreescriure tots els altres filtres i no haver de desactivar-los temporalment un per un.
+    ]]>
+    </string>
 </resources>

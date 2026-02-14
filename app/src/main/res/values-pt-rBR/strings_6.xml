@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        Desculpe, o aplicativo travou.\n\n
-        Por favor, copie o conteúdo abaixo e reporte este problema no github,
-        remova quaisquer informações confidenciais antes de relatar.
+    <![CDATA[
+        Desculpe, o aplicativo travou. <br>
+        <br>
+        Por favor, copie o conteúdo abaixo e reporte este problema no GitHub,
+        remova qualquer informação sensível antes de relatar.
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>Dom</item>
@@ -21,13 +24,7 @@
     <string name="days">Dias</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        Quando habilitado, o conteúdo do SMS também será registrado no banco de dados e exibido nesta lista, ele não será registrado no banco de dados quando desabilitado.<br>
-        <br>
-        - Quando habilitado:<br>
-        &emsp; <b>Toque</b> para expandir/recolher a mensagem completa.<br>
-        <br>
-        - Quando desabilitado:<br>
-        &emsp; <b>Toque</b> para abrir a conversa no aplicativo padrão.
+        Quando habilitado, o conteúdo do SMS também será registrado no banco de dados e exibido nesta lista, ele não será registrado no banco de dados quando desabilitado.
         ]]>
     </string>
 
@@ -73,5 +70,4 @@
     <string name="copy_number">Copiar número</string>
     <string name="add_num_to_regex_rule">Adicionar número à regra regex</string>
     <string name="add_num_to_db">Adicionar número ao banco de dados de spam</string>
-    <string name="mark_all_as_read">Marcar tudo como lido</string>
 </resources>

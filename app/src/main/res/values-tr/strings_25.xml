@@ -54,4 +54,61 @@
          sonraki HTTP sorgularında <font color="#03DAC5">{my_token}</font> kullanabilirsiniz. <br>
     ]]>
     </string>
+    <string name="max"><short>Maks</short></string>
+    <string name="exporting_database">
+    <![CDATA[
+        Veritabanından %s numara dışa aktarılıyor, bu yaklaşık %s saniye sürebilir.
+    ]]>
+    </string>
+    <string name="time_color">Zaman Rengi</string>
+    <string name="help_time_color">
+    <![CDATA[
+        Kaydın ne kadar yeni olduğuna göre zaman damgasını farklı renklerde vurgulayın. <br>
+        <br>
+        <b>Kullanım durumu</b>: <br>
+        &ensp; <font color="#888888">Tüm kayıtları mavi zaman damgası ile kontrol ederek gece bugün yapılan aramaları gözden geçirin. </font>
+    ]]>
+    </string>
+    <string name="help_time_color_values">
+    <![CDATA[
+        Ya <font color="#00BFFF"><no_translate>today</no_translate></font> olmalı ya da
+        bir sayı <b><no_translate>min</no_translate></b> ile
+        (ör. <font color="#00BFFF"><no_translate>5min</no_translate></font>,
+        <font color="#00BFFF"><no_translate>120min</no_translate></font>)
+    ]]>
+    </string>
+    <string name="invalid_value_see_tooltip">Geçersiz değer, yardım için araç ipucuna bakın</string>
+    <string name="faq"><short>SSS</short></string>
+    <string name="faq_priority">
+    <![CDATA[
+        Her filtre, terimin de belirttiği gibi, öncelik değerine sahiptir ve bu, aramanın kontrol edildiği sırayı belirler. <br>
+        <br>
+        Varsayılan olarak, <br>
+        <br>
+        - <font color="#03DAC5">Whitelist rules</font> önceliği <font color="#ea86ff">10</font> <br>
+        &ensp; <font color="#888888">Örn. Kişiler, TekrarlananArama, SonUygulamalar, vb </font><br>
+        <br>
+        - <font color="#fa7f71">Blacklist rules</font> önceliği <font color="#ea86ff">0</font> <br>
+        &ensp; <font color="#888888">Örn. STIR, Veritabanı, vb </font> <br>
+        <br>
+        Her ikisi de etkin olduğunda, whitelist kuralları blacklist kurallarını 10 > 0 olduğu için geçersiz kılar. <br>
+        <br>
+        Regex kuralları için öncelik, <font color="#ea86ff">-2147483648</font> ile <font color="#ea86ff">2147483647</font> arasında herhangi bir numaraya ayarlanabilir. <br>
+        Farklı kurallar aynı türde oldukları sürece aynı önceliğe sahip olabilir, ancak <font color="#ffa500"><b>whitelist ve blacklist kurallarına aynı önceliği asla atamayın</b></font>, bu rastgele davranışa neden olabilir. <br>
+        <br>
+        <font color="#00BFFF">Meeting Mode</font> özelliği, varsayılan olarak önceliği <font color="#ea86ff">20</font>’dir, çünkü toplantı sırasında tüm aramaları engellemesi gerekir. <br>
+        Ve <font color="#ea86ff">-1</font> <font color="#00BFFF">Instant Query</font> için, böylece arama tüm yerel filtrelerden geçtiğinde kontrol edilir. <br>
+        <br>
+        <b>Önceliği özelleştirmenin kullanım durumları</b>: <br>
+        <br>
+        - <font color="#888888">Tekrarlansa da belirli bir numarayı her zaman engelle</font> <br>
+         &ensp; <font color="#00BFFF">Repeated Call</font> kuralını geçersiz kılmak için önceliği > 10 bir kural ayarlayın. <br>
+        <br>
+        - <font color="#888888">Bir numarayı her zaman izin ver</font> <br>
+         &ensp; <font color="#00BFFF">Meeting Mode</font>’u geçersiz kılmak için önceliği > 20 yapın. <br>
+        <br>
+        - <font color="#888888">Bir regex kuralını test et</font> <br>
+         &ensp; Diğer tüm filtreleri geçersiz kılmak için önceliği 999 yapın, böylece tek tek geçici olarak devre dışı bırakmanız gerekmez.
+    ]]>
+    </string>
 </resources>

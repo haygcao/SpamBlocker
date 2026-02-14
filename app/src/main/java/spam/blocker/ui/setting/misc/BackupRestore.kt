@@ -6,14 +6,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import spam.blocker.Events
 import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.config.Configs
+import spam.blocker.db.SpamTable
 import spam.blocker.ui.setting.LabeledRow
 import spam.blocker.ui.theme.DarkOrange
 import spam.blocker.ui.theme.LocalPalette
@@ -31,21 +35,36 @@ import spam.blocker.ui.widgets.Str
 import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.ui.widgets.rememberFileReadChooser
 import spam.blocker.ui.widgets.rememberFileWriteChooser
-import spam.blocker.util.Algorithm.b64Decode
-import spam.blocker.util.Algorithm.compressString
-import spam.blocker.util.Algorithm.decompressToString
+import spam.blocker.util.A
 import spam.blocker.util.Launcher
 import spam.blocker.util.Permission
 import spam.blocker.util.PermissionWrapper
+import spam.blocker.util.formatAnnotated
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ExportButton() {
     val ctx = LocalContext.current
+    val coroutine = rememberCoroutineScope()
 
+    // Show a dialog for exporting database numbers, it can take long
+    val progressTrigger = remember { mutableStateOf(false) }
+    PopupDialog(
+        trigger = progressTrigger,
+        // the dialog cannot be dismissed by tapping around, it will only disappear when the export is done
+        manuallyDismissable = false
+    ) {
+        val total = remember { SpamTable.count(ctx) }
+        val estimate = remember { total/100_000 } // 100k numbers per second
+
+        Text(Str(R.string.exporting_database).formatAnnotated(
+            "$total".A(Salmon), "$estimate".A(Teal200)
+        ))
+    }
+
+    // Show a system file chooser
     val fileWriter = rememberFileWriteChooser()
     fileWriter.Compose()
 
@@ -55,23 +74,31 @@ fun ExportButton() {
         val ymd = LocalDate.now().format(formatter)
         val fn = "SpamBlocker.${ymd}${if (includeSpamDB) ".db" else ""}.gz"
 
+        if (includeSpamDB) progressTrigger.value = true
+
         // prepare file content
         val curr = Configs()
         curr.load(ctx, includeSpamDB)
-        val content = compressString(curr.toJsonString())
+        val compressed = curr.toByteArray()
+
+        if (includeSpamDB) progressTrigger.value = false
 
         fileWriter.popup(
             filename = fn,
-            content = content,
+            content = compressed,
         )
     }
+
 
     DropdownWrapper(
         items = listOf(
             LabelItem(
                 label = Str(R.string.include_spam_db)
             ) {
-                chooseExportFile(true)
+                progressTrigger.value = true
+                coroutine.launch(IO) {
+                    chooseExportFile(includeSpamDB = true)
+                }
             }
         )
     ) { expanded ->
@@ -79,7 +106,9 @@ fun ExportButton() {
             label = Str(R.string.export),
             color = Teal200,
             onClick = {
-                chooseExportFile(false)
+                coroutine.launch(IO) {
+                    chooseExportFile(includeSpamDB = false)
+                }
             },
             onLongClick = {
                 expanded.value = true
@@ -174,12 +203,12 @@ fun ImportButton() {
     fun chooseImportFile(includeSpamDB: Boolean) {
         fileReader.popup(
             mimeTypes = arrayOf("application/octet-stream", "application/gzip")
-        ) { _, raw ->
-            if (raw == null)
+        ) { _, bytes ->
+            if (bytes == null)
                 return@popup
 
-            fun onDecodeSuccess(str: String) {
-                val newCfg = Configs.createFromJson(str)
+            try {
+                val newCfg = Configs.fromByteArray(bytes)
                 newCfg.apply(ctx, includeSpamDB)
 
                 prevPermissions = newCfg.permissions.allEnabledNames
@@ -189,32 +218,10 @@ fun ImportButton() {
                 // Fire an event to notify the configuration has changed,
                 // for example, the history cleanup schedule should restart
                 Events.configImported.fire()
-            }
-
-            fun onDecodeFail(err: String) {
+            } catch (e: Exception) {
                 succeeded = false
-                errorStr = err
+                errorStr = e.message ?: ""
                 resultTrigger.value = true
-            }
-
-            try {
-                // for history compatibility, text file contains b64(gzip)
-                val jsonStr = decompressToString(b64Decode(String(raw)))
-                onDecodeSuccess(jsonStr)
-            } catch (_: Exception) {
-                try {
-                    // try gzip compressed
-                    val jsonStr = decompressToString(raw)
-                    onDecodeSuccess(jsonStr)
-                } catch (e: Exception) {
-                    // try plain json string
-                    try {
-                        val jsonStr = String(raw)
-                        onDecodeSuccess(jsonStr)
-                    } catch (e: Exception) {
-                        onDecodeFail(e.message ?: "")
-                    }
-                }
             }
         }
     }

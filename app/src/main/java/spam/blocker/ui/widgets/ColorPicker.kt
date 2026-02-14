@@ -1,4 +1,5 @@
 package spam.blocker.ui.widgets
+
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.ComposeShader
@@ -58,10 +59,89 @@ import spam.blocker.ui.M
 import spam.blocker.ui.theme.LocalPalette
 import spam.blocker.ui.theme.Salmon
 import spam.blocker.ui.theme.Teal200
+import spam.blocker.util.Lambda
 import spam.blocker.util.Lambda1
 import android.graphics.Color as AndroidColor
 
 private const val AREA_WIDTH = 260 // .dp
+
+@Composable
+fun ColorButton(
+    color: Int?,
+    defaultText: String? = null,
+    enabled: Boolean = true,
+    onClick: Lambda
+) {
+    StrokeButton(
+        label = if (color == null) defaultText else null,
+        color = LocalPalette.current.textGrey,
+        enabled = enabled,
+        contentPadding = PaddingValues(
+            horizontal = if (color == null) BUTTON_H_PADDING.dp else 0.dp, vertical = 0.dp
+        ),
+        icon = if (color == null) {
+            null
+        } else {
+            {
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(60.dp)
+                        .clip(RoundedCornerShape(BUTTON_CORNER_RADIUS.dp))
+                        .background(Color(color))
+                )
+            }
+        },
+        onClick = onClick
+    )
+}
+
+// Show up to 6 colors in a button
+@Composable
+fun MultiColorButton(
+    colors: List<Int>,
+    emptyColor: Color,
+    onClick: Lambda
+) {
+    val W = 60
+    val H = BUTTON_H
+
+    val first6 = colors.take(6)
+    val (w, h) = when (first6.size) {
+        2 -> (W / 2 to H)
+        3 -> (W / 3 to H)
+        4 -> (W / 2 to H / 2)
+        5,6 -> (W / 3 to H / 2)
+        else -> (W to H)
+    }
+
+    StrokeButton(
+        color = Color.Unspecified,
+        icon = {
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(W.dp)
+                    .clip(RoundedCornerShape(BUTTON_CORNER_RADIUS.dp))
+                    .background(emptyColor),
+                contentAlignment = Alignment.Center
+            ) {
+                FlowRowSpaced(0, vSpace = 0) {
+                    first6.forEach {
+                        Box(
+                            modifier = M.background(Color(it))
+                                // It doesn't appear on some devices without the -0.01,
+                                //  seems it just has to be smaller than ... whatever.
+                                .width((w-0.001).dp)
+                                .height((h-0.001).dp)
+                        )
+                    }
+                }
+            }
+        },
+        onClick = onClick
+    )
+}
 
 @Composable
 fun ColorPickerButton(
@@ -81,31 +161,16 @@ fun ColorPickerButton(
         onSelect = onSelect,
     )
 
-    val C = LocalPalette.current
-    StrokeButton(
-        label = if (color == null) defaultText else null,
-        color = C.textGrey,
+    ColorButton(
+        color = color,
+        defaultText = defaultText,
         enabled = enabled,
-        contentPadding = PaddingValues(
-            horizontal = if (color == null) BUTTON_H_PADDING.dp else 0.dp, vertical = 0.dp
-        ),
-        icon = if (color == null) {
-            null
-        } else {
-            {
-                Box(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .width(60.dp)
-                        .clip(RoundedCornerShape(BUTTON_CORNER_RADIUS.dp))
-                        .background(Color(color))
-                )
-            }
-        }
     ) {
         trigger.value = true
     }
 }
+
+
 @Composable
 fun ColorPickerPopup(
     trigger: MutableState<Boolean>,
@@ -216,7 +281,7 @@ fun ColorPickerPopup(
 }
 
 fun String.parseColorString(): Pair<Int, Int>? {
-    if(this.length != 8) {
+    if (this.length != 8) {
         return null
     }
 
@@ -230,6 +295,7 @@ fun String.parseColorString(): Pair<Int, Int>? {
 
     return Pair(alpha, rgb)
 }
+
 fun Color.contrastColor(): Color {
     // Calculate the perceptive luminance (aka luma) - human eye favors green color...
     val luma = (0.299 * red) + (0.587 * green) + (0.114 * blue)

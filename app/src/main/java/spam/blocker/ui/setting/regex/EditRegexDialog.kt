@@ -44,6 +44,8 @@ import spam.blocker.def.Def.FLAG_REGEX_FOR_CNAP
 import spam.blocker.def.Def.FLAG_REGEX_FOR_CONTACT
 import spam.blocker.def.Def.FLAG_REGEX_FOR_CONTACT_GROUP
 import spam.blocker.def.Def.FLAG_REGEX_FOR_GEO_LOCATION
+import spam.blocker.def.Def.ForNumber
+import spam.blocker.def.Def.ForSms
 import spam.blocker.def.Def.MAP_REGEX_FLAGS
 import spam.blocker.ui.LaunchedEffectOnlyOnChange
 import spam.blocker.ui.M
@@ -85,7 +87,7 @@ import spam.blocker.util.Lambda1
 import spam.blocker.util.Permission
 import spam.blocker.util.PermissionWrapper
 import spam.blocker.util.TimeSchedule
-import spam.blocker.util.Util
+import spam.blocker.util.TimeUtils.timeRangeStr
 import spam.blocker.util.addFlag
 import spam.blocker.util.hasFlag
 import spam.blocker.util.removeFlag
@@ -135,7 +137,7 @@ fun RegexLeadingDropdownIcon(
         )
         val labelIds = mutableListOf(
             R.string.phone_number,
-            R.string.contacts,
+            R.string.contact,
             R.string.contact_group,
             R.string.geo_location,
         )
@@ -251,7 +253,7 @@ fun RegexFieldLabel(
                     if (flags.hasFlag(FLAG_REGEX_FOR_CONTACT_GROUP))
                         R.string.contact_group
                     else if (flags.hasFlag(FLAG_REGEX_FOR_CONTACT))
-                        R.string.contacts
+                        R.string.contact
                     else if (flags.hasFlag(FLAG_REGEX_FOR_CNAP))
                         R.string.caller_name
                     else if (flags.hasFlag(FLAG_REGEX_FOR_GEO_LOCATION))
@@ -645,17 +647,9 @@ fun EditRegexDialog(
                 // Notification Type
                 AnimatedVisibleV(
                     visible = when (forType) {
-                        Def.ForNumber -> {
-                            if (whiteOrBlack == 0) { // allow
-                                !forCNAP && applyToSms
-                            } else { // block
-                                true
-                            }
-                        }
-                        Def.ForSms -> {
-                            true
-                        }
-                        else -> false
+                        ForNumber -> whiteOrBlack != 0 || (!forCNAP && applyToSms)
+                        ForSms   -> true
+                        else     -> false
                     }
                 ) {
                     // Auto change the current channelId to "Allow" or "Block" when user select `whitelist/blacklist`
@@ -710,7 +704,7 @@ fun EditRegexDialog(
                         FlowRowSpaced(8) {
                             if (schEnabled) {
                                 GreyButton(
-                                    label = Util.timeRangeStr(
+                                    label = timeRangeStr(
                                         ctx, schSHour, schSMin, schEHour, schEMin
                                     ),
                                 ) {

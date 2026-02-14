@@ -11,6 +11,8 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import spam.blocker.db.Notification.Channel
 import spam.blocker.db.Notification.ChannelTable
 import spam.blocker.ui.history.CallViewModel
+import spam.blocker.ui.history.HistoryOptions.showHistoryBlocked
+import spam.blocker.ui.history.HistoryOptions.showHistoryPassed
 import spam.blocker.ui.history.SmsViewModel
 import spam.blocker.ui.setting.TestingViewModel
 import spam.blocker.ui.setting.api.ApiQueryViewModel
@@ -35,11 +37,6 @@ object G {
 
     val notificationChannels : SnapshotStateList<Channel> = mutableStateListOf()
     val themeType : MutableIntState  = mutableIntStateOf(0)
-    val showHistoryIndicator : MutableState<Boolean> = mutableStateOf(false)
-    val showHistoryGeoLocation : MutableState<Boolean> = mutableStateOf(false)
-    val forceShowSIM : MutableState<Boolean> = mutableStateOf(false)
-    val showHistoryPassed : MutableState<Boolean> = mutableStateOf(false)
-    val showHistoryBlocked : MutableState<Boolean> = mutableStateOf(false)
 
     val callVM : CallViewModel = CallViewModel()
     val smsVM : SmsViewModel = SmsViewModel()
@@ -61,10 +58,10 @@ object G {
         // Global switches
         run {
             val spf = spf.Global(ctx)
-            globallyEnabled.value = spf.isGloballyEnabled()
-            callEnabled.value = spf.isCallEnabled() && Permission.callScreening.isGranted
-            smsEnabled.value = spf.isSmsEnabled() && Permission.receiveSMS.isGranted
-            themeType.intValue = spf.getThemeType()
+            globallyEnabled.value = spf.isGloballyEnabled
+            callEnabled.value = spf.isCallEnabled && Permission.callScreening.isGranted
+            smsEnabled.value = spf.isSmsEnabled && Permission.receiveSMS.isGranted
+            themeType.intValue = spf.themeType
         }
 
         // Workflow switches
@@ -73,14 +70,12 @@ object G {
             dynamicTile0Enabled.value = spf.isDynamicTileEnabled(0)
         }
 
-        // History options
+        // History options, these two needs to be loaded here because they are used to
+        //  calculate the unread count on the bottom bar.
         run {
             val spf = spf.HistoryOptions(ctx)
-            showHistoryIndicator.value = spf.getShowIndicator()
-            showHistoryGeoLocation.value = spf.getShowGeoLocation()
-            forceShowSIM.value = spf.getForceShowSim()
-            showHistoryPassed.value = spf.getShowPassed()
-            showHistoryBlocked.value = spf.getShowBlocked()
+            showHistoryPassed.value = spf.showPassed
+            showHistoryBlocked.value = spf.showBlocked
         }
 
         // Notifications

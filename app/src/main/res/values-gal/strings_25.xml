@@ -54,4 +54,63 @@
          entón podes usar <font color="#03DAC5">{my_token}</font> en consultas HTTP posteriores. <br>
     ]]>
     </string>
+    <string name="max"><short>Máx</short></string>
+    <string name="exporting_database">
+    <![CDATA[
+        Exportando %s números da base de datos, isto pode levar aproximadamente %s segundos.
+    ]]>
+    </string>
+    <string name="time_color">Cor do tempo</string>
+    <string name="help_time_color">
+    <![CDATA[
+        Resalta a marca de tempo en diferentes cores segundo o quão recente é o rexistro. <br>
+        <br>
+        <b>Caso de uso</b>: <br>
+        &ensp; <font color="#888888">Revisa as chamadas de hoxe pola noite comprobando todos os rexistros cunha marca de tempo azul. </font>
+    ]]>
+    </string>
+    <string name="help_time_color_values">
+    <![CDATA[
+        Debe ser <font color="#00BFFF"><no_translate>today</no_translate></font> ou un número seguido de <b><no_translate>min</no_translate></b>
+        (p.ex. <font color="#00BFFF"><no_translate>5min</no_translate></font>,
+        <font color="#00BFFF"><no_translate>120min</no_translate></font>)
+    ]]>
+    </string>
+    <string name="invalid_value_see_tooltip">Valor inválido, consulte a información emerxente para obter axuda</string>
+    <string name="faq"><short>PMF</short></string>
+    <string name="faq_priority">
+    <![CDATA[
+        Cada filtro ten o seu valor de prioridade, como indica o termo, determina a orde na que se verifica a chamada. <br>
+        <br>
+        Por defecto, <br>
+        <br>
+        - <font color="#03DAC5">Reglas da lista branca</font> teñen prioridade <font color="#ea86ff">10</font> <br>
+        &ensp; <font color="#888888">Por exemplo. Contactos, Chamada Repetida, Aplicacións Recentes, etc </font><br>
+        <br>
+        - <font color="#fa7f71">Reglas da lista negra</font> teñen prioridade <font color="#ea86ff">0</font> <br>
+        &ensp; <font color="#888888">Por exemplo. STIR, Base de datos, etc </font> <br>
+        <br>
+        Cando están ambas activas, as regras da lista branca sobrescribirán as regras da lista negra xa que 10 > 0. <br>
+        <br>
+        Para as regras regex, a prioridade pode establecerse a calquera número entre <font color="#ea86ff">-2147483648</font>
+          e <font color="#ea86ff">2147483647</font>. <br>
+        As diferentes regras poden ter a mesma prioridade sempre que sexan do mesmo tipo, pero <font color="#ffa500"><b>nunca asignes a mesma prioridade tanto ás regras da lista branca como ás da lista negra</b></font>, pois pode causar un comportamento aleatorio. <br>
+        <br>
+        A funcionalidade <font color="#00BFFF">Modo Reunión</font> ten prioridade <font color="#ea86ff">20</font> por defecto,
+          porque supón bloquear calquera chamada durante unha reunión. <br>
+        E <font color="#ea86ff">-1</font> para <font color="#00BFFF">Consulta Instantánea</font>,
+          polo que só se verifica despois de que a chamada pase todos os filtros locais. <br>
+        <br>
+        <b>Casos de uso</b> da personalización da prioridade: <br>
+        <br>
+        - <font color="#888888">Bloquear sempre un número concreto, sen importar se se repite</font> <br>
+         &ensp; Establece unha regra con prioridade > 10 para sobrescribir <font color="#00BFFF">Chamada Repetida</font>. <br>
+        <br>
+        - <font color="#888888">Permitir sempre un número</font> <br>
+         &ensp; Estabeléceo en > 20 para sobrescribir o <font color="#00BFFF">Modo Reunión</font>. <br>
+        <br>
+        - <font color="#888888">Probar unha regra regex</font> <br>
+         &ensp; Estabeléceo en 999 para sobrescribir todos os outros filtros de modo que non teñas que desactivalos temporalmente un a un.
+    ]]>
+    </string>
 </resources>

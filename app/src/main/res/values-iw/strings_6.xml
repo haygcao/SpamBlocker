@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        מצטערים, האפליקציה קרסה.\n\n
-        אנא העתק את התוכן למטה ודווח על בעיה זו ב-GitHub,
-        הסר כל מידע רגיש לפני הדיווח.
+    <![CDATA[
+        מצטערים, האפליקציה קרסה. <br>
+        <br>
+        אנא העתקו את התוכן למטה ודווחו על הבעיה ב‑GitHub,
+        הסירו כל מידע רגיש לפני הדיווח.
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>א׳</item>
@@ -21,19 +24,12 @@
     <string name="days">ימים</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        כאשר מופעל, תוכן ההודעות יירשם גם במסד הנתונים ויוצג ברשימה זו, הוא לא יירשם במסד הנתונים כאשר מושבת.<br>
-        <br>
-        - כאשר מופעל:<br>
-        &emsp; <b>הקש</b> כדי להרחיב/לכווץ את ההודעה המלאה.<br>
-        <br>
-        - כאשר מושבת:<br>
-        &emsp; <b>הקש</b> כדי לפתוח את השיחה באפליקציית ברירת המחדל.
+        כאשר מופעל, תוכן ההודעות יירשם גם במסד הנתונים ויוצג ברשימה זו, הוא לא יירשם במסד הנתונים כאשר מושבת.
         ]]>
     </string>
     <string name="copy_number">העתק מספר</string>
     <string name="add_num_to_regex_rule">הוסף מספר לחוק Regex</string>
     <string name="add_num_to_db">הוסף מספר למאגר נתוני ספאם</string>
-    <string name="mark_all_as_read">סמן הכל כנקרא</string>
     <string name="remove_db_number">מחק מספר ממאגר נתוני ספאם</string>
 
     <string name="language">שפה</string>

@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        很抱歉，應用程式發生錯誤。\n\n
-        請複製以下內容並在 GitHub 上回報此問題，
+    <![CDATA[
+        抱歉，應用程式已崩潰。 <br>
+        <br>
+        請複製以下內容並在 github 上回報此問題，
         回報前請移除任何敏感資訊。
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>週日</item>
@@ -21,19 +24,12 @@
     <string name="days">天</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        啟用時，簡訊內容也會記錄在資料庫中並顯示在此清單中，停用時則不會記錄在資料庫中。<br>
-        <br>
-        - 啟用時：<br>
-        &emsp; <b>點選</b>可展開/摺疊完整訊息。<br>
-        <br>
-        - 停用時：<br>
-        &emsp; <b>點選</b>可在預設應用程式中開啟對話。
+        啟用時，簡訊內容也會記錄在資料庫中並顯示在此清單中，停用時則不會記錄在資料庫中。
         ]]>
     </string>
     <string name="copy_number">複製號碼</string>
     <string name="add_num_to_regex_rule">將號碼新增至正規表示式規則</string>
     <string name="add_num_to_db">將號碼新增至騷擾號碼資料庫</string>
-    <string name="mark_all_as_read">全部標示為已讀</string>
     <string name="remove_db_number">從騷擾號碼資料庫刪除號碼</string>
 
     <string name="language">語言</string>

@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        Sorry, the app has crashed.\n\n
+    <![CDATA[
+        Sorry, the app has crashed. <br>
+        <br>
         Please copy the content below and report this issue on github,
         remove any sensitive information before reporting.
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>Sun</item>
@@ -19,19 +22,12 @@
     <string name="days">Days</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        When enabled, the SMS content will also be logged in the database and displayed in this list, it will not be logged in database when disabled.<br>
-        <br>
-        - When enabled:<br>
-        &emsp; <b>Tap</b> to expand/collapse the full message.<br>
-        <br>
-        - When disabled:<br>
-        &emsp; <b>Tap</b> to open the conversation in the default app.
+        When enabled, the SMS content will also be logged in the database and displayed in this list, it will not be logged in database when disabled.
         ]]>
     </string>
     <string name="copy_number">Copy number</string>
     <string name="add_num_to_regex_rule">Add number to regex rule</string>
     <string name="add_num_to_db">Add number to spam database</string>
-    <string name="mark_all_as_read">Mark all as read</string>
     <string name="remove_db_number">Delete number from spam database</string>
 
     <string name="language">Language</string>
