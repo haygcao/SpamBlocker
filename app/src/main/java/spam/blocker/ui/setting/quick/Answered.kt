@@ -16,6 +16,7 @@ import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.ui.setting.LabeledRow
 import spam.blocker.ui.widgets.GreyButton
+import spam.blocker.ui.widgets.GreyIcon20
 import spam.blocker.ui.widgets.GreyText
 import spam.blocker.ui.widgets.NumberInputBox
 import spam.blocker.ui.widgets.PluralStr
@@ -151,4 +152,22 @@ fun Answered() {
             }
         }
     )
+}
+
+@Composable
+fun AnsweredSummary() {
+    val ctx = LocalContext.current
+    val spf = spf.Answered(ctx)
+
+    val isEnabled by remember { mutableStateOf(spf.isEnabled && Permission.callLog.isGranted) }
+    if (isEnabled) {
+        val inXDay by remember { mutableIntStateOf(spf.days) }
+
+        StrokeButton(
+            label = PluralStr(inXDay, R.plurals.days),
+            icon = { GreyIcon20(R.drawable.ic_incoming) },
+            color = G.palette.textGrey,
+            enabled = false,
+        )
+    }
 }

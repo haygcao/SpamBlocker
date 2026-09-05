@@ -38,40 +38,61 @@ import spam.blocker.ui.setting.api.ApiHeader
 import spam.blocker.ui.setting.api.ApiList
 import spam.blocker.ui.setting.api.ApiQueryPresets
 import spam.blocker.ui.setting.api.ApiReportPresets
+import spam.blocker.ui.setting.api.ApiSummary
 import spam.blocker.ui.setting.bot.BotHeader
 import spam.blocker.ui.setting.bot.BotList
+import spam.blocker.ui.setting.bot.BotSummary
 import spam.blocker.ui.setting.misc.About
 import spam.blocker.ui.setting.misc.BackupRestore
 import spam.blocker.ui.setting.misc.FAQ
 import spam.blocker.ui.setting.misc.Language
 import spam.blocker.ui.setting.misc.Theme
+import spam.blocker.ui.setting.misc.VersionSummary
 import spam.blocker.ui.setting.quick.Answered
+import spam.blocker.ui.setting.quick.AnsweredSummary
 import spam.blocker.ui.setting.quick.BlockType
+import spam.blocker.ui.setting.quick.BlockTypeSummary
 import spam.blocker.ui.setting.quick.CallerID
+import spam.blocker.ui.setting.quick.CallerIDSummary
 import spam.blocker.ui.setting.quick.Contacts
+import spam.blocker.ui.setting.quick.ContactsSummary
 import spam.blocker.ui.setting.quick.Dialed
+import spam.blocker.ui.setting.quick.DialedSummary
 import spam.blocker.ui.setting.quick.EmergencySituation
+import spam.blocker.ui.setting.quick.EmergencySituationSummary
 import spam.blocker.ui.setting.quick.MeetingMode
+import spam.blocker.ui.setting.quick.MeetingModeSummary
 import spam.blocker.ui.setting.quick.Notification
+import spam.blocker.ui.setting.quick.NotificationSummary
 import spam.blocker.ui.setting.quick.OffTime
+import spam.blocker.ui.setting.quick.OffTimeSummary
 import spam.blocker.ui.setting.quick.RecentApps
+import spam.blocker.ui.setting.quick.RecentAppsSummary
 import spam.blocker.ui.setting.quick.RepeatedCall
+import spam.blocker.ui.setting.quick.RepeatedCallSummary
 import spam.blocker.ui.setting.quick.SpamDB
+import spam.blocker.ui.setting.quick.SpamDBSummary
 import spam.blocker.ui.setting.quick.Stir
+import spam.blocker.ui.setting.quick.StirSummary
 import spam.blocker.ui.setting.regex.PushAlertHeader
 import spam.blocker.ui.setting.regex.PushAlertList
+import spam.blocker.ui.setting.regex.PushAlertSummary
 import spam.blocker.ui.setting.regex.PushAlertViewModel
 import spam.blocker.ui.setting.regex.RegexHeader
 import spam.blocker.ui.setting.regex.RegexList
+import spam.blocker.ui.setting.regex.RegexSummary
 import spam.blocker.ui.setting.regex.RegexViewModel
 import spam.blocker.ui.setting.regex.SmsAlert
+import spam.blocker.ui.setting.regex.SmsAlertSummary
 import spam.blocker.ui.setting.regex.SmsBomb
+import spam.blocker.ui.setting.regex.SmsBombSummary
 import spam.blocker.ui.slightDiff
 import spam.blocker.ui.theme.White
 import spam.blocker.ui.widgets.AnimatedVisibleV
 import spam.blocker.ui.widgets.BalloonQuestionMark
 import spam.blocker.ui.widgets.Fab
 import spam.blocker.ui.widgets.FabWrapper
+import spam.blocker.ui.widgets.FlowRowSpaced
 import spam.blocker.ui.widgets.GreyIcon16
 import spam.blocker.ui.widgets.NormalColumnScrollbar
 import spam.blocker.ui.widgets.RowVCenter
@@ -187,30 +208,48 @@ fun SettingScreen() {
                     isCollapsed = remember { mutableStateOf(spfSections.isQuickSettingsCollapsed) },
                     onToggleCollapse = {
                         spfSections.isQuickSettingsCollapsed = it
-                    }
-                ) {
-                    Column {
-                        Contacts()
-                        Stir()
-                        SpamDB()
-                        RepeatedCall()
-                        Dialed()
-                        Answered()
-                        OffTime()
-                        EmergencySituation()
-                        RecentApps()
-                        MeetingMode()
+                    },
+                    content = {
+                        Column {
+                            Contacts()
+                            Stir()
+                            SpamDB()
+                            RepeatedCall()
+                            Dialed()
+                            Answered()
+                            OffTime()
+                            EmergencySituation()
+                            RecentApps()
+                            MeetingMode()
 
-                        HorizontalDivider(
-                            thickness = 1.dp,
-                            color = G.palette.background.slightDiff()
-                        )
+                            HorizontalDivider(thickness = 1.dp, color = G.palette.background.slightDiff())
 
-                        BlockType()
-                        Notification()
-                        CallerID()
+                            BlockType()
+                            Notification()
+                            CallerID()
+                        }
+                    },
+                    contentCollapsed = {
+                        FlowRowSpaced(4) {
+                            ContactsSummary()
+                            StirSummary()
+                            SpamDBSummary()
+                            RepeatedCallSummary()
+                            DialedSummary()
+                            AnsweredSummary()
+                            OffTimeSummary()
+                            EmergencySituationSummary()
+                            RecentAppsSummary()
+                            MeetingModeSummary()
+
+                            HorizontalDivider(modifier = M.padding(vertical = 2.dp), thickness = 1.dp, color = G.palette.background.slightDiff())
+
+                            BlockTypeSummary()
+                            NotificationSummary()
+                            CallerIDSummary()
+                        }
                     }
-                }
+                )
 
                 Section(
                     title = Str(R.string.regex_settings),
@@ -218,43 +257,54 @@ fun SettingScreen() {
                     isCollapsed = remember { mutableStateOf(spfSections.isRegexSettingsCollapsed) },
                     onToggleCollapse = {
                         spfSections.isRegexSettingsCollapsed = it
-                    }
-                ) {
-                    Column {
-                        // NumberRule / ContentRule / QuickCopy
-                        listOf<RegexViewModel>(
-                            G.NumberRuleVM,
-                            G.ContentRuleVM,
-                            G.QuickCopyRuleVM,
-                        ).forEach { vm ->
-                            vm.reloadOptions(ctx)
-                            LaunchedEffect(true) { vm.reloadDbAndOptions(ctx) }
+                    },
+                    content = {
+                        Column {
+                            // NumberRule / ContentRule / QuickCopy
+                            listOf<RegexViewModel>(
+                                G.NumberRuleVM,
+                                G.ContentRuleVM,
+                                G.QuickCopyRuleVM,
+                            ).forEach { vm ->
+                                vm.reloadOptions(ctx)
+                                LaunchedEffect(true) { vm.reloadDbAndOptions(ctx) }
 
-                            RegexHeader(vm)
-                            AnimatedVisibleV(!vm.listCollapsed.value) {
-                                Column {
-                                    SearchBox(vm.searchEnabled, vm.filter) {
-                                        vm.reloadDb(ctx)
+                                RegexHeader(vm)
+                                AnimatedVisibleV(!vm.listCollapsed.value) {
+                                    Column {
+                                        SearchBox(vm.searchEnabled, vm.filter) {
+                                            vm.reloadDb(ctx)
+                                        }
+                                        RegexList(vm)
                                     }
-                                    RegexList(vm)
                                 }
                             }
+
+                            // Push Alert
+                            LaunchedEffect(true) { PushAlertViewModel.reloadDbAndOptions(ctx) }
+                            PushAlertHeader()
+                            AnimatedVisibleV(!PushAlertViewModel.listCollapsed.value) {
+                                PushAlertList()
+                            }
+
+                            // SMS Alert
+                            SmsAlert()
+
+                            // SMS Bomb
+                            SmsBomb()
                         }
-
-                        // Push Alert
-                        LaunchedEffect(true) { PushAlertViewModel.reloadDbAndOptions(ctx) }
-                        PushAlertHeader()
-                        AnimatedVisibleV(!PushAlertViewModel.listCollapsed.value) {
-                            PushAlertList()
+                    },
+                    contentCollapsed = {
+                        FlowRowSpaced(4) {
+                            RegexSummary(G.NumberRuleVM)
+                            RegexSummary(G.ContentRuleVM)
+                            RegexSummary(G.QuickCopyRuleVM)
+                            PushAlertSummary(PushAlertViewModel)
+                            SmsAlertSummary()
+                            SmsBombSummary()
                         }
-
-                        // SMS Alert
-                        SmsAlert()
-
-                        // SMS Bomb
-                        SmsBomb()
                     }
-                }
+                )
 
                 // Instant Query
                 Section(
@@ -263,19 +313,23 @@ fun SettingScreen() {
                     isCollapsed = remember { mutableStateOf(spfSections.isInstantQueryCollapsed) },
                     onToggleCollapse = {
                         spfSections.isInstantQueryCollapsed = it
-                    }
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(0.dp),
-                    ) {
-                        // Api Query list
-                        LaunchedEffect(true) { G.apiQueryVM.reloadDb(ctx) }
-                        ApiHeader(G.apiQueryVM, ApiQueryPresets)
-                        AnimatedVisibleV(!G.apiQueryVM.listCollapsed.value) {
-                            ApiList(G.apiQueryVM)
+                    },
+                    content = {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(0.dp),
+                        ) {
+                            // Api Query list
+                            LaunchedEffect(true) { G.apiQueryVM.reloadDb(ctx) }
+                            ApiHeader(G.apiQueryVM, ApiQueryPresets)
+                            AnimatedVisibleV(!G.apiQueryVM.listCollapsed.value) {
+                                ApiList(G.apiQueryVM)
+                            }
                         }
+                    },
+                    contentCollapsed = {
+                        ApiSummary(G.apiQueryVM)
                     }
-                }
+                )
 
                 // Report Number
                 Section(
@@ -284,40 +338,48 @@ fun SettingScreen() {
                     isCollapsed = remember { mutableStateOf(spfSections.isReportNumberCollapsed) },
                     onToggleCollapse = {
                         spfSections.isReportNumberCollapsed = it
-                    }
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(0.dp),
-                    ) {
-                        // Api Report list
-                        LaunchedEffect(true) { G.apiReportVM.reloadDb(ctx) }
-                        ApiHeader(G.apiReportVM, ApiReportPresets)
-                        AnimatedVisibleV(!G.apiReportVM.listCollapsed.value) {
-                            ApiList(G.apiReportVM)
+                    },
+                    content = {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(0.dp),
+                        ) {
+                            // Api Report list
+                            LaunchedEffect(true) { G.apiReportVM.reloadDb(ctx) }
+                            ApiHeader(G.apiReportVM, ApiReportPresets)
+                            AnimatedVisibleV(!G.apiReportVM.listCollapsed.value) {
+                                ApiList(G.apiReportVM)
+                            }
                         }
+                    },
+                    contentCollapsed = {
+                        ApiSummary(G.apiReportVM)
                     }
-                }
+                )
 
                 // Automation
                 Section(
                     title = Str(R.string.automation),
                     horizontalPadding = 8,
                     isCollapsed = remember { mutableStateOf(spfSections.isAutomationCollapsed) },
+                    content = {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(0.dp),
+                        ) {
+                            // Bot list
+                            LaunchedEffect(true) { G.botVM.reload(ctx) }
+                            BotHeader(G.botVM)
+                            AnimatedVisibleV(!G.botVM.listCollapsed.value) {
+                                BotList()
+                            }
+                        }
+                    },
+                    contentCollapsed = {
+                        BotSummary(G.botVM)
+                    },
                     onToggleCollapse = {
                         spfSections.isAutomationCollapsed = it
                     }
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(0.dp),
-                    ) {
-                        // Bot list
-                        LaunchedEffect(true) { G.botVM.reload(ctx) }
-                        BotHeader(G.botVM)
-                        AnimatedVisibleV(!G.botVM.listCollapsed.value) {
-                            BotList()
-                        }
-                    }
-                }
+                )
 
                 // Miscellaneous
                 Section(
@@ -326,22 +388,26 @@ fun SettingScreen() {
                     isCollapsed = remember { mutableStateOf(spfSections.isMiscCollapsed) },
                     onToggleCollapse = {
                         spfSections.isMiscCollapsed = it
-                    }
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(0.dp),
-                    ) {
-                        Language()
-                        Theme()
-                        BackupRestore()
-                        SettingRow {
-                            RowVCenterSpaced(8) {
-                                FAQ()
-                                About()
+                    },
+                    content = {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(0.dp),
+                        ) {
+                            Language()
+                            Theme()
+                            BackupRestore()
+                            SettingRow {
+                                RowVCenterSpaced(8) {
+                                    FAQ()
+                                    About()
+                                }
                             }
                         }
+                    },
+                    contentCollapsed = {
+                        VersionSummary()
                     }
-                }
+                )
             }
         }
     }

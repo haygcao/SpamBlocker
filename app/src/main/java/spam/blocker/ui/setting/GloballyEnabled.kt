@@ -22,6 +22,7 @@ import spam.blocker.def.Def
 import spam.blocker.ui.M
 import spam.blocker.ui.widgets.AnimatedVisibleV
 import spam.blocker.ui.widgets.Button
+import spam.blocker.ui.widgets.GreenDot
 import spam.blocker.ui.widgets.HtmlText
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.ResIcon
@@ -38,14 +39,36 @@ import spam.blocker.util.Util.isDefaultSmsAppNotificationEnabled
 import spam.blocker.util.spf
 
 @Composable
+fun GloballyEnabledSummaryIcons(
+    mmsEnabled: Boolean
+) {
+    val C = G.palette
+    ResImage(
+        R.drawable.ic_call,
+        if (G.callEnabled.value) C.teal200 else C.disabled,
+        M.size(20.dp)
+    )
+    ResImage(
+        R.drawable.ic_sms,
+        if (G.smsEnabled.value) C.teal200 else C.disabled,
+        M.size(20.dp)
+    )
+    if (G.smsEnabled.value) {
+        ResImage(
+            R.drawable.ic_mms,
+            if (mmsEnabled) C.teal200 else C.disabled,
+            M.size(20.dp)
+        )
+    }
+}
+
+@Composable
 fun GloballyEnabled() {
     val ctx = LocalContext.current
     val C = G.palette
     val spfSections = spf.SettingSections(ctx)
     val spfGlobal = spf.Global(ctx)
 
-    // Section collapsed state
-    // var sectionCollapsed by remember { mutableStateOf(spfSections.isScreeningSectionCollapsed) }
     var collapsed by remember { mutableStateOf(spfGlobal.isCollapsed) }
     fun expand() {
         collapsed = false
@@ -110,7 +133,8 @@ fun GloballyEnabled() {
         isCollapsed = remember { mutableStateOf(spfSections.isScreeningSectionCollapsed) },
         onToggleCollapse = {
             spfSections.isScreeningSectionCollapsed = it
-        }
+        },
+        contentCollapsed = { GloballyEnabledSummary() }
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(0.dp),
@@ -127,23 +151,7 @@ fun GloballyEnabled() {
                         Button(
                             content = {
                                 RowVCenterSpaced(4) {
-                                    ResImage(
-                                        R.drawable.ic_call,
-                                        if (G.callEnabled.value) C.teal200 else C.disabled,
-                                        M.size(20.dp)
-                                    )
-                                    ResImage(
-                                        R.drawable.ic_sms,
-                                        if (G.smsEnabled.value) C.teal200 else C.disabled,
-                                        M.size(20.dp)
-                                    )
-                                    if (G.smsEnabled.value) {
-                                        ResImage(
-                                            R.drawable.ic_mms,
-                                            if (mmsEnabled) C.teal200 else C.disabled,
-                                            M.size(20.dp)
-                                        )
-                                    }
+                                    GloballyEnabledSummaryIcons(mmsEnabled)
                                 }
                             }
                         ) {
@@ -251,4 +259,29 @@ fun GloballyEnabled() {
         }
     }
 
+}
+
+@Composable
+fun GloballyEnabledSummary() {
+    val ctx = LocalContext.current
+    val C = G.palette
+    val spf = spf.Global(ctx)
+    G.globallyEnabled
+    G.callEnabled
+    G.smsEnabled
+
+    val mmsEnabled = remember { spf.isMmsEnabled }
+    if (G.globallyEnabled.value) {
+        RowVCenterSpaced(4) {
+            GreenDot()
+
+            GloballyEnabledSummaryIcons(mmsEnabled)
+        }
+    } else {
+        ResImage(
+            R.drawable.ic_tile,
+            C.disabled,
+            M.size(20.dp)
+        )
+    }
 }

@@ -36,6 +36,8 @@ import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
 import spam.blocker.ui.setting.quick.PopupChooseApps
 import spam.blocker.ui.widgets.GreyButton
+import spam.blocker.ui.widgets.GreyIcon18
+import spam.blocker.ui.widgets.GreyIcon20
 import spam.blocker.ui.widgets.GreyLabel
 import spam.blocker.ui.widgets.LeftDeleteSwipeWrapper
 import spam.blocker.ui.widgets.NumberInputBox
@@ -264,6 +266,23 @@ fun PushAlertHeader() {
             color = C.infoBlue,
             onClick = {
                 addTrigger.value = true
+            }
+        )
+    }
+}
+
+@Composable
+fun PushAlertSummary(vm: PushAlertViewModel) {
+    val C = G.palette
+    if (vm.records.any { it.enabled }) {
+        StrokeButton(
+            color = C.textGrey,
+            enabled = false,
+            icon = {
+                RowVCenterSpaced(2) {
+                    GreyIcon20(R.drawable.ic_notification)
+                    GreyIcon18(R.drawable.ic_call)
+                }
             }
         )
     }

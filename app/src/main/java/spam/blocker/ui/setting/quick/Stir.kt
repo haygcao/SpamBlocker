@@ -26,9 +26,29 @@ import spam.blocker.ui.widgets.SwitchBox
 import spam.blocker.util.spf
 
 @Composable
+fun StirSummaryIcons(
+    includeUnverified: Boolean,
+    priority: Int,
+) {
+    val C = G.palette
+    RowVCenterSpaced(6) {
+        ResIcon(R.drawable.ic_incognito, color = C.error, modifier = M.size(16.dp))
+        if (includeUnverified) {
+            ResIcon(
+                R.drawable.ic_question,
+                modifier = M.size(16.dp),
+                color = C.error
+            )
+        }
+        if (priority != 0) {
+            PriorityLabel(priority)
+        }
+    }
+}
+
+@Composable
 fun Stir() {
     val ctx = LocalContext.current
-    val C = G.palette
     val spf = spf.Stir(ctx)
 
     var isEnabled by remember { mutableStateOf(spf.isEnabled) }
@@ -64,19 +84,7 @@ fun Stir() {
             if (isEnabled) {
                 Button(
                     content = {
-                        RowVCenterSpaced(6) {
-                            ResIcon(R.drawable.ic_incognito, color = C.error, modifier = M.size(16.dp))
-                            if (includeUnverified) {
-                                ResIcon(
-                                    R.drawable.ic_question,
-                                    modifier = M.size(16.dp),
-                                    color = C.error
-                                )
-                            }
-                            if (priority != 0) {
-                                PriorityLabel(priority)
-                            }
-                        }
+                        StirSummaryIcons(priority = priority, includeUnverified = includeUnverified)
                     },
                 ) {
                     popupTrigger.value = true
@@ -88,4 +96,23 @@ fun Stir() {
             }
         }
     )
+}
+
+@Composable
+fun StirSummary() {
+    val ctx = LocalContext.current
+    val spf = spf.Stir(ctx)
+
+    val isEnabled by remember { mutableStateOf(spf.isEnabled) }
+    if (isEnabled) {
+        val includeUnverified by remember { mutableStateOf(spf.isIncludeUnverified) }
+        val priority by remember { mutableIntStateOf(spf.priority) }
+
+        Button(
+            enabled = false,
+            content = {
+                StirSummaryIcons(priority = priority, includeUnverified = includeUnverified)
+            },
+        )
+    }
 }

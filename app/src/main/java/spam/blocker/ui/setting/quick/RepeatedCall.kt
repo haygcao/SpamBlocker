@@ -16,6 +16,7 @@ import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
+import spam.blocker.ui.widgets.GreyIcon20
 import spam.blocker.ui.widgets.NumberInputBox
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.Str
@@ -150,4 +151,29 @@ fun RepeatedCall() {
             }
         }
     )
+}
+
+@Composable
+fun RepeatedCallSummary() {
+    val ctx = LocalContext.current
+    val C = G.palette
+    val spf = spf.RepeatedCall(ctx)
+
+    val isEnabled by remember { mutableStateOf(spf.isEnabled && Permission.callLog.isGranted) }
+    if (isEnabled) {
+        val times by remember { mutableIntStateOf(spf.times) }
+        val inXMin by remember { mutableIntStateOf(spf.maxInterval) }
+
+        val label = if (times == 1) {
+            "$inXMin ${Str(R.string.min)}"
+        } else {
+            "$times / $inXMin ${Str(R.string.min)}"
+        }
+        StrokeButton(
+            label = label,
+            icon = { GreyIcon20(R.drawable.ic_multi_call) },
+            color = C.textGrey,
+            enabled = false,
+        )
+    }
 }

@@ -35,9 +35,12 @@ import spam.blocker.R
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
 import spam.blocker.ui.slightDiff
+import spam.blocker.ui.widgets.Button
 import spam.blocker.ui.widgets.DrawableImage
 import spam.blocker.ui.widgets.GreyButton
 import spam.blocker.ui.widgets.GreyIcon16
+import spam.blocker.ui.widgets.GreyIcon18
+import spam.blocker.ui.widgets.GreyLabel
 import spam.blocker.ui.widgets.NumberInputBox
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.PopupSize
@@ -365,4 +368,50 @@ private fun clearUninstalledRecentApps(ctx: Context) {
         Util.isPackageInstalled(ctx, it.pkgName)
     }
     spf.setList(cleared)
+}
+
+@Composable
+fun RecentAppsSummary() {
+    val ctx = LocalContext.current
+    val spf = spf.RecentApps(ctx)
+
+    if (Permission.usageStats.isGranted) {
+        val defaultInXMin = remember { mutableStateOf<Int?>(spf.inXMin) }
+        val enabledAppInfos = remember {
+            mutableStateListOf<RecentAppInfo>()
+        }
+
+        SideEffect {
+            enabledAppInfos.clear()
+            enabledAppInfos.addAll(spf.getList())
+        }
+
+        if (enabledAppInfos.isNotEmpty()) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End,
+            ) {
+                Button(
+                    content = {
+                        RowVCenterSpaced(4) {
+                            GreyIcon18(R.drawable.ic_delay)
+
+                            GreyLabel("${defaultInXMin.value} ${Str(R.string.min)}")
+
+                            enabledAppInfos.forEach {
+                                DrawableImage(
+                                    AppInfo.fromPackage(ctx, it.pkgName).icon,
+                                    modifier = M
+                                        .size(22.dp)
+                                        .padding(horizontal = 2.dp)
+                                )
+                            }
+                        }
+                    },
+                    enabled = false,
+                )
+
+            }
+        }
+    }
 }

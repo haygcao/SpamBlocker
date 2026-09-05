@@ -8,10 +8,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.ui.setting.LabeledRow
 import spam.blocker.ui.widgets.GreyButton
+import spam.blocker.ui.widgets.GreyIcon18
 import spam.blocker.ui.widgets.Str
+import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.ui.widgets.SwitchBox
 import spam.blocker.ui.widgets.TimeRangePicker
 import spam.blocker.util.TimeUtils.timeRangeStr
@@ -65,4 +68,27 @@ fun OffTime() {
             }
         }
     )
+}
+
+@Composable
+fun OffTimeSummary() {
+    val ctx = LocalContext.current
+    val spf = spf.OffTime(ctx)
+
+    val isEnabled by remember { mutableStateOf(spf.isEnabled) }
+    if (isEnabled) {
+        val sHour by remember { mutableIntStateOf(spf.startHour) }
+        val sMin by remember { mutableIntStateOf(spf.startMin) }
+        val eHour by remember { mutableIntStateOf(spf.endHour) }
+        val eMin by remember { mutableIntStateOf(spf.endMin) }
+
+        StrokeButton(
+            label = timeRangeStr(
+                ctx, sHour, sMin, eHour, eMin
+            ),
+            icon = { GreyIcon18(R.drawable.ic_yes) },
+            color = G.palette.textGrey,
+            enabled = false,
+        )
+    }
 }

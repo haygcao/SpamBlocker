@@ -14,8 +14,11 @@ import spam.blocker.R
 import spam.blocker.def.Def
 import spam.blocker.def.Def.DEFAULT_HANG_UP_DELAY
 import spam.blocker.ui.setting.LabeledRow
+import spam.blocker.ui.widgets.Button
 import spam.blocker.ui.widgets.ComboBox
+import spam.blocker.ui.widgets.GreyIcon18
 import spam.blocker.ui.widgets.GreyIcon20
+import spam.blocker.ui.widgets.GreyLabel
 import spam.blocker.ui.widgets.LabelItem
 import spam.blocker.ui.widgets.NumberInputBox
 import spam.blocker.ui.widgets.PopupDialog
@@ -133,4 +136,47 @@ fun BlockType() {
             }
         }
     )
+}
+
+@Composable
+fun BlockTypeSummary() {
+    val ctx = LocalContext.current
+    val spf = spf.BlockType(ctx)
+    val C = G.palette
+
+    val selected = remember {
+        spf.type
+    }
+
+    val icons = remember {
+        listOf(
+            R.drawable.ic_call_blocked,
+            R.drawable.ic_call_miss,
+            R.drawable.ic_hang,
+        )
+    }
+    val labels = remember {
+        ctx.resources.getStringArray(R.array.block_type_list)
+    }
+
+    RowVCenterSpaced(4) {
+        Button(
+            enabled = false,
+            content = {
+                RowVCenterSpaced(4) {
+                    GreyIcon18(icons[selected])
+
+                    GreyLabel(labels[selected])
+
+                    if (selected == Def.BLOCK_TYPE_ANSWER_AND_HANGUP) {
+                        val delay = remember {
+                            spf.delay.toIntOrNull() ?: DEFAULT_HANG_UP_DELAY
+                        }
+
+                        GreyLabel("$delay ${Str(R.string.seconds_short)}")
+                    }
+                }
+            }
+        )
+    }
 }

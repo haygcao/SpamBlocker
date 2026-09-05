@@ -46,6 +46,7 @@ import spam.blocker.ui.widgets.OutlineCard
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.PriorityBox
 import spam.blocker.ui.widgets.PriorityLabel
+import spam.blocker.ui.widgets.ResIcon18
 import spam.blocker.ui.widgets.RowVCenter
 import spam.blocker.ui.widgets.RowVCenterSpaced
 import spam.blocker.ui.widgets.Str
@@ -281,4 +282,35 @@ fun SpamDB() {
             }
         }
     )
+}
+
+@Composable
+fun SpamDBSummary() {
+    val ctx = LocalContext.current
+    val C = G.palette
+    val spf = spf.SpamDB(ctx)
+
+    val isEnabled by remember { mutableStateOf(spf.isEnabled) }
+    if (isEnabled) {
+        var total by remember { mutableIntStateOf(SpamTable.count(ctx)) }
+        val priority by remember { mutableIntStateOf(spf.priority) }
+
+        Events.spamDbUpdated.Listen {
+            total = SpamTable.count(ctx)
+        }
+
+        Button(
+            enabled = false,
+            content = {
+                RowVCenterSpaced(4) {
+                    ResIcon18(R.drawable.ic_db, color = C.error)
+                    Text(NumberFormat.getInstance().format(total), color = C.error)
+
+                    if (priority != 0) {
+                        PriorityLabel(priority)
+                    }
+                }
+            }
+        )
+    }
 }

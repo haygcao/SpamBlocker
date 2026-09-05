@@ -130,11 +130,10 @@ fun HistoryCard(
                     space = 2,
                 ) {
 
-                    // 1. avatar (only when not expanded)
+                    // 1. avatar (when not expanded)
                     if (!record.expanded) {
                         Avatar(M
                             .size(ItemHeight.dp)
-                            .align(Alignment.Top)
                             .clip(RoundedCornerShape((ItemHeight / 2).dp))
                         )
                     }

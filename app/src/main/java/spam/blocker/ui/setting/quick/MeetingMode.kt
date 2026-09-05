@@ -36,10 +36,12 @@ import spam.blocker.ui.widgets.Button
 import spam.blocker.ui.widgets.DrawableImage
 import spam.blocker.ui.widgets.GreyButton
 import spam.blocker.ui.widgets.GreyIcon16
+import spam.blocker.ui.widgets.GreyIcon18
 import spam.blocker.ui.widgets.GreyLabel
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.PriorityBox
 import spam.blocker.ui.widgets.PriorityLabel
+import spam.blocker.ui.widgets.RowVCenterSpaced
 import spam.blocker.ui.widgets.Str
 import spam.blocker.ui.widgets.StrInputBox
 import spam.blocker.util.AppInfo
@@ -270,4 +272,50 @@ private fun clearUninstalledMeetingApps(ctx: Context) {
         Util.isPackageInstalled(ctx, it.pkgName)
     }
     spf.setList(cleared)
+}
+
+@Composable
+fun MeetingModeSummary() {
+    val C = G.palette
+    val ctx = LocalContext.current
+    val spf = spf.MeetingMode(ctx)
+
+    if (Permission.usageStats.isGranted) {
+        val priority = remember { mutableIntStateOf(spf.priority) }
+        val enabledAppInfos = remember {
+            mutableStateListOf<MeetingAppInfo>()
+        }
+
+        SideEffect {
+            enabledAppInfos.clear()
+            enabledAppInfos.addAll(spf.getList())
+        }
+
+        if (enabledAppInfos.isNotEmpty()) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End,
+            ) {
+                Button(
+                    enabled = false,
+                    content = {
+                        RowVCenterSpaced(4) {
+                            GreyIcon18(R.drawable.ic_video_call)
+                            if (priority.intValue != 20) {
+                                PriorityLabel(priority.intValue, color = C.error)
+                            }
+                            enabledAppInfos.forEach {
+                                DrawableImage(
+                                    AppInfo.fromPackage(ctx, it.pkgName).icon,
+                                    modifier = M
+                                        .size(22.dp)
+                                        .padding(horizontal = 2.dp)
+                                )
+                            }
+                        }
+                    },
+                )
+            }
+        }
+    }
 }

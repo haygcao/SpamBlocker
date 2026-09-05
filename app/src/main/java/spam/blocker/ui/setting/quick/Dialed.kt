@@ -14,9 +14,11 @@ import spam.blocker.R
 import spam.blocker.ui.setting.LabeledRow
 import spam.blocker.ui.widgets.DurationButton
 import spam.blocker.ui.widgets.GreyButton
+import spam.blocker.ui.widgets.GreyIcon16
 import spam.blocker.ui.widgets.PluralStr
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.Str
+import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.ui.widgets.SwitchBox
 import spam.blocker.util.Permission
 import spam.blocker.util.PermissionWrapper
@@ -127,4 +129,27 @@ fun Dialed() {
             }
         }
     )
+}
+
+@Composable
+fun DialedSummary() {
+    val ctx = LocalContext.current
+    val spf = spf.Dialed(ctx)
+
+    val isEnabled by remember { mutableStateOf(spf.isEnabled && Permission.callLog.isGranted) }
+    if (isEnabled) {
+        val always by remember { mutableStateOf(spf.always) }
+        val inXDay by remember { mutableIntStateOf(spf.days) }
+
+        StrokeButton(
+            label = if (!always) {
+                PluralStr(inXDay, R.plurals.days)
+            } else {
+                Str(R.string.all_time)
+            },
+            color = G.palette.textGrey,
+            icon = { GreyIcon16(R.drawable.ic_dial_pad) },
+            enabled = false,
+        )
+    }
 }

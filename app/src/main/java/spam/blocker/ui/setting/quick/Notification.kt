@@ -8,6 +8,8 @@ import android.app.NotificationManager.IMPORTANCE_NONE
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -59,6 +61,7 @@ import spam.blocker.ui.widgets.StrInputBox
 import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.ui.widgets.SwitchBox
 import spam.blocker.util.FileUtils.readDataFromUri
+import spam.blocker.util.Lambda
 import spam.blocker.util.Lambda2
 import spam.blocker.util.Notification
 import spam.blocker.util.Notification.createChannel
@@ -559,6 +562,68 @@ fun ChannelPicker(
     )
 }
 
+@Composable
+fun NotificationSummary(
+    onCallClick: Lambda? = null,
+    onSmsClick: Lambda? = null,
+) {
+    val ctx = LocalContext.current
+    val C = G.palette
+
+    val spf = spf.Notification(ctx)
+
+    val spamCallChannelId = remember { spf.spamCallChannelId }
+    val spamSmsChannelId = remember { spf.spamSmsChannelId }
+    val validSmsChannelId = remember { spf.validSmsChannelId }
+
+    RowVCenterSpaced(4, modifier = M.height(IntrinsicSize.Min) ) {
+        // Call Button
+        if (G.callEnabled.value) {
+            val ch = G.notificationChannels.find {
+                it.channelId == spamCallChannelId
+            }
+            FooterButton(
+                footerIconId = R.drawable.ic_call,
+                footerSize = 10,
+                footerOffset = Pair(-2, -2),
+                enabled = onCallClick != null,
+                onClick = onCallClick,
+                icon = {
+                    ChannelIcons(ch?.importance, ch?.mute, color = C.error)
+                }
+            )
+        }
+
+        if (G.callEnabled.value && G.smsEnabled.value) {
+
+            if (G.smsEnabled.value) {
+                val chValid = G.notificationChannels.find {
+                    it.channelId == validSmsChannelId
+                }
+                val chSpam = G.notificationChannels.find {
+                    it.channelId == spamSmsChannelId
+                }
+                FooterButton(
+                    footerIconId = R.drawable.ic_sms,
+                    footerSize = 8,
+                    footerOffset = Pair(-3, -2),
+                    enabled = onSmsClick != null,
+                    icon = {
+                        RowVCenterSpaced(4) {
+                            // Valid SMS icon
+                            ChannelIcons(chValid?.importance, chValid?.mute)
+                            // Vertical Divider
+                            VerticalDivider(thickness = 1.dp, color = C.disabled)
+                            // Spam SMS icon
+                            ChannelIcons(chSpam?.importance, chSpam?.mute, color = C.error)
+                        }
+                    },
+                    onClick = onSmsClick
+                )
+            }
+        }
+    }
+}
 
 @Composable
 fun Notification() {
@@ -651,52 +716,10 @@ fun Notification() {
         R.string.notification,
         helpTooltip = Str(R.string.help_notification),
         content = {
-            RowVCenterSpaced(4) {
-                // Call Button
-                if (G.callEnabled.value) {
-                    val ch = G.notificationChannels.find {
-                        it.channelId == spamCallChannelId
-                    }
-                    FooterButton(
-                        footerIconId = R.drawable.ic_call,
-                        footerSize = 10,
-                        footerOffset = Pair(-2, -2),
-                        icon = {
-                            ChannelIcons(ch?.importance, ch?.mute, color = C.error)
-                        }
-                    ) {
-                        configTrigger.value = true
-                    }
-                }
-
-                // SMS Button
-                if (G.smsEnabled.value) {
-                    val chValid = G.notificationChannels.find {
-                        it.channelId == validSmsChannelId
-                    }
-                    val chSpam = G.notificationChannels.find {
-                        it.channelId == spamSmsChannelId
-                    }
-
-                    FooterButton(
-                        footerIconId = R.drawable.ic_sms,
-                        footerSize = 8,
-                        footerOffset = Pair(-3, -2),
-                        icon = {
-                            RowVCenterSpaced(4) {
-                                // Valid SMS icon
-                                ChannelIcons(chValid?.importance, chValid?.mute)
-                                // Vertical Divider
-                                VerticalDivider(thickness = 1.dp, color = C.disabled)
-                                // Spam SMS icon
-                                ChannelIcons(chSpam?.importance, chSpam?.mute, color = C.error)
-                            }
-                        }
-                    ) {
-                        configTrigger.value = true
-                    }
-                }
-            }
+            NotificationSummary(
+                onCallClick = { configTrigger.value = true},
+                onSmsClick = { configTrigger.value = true }
+            )
         }
     )
 }

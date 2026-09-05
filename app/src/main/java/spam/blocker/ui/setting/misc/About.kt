@@ -11,6 +11,7 @@ import spam.blocker.BuildConfig
 import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.ui.widgets.FileChooser
+import spam.blocker.ui.widgets.GreyLabel
 import spam.blocker.ui.widgets.HtmlText
 import spam.blocker.ui.widgets.InitFile
 import spam.blocker.ui.widgets.MIME_TEXT
@@ -63,4 +64,9 @@ fun About() {
             )
         }
     )
+}
+
+@Composable
+fun VersionSummary() {
+    GreyLabel("v${BuildConfig.VERSION_NAME}")
 }

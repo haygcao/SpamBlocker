@@ -27,6 +27,7 @@ import spam.blocker.ui.widgets.NumberInputBox
 import spam.blocker.ui.widgets.OutlineCard
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.RegexInputBox
+import spam.blocker.ui.widgets.ResIcon20
 import spam.blocker.ui.widgets.Str
 import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.ui.widgets.SwitchBox
@@ -152,5 +153,23 @@ fun SmsBomb() {
                 )
             }
         }
+    }
+}
+
+@Composable
+fun SmsBombSummary() {
+    val ctx = LocalContext.current
+    val spf = spf.SmsBomb(ctx)
+
+    val isEnabled = spf.isEnabled && Permission.receiveSMS.isGranted
+    if (isEnabled) {
+        val C = G.palette
+        StrokeButton(
+            color = C.textGrey,
+            enabled = false,
+            icon = {
+                ResIcon20(R.drawable.ic_sms_bomb, color = C.error)
+            }
+        )
     }
 }

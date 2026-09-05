@@ -32,6 +32,40 @@ import spam.blocker.util.PermissionWrapper
 import spam.blocker.util.spf
 
 @Composable
+fun ContactsButtonContent(
+    isStrict: Boolean,
+    priLenient: Int,
+    priStrict: Int,
+) {
+    RowVCenterSpaced(6) {
+        // Contacts
+        RowVCenterSpaced(2) {
+            GreyIcon16(R.drawable.ic_contact_square)
+            if (priLenient != 10) {
+                PriorityLabel(priLenient)
+            }
+        }
+
+        // Non Contacts
+        if (isStrict) {
+            // Vertical Divider
+            VerticalDivider(thickness = 1.dp, color = G.palette.disabled)
+
+            RowVCenterSpaced(2) {
+                ResIcon(
+                    R.drawable.ic_question,
+                    modifier = M.size(16.dp),
+                    color = G.palette.error
+                )
+                if (priStrict != 0) {
+                    PriorityLabel(priStrict)
+                }
+            }
+        }
+    }
+}
+
+@Composable
 fun Contacts() {
     val ctx = LocalContext.current
     val C = G.palette
@@ -157,4 +191,31 @@ fun Contacts() {
             }
         }
     )
+}
+
+@Composable
+fun ContactsSummary() {
+    val ctx = LocalContext.current
+    val C = G.palette
+
+    val spf = spf.Contact(ctx)
+
+    var isEnabled by remember { mutableStateOf(spf.isEnabled && Permission.contacts.isGranted) }
+    var isStrict by remember { mutableStateOf(spf.isStrict) }
+    var priLenient by remember { mutableIntStateOf(spf.lenientPriority) }
+    var priStrict by remember { mutableIntStateOf(spf.strictPriority) }
+
+    if (isEnabled) {
+        StrokeButton(
+            color = C.textGrey,
+            enabled = false,
+            icon = {
+                ContactsButtonContent(
+                    priLenient = priLenient,
+                    priStrict = priStrict,
+                    isStrict = isStrict
+                )
+            }
+        )
+    }
 }

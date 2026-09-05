@@ -16,7 +16,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +29,7 @@ import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
 import spam.blocker.ui.widgets.AnimatedVisibleV
 import spam.blocker.ui.widgets.Button
+import spam.blocker.ui.widgets.GreyIcon18
 import spam.blocker.ui.widgets.GreyText
 import spam.blocker.ui.widgets.NumberInputBox
 import spam.blocker.ui.widgets.OutlineCard
@@ -45,26 +45,33 @@ import spam.blocker.ui.widgets.SwitchBox
 import spam.blocker.util.spf
 
 
+fun calcTimeLeft(
+    timestamp: Long,
+    duration: Int,
+): Long {
+    val lastEccCallTime: Long = timestamp
+    val dur: Long = (duration * 60 * 1000).toLong()
+    val now = System.currentTimeMillis()
+    return lastEccCallTime + dur - now
+}
+
 @Composable
 fun EmergencySituation() {
     val C = G.palette
     val ctx = LocalContext.current
     val spf = spf.EmergencySituation(ctx)
 
-    var isEnabled by rememberSaveable { mutableStateOf(spf.isEnabled) }
+    var isEnabled by remember { mutableStateOf(spf.isEnabled) }
     var priority by remember { mutableIntStateOf(spf.priority) }
-    var extraNumbers by rememberSaveable { mutableStateOf(spf.getExtraNumbers().joinToString(", ")) }
-    var duration by rememberSaveable { mutableIntStateOf(spf.duration) }
-    var collapsed by rememberSaveable { mutableStateOf(spf.isCollapsed) }
+    var extraNumbers by remember { mutableStateOf(spf.getExtraNumbers().joinToString(", ")) }
+    var duration by remember { mutableIntStateOf(spf.duration) }
+    var collapsed by remember { mutableStateOf(spf.isCollapsed) }
 
-    fun calcTimeLeft(): Long {
-        val lastEccCallTime: Long = spf.timestamp
-        val duration: Long = (duration * 60 * 1000).toLong()
-        val now = System.currentTimeMillis()
-        return lastEccCallTime + duration - now
-    }
-    var timeLeft by rememberSaveable(duration) {
-        mutableLongStateOf(calcTimeLeft())
+    var timeLeft by remember(duration) {
+        mutableLongStateOf(calcTimeLeft(
+            duration = duration,
+            timestamp = spf.timestamp
+        ))
     }
 
     // Reset confirm
@@ -83,14 +90,17 @@ fun EmergencySituation() {
     }
 
     // Test popup
-    var callToNumber by rememberSaveable { mutableStateOf("") }
-    val testTrigger = rememberSaveable { mutableStateOf(false) }
+    var callToNumber by remember { mutableStateOf("") }
+    val testTrigger = remember { mutableStateOf(false) }
     PopupDialog(
         trigger = testTrigger,
         buttons = {
             StrokeButton(label = Str(R.string.call_to), color = C.teal200) {
                 CallScreeningService.updateOutgoingEmergencyTimestamp(ctx, callToNumber)
-                timeLeft = calcTimeLeft()
+                timeLeft = calcTimeLeft(
+                    duration = duration,
+                    timestamp = spf.timestamp
+                )
                 testTrigger.value = false
             }
         }
@@ -105,7 +115,7 @@ fun EmergencySituation() {
     }
 
     // Config popup
-    val configTrigger = rememberSaveable { mutableStateOf(false) }
+    val configTrigger = remember { mutableStateOf(false) }
 
     PopupDialog(
         trigger = configTrigger,
@@ -117,7 +127,10 @@ fun EmergencySituation() {
         content = {
             // Re-calculate the time left when the config dialog popups.
             LaunchedEffect(true) {
-                timeLeft = calcTimeLeft()
+                timeLeft = calcTimeLeft(
+                    duration = duration,
+                    timestamp = spf.timestamp
+                )
             }
 
             Column(
@@ -235,5 +248,40 @@ fun EmergencySituation() {
                 )
             }
         }
+    }
+}
+
+@Composable
+fun EmergencySituationSummary() {
+    val ctx = LocalContext.current
+    val C = G.palette
+    val spf = spf.EmergencySituation(ctx)
+
+    val isEnabled by remember { mutableStateOf(spf.isEnabled) }
+    if (isEnabled) {
+        val priority by remember { mutableIntStateOf(spf.priority) }
+        val duration by remember { mutableIntStateOf(spf.duration) }
+
+
+        val timeLeft by remember(duration) {
+            mutableLongStateOf(calcTimeLeft(
+                duration = duration,
+                timestamp = spf.timestamp
+            ))
+        }
+
+        Button(
+            enabled = false,
+            borderColor = if (timeLeft > 0) C.warning else C.textGrey,
+            content = {
+                RowVCenterSpaced(6) {
+                    GreyIcon18(R.drawable.ic_sos)
+                    Text("$duration ${Str(R.string.min)}", color = if (timeLeft > 0) C.warning else C.textGrey)
+                    if (priority != Int.MAX_VALUE) {
+                        PriorityLabel(priority)
+                    }
+                }
+            }
+        )
     }
 }

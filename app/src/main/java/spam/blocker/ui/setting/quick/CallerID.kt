@@ -222,3 +222,19 @@ fun CallerID() {
         }
     )
 }
+
+@Composable
+fun CallerIDSummary() {
+    val ctx = LocalContext.current
+    val spf = spf.CallerID(ctx)
+
+    val isEnabled by remember { mutableStateOf(spf.isEnabled && Permission.phoneState.isGranted && Permission.showOverlay.isGranted) }
+    if (isEnabled) {
+        val C = G.palette
+        StrokeButton(
+            label = Str(R.string.preview),
+            color = C.textGrey,
+            enabled = false,
+        )
+    }
+}

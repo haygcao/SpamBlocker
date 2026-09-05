@@ -35,6 +35,7 @@ import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
+import spam.blocker.ui.thenIf
 import spam.blocker.util.Lambda
 import spam.blocker.util.Lambda1
 import spam.blocker.util.Lambda2
@@ -63,7 +64,7 @@ fun Button(
     backgroundColor: Color = Color.Unspecified,
     shape: Shape = RoundedCornerShape(BUTTON_CORNER_RADIUS.dp),
     contentPadding: PaddingValues = PaddingValues(BUTTON_H_PADDING.dp, 0.dp),
-    onClick: () -> Unit,
+    onClick: Lambda? = null,
 ) {
     val C = G.palette
 
@@ -77,10 +78,12 @@ fun Button(
             .clip(RoundedCornerShape(BUTTON_CORNER_RADIUS.dp))
             .background(backgroundColor)
 
-            .combinedClickable(
-                onClick = { if (enabled) onClick() },
-                onLongClick = { if (enabled) onLongClick?.invoke() }
-            ),
+            .thenIf(enabled) {
+                combinedClickable(
+                    onClick = { onClick?.let { it() } },
+                    onLongClick = { onLongClick?.invoke() }
+                )
+            },
         propagateMinConstraints = true
     ) {
         RowCenter(
@@ -102,7 +105,7 @@ fun StrokeButton(
     shape: RoundedCornerShape = RoundedCornerShape(BUTTON_CORNER_RADIUS.dp),
     contentPadding: PaddingValues = PaddingValues(BUTTON_H_PADDING.dp, 0.dp),
     enabled: Boolean = true,
-    onClick: Lambda,
+    onClick: Lambda? = null,
 ) {
     Button(
         modifier = modifier.heightIn(min = BUTTON_H.dp),
@@ -131,7 +134,7 @@ fun GreyButton(
     // optional
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    onClick: Lambda,
+    onClick: Lambda? = null,
 ) {
     StrokeButton(
         label = label,
@@ -157,7 +160,7 @@ fun FooterButton(
     footerOffset: Pair<Int, Int> = Pair(-3, -3),
 
     onLongClick: Lambda? = null,
-    onClick: Lambda,
+    onClick: Lambda? = null,
 ) {
     val C = G.palette
 

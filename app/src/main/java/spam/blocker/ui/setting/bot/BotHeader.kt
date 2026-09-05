@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,10 +23,13 @@ import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
 import spam.blocker.ui.widgets.ConfigImportDialog
 import spam.blocker.ui.widgets.DividerItem
+import spam.blocker.ui.widgets.FlowRowSpaced
 import spam.blocker.ui.widgets.GreyIcon
+import spam.blocker.ui.widgets.GreyText
 import spam.blocker.ui.widgets.LabelItem
 import spam.blocker.ui.widgets.MenuButton
 import spam.blocker.ui.widgets.Str
+import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.util.MyJson
 import java.util.UUID
 
@@ -166,5 +170,31 @@ fun BotHeader(
             color = C.infoBlue,
             items = dropdownItems,
         )
+    }
+}
+
+
+@Composable
+fun BotSummary(vm: BotViewModel) {
+    val ctx = LocalContext.current
+    val C = G.palette
+
+    LaunchedEffect(Unit) {
+        vm.reload(ctx)
+    }
+
+    val enabledBots = vm.bots.filter { it.trigger.isActivated() }
+    if (enabledBots.isEmpty()) {
+        GreyText("N/A")
+    } else {
+        FlowRowSpaced(4) {
+            enabledBots.forEach { bot ->
+                StrokeButton(
+                    label = bot.desc,
+                    color = C.textGrey,
+                    enabled = false,
+                )
+            }
+        }
     }
 }

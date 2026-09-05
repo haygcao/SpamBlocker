@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -29,6 +30,7 @@ fun Section(
     bgColor: Color = G.palette.background,
     isCollapsed: MutableState<Boolean>? = null, // null == non-foldable, e.g. sections in api dialogs
     onToggleCollapse: ((Boolean) -> Unit)? = null,
+    contentCollapsed: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
     Box(
@@ -44,8 +46,19 @@ fun Section(
                 .padding(horizontal = 14.dp, vertical = 10.dp)
                 .wrapContentHeight()
         ) {
+            // Show expanded content
             AnimatedVisibleV(isCollapsed?.value != true) {
                 content()
+            }
+            // Show folded summary
+            AnimatedVisibleV(isCollapsed?.value == true) {
+                Column(
+                    modifier = M.fillMaxWidth().padding(4.dp).clickable {
+                        isCollapsed!!.value = !isCollapsed.value
+                    }
+                ) {
+                    contentCollapsed?.let { it() }
+                }
             }
         }
 
