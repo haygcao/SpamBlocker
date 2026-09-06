@@ -4,9 +4,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 
 fun String.A(color: Color = Color.Unspecified): AnnotatedString =
     AnnotatedString(this, SpanStyle(color = color))
+
+fun AnnotatedString.A(color: Color = Color.Unspecified): AnnotatedString =
+    buildAnnotatedString {
+        withStyle(SpanStyle(color = color)) {
+            append(this@A)
+        }
+    }
 
 fun String.formatAnnotated(vararg args: AnnotatedString): AnnotatedString {
     return buildAnnotatedString {
@@ -26,23 +34,15 @@ fun String.formatAnnotated(vararg args: AnnotatedString): AnnotatedString {
             // Append the AnnotatedString argument if available
             if (index < args.size) {
                 val arg = args[index]
-                append(arg.text)
-                // Copy all span styles from the argument
-                arg.spanStyles.forEach { span ->
-                    addStyle(span.item, currentIndex + span.start, currentIndex + span.end)
-                }
-                currentIndex += arg.text.length
+                append(arg)
+                currentIndex += arg.length
             }
         }
 
         // Append any remaining AnnotatedString arguments
         args.drop(parts.size).forEach { arg ->
-            append(arg.text)
-            arg.spanStyles.forEach { span ->
-                addStyle(span.item, currentIndex + span.start, currentIndex + span.end)
-            }
-            currentIndex += arg.text.length
+            append(arg)
+            currentIndex += arg.length
         }
     }
 }
-

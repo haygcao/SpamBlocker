@@ -8,7 +8,6 @@
         %s
         ]]>
     </string>
-    <string name="invalid_auth_credentials">Lütfen geçerli yetkilendirme bilgilerini girin.</string>
     <string name="delay">Gecikme</string>
     <string name="report_number_require_call_log_permission">
         Tekrarlanan aramaların veya geri aranan numaraların yanlış raporlanmasını önlemek için,
@@ -29,29 +28,36 @@
     </string>
     <string name="running_services">Çalışan Hizmetler</string>
     <string name="report_number">Numarayı Bildir</string>
-    <string-array name="spam_categories">
-        <item>Geçerli Numara</item>
-        <item>Sahtekarlık</item>
-        <item>Pazarlama</item>
-        <item>Anket</item>
-        <item>Siyasi</item>
-        <item>Diğer Spam</item>
-    </string-array>
+    <string name="valid_number">Geçerli Numara</string>
+    <string name="valid_sms">Geçerli SMS</string>
+    <string name="fraud">Sahtekarlık</string>
+    <string name="promotional">Promosyon</string>
+    <string name="survey">Anket</string>
+    <string name="reminder">Hatırlatıcı</string>
     <string name="action_category_config">Kategori Yapılandırması</string>
     <string name="help_action_category_config">
         <![CDATA[
-        Yalnızca aşağıdaki spam kategorileri desteklenir, API\'den gelen diğer tüm kategoriler bunlardan birine eşleştirilmelidir.<br>
-        <br>
-         - <font color="#03DAC5"><b>{geçerli}</b></font><br>
-        &ensp; Geçerli numara olarak bildirin, spam değil.<br>
-        <br>
-         - <font color="#fa7f71"><b>{sahtekarlık}</b></font><br>
-         - <font color="#fa7f71"><b>{pazarlama}</b></font><br>
-         - <font color="#fa7f71"><b>{anket}</b></font><br>
-         - <font color="#fa7f71"><b>{siyasi}</b></font><br>
-        <br>
-         - <font color="#fa7f71"><b>{diğer}</b></font><br>
-        &ensp; Yukarıdaki kategorilerden hiçbiri uygulanmadığında kullanılan yedek spam türü.<br>
+                Yalnızca aşağıdaki kategoriler desteklenir:<br>
+                <br>
+                 - <highlight><b>{geçerli}</b></highlight><br>
+                &ensp; Geçerli bir telefon numarası olarak bildirin, spam araması olarak değil.<br>
+                <br>
+                 - <error><b>{sahtekarlık}</b></error><br>
+                 - <error><b>{promosyon}</b></error><br>
+                 - <error><b>{anket}</b></error><br>
+                 - <error><b>{reminder}</b></error><br>
+                 - <error><b>{diğer}</b></error><br>
+                &ensp; Yukarıdaki kategorilerden hiçbiri uymadığında kullanılan yedek spam araması türü.<br>
+                <br>
+                Bu, sonraki HTTP isteklerinde kullanılabilecek <title>{category}</title> etiketini oluşturur. <br>
+                <br>
+                Örneğin, POST gövdesi: <br>
+                <sample>
+                { <br>
+                    &ensp; \"phone\": \"{number}\", <br>
+                    &ensp; \"rating\": \"{category}\" <br>
+                }
+                </sample>
         ]]>
     </string>
     <string name="missing_category">
@@ -76,19 +82,20 @@
         Bazı hizmetler, size bir aramanın yaklaşmakta olduğunu, genellikle bir dakika içinde, önceden bildirmek için size mesaj gönderecektir.<br>
         <br>
         Örneğin, şöyle bir SMS mesajı:<br>
-        &ensp; <font color="#888888">[bazı hizmet] Sizi bilgilendirmek için arıyoruz ..., lütfen cevaplamaktan çekinmeyin.</font><br>
+        &ensp; <sample>[bazı hizmet] Sizi bilgilendirmek için arıyoruz ..., lütfen cevaplamaktan çekinmeyin.</sample><br>
         <br>
         Böyle bir mesaj için normal ifade şöyle olacaktır:<br>
-        &ensp; <font color="#03DAC5"><b><translate>.*cevap.*ver.*</translate></b></font> <br>
+        &ensp; <highlight><b><translate>.*cevap.*ver.*</translate></b></highlight> <br>
         <br>
-        Varsayılan ayar <font color="#03DAC5"><b>120 Saniye</b></font>, böyle bir mesaj aldıktan sonraki iki dakika içinde tüm aramalara izin verileceği anlamına gelir.<br>
+        Varsayılan ayar <highlight><b>120 Saniye</b></highlight>, böyle bir mesaj aldıktan sonraki iki dakika içinde tüm aramalara izin verileceği anlamına gelir.<br>
         <br>
         Hem normal SMS hem de flaş SMS (sınıf 0 SMS) için çalışır.<br>
         <br>
-        <font color="#ea86ff"><b>Öncelik: 10</b></font>
+        Genel SMS taraması etkinleştirilmeden de çalışır.<br>
+        <br>
+        <priority><b>Öncelik: 10</b></priority>
         ]]>
     </string>
     <string name="waning_using_wildcard_as_regex">Wildcard `*`, öncesinde nokta olmadan kullanıldı, `.*` demek istediniz mi?</string>
     <string name="import_as">Şu Olarak İçe Aktar</string>
-    <string name="api_key">API Anahtarı</string>
 </resources>

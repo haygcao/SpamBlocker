@@ -17,8 +17,6 @@
     <string name="clear">Neteja</string>
     <string name="test">Prova</string>
     <string name="save">Guarda</string>
-    <string name="whitelist">Llista blanca</string>
-    <string name="blacklist">Llista negra</string>
     <string name="content">Contingut</string>
     <string name="priority">Prioritat</string>
     <string name="deleted_filter">(regla suprimida)</string>
@@ -30,20 +28,23 @@
     <string name="yes">Sí</string>
     <string name="no">No</string>
     <string name="ok">D\'acord</string>
+    <string name="cancel">Cancel·lar</string>
     <string name="miscellaneous">Diversos</string>
     <string name="quick_settings">Configuració ràpida</string>
     <string name="regex_settings">Configuració Regex</string>
     <string name="backup">Còpia de seguretat</string>
     <string name="import_">Importa</string>
     <string name="export">Exporta</string>
-    <string name="config_text">Text de configuració</string>
+    <string name="config_json">JSON de configuració</string>
     <string name="imported_successfully">Importat correctament</string>
     <string name="import_fail">Error en importar</string>
+    <string name="exported_successfully">Exportat amb èxit</string>
+    <string name="export_fail">Error en l\'exportació</string>
     <string name="prompt_go_to_permission_setting">
         <![CDATA[
         Aquesta funció requereix permís:<br>
         <br>
-        <font color="#00BFFF">%s</font><br>
+        <title>%s</title><br>
         <br>
         S\'ha d\'activar manualment a la configuració del sistema.<br>
         Voleu obrir aquesta pàgina de configuració?
@@ -55,5 +56,6 @@
     <string name="label_content_rules">Regles del missatge</string>
     <string name="content_rule">Regla de missatge</string>
     <string name="recent_apps"><short>Recents</short></string>
-    <string name="allow_contact">Contactes</string>
+    <string name="contacts">Contactes</string>
+    <string name="non_contacts">No contactes</string>
 </resources>

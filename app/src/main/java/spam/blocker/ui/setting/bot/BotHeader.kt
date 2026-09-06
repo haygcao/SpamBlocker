@@ -1,56 +1,62 @@
 package spam.blocker.ui.setting.bot
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.db.Bot
 import spam.blocker.db.BotTable
 import spam.blocker.db.reScheduleBot
+import spam.blocker.service.bot.InterceptCall
+import spam.blocker.service.bot.InterceptSms
 import spam.blocker.service.bot.Schedule
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
-import spam.blocker.ui.setting.api.ApiAuthConfigDialog
-import spam.blocker.ui.theme.SkyBlue
 import spam.blocker.ui.widgets.ConfigImportDialog
 import spam.blocker.ui.widgets.DividerItem
+import spam.blocker.ui.widgets.FlowRowSpaced
 import spam.blocker.ui.widgets.GreyIcon
+import spam.blocker.ui.widgets.GreyText
 import spam.blocker.ui.widgets.LabelItem
 import spam.blocker.ui.widgets.MenuButton
 import spam.blocker.ui.widgets.Str
-import spam.blocker.util.BotJson
-import spam.blocker.util.Lambda1
+import spam.blocker.ui.widgets.StrokeButton
+import spam.blocker.util.MyJson
 import java.util.UUID
 
-// The row:
-//         ? [Test] [New]
+
+fun addBotToDB(ctx: Context, newBot: Bot) {
+    // 1. add to db
+    BotTable.addNew(ctx, newBot)
+
+    // 2. reload UI
+    G.botVM.reload(ctx)
+
+    // 3. expand the list
+    G.botVM.listCollapsed.value = false
+
+    // 4. re-schedule it
+    reScheduleBot(ctx, newBot)
+}
+
+@SuppressLint("LocalContextGetResourceValueCall")
 @Composable
 fun BotHeader(
     vm: BotViewModel,
 ) {
+    val C = G.palette
     val ctx = LocalContext.current
 
     val initialBotToEdit = remember { mutableStateOf(Bot()) }
-    val afterCreated = remember{ mutableStateOf<Lambda1<Context>?> (null) }
-
-    fun addBotToDB(ctx: Context, newBot: Bot) {
-        // 1. add to db
-        BotTable.addNewRecord(ctx, newBot)
-
-        // 2. reload UI
-        G.botVM.reload(ctx)
-
-        // 3. expand the list
-        vm.listCollapsed.value = false
-
-        // 4. re-schedule it
-        reScheduleBot(ctx, newBot)
-    }
 
     val customizeTrigger = rememberSaveable { mutableStateOf(false) }
     if (customizeTrigger.value) {
@@ -69,7 +75,15 @@ fun BotHeader(
         ConfigImportDialog(
             trigger = importTrigger,
         ) { configJson ->
-            val bot = BotJson.decodeFromString<Bot>(configJson)
+            val bot = MyJson.decodeFromString<Bot>(configJson)
+
+            // Show error prompt if user try to import API json (copied from wiki)
+            when (bot.actions.firstOrNull()) {
+                is InterceptCall, is InterceptSms -> {
+                    throw Exception(ctx.getString(R.string.should_import_as_instant_query))
+                }
+            }
+
             // clear `workUUID` from imported bot
             val newBot = bot.copy(
                 trigger = if(bot.trigger is Schedule)
@@ -89,19 +103,17 @@ fun BotHeader(
         }
     }
 
-    val tappedPreset = remember { mutableStateOf<BotPreset?>(null) }
+    var tappedPreset by remember { mutableStateOf<BotPreset?>(null) }
 
-    val authFormTrigger = remember { mutableStateOf(false) }
-    if (authFormTrigger.value) {
-        ApiAuthConfigDialog(
-            trigger = authFormTrigger,
-            authConfig = tappedPreset.value!!.newAuthConfig!!(),
-            actions = initialBotToEdit.value.actions,
-            reportApi = tappedPreset.value!!.newReportApi?.let { it(ctx) },
-        ) {
-            addBotToDB(ctx, initialBotToEdit.value)
-            afterCreated.value?.let { it(ctx) }
-        }
+    var setupDialog by remember(tappedPreset) {
+        mutableStateOf(
+            tappedPreset?.setupDialog
+        )
+    }
+
+    val setupTrigger = remember { mutableStateOf(false) }
+    if (setupTrigger.value) {
+        setupDialog?.Compose(setupTrigger)
     }
 
     val dropdownItems = remember {
@@ -110,46 +122,34 @@ fun BotHeader(
                 label = ctx.getString(R.string.customize),
                 leadingIcon = { GreyIcon(R.drawable.ic_note) }
             ) {
-                tappedPreset.value = null
                 initialBotToEdit.value = Bot()
-                afterCreated.value = null
 
                 customizeTrigger.value = true
             },
             LabelItem(
                 label = ctx.getString(R.string.import_),
-                leadingIcon = { GreyIcon(R.drawable.ic_backup_import) }
+                leadingIcon = { GreyIcon(R.drawable.ic_import) }
             ) {
                 importTrigger.value = true
             },
             DividerItem(),
         )
         ret += BotPresets.map { preset ->
-            val bot = preset.newInstance(ctx)
             LabelItem(
-                label = bot.desc,
+                label = ctx.getString(preset.descId),
                 tooltip = preset.tooltip(ctx)
             ) {
-                tappedPreset.value = preset
-                initialBotToEdit.value = bot
-                afterCreated.value = preset.afterCreated
+                tappedPreset = preset
 
-                val requiredPermissions = bot.triggerAndActions().map {
-                    it.requiredPermissions(ctx)
-                }.flatten() + preset.requiredPermissions
-
-                G.permissionChain.ask(ctx, requiredPermissions) { isGranted ->
+                G.permissionChain.ask(ctx, preset.requiredPermissions) { isGranted ->
                     if (isGranted) {
-                        // If the preset requires authorization, such as API_KEY/username/password,
-                        //  show a dialog asking for it.
-                        // Otherwise, create the actions directly.
-                        val authConfig = preset.newAuthConfig
-                        if (authConfig == null) {
-                            addBotToDB(ctx, bot)
-                            preset.afterCreated?.let { it(ctx) }
+                        // If the preset requires authentication, such as PhoneBlock OAuth,
+                        //  show an OAuth dialog.
+                        // Otherwise, just create the bot.
+                        if(preset.setupDialog == null) {
+                            preset.doAdd!!(ctx)
                         } else {
-                            // If it requires authorization, show a config dialog
-                            authFormTrigger.value = true
+                            setupTrigger.value = true
                         }
                     }
                 }
@@ -167,8 +167,34 @@ fun BotHeader(
     ) {
         MenuButton(
             label = Str(R.string.new_),
-            color = SkyBlue,
+            color = C.infoBlue,
             items = dropdownItems,
         )
+    }
+}
+
+
+@Composable
+fun BotSummary(vm: BotViewModel) {
+    val ctx = LocalContext.current
+    val C = G.palette
+
+    LaunchedEffect(Unit) {
+        vm.reload(ctx)
+    }
+
+    val enabledBots = vm.bots.filter { it.trigger.isActivated() }
+    if (enabledBots.isEmpty()) {
+//        GreyText("N/A")
+    } else {
+        FlowRowSpaced(4) {
+            enabledBots.forEach { bot ->
+                StrokeButton(
+                    label = bot.desc,
+                    color = C.textGrey,
+                    enabled = false,
+                )
+            }
+        }
     }
 }

@@ -17,8 +17,6 @@
     <string name="clear">Pulisci</string>
     <string name="test">Prova</string>
     <string name="save">Salva</string>
-    <string name="whitelist">Lista bianca</string>
-    <string name="blacklist">Lista nera</string>
     <string name="content">Contenuto</string>
     <string name="priority">Priorità</string>
     <string name="deleted_filter">(cancella regola)</string>
@@ -30,20 +28,23 @@
     <string name="yes">Si</string>
     <string name="no">No</string>
     <string name="ok">OK</string>
+    <string name="cancel">Annulla</string>
     <string name="miscellaneous">Varie</string>
     <string name="quick_settings">Impostazioni veloci</string>
     <string name="regex_settings">Impostazioni regex</string>
     <string name="backup">Backup</string>
     <string name="import_">Importa</string>
     <string name="export">Esporta</string>
-    <string name="config_text">Prova configurazione</string>
+    <string name="config_json">JSON di configurazione</string>
     <string name="imported_successfully">Importato con successo</string>
     <string name="import_fail">Importazione fallita</string>
+    <string name="exported_successfully">Esportato con successo</string>
+    <string name="export_fail">Errore di esportazione</string>
     <string name="prompt_go_to_permission_setting">
         <![CDATA[
         Questa funzionalità richiede l\'autorizzazione:<br>
         <br>
-        <font color="#00BFFF">%s</font><br>
+        <title>%s</title><br>
         <br>
         Deve essere abilitata manualmente nelle Impostazioni di Sistema.<br>
         Aprire la pagina delle impostazioni?
@@ -55,6 +56,7 @@
     <string name="label_content_rules">Regole del messaggio</string>
     <string name="content_rule">Regola messaggio</string>
     <string name="recent_apps"><short>Applicazioni recenti</short></string>
-    <string name="allow_contact">Contatti</string>
+    <string name="contacts">Contatti</string>
 
+    <string name="non_contacts">Non-Contatti</string>
 </resources>

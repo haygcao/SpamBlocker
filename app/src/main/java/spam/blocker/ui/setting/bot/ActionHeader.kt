@@ -27,19 +27,19 @@ import spam.blocker.service.bot.botActions
 import spam.blocker.service.bot.clone
 import spam.blocker.service.bot.executeAll
 import spam.blocker.ui.M
+import spam.blocker.ui.history.tagOther
 import spam.blocker.ui.setting.SettingRow
-import spam.blocker.ui.setting.api.tagOther
-import spam.blocker.ui.theme.LocalPalette
-import spam.blocker.ui.theme.SkyBlue
-import spam.blocker.ui.theme.Teal200
+import spam.blocker.ui.widgets.AnimatedVisibleV
 import spam.blocker.ui.widgets.BalloonQuestionMark
-import spam.blocker.ui.widgets.DimGreyText
 import spam.blocker.ui.widgets.GreyLabel
+import spam.blocker.ui.widgets.GreyText
+import spam.blocker.ui.widgets.Placeholder
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.RowVCenterSpaced
 import spam.blocker.ui.widgets.Str
 import spam.blocker.ui.widgets.StrInputBox
 import spam.blocker.ui.widgets.StrokeButton
+import spam.blocker.util.Clipboard
 import spam.blocker.util.JetpackTextLogger
 import spam.blocker.util.Lambda
 
@@ -47,11 +47,11 @@ import spam.blocker.util.Lambda
 @Composable
 fun TestActionButton(
     actions: SnapshotStateList<IAction>,
-    testingRequireNumber: Boolean = false, // testing InstantQuery requires a number
+    testingRequiresNumberOrContent: Boolean = false, // testing InstantQuery requires a number
     botId: Long? = null, // is testing bot
 ) {
     val ctx = LocalContext.current
-    val C = LocalPalette.current
+    val C = G.palette
 
 
     val logStr = remember { mutableStateOf(buildAnnotatedString {}) }
@@ -60,13 +60,23 @@ fun TestActionButton(
     val logTrigger = remember { mutableStateOf(false) }
     PopupDialog(
         trigger = logTrigger,
+        buttons = if (logStr.value.text.length > 3000){
+            {
+                StrokeButton(Str(R.string.copy), color = C.teal200) {
+                    Clipboard.copy(ctx, logStr.value.text)
+                }
+            }
+        } else {
+            null
+        }
     ) {
         Text(text = logStr.value)
     }
 
     val coroutine = rememberCoroutineScope()
     fun testActions(
-        content: String? = null,
+        rawNumber: String? = null,
+        smsContent: String? = null,
     ) {
         // Gather all required permissions for all actions
         val requiredPermissions = actions.map { it.requiredPermissions(ctx) }.flatten()
@@ -79,10 +89,10 @@ fun TestActionButton(
                 coroutine.launch {
                     withContext(IO) {
                         val aCtx = ActionContext(
-                            logger = JetpackTextLogger(logStr, C),
-                            rawNumber = content,
-                            smsContent = content,
-                            tagCategory = tagOther,
+                            logger = JetpackTextLogger(logStr),
+                            rawNumber = rawNumber,
+                            smsContent = smsContent,
+                            tagCategoryValue = tagOther,
                             botId = botId,
                         )
                         actions.executeAll(ctx, aCtx)
@@ -104,27 +114,37 @@ fun TestActionButton(
     PopupDialog(
         trigger = inputTrigger,
         buttons = {
-            StrokeButton(label = Str(R.string.ok), color = Teal200) {
-                testActions(if (forCall) G.testingVM.phone.value else G.testingVM.sms.value)
+            StrokeButton(label = Str(R.string.ok), color = C.teal200) {
+                testActions(
+                    rawNumber = G.testingVM.phone.value,
+                    smsContent = if (forCall) null else G.testingVM.sms.value
+                )
             }
         }
     ) {
 
         StrInputBox(
-            text = if(forCall) G.testingVM.phone.value else G.testingVM.sms.value,
-            label = { GreyLabel(Str(if (forCall) R.string.phone_number else R.string.sms_content))},
-            placeholder = { DimGreyText(if (forCall) "+12223334444" else "") },
+            text = G.testingVM.phone.value,
+            label = { GreyLabel(Str(R.string.phone_number))},
+            placeholder = { Placeholder("+12223334444") },
             onValueChange = {
-                if (forCall)
-                    G.testingVM.phone.value = it
-                else
-                    G.testingVM.sms.value = it
+                G.testingVM.phone.value = it
             }
         )
+        AnimatedVisibleV(!forCall) {
+            StrInputBox(
+                text = G.testingVM.sms.value,
+                label = { GreyLabel(Str(R.string.sms_content))},
+                placeholder = { Placeholder("") },
+                onValueChange = {
+                    G.testingVM.sms.value = it
+                }
+            )
+        }
     }
 
-    StrokeButton(label = Str(R.string.test), color = Teal200) {
-        if (testingRequireNumber) {
+    StrokeButton(label = Str(R.string.test), color = C.teal200) {
+        if (testingRequiresNumberOrContent) {
             inputTrigger.value = true
         } else {
             testActions()
@@ -143,7 +163,7 @@ fun ActionPresetCard(
         // Icon
         action.Icon()
         // Title
-        GreyLabel(
+        GreyText(
             text = action.label(ctx),
             modifier = M
                 .weight(1f)
@@ -165,6 +185,7 @@ fun ActionHeader(
     testingRequireNumber: Boolean = false,
     botId: Long? = null,
 ) {
+    val C = G.palette
     val newTrigger = remember { mutableStateOf(false) }
     PopupDialog(
         trigger = newTrigger,
@@ -193,14 +214,14 @@ fun ActionHeader(
             // Test
             TestActionButton(
                 actions = currentActions,
-                testingRequireNumber = testingRequireNumber,
+                testingRequiresNumberOrContent = testingRequireNumber,
                 botId = botId,
             )
 
             // New
             StrokeButton(
                 label = Str(R.string.new_),
-                color = SkyBlue,
+                color = C.infoBlue,
             ) {
                 newTrigger.value = true
             }

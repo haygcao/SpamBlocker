@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        Sorry, the app has crashed.\n\n
+    <![CDATA[
+        Sorry, the app has crashed. <br>
+        <br>
         Please copy the content below and report this issue on github,
         remove any sensitive information before reporting.
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>Sun</item>
@@ -14,25 +17,23 @@
         <item>Sat</item>
     </string-array>
 
-    <string name="confirm_delete_all_records">Confirm to delete all Records?</string>
+    <string name="confirm_delete_all_records">
+        <![CDATA[
+        Confirm to delete <error>all</error> records?
+        ]]>
+    </string>
     <string name="expiry">Expiry</string>
     <string name="days">Days</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        When enabled, the SMS content will also be logged in the database and displayed in this list, it will not be logged in database when disabled.<br>
-        <br>
-        - When enabled:<br>
-        &emsp; <b>Tap</b> to expand/collapse the full message.<br>
-        <br>
-        - When disabled:<br>
-        &emsp; <b>Tap</b> to open the conversation in the default app.
+        When enabled, the SMS content will also be logged in the database and displayed in this list, it will not be logged in database when disabled.
         ]]>
     </string>
     <string name="copy_number">Copy number</string>
-    <string name="add_num_to_regex_rule">Add number to regex rule</string>
-    <string name="add_num_to_db">Add number to spam database</string>
-    <string name="mark_all_as_read">Mark all as read</string>
-    <string name="remove_db_number">Delete number from spam database</string>
+    <string name="add_to_regex_rule">Add to regex rule</string>
+    <string name="edit_regex_rule">Edit regex rule</string>
+    <string name="add_to_db">Add to database</string>
+    <string name="remove_from_db">Remove from database</string>
 
     <string name="language">Language</string>
     <string name="help_language">
@@ -43,21 +44,39 @@
     <string name="repeated_call">Repeated Call</string>
     <string name="help_repeated_call">
         <![CDATA[
-        Allow if the call is repeated within a period of time, it is likely to be important rather than a spam call. <br>
+        Allow repeated calls, they are more likely to be urgent than spam. <br>
+        <br>
+        By default, the second call within <highlight><b>5 minutes</b></highlight> will be allowed. <br>
         <br>
         <b>Options:</b><br>
         <br>
-        <h6><font color="#00BFFF">- Frequency</h6>
-        The default setting <font color="#03DAC5"><b>1 / 5 Min</b></font> means the second call within 5 minutes will be allowed. <br>
+        - <title><b>Max Interval</b></title> <br>
+        Only calls within this timeframe are considered as repeats. <br>
         <br>
-        <h6><font color="#00BFFF">- Include SMS</font></h6>
-        When enabled, receiving SMS messages from that number also counts.<br>
+        - <title><b>Min Interval</b></title> <br>
+        If a number calls again sooner than this, it will be ignored. Spam bots usually redial instantly,
+         in that case, increase this value. Setting the blocking mode to \"Silence\" can also help, check its tooltip for details. <br>
         <br>
-        <font color="#ea86ff"><b>Priority: 10</b></font>
+        - <title><b>Repeat Times</b></title> <br>
+        The minimal repeat times. <br>
+        For example: <br>
+        <sample>
+        When set to 2, a call must repeat twice. In total, it takes three calls: <br>
+         &ensp; - ignore <br>
+         &ensp; - ignore <br>
+         &ensp; - allow <br>
+        </sample>
+        <br>
+        - <title><b>Include SMS</b></title> <br>
+        When enabled, receiving SMS messages from that number also counts. <br>
+        <br>
+        <priority><b>Priority: 10</b></priority>
         ]]>
     </string>
-
-
+    <string name="max_interval_min">Max Interval (Min)</string>
+    <string name="min_interval_sec">Min Interval (Sec)</string>
+    <string name="repeat_times">Repeat Times</string>
+    <string name="call_repeated_too_soon">Only %s milliseconds since last call from this number, required minimum is %s milliseconds, ignore.</string>
     <string name="about">About</string>
     <string name="version">Version</string>
     <string name="source_code">Source Code</string>

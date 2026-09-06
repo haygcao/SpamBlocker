@@ -1,0 +1,108 @@
+<resources>
+    <string name="call_screened">Anruf gefiltert</string>
+    <string name="help_call_screened">
+        <![CDATA[
+        Wird nach der Anruffilterung ausgelöst.
+        ]]>
+    </string>
+    <string name="text_reply">Textantwort</string>
+    <string name="text_to_reply">Antworttext</string>
+    <string name="cant_talk_in_meeting">Ich bin gerade in einem Meeting, ich melde mich später.</string>
+    <string name="busy_right_now">Kann gerade nicht sprechen, ich melde mich später.</string>
+    <string name="help_action_text_reply">
+        <![CDATA[
+        Erzeugt den automatischen Antworttext basierend auf dem Ergebnis der Anruffilterung.
+        ]]>
+    </string>
+    <string name="send_sms">SMS senden</string>
+    <string name="result">Ergebnis</string>
+    <string name="contacts_only">Nur Kontakte</string>
+    <string name="blocked_by">Blockiert von</string>
+    <string name="sms_sent_successfully">SMS erfolgreich gesendet</string>
+    <string name="failed_to_send_sms">Fehler beim Senden der SMS: %s</string>
+    <string name="replying_text">Antworttext: %s</string>
+    <string name="help_action_send_sms">
+        <![CDATA[
+        Eine SMS-Nachricht senden. <br>
+        <br>
+        <title>Nummer</title> <br>
+        Überprüft mehrere Quellen in einer bestimmten Reihenfolge und übernimmt die erste gefundene Übereinstimmung: <br>
+        &ensp; Tag <sample><no_translate>send_sms_to</no_translate></sample> (kann mit <b>Tag setzen</b> erstellt werden) <br>
+        &ensp; Die eingehende Nummer <br>
+        <br>
+        <title>SMS-Inhalt</title> <br>
+        Überprüft mehrere Quellen in einer bestimmten Reihenfolge: <br>
+        &ensp; Tag <sample><no_translate>send_sms_content</no_translate></sample> <br>
+        &ensp; Textausgabe des vorherigen Schritts <br>
+        ]]>
+    </string>
+    <string name="help_call_screening_number_filter">
+        <![CDATA[
+        Verwenden Sie diesen Regex, um bestimmte Nummern auszuschließen, z. B. Festnetz- oder internationale Nummern. <br>
+        <br>
+        Zum Beispiel <br>
+        &ensp; <sample>\\d{10,11}</sample> <br>
+        &ensp; 10- bis 11-stellige Nummern.
+        ]]>
+    </string>
+    <string name="sms_reply">SMS-Antwort</string>
+    <string name="help_bot_preset_sms_reply">
+        <![CDATA[
+        Sendet automatisch eine SMS an Kontakte, wenn deren Anrufe blockiert werden. <br>
+        Für den Meeting-Modus und andere Blockierfunktionen können unterschiedliche Nachrichten festgelegt werden. <br>
+        <br>
+        <warn>Hinweis</warn> <br>
+        Wenn die App zum ersten Mal eine SMS sendet, wird ein System-Popup vor möglichen Gebühren warnen.
+        Tippen Sie auf <sample>Meine Auswahl merken</sample>, um diese Warnung in Zukunft zu vermeiden.
+        ]]>
+    </string>
+    <string name="find_regex_rule_by_description">
+        <![CDATA[
+        Geben Sie eine Beschreibung ein, um die entsprechende Regex-Regel zu finden.
+        ]]>
+    </string>
+    <string name="rules">Regeln</string>
+    <string name="rule_description">Regelbeschreibung</string>
+    <string name="priority_in_order">Die Priorität wird durch die Reihenfolge dieser Liste bestimmt.</string>
+    <string name="help_ringtone_trigger">
+        <![CDATA[
+        Der Grund, warum der Anruf zugelassen wird. <br>
+        <br>
+        Zum Beispiel bedeutet <b>Wiederholter Anruf</b>, dass der festgelegte Klingelton abgespielt wird, wenn der Anruf durch <b>Wiederholter Anruf</b> zugelassen wird.
+        ]]>
+    </string>
+    <string name="copy_tag">Tag kopieren</string>
+    <string name="tag_is_copied_from">Tag %s wird kopiert von %s</string>
+    <string name="help_copy_tag">Erstellen Sie ein neues Tag mit demselben Wert, aber einem anderen Namen.</string>
+    <string name="from_tag">Von Tag</string>
+    <string name="to_tag">Zu Tag</string>
+    <string name="allow_7726">7726 zulassen</string>
+    <string name="help_bot_preset_7726">
+        <![CDATA[
+        Nur zu <warn>Demonstrationszwecken</warn>.<br>
+        <br>
+        Leitet Spam-Texte an <error>7726</error> (die universelle Kurzwahl für <error>SPAM</error>) weiter,
+         eine Funktion, die von vielen Mobilfunkanbietern unterstützt wird. <br>
+        <br>
+        <warn>Warnung</warn> <br>
+        Aktivieren Sie dies nur, wenn Ihr Anbieter 7726 unterstützt. Andernfalls können Standard-SMS-Gebühren anfallen. <br>
+        <br>
+        Es erstellt sowohl einen <minor>Workflow</minor> als auch eine SMS-<minor>Regex-Regel</minor>: <br>
+        <br>
+        - Der <minor>Workflow</minor> <br>
+        &ensp; 1. Sende den Spam-Text an 7726. <br>
+        &ensp; 2. Warte 10 Sekunden. <br>
+        &ensp; 3. Sende die Nummer an 7726. <br>
+        <br>
+        - Die <minor>Regex-Regel</minor> \"7726 zulassen\" <br>
+        &ensp; Nachrichten von 7726 zulassen, wie z. B.: <br>
+        &emsp; <sample>Vielen Dank für die Meldung, bitte antworten Sie mit der Telefonnummer</sample>. <br>
+        <br>
+        Passen Sie die 10-Sekunden-Verzögerung an die Antwortzeit Ihres Anbieters an, und entfernen Sie die Nummernmeldung, falls sie von Ihrem Anbieter nicht unterstützt wird.
+        ]]>
+    </string>
+    <string name="report_sms">SMS melden</string>
+    <string name="regex_starts_with_plus">%s ist ein Sonderzeichen in Regex (z. B. %s), maskieren Sie es wie %s</string>
+    <string name="sms_content_is_null">SMS-Inhalt ist leer, ist die SMS-Inhalts-Protokollierung aktiviert?</string>
+    <string name="ignore">Ignorieren</string>
+</resources>

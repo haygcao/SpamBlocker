@@ -1,6 +1,7 @@
 package spam.blocker.util
 
-import android.os.Environment
+import android.content.Context
+import spam.blocker.def.Def
 import spam.blocker.util.Algorithm.b64Encode
 import spam.blocker.util.Algorithm.sha1
 import java.time.LocalDateTime
@@ -92,26 +93,6 @@ fun String.resolveTimeTags(): String {
         .replace("{day_of_week_index}", time.dayOfWeek.value.toString())
 }
 
-fun String.resolvePathTags(): String {
-    return this
-        .replace(
-            "{Download}",
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
-        )
-        .replace(
-            "{Downloads}", // for history compatibility
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
-        )
-        .replace(
-            "{Documents}",
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).absolutePath
-        )
-        .replace(
-            "{sdcard}",
-            Environment.getExternalStorageDirectory().absolutePath
-        )
-}
-
 fun String.resolveNumberTag(
     cc: String? = null,
     domestic: String? = null,
@@ -122,7 +103,9 @@ fun String.resolveNumberTag(
         .replace("{cc}", cc ?: "")
         .replace("{domestic}", domestic ?: "")
         .replace("{number}", fullNumber ?: ((cc?:"") + (domestic?:"")))
-        .replace("{origin_number}", rawNumber?.replace(" ", "") ?: "")
+
+        .replace("{raw_number}", rawNumber?.replace(" ", "") ?: "")
+        .replace("{origin_number}", rawNumber?.replace(" ", "") ?: "") // for history compatibility, previously it was {origin_number}
 }
 fun String.resolveSmsTag(
     smsContent: String? = null,
@@ -131,40 +114,85 @@ fun String.resolveSmsTag(
         .replace("{sms}", smsContent ?: "")
 }
 
+
+// A tag should be escaped if it's used inside a json
+fun String.resolveEscapeTag(): String {
+    val tpl = """\{escape\((.*?)\)\}"""
+    val opts = Util.flagsToRegexOptions(Def.DefaultRegexFlags)
+    val regex = tpl.toRegex(opts)
+
+    // .replace loops through ALL instances automatically
+    return regex.replace(this) { matchResult ->
+        // Destructuring extracts the content inside the parentheses safely
+        val (content) = matchResult.destructured
+
+        // Replace the whole tag with the escaped content
+        content.escape()
+    }
+}
+
 // Deprecated by `resolveBasicAuthTag`, for history compatibility only.
 fun String.resolveBase64Tag(): String {
-    var ret = this
+    // Triple quotes mean we only need single backslashes for escaping
+    val regex = """\{base64\((.*?)\)\}""".toRegex()
 
-    val tpl ="\\{base64\\((.*?)\\)\\}"
-    val result = tpl.toRegex().find(ret)
+    // .replace loops through ALL instances automatically
+    return regex.replace(this) { matchResult ->
+        // Destructuring extracts the content inside the parentheses
+        val (content) = matchResult.destructured
 
-    result?.groups?.size?.let {
-        if (it > 1) {
-            val g0 = result.groups[0]!!.value // the tpl
-            val g1 = result.groups[1]!!.value
-
-            ret = ret.replace(g0, b64Encode(g1))
-        }
+        // Replace with your Base64 encoding logic
+        b64Encode(content)
     }
-    return ret
 }
 
 // Query by the number's sha1 hash for better privacy (if it's supported by the API).
 fun String.resolveSHA1Tag(): String {
-    var ret = this
+    // Using triple quotes removes the need for double-escaping backslashes
+    val regex = """\{sha1\((.*?)\)\}""".toRegex()
 
-    val tpl ="\\{sha1\\((.*?)\\)\\}"
-    val result = tpl.toRegex().find(ret)
+    // replace() automatically finds and loops through ALL matches
+    return regex.replace(this) { matchResult ->
+        // Destructuring easily grabs the content inside the (.*?) group
+        val (content) = matchResult.destructured
 
-    result?.groups?.size?.let {
-        if (it > 1) {
-            val g0 = result.groups[0]!!.value // the tpl
-            val g1 = result.groups[1]!!.value
-
-            ret = ret.replace(g0, sha1(g1.toByteArray()).toHexString().uppercase())
-        }
+        // Convert content to SHA1 hex string
+        sha1(content.toByteArray()).toHexString().uppercase()
     }
-    return ret
+}
+fun String.dropLast(): String {
+    // Regex to match {drop_end(CONTENT, NUM)}
+    // \s* allows for optional spaces around the comma
+    val regex = """\{drop_last\((.*?),\s*(\d+)\)\}""".toRegex()
+
+    // replace() loops through all matches automatically
+    return regex.replace(this) { matchResult ->
+        // Extract the two capturing groups
+        val (content, dropCountStr) = matchResult.destructured
+        val dropCount = dropCountStr.toInt()
+
+        // Drop the last N characters from the content
+        content.dropLast(dropCount)
+    }
+}
+
+fun String.resolveStringTransformTag(): String {
+    return this.dropLast()
+}
+
+// Load from shared prefs
+fun String.resolveSpfTag(ctx: Context): String {
+    // Using triple quotes removes the need for double-escaping backslashes
+    val regex = """\{shared_pref\((.*?)\)\}""".toRegex()
+
+    // replace() automatically finds and loops through ALL matches
+    return regex.replace(this) { matchResult ->
+        // Destructuring easily grabs the content inside the (.*?) group
+        val (key) = matchResult.destructured
+
+        // load this key from shared prefs
+        spf.SharedPref(ctx).prefs.getString(key, "") ?: ""
+    }
 }
 
 // Authorization: Basic {base64({username}:{password})}

@@ -1,11 +1,13 @@
 <resources>
     <string name="help_instant_query">
         <![CDATA[
-        即時在線上查詢來電號碼，會同時查詢多個 API 端點，並採用第一個收到的結果，忽略後續結果。<br>
+        即時在線查詢來電號碼。 <br>
         <br>
-        此功能預設為最低優先順序，代表僅在來電符合所有其他規則後才會觸發。<br>
+        將同時查詢多個 API 端點，使用第一個收到的結果，之後的結果將被忽略。 <br>
         <br>
-        <font color="#ea86ff"><b>優先順序：-1</b></font>
+        預設情況下，它的優先級最低，表示只有在通話通過所有本地規則後才會觸發。<br>
+        <br>
+        <priority><b>預設優先級：-1</b></priority>
         ]]>
     </string>
     <string name="instant_query">即時查詢</string>
@@ -35,22 +37,18 @@
     </string>
     <string name="help_category_identifier">
         <![CDATA[
-        從查詢結果中提取<font color="#00BFFF">類別</font>和<font color="#00BFFF">備註</font>，並將其顯示在通知和歷史記錄中。(可選)<br>
+        從查詢結果中提取<title>類別</title>，用於在通知和歷史記錄中顯示。(可選)<br>
         <br>
         例如，對於此查詢結果： <br>
-        <font color="#888888">
+        <sample>
         { <br>
           &ensp; \"type\": \"MARKETING\", <br>
-          &ensp; \"comments\": \"Better call Saul\", <br>
           &ensp;  … <br>
         } <br>
-        </font>
+        </sample>
         <br>
-        - 僅提取<font color="#00BFFF">類別</font>： <br>
-        &ensp; <font color="#888888">\"type\": \"(.+?)\"</font> <br>
-        <br>
-        - 提取<font color="#00BFFF">類別</font>和<font color="#00BFFF">備註</font>： <br>
-        &ensp; <font color="#888888">(?:\"type\":\"(.+?)\"|\"comments\":\"(.+?)\")</font><br>
+        可用以下方式提取： <br>
+        &ensp; <sample>\"type\": \"(.+?)\"</sample> <br>
         ]]>
     </string>
     <string name="action_parse_query_result">解析結果</string>
@@ -61,30 +59,31 @@
         可以使用額外的正規表示式來擷取騷擾電話類別（選用）。
         ]]>
     </string>
-    <string name="action_intercept_call">攔截來電</string>
-    <string name="help_action_intercept_call">
+    <string name="action_parse_incoming_number">解析號碼</string>
+    <string name="help_action_parse_incoming_number">
         <![CDATA[
-        來電號碼將被攔截並解析為不同的標籤：<br>
+        將把來電號碼解析成不同的標籤：<br>
         <br>
         %s
         <br>
-        這些標籤將用於建立 HTTP 網址，例如：<br>
-        <br>
-        1. 對於國際號碼如 <b>+122222</b>，這兩種寫法是相同的：<br>
-        - https://test.com/number=<b>{number}</b><br>
-        - https://test.com/number=<b>{cc}{domestic}</b><br>
-        將被解析為：<br>
-        https://test.com/number=<b>122222</b><br>
-        <br>
-        2. 對於本地號碼如 <b>12345</b>，您需要在設定中提供國碼，
-        或讓應用程式自動偵測。<br>
+        這些標籤可用於後續的 HTTP 請求。<br>
         ]]>
     </string>
-    <string name="action_intercept_sms">攔截簡訊</string>
-    <string name="help_action_intercept_sms">
+    <string name="content_filter">內容過濾器</string>
+    <string name="help_content_filter">
         <![CDATA[
-        收到的簡訊將被攔截，內容將被解析為標籤 <b>{sms}</b>，
-        可以在 HTTP 請求中使用。
+        雖然簡訊規則已經過濾了此內容，您可以使用此附加過濾器來進一步縮小範圍。
+        ]]>  
+    </string>
+    <string name="action_parse_incoming_sms">解析簡訊</string>
+    <string name="help_action_parse_incoming_sms">
+        <![CDATA[
+        收到的簡訊內容將被解析為以下標籤，用於後續步驟： <br>
+        <br>
+        %s
+        <br>
+        - <title><b>{sms_content}</b></title> <br>
+        &ensp; 簡訊內容
         ]]>
     </string>
     <string name="query_api">查詢 API</string>
@@ -97,19 +96,17 @@
         此正規表示式會相應地過濾號碼，不符合此規則的來電號碼將略過檢查。<br>
         <br>
         - 只檢查<b>國際號碼</b>：<br>
-        &ensp; <font color="#03DAC5"><b>\\+.*</b></font><br>
+        &ensp; <highlight><b>\\+.*</b></highlight><br>
         <br>
         - 只檢查<b>本地號碼</b>：<br>
-        &ensp; <font color="#03DAC5"><b>0{1,2}.*</b></font><br>
+        &ensp; <highlight><b>0{1,2}.*</b></highlight><br>
         <br>
         - 檢查<b>任何號碼</b>：<br>
-        &ensp; <font color="#03DAC5"><b>.*</b></font>
+        &ensp; <highlight><b>.*</b></highlight>
         ]]>
     </string>
-    <string name="checking_template">正在檢查：%s，優先順序：%s</string>
     <string name="skip_for_testing">測試時略過。</string>
     <string name="allowed_by">放行原因：%s</string>
-    <string name="blocked_by">封鎖原因：%s</string>
-    <string name="outside_time_schedule">不在排程時段內，略過。</string>
+    <string name="blocked_by_template">封鎖原因：%s</string>
     <string name="android_ver_lower_than_11">Android 版本低於 11，略過。</string>
 </resources>

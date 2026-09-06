@@ -1,0 +1,134 @@
+<resources>
+    <string name="normal_text">通常テキスト</string>
+    <string name="info_feature">情報 / 機能</string>
+    <string name="success_allow">成功 / 許可</string>
+    <string name="error_block">エラー / ブロック</string>
+    <string name="disable">無効化</string>
+    <string name="dialog_bg">ダイアログ背景</string>
+    <string name="app_bg">アプリ背景</string>
+    <string name="should_import_as_instant_query">
+        <![CDATA[
+        これは「APIクエリ」ワークフローのようです。上記の「Instant Query」セクションにインポートする必要があります。
+        ]]>
+    </string>
+    <string name="at_time">時刻</string>
+    <string name="interval">間隔</string>
+    <string name="contact_prefix">連絡先プレフィックス</string>
+    <string name="help_regex_mode_contact_prefix">
+        <![CDATA[
+        <title><b>連絡先プレフィックス</b></title>:<br>
+        &ensp; 連絡先プレフィックスの一致に基づいて着信を許可します。連番を使う
+          組織、たとえばクリニックや法律事務所に適しています。 <br>
+        <br>
+        <warn>この正規表現はドットで終わる必要があります</warn>。このモードでは、末尾のドットが可変の数字を表します。 <br>
+        <br>
+        <b>例えば:</b> <br>
+        &ensp; <sample><b>.*..</b></sample> <br>
+        &ensp; 同じプレフィックスを持つ連絡先に一致し、末尾2桁の違いを許可します。<br>
+        &ensp; 連絡先として <sample>1111<b>22</b></sample> を保存している場合、<sample>1111<b>33</b></sample> からの着信も許可されます。<br>
+        <br>
+        <b>別の例:</b> <br>
+        &ensp; <sample><b>(?!(04|03))\d{5}..</b></sample> <br>
+        内訳: <br>
+        &ensp; - <b><sample>(?!(03|04))</sample></b> <br>
+        &emsp;   03 または 04 で始まる番号を除外します <br>
+        &ensp; - <b><sample>\d{5}</sample></b> <br>
+        &emsp;   番号全体は 7 桁で、末尾の可変 2 桁を含みます <br>
+        &ensp; - <b><sample>..</sample></b> <br>
+        &emsp;   可変 2 桁の接尾部 <br>
+        ]]>
+    </string>
+    <string name="help_regex_preset_contact_prefix">
+        <![CDATA[
+        連絡先をプレフィックスで照合し、末尾<minor><b>2</b></minor>桁の違いを許可します。クリニックや法律事務所など、連番を使用している組織に最適です。 <br>
+        <br>
+        <b>例えば</b>: <br>
+        &ensp; 連絡先として <sample>111111</sample><highlight>22</highlight> を保存している場合、<sample>111111</sample><highlight>33</highlight> からの着信も許可されます。
+        ]]>
+    </string>
+    <string name="caller_id">発信者ID</string>
+    <string name="help_caller_id">
+        <![CDATA[
+        発信者IDをフローティングウィンドウに表示します。 <br>
+        <br>
+        ドラッグして移動できます。 <br>
+        <br>
+        <b>注意</b> <br>
+        フローティングウィンドウが有効な間、通知欄にシステム警告が表示されることがあります。
+          これは、このアプリが他のアプリの上にウィンドウを表示していることを示しています。
+        これは、フローティングウィンドウが過去にマルウェアによって偽のログイン画面の表示に悪用されてきたためです。 <br>
+        この警告は無視してください。フローティングウィンドウが消えると一緒に消えます。
+        ]]>
+    </string>
+    <string name="perm_show_overlay">オーバーレイを表示</string>
+    <string name="preview">プレビュー</string>
+    <string name="content_template">コンテンツテンプレート</string>
+    <string name="help_caller_id_template">
+        <![CDATA[
+        発信者IDウィンドウに表示される内容です。HTML形式です。 <br>
+        <br>
+        値が空の場合はダッシュ (-) が表示されます。たとえば、その番号に通信事業者情報がない場合です。
+        <br>
+        <title>対応タグ</title>: <br>
+        - <minor>{reason}</minor> <br>
+        &emsp; 通話が許可された理由です。通話履歴に表示される理由と同じです。 <br>
+        - <minor>{geolocation}</minor> <br>
+        &emsp; 電話番号の地理情報です。 <br>
+        - <minor>{carrier}</minor> <br>
+        &emsp; 電話番号の通信事業者名です。 <br>
+        <br>
+        <title>対応HTMLタグ</title>: <br>
+        参照: <a href="%s">link</a>
+        ]]>
+    </string>
+    <string name="background_color">背景色</string>
+    <string name="wait">待機</string>
+    <string name="help_action_wait">
+        <![CDATA[
+        N秒待機します。 <br>
+        <br>
+        <b>使用例</b>: <br>
+        <sample>
+        <b>SMS警告</b> 機能では、メッセージが通話と同時に届いたり
+         通話の数秒後に届いたりすることがあります。通話スクリーニングに 2~3 秒の遅延を追加すると、このような問題を防げます。
+        </sample>
+        ]]>
+    </string>
+    <string name="comment_identifier">コメント識別子</string>
+    <string name="hint_comment_identifier">
+        例: \"comment\":\"(.+?)\"
+    </string>
+    <string name="help_comment_identifier">
+        <![CDATA[
+        照会結果から<title>コメント</title>を抽出して、通知と履歴ログに表示します。(オプション)<br>
+        <br>
+        例として、この照会結果の場合: <br>
+        <sample>
+        { <br>
+          &ensp; \"type\": \"MARKETING\", <br>
+          &ensp; \"comment\": \"Better call Saul\", <br>
+          &ensp;  … <br>
+        } <br>
+        </sample>
+        <br>
+        次のパターンで抽出します: <br>
+        &ensp; <sample>\"comment\": \"(.+?)\"</sample> <br>
+        ]]>
+    </string>
+    <string name="carrier">通信事業者</string>
+    <string name="carrier_rule">通信事業者ルール</string>
+    <string name="help_regex_mode_carrier">
+        <![CDATA[
+        <title><b>通信事業者</b></title>:<br>
+        &ensp; 正規表現は電話番号の通信事業者名に一致します。 <br>
+        <br>
+        <warn>注</warn> <br>
+        &ensp; 通信事業者情報は最初の登録時点に基づくため、番号が他社へ移転されている
+        場合は不正確なことがあります。 <br>
+        <br>
+        例: <br>
+        &ensp; <no_translate><sample>Verizon Wireless</sample></no_translate> の番号を
+        正規表現 <no_translate><error>verizon.*</error></no_translate> でブロック <br>
+        ]]>
+    </string>
+</resources>

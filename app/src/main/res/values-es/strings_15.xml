@@ -1,31 +1,4 @@
 <resources>
-    <string name="api_preset_groq">Groq</string>
-    <string name="help_api_preset_groq">
-        <![CDATA[
-        Verifica el contenido de los SMS usando <b>Groq AI</b>, solo requiere una cuenta de correo electrónico.
-        ]]>
-    </string>
-    <string name="help_api_preset_groq_authorization">
-        <![CDATA[
-        1. Registrar e iniciar sesión: <br>
-         <a href="https://console.groq.com/login">https://console.groq.com/login</a><br>
-         <br>
-        2. Abre la página de la API:<br>
-         <a href="https://console.groq.com/keys">https://console.groq.com/keys</a><br>
-        <br>
-        3. Presiona el botón <translate>\"Crear clave de API\"</translate>.<br>
-        <br>
-        4. Copia la clave, luego complétala abajo.
-        ]]>
-    </string>
-    <string name="spam_sms_prompt_template">
-        Clasifica este mensaje SMS como Político, Fraude, Encuesta o Marketing.
-        Si no aplica ninguno, responde \"Válido\", de lo contrario, responde solo la categoría, no respondas nada más.
-        El mensaje SMS es:
-        {sms}
-    </string>
-    <string name="spam_sms_negative_category"><translate>(Político|Fraude|Encuesta|Marketing)</translate></string>
-    <string name="spam_sms_positive_category">Válido</string>
     <string name="last_log">Último registro</string>
     <string name="executed_at">Ejecutado en:</string>
     <string name="not_executed_yet">Aún no ejecutado</string>
@@ -35,9 +8,6 @@
         <br>
         De un vistazo rápido, puede verificar sin esfuerzo si los registros del historial están cubiertos por las reglas, para que no necesite probarlos individualmente. <br>
         <br>
-        <font color="#ffa500">Nota:</font><br>
-        Esto puede afectar el rendimiento cuando hay demasiadas reglas de expresión regular. <br>
-        <br>
         <b>Ejemplos:</b> <br>
         <br>
         <img src=\'ic_history_indicator_1\'/> <br>
@@ -45,7 +15,7 @@
         &ensp; - El segundo icono de SMS rojo indica que este contenido SMS será bloqueado por una regla de contenido. <br>
         &ensp; - El tercer icono de base de datos rojo indica que este número existe en la base de datos de números spam. <br>
         <br>
-        Estos iconos están organizados por <font color="#ea86ff"><b>prioridad</b></font>, el <b>primer</b> icono indica
+        Estos iconos están organizados por <priority><b>prioridad</b></priority>, el <b>primer</b> icono indica
         el resultado general. Esa regla de número tiene una prioridad más alta, el mensaje SMS eventualmente será permitido por ella.<br>
         <br>
         <img src=\'ic_history_indicator_2\'/> <br>
@@ -57,6 +27,11 @@
         <br>
         <img src=\'ic_history_indicator_3\'/> <br>
         Ninguna regla de número coincide, solo la regla de SMS y la base de datos. Y será bloqueado por una regla de SMS.<br>
+        <br>
+        <br>
+        <warn>Nota</warn> <br>
+        Ajuste siempre las reglas en función de los iconos iniciales, no del color del número (<img src=\'ic_history_indicator_4\'/>).
+        El color del número solo refleja el resultado del filtrado pasado y nunca cambiará.
         ]]>
     </string>
     <string name="rule_indicator">Indicador de Regla</string>
@@ -64,7 +39,7 @@
         <![CDATA[
         Los mensajes MMS suelen ser spam, no es necesario habilitarlos a menos que realmente los uses.<br>
         <br>
-        <font color="#ffa500">Nota:</font><br>
+        <warn>Nota:</warn><br>
         Los mensajes grupales son MMS, no SMS.<br>
         <br>
         MMS se tratará como SMS, solo se procesará el contenido de texto,
@@ -73,8 +48,6 @@
         Se requieren dos permisos: RECEIVE_MMS y READ_SMS
         ]]>
     </string>
-    <string name="unknown_error">Error desconocido.</string>
-    <string name="checking_auth_credential">Verificando las credenciales de autorización.</string>
     <string name="sms_bomb"><short>Bombardeo SMS</short></string>
     <string name="help_sms_bomb">
         <![CDATA[
@@ -84,28 +57,28 @@
           de verificaciones OTP (contraseña de un solo uso).<br>
         <br>
         Por ejemplo, mensajes SMS como:<br>
-        &ensp; <font color="#888888">Tu OTP es: 1234.</font><br>
-        &ensp; <font color="#888888">Este es tu código de verificación: 1234.</font><br>
-        &ensp; <font color="#888888">1234 es tu código de validación.</font><br>
+        &ensp; <sample>Tu OTP es: 1234.</sample><br>
+        &ensp; <sample>Este es tu código de verificación: 1234.</sample><br>
+        &ensp; <sample>1234 es tu código de validación.</sample><br>
         <br>
-        <h5><font color="#00BFFF">- Regex de contenido</font></h5>
+        <h5><title>- Regex de contenido</title></h5>
         Esta función se aplica solo a los mensajes que coinciden con esta regex, una regex típica sería: <br>
-        <font color="#fa7f71">.*(otp|code).*</font><br>
+        <error>.*(otp|code).*</error><br>
         <br>
-        <h5><font color="#00BFFF">- Intervalo</font></h5>
+        <h5><title>- Intervalo</title></h5>
         Si un mensaje OTP posterior llega dentro de este intervalo de tiempo, se considera
           parte del ataque de bombardeo y se bloqueará.<br>
         (predeterminado: 30 segundos)<br>
         <br>
         Esto bloqueará todas las bombas siguientes, excepto la primera.<br>
         <br>
-        <h5><font color="#00BFFF">- Protección de la pantalla de bloqueo</font></h5>
+        <h5><title>- Protección de la pantalla de bloqueo</title></h5>
         Habilita esto para bloquear todas las bombas en el modo de pantalla de bloqueo, incluida la primera. <br>
         <br>
         Por lo general, tu pantalla debería haberse desbloqueado mientras esperas un código de verificación.
         Cuando tales mensajes llegan mientras el dispositivo está en modo de pantalla de bloqueo, es probable que sean bombas.<br>
         <br>
-        <font color="#ea86ff"><b>Prioridad: 20</b></font>
+        <priority><b>Prioridad: 20</b></priority>
         ]]>
     </string>
     <string name="lockscreen_protection"><short>Protec. bloqueo</short>></string>
@@ -127,7 +100,8 @@
     </string>
     <string name="help_history_expiry">
         <![CDATA[
-            Cuando está activado, los registros del historial expirarán después de N días, los registros expirados se eliminarán automáticamente.
+                Cuando está activado, los registros del historial se eliminarán automáticamente después de N días. <br>
+                La tarea de limpieza se ejecuta todos los días a las 00:00.
         ]]>
     </string>
 </resources>

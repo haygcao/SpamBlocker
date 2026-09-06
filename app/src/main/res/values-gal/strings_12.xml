@@ -1,13 +1,13 @@
 <resources>
     <string name="help_instant_query">
         <![CDATA[
-        Consultar o número entrante en liña en tempo real. <br>
+        Consulta o número entrante en liña en tempo real. <br>
         <br>
-        Múltiples puntos finais da API serán consultados simultaneamente, utilizándose o primeiro resultado recibido e ignorándose todos os posteriores. <br>
+        Consultaranse simultaneamente varios puntos finais da API, usando o primeiro resultado recibido e ignorando os resultados posteriores. <br>
         <br>
-        Ten a prioridade máis baixa por defecto, o que significa que só se activará cando a chamada pase todas as outras regras.<br>
+        Ten a prioridade máis baixa por defecto, o que significa que só se activará despois de que a chamada pase todas as regras locais.<br>
         <br>
-        <font color="#ea86ff"><b>Prioridade por defecto: -1</b></font>
+        <priority><b>Prioridade predeterminada: -1</b></priority>
         ]]>
     </string>
     <string name="instant_query">Consulta instantánea</string>
@@ -36,23 +36,18 @@
     </string>
     <string name="help_category_identifier">
         <![CDATA[
-        Extrae a <font color="#00BFFF">categoría</font> e os <font color="#00BFFF">comentarios</font>
-         do resultado da consulta e móstraos na notificación e no rexistro de historial. (opcional)<br>
+        Extrae a <title>categoría</title> do resultado da consulta para mostrala na notificación e no rexistro de historial. (opcional)<br>
         <br>
         Por exemplo, para este resultado de consulta: <br>
-        <font color="#888888">
+        <sample>
         { <br>
           &ensp; \"type\": \"MARKETING\", <br>
-          &ensp; \"comments\": \"Better call Saul\", <br>
           &ensp;  … <br>
         } <br>
-        </font>
+        </sample>
         <br>
-        - Extraer só a <font color="#00BFFF">categoría</font>: <br>
-        &ensp; <font color="#888888">\"type\": \"(.+?)\"</font> <br>
-        <br>
-        - Extraer tanto a <font color="#00BFFF">categoría</font> coma os <font color="#00BFFF">comentarios</font>: <br>
-        &ensp; <font color="#888888">(?:\"type\":\"(.+?)\"|\"comments\":\"(.+?)\")</font><br>
+        Extráea con: <br>
+        &ensp; <sample>\"type\": \"(.+?)\"</sample> <br>
         ]]>
     </string>
     <string name="action_parse_query_result">Analizar resultado</string>
@@ -63,23 +58,14 @@
         Pode usarse un regex extra para extraer a categoría de spam. (opcional)
         ]]>
     </string>
-    <string name="action_intercept_call">Interceptar chamada</string>
-    <string name="help_action_intercept_call">
+    <string name="action_parse_incoming_number">Analizar número</string>
+    <string name="help_action_parse_incoming_number">
         <![CDATA[
-        O número de chamada entrante interceptarase e analizarase en diferentes etiquetas:<br>
+        O número da chamada entrante analizarase en diferentes etiquetas:<br>
         <br>
         %s
         <br>
-        Estas etiquetas usaránse para crear a URL HTTP, por exemplo:<br>
-        <br>
-        1. Para números internacionais como <b>+122222</b>, estes dous son equivalentes:<br>
-        - https://test.com/number=<b>{number}</b><br>
-        - https://test.com/number=<b>{cc}{domestic}</b><br>
-        Analizarase a:<br>
-        https://test.com/number=<b>122222</b><br>
-        <br>
-        2. Para números nacionais como <b>12345</b>, tes que proporcionar o código do país na configuración,<br>
-        ou deixar que a aplicación o detecte automaticamente.<br>
+        Estas etiquetas poden usarse nas solicitudes HTTP posteriores.<br>
         ]]>
     </string>
     <string name="query_api">API de consulta</string>
@@ -91,28 +77,36 @@
         Este regex filtra os números en consecuencia, os números entrantes que non coincidan con este regex saltaranse a comprobación.<br>
         <br>
         - Só comprobar <b>números internacionais</b>:<br>
-        &ensp; <font color="#03DAC5"><b>\\+.*</b></font><br>
+        &ensp; <highlight><b>\\+.*</b></highlight><br>
         <br>
         - Só comprobar <b>números domésticos</b>:<br>
-        &ensp; <font color="#03DAC5"><b>0{1,2}.*</b></font><br>
+        &ensp; <highlight><b>0{1,2}.*</b></highlight><br>
         <br>
         - Comprobar <b>calquera número</b>:<br>
-        &ensp; <font color="#03DAC5"><b>.*</b></font>
+        &ensp; <highlight><b>.*</b></highlight>
         ]]>
     </string>
-    <string name="checking_template">Comprobando: %s, prioridade: %s</string>
+    <string name="content_filter">Filtro de contido</string>
+    <string name="help_content_filter">
+        <![CDATA[
+        Aínda que as regras de SMS xa filtraron este contido, podes usar este filtro adicional para afinar máis.
+        ]]>  
+    </string>
     <string name="skip_for_testing">Saltar para probas.</string>
     <string name="allowed_by">Permitido por: %s</string>
-    <string name="blocked_by">Bloqueado por: %s</string>
-    <string name="outside_time_schedule">Fóra do horario, saltando.</string>
+    <string name="blocked_by_template">Bloqueado por: %s</string>
     <string name="android_ver_lower_than_11">A versión de Android é inferior a 11, saltando.</string>
     <string name="query">Consulta</string>
     <string name="report_api">API de reporte</string>
-    <string name="action_intercept_sms">Interceptar SMS</string>
-    <string name="help_action_intercept_sms">
+    <string name="action_parse_incoming_sms">Analizar SMS</string>
+    <string name="help_action_parse_incoming_sms">
         <![CDATA[
-        O SMS entrante será interceptado e o contido analizarase na etiqueta <b>{sms}</b>,<br>
-        que pode ser usada polas seguintes accións.
+        O contido do SMS entrante analizarase nas seguintes etiquetas para uso en pasos posteriores: <br>
+        <br>
+        %s
+        <br>
+        - <title><b>{sms_content}</b></title> <br>
+        &ensp; O contido do SMS
         ]]>
     </string>
 </resources>

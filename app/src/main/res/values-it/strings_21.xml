@@ -1,23 +1,10 @@
 <resources>
     <string name="perm_write_settings">Scrivi impostazioni</string>
-    <string name="set_to">Imposta su</string>
-    <string name="help_set_ringtone_to">
-    <![CDATA[
-        Imposta la suoneria per una particolare funzione, o disattivala. <br>
-        <br>
-        Ad esempio, per impostare la suoneria per una regola regex: <br><br>
-        <font color="#888888">
-        &emsp; { \"regex\": \"rule_desc\" }
-        </font>
-        <br><br>
-        Le chiamate consentite da questa regola riprodurranno la suoneria specificata.<br>
-    ]]>
-    </string>
     <string name="ringtone">Suoneria</string>
     <string name="call_to_test_ringtone">Effettua una chiamata reale per testare la suoneria.</string>
     <string name="help_ringtone">
     <![CDATA[
-        Personalizza la suoneria per una particolare funzione; le chiamate consentite da tale funzione riprodurranno la suoneria specificata.
+        Imposta suonerie diverse per le chiamate consentite da diverse funzioni.
     ]]>
     </string>
     <string name="help_target_rule_desc">
@@ -28,7 +15,7 @@
         digita <b>Lavoro</b> in questo campo.
     ]]>
     </string>
-    <string name="invalid_config">Configurazione non valida</string>
+
     <string name="custom">Personalizzato</string>
     <string name="quick_tile">Riquadro rapido</string>
     <string name="help_quick_tile">
@@ -47,16 +34,15 @@
     ]]>
     </string>
     <string name="quick_tile_is_active">Il riquadro rapido personalizzato è attivo.</string>
-    <string name="http_status_code_template">Codice di stato Http: %d</string>
     <string name="help_preset_ringtone">
     <![CDATA[
         Personalizza la suoneria per una regola regex; la suoneria specificata verrà riprodotta quando la chiamata è
         consentita da questa regola. <br>
         <br>
         <b>Caso d\'uso:<b> <br>
-        <font color="#888888">
-        &ensp; Imposta suonerie diverse per persone specifiche, gruppi di contatti o intervalli di numeri di telefono.
-        </font>
+        <sample>
+        &ensp; Imposta suonerie diverse per contatti specifici, intervalli di numeri o chiamate ripetute.
+        </sample>
     ]]>
     </string>
     <string name="remote_setup">Configurazione Remota</string>
@@ -93,17 +79,13 @@
         <br>
         Il flusso di lavoro viene eseguito quotidianamente, scarica il set completo di dati di 90 giorni al primo avvio, poi esegue solo aggiornamenti incrementali nelle esecuzioni successive. <br>
         <br>
-        <font color="#ffa500"><b>Nota:</b></font> <br>
-        <font color="#888888">&ensp; Il set di dati viene tipicamente aggiornato ogni giorno feriale verso mezzogiorno ora orientale. </font><br>
+        <warn><b>Nota:</b></warn> <br>
+        <sample>&ensp; Il set di dati viene tipicamente aggiornato ogni giorno feriale verso mezzogiorno ora orientale. </sample><br>
         <br>
         Quindi è programmato alle 18:00, poiché il set di dati dovrebbe essere disponibile entro quell\'ora. <br>
     ]]>
     </string>
     <string name="csv_missing_column">
         Colonna richiesta %s mancante. Puoi usare l\'intestazione %s per la colonna del numero di telefono, o mappare un\'intestazione esistente a %s in \"Analizza CSV\".
-    </string>
-    <string name="enable_reporting_number">Abilita Segnalazione</string>
-    <string name="help_enable_reporting_number">
-        Questa API supporta anche la segnalazione di numeri di telefono; abilita questa opzione per generare anche il flusso di lavoro di segnalazione.
     </string>
 </resources>

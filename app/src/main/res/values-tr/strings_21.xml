@@ -1,23 +1,10 @@
 <resources>
     <string name="perm_write_settings">Ayarları Yaz</string>
-    <string name="set_to">Şuna Ayarla</string>
-    <string name="help_set_ringtone_to">
-    <![CDATA[
-        Belirli bir özellik için zil sesini ayarlayın veya sessize alın. <br>
-        <br>
-        Örneğin, bir regex kuralı için zil sesini ayarlamak için: <br><br>
-        <font color="#888888">
-        &emsp; { \"regex\": \"rule_desc\" }
-        </font>
-        <br><br>
-        Bu kuralın izin verdiği aramalar belirtilen zil sesini çalacaktır.<br>
-    ]]>
-    </string>
     <string name="ringtone">Zil Sesi</string>
     <string name="call_to_test_ringtone">Zil sesini test etmek için gerçek bir arama yapın.</string>
     <string name="help_ringtone">
     <![CDATA[
-        Belirli bir özellik için zil sesini özelleştirin, bu özelliğin izin verdiği aramalar belirtilen zil sesini çalacaktır.
+        Farklı özellikler tarafından izin verilen aramalar için farklı zil sesleri ayarlayın.
     ]]>
     </string>
     <string name="help_target_rule_desc">
@@ -28,7 +15,7 @@
         bu alana <b>İş</b> yazın.
     ]]>
     </string>
-    <string name="invalid_config">Geçersiz Yapılandırma</string>
+
     <string name="custom">Özel</string>
     <string name="quick_tile">Hızlı Döşeme</string>
     <string name="help_quick_tile">
@@ -45,15 +32,14 @@
     ]]>
     </string>
     <string name="quick_tile_is_active">Özel hızlı döşeme etkin.</string>
-    <string name="http_status_code_template">Http Durum Kodu: %d</string>
     <string name="help_preset_ringtone">
     <![CDATA[
         Bir regex kuralı için zil sesini özelleştirin, arama bu kural tarafından izin verildiğinde belirtilen zil sesi çalacaktır. <br>
         <br>
         <b>Kullanım senaryosu:<b> <br>
-        <font color="#888888">
-        &ensp; Belirli kişiler, kişi grupları veya numara aralıkları için farklı zil sesleri ayarlayın.
-        </font>
+        <sample>
+        &ensp; Belirli kişiler, numara aralıkları veya tekrarlanan aramalar için farklı zil sesleri ayarlayın.
+        </sample>
     ]]>
     </string>
     <string name="remote_setup">Uzaktan Kurulum</string>
@@ -90,8 +76,8 @@
         <br>
         İş akışı günlük çalışır, ilk çalıştırmada tam 90 günlük veri kümesini indirir, sonraki çalıştırmalarda ise yalnızca artımlı güncellemeler yapar. <br>
         <br>
-        <font color="#ffa500"><b>Not:</b></font> <br>
-        <font color="#888888">&ensp; Veri kümesi genellikle her iş gününde öğlen civarı Doğu saatine göre güncellenir. </font><br>
+        <warn><b>Not:</b></warn> <br>
+        <sample>&ensp; Veri kümesi genellikle her iş gününde öğlen civarı Doğu saatine göre güncellenir. </sample><br>
         <br>
         Bu nedenle saat 18:00\'de planlanmıştır, çünkü veri kümesinin o saatlerde mevcut olması beklenmektedir. <br>
     ]]>
@@ -99,9 +85,5 @@
     <string name="csv_missing_column">
         Gerekli %s sütunu eksik. Numara sütunu için %s başlığını kullanabilir veya mevcut bir
         başlığı \"CSV Ayrıştırma\" bölümünde %s ile eşleştirebilirsiniz.
-    </string>
-    <string name="enable_reporting_number">Raporlamayı Etkinleştir</string>
-    <string name="help_enable_reporting_number">
-        Bu API aynı zamanda telefon numarası raporlamayı da destekler, raporlama iş akışını da oluşturmak için bunu etkinleştirin.
     </string>
 </resources>

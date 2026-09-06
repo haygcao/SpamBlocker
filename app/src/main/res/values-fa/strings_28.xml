@@ -1,0 +1,151 @@
+<resources>
+    <string name="perm_access_dir">دسترسی به پوشه</string>
+    <string name="dir_not_specified">پوشه مشخص نشده است.</string>
+    <string name="no_access_to_dir">دسترسی به پوشه ممکن نیست: %s.</string>
+    <string name="grant_access_to_dir">
+        <![CDATA[
+        دسترسی به پوشه را بدهید: <br>
+        <highlight>%s</highlight>
+        ]]>
+    </string>
+    <string name="comment">نظر</string>
+    <string name="database_prefix">پیشوند پایگاه داده</string>
+    <string name="help_regex_mode_database_prefix">
+        <![CDATA[
+        <title><b>پیشوند پایگاه داده</b></title>:<br>
+        &ensp; مسدودسازی بازه‌ای برای شماره‌های تلفن موجود در پایگاه داده.<br>
+        <br>
+        <warn>این regex باید با نقطه پایان یابد</warn>، در این حالت regex این نقطه‌های پایانی نشان‌دهنده رقم‌های متغیر هستند. <br>
+        <br>
+        <b>برای مثال:</b> <br>
+        &ensp; <sample><b>.{5,}..</b></sample> نیاز دارد که پیشوند دست‌کم 5 رقم داشته باشد، در حالی که تغییر 2 رقم در پایان مجاز است.
+        ]]>
+    </string>
+    <string name="help_regex_preset_database_prefix">
+        <![CDATA[
+        شماره‌های تلفن پایگاه داده را بر اساس پیشوند تطبیق می‌دهد؛ پیشوند باید دست‌کم <minor><b>5</b></minor> رقم داشته باشد، در حالی که تغییر <minor><b>2</b></minor> رقم در پایان مجاز است. <br>
+        <br>
+        <b>برای مثال</b>: <br>
+        &ensp; اگر <sample>12345678</sample><error>00</error> در پایگاه داده وجود داشته باشد، تماس از <sample>12345678</sample><error>99</error> نیز مسدود می‌شود.
+        ]]>
+    </string>
+    <string name="api_preset_remote_llm">مدل زبانی بزرگ راه دور</string>
+    <string name="help_api_preset_remote_llm">
+        <![CDATA[
+            محتوای SMS را با مدل‌های زبانی بزرگ راه دور بررسی کنید. <br>
+            <br>
+            این فقط برای <warn>اهداف نمایشی</warn> ارائه شده است.<br>
+            <br>
+            برای باز کردن صفحه ویکی راهنما، لمس کنید.
+        ]]>
+    </string>
+    <string name="found_existing_auth_token">توکن احراز هویت موجود پیدا شد</string>
+    <string name="use_this_token">از این توکن استفاده کن</string>
+    <string name="login_and_get_a_token">در وب‌سایت ثبت‌نام و وارد شوید و توکن خود را دریافت کنید.</string>
+    <string name="get_a_new_token">دریافت توکن جدید</string>
+    <string name="token">توکن</string>
+    <string name="enter_token_manually_desc">اگر از قبل توکن دارید، آن را به‌صورت دستی وارد کنید.</string>
+    <string name="enter_token_manually">ورود دستی توکن</string>
+    <string name="others">سایر موارد</string>
+    <string name="api_settings">تنظیمات API</string>
+    <string name="include_settings">تنظیمات شامل‌کردن</string>
+    <string name="exclude_settings">تنظیمات مستثنی‌کردن</string>
+    <string name="backup_missing_category">این تنظیم در فایل پشتیبان وجود ندارد و قابل بازیابی نیست.</string>
+    <string name="warning_priority_conflict">
+        <![CDATA[
+        <highlight>قواعد فهرست سفید</highlight> و <error>قواعد فهرست سیاه</error> نباید اولویت یکسانی داشته باشند<br>
+        <br>
+        قواعد متعارض:
+        ]]>
+    </string>
+    <string name="checking_template_new">%s بررسی: %s</string>
+    <string name="textbox_limit">حد جعبه متن</string>
+    <string name="help_rule_textbox_limit">
+        <![CDATA[
+        حداکثر تعداد نویسه‌های مجاز در کادر ورودی. عبور از این حد ویرایش را غیرفعال می‌کند،
+          زیرا متن بیش از حد طولانی باعث فریز شدن رابط کاربری می‌شود. <br>
+          <br>
+        پیش‌فرض: <b>10000</b> نویسه
+        ]]>
+    </string>
+    <string name="clear_history">پاک کردن تاریخچه</string>
+    <string name="tip_clear_history">اگر برنامه هنگام راه‌اندازی کرش می‌کند و باز نمی‌شود، با دکمه زیر گزارش‌های تاریخچه را پاک کنید.</string>
+    <string name="direct_verdict">نتیجه مستقیم</string>
+    <string name="formula">فرمول</string>
+    <string name="strategy">راهبرد</string>
+    <string name="help_api_result_strategy">
+        <![CDATA[
+        <title>نتیجه مستقیم</title> <br>
+        سرور یک دسته‌بندی صریح برای تماس مزاحم برمی‌گرداند که در سرویس‌های API رایج است. <br>
+        <br>
+        برای مثال، سرور این مقدار را برمی‌گرداند: <br>
+        &ensp; <sample><no_translate>{ …, \"type\": \"fraud\", … }</no_translate></sample> <br>
+        تطابق با عبارت منظم (regex): <br>
+        &ensp; <sample><no_translate>\"type\": \"(fraud|scam|political)\"</no_translate></sample> <br>
+        <br>
+        <title>فرمول</title> <br>
+        منطق مسدودسازی دلخواه خود را بر اساس تعداد امتیازهای مثبت/منفی بازگردانده شده توسط سرور سفارشی کنید. <br>
+        <br>
+        برای مثال، مسدود کردن در صورتی که: <br>
+        &ensp; <sample><no_translate>(negative &gt; 5) &amp; (negative / positive &gt; 120%)</no_translate></sample> <br>
+        ]]>
+    </string>
+    <string name="hint_positive_identifier_strategy_formula">مثال: (\\d+) مثبت</string>
+    <string name="hint_negative_identifier_strategy_formula">مثال: (\\d+) منفی</string>
+    <string name="help_positive_identifier_strategy_formula">
+        <![CDATA[
+        این regex برای استخراج تعداد امتیازهای مثبت است؛ وجود یک گروه ضبط لازم است، یعنی باید شامل
+         <sample>(</sample> و <sample>)</sample> باشد، و اگر تطابقی پیدا نشود مقدار پیش‌فرض 0 است. <br>
+        <br>
+        برای مثال: <br>
+        &ensp; <sample>(\\d+) مثبت</sample>
+        ]]>
+    </string>
+    <string name="help_negative_identifier_strategy_formula">
+        <![CDATA[
+        این regex برای استخراج تعداد امتیازهای منفی است؛ وجود یک گروه ضبط لازم است، یعنی باید شامل
+         <sample>(</sample> و <sample>)</sample> باشد، و اگر تطابقی پیدا نشود مقدار پیش‌فرض 0 است. <br>
+        <br>
+        برای مثال: <br>
+        &ensp; <sample>(\\d+) منفی</sample>
+        ]]>
+    </string>
+    <string name="positive_condition">شرط مثبت</string>
+    <string name="negative_condition">شرط منفی</string>
+    <string name="help_positive_condition">
+        <![CDATA[
+        اگر این شرط برقرار باشد، شماره <highlight>مجاز</highlight> می‌شود.
+        ]]>
+    </string>
+    <string name="help_negative_condition">
+        <![CDATA[
+        اگر این شرط برقرار باشد، شماره <error>مسدود</error> می‌شود.
+        ]]>
+    </string>
+    <string name="supported_formula_syntax" formatted="false">
+        <![CDATA[
+        <title>نحو پشتیبانی‌شده</title> <br>
+        <minor>positive &ensp; p &ensp; negative &ensp; n</minor> <br>
+        &ensp; جای‌نگهدارهایی که با تعداد واقعی امتیازها جایگزین می‌شوند. <br>
+        <minor>+ &ensp; - &ensp; * &ensp; /</minor> <br>
+        &ensp; عملیات پایه ریاضی (N/0=N) <br>
+        <minor>%</minor> <br>
+        &ensp; درصد <br>
+        <minor>&lt; &ensp; &gt; &ensp; &lt;= &ensp; &gt;=</minor> <br>
+        &ensp; مقایسه‌ها <br>
+        <minor>& &ensp; |</minor> <br>
+        &ensp; AND/OR منطقی <br>
+        <minor>( &ensp; )</minor> <br>
+        &ensp; پرانتزها <br>
+        <br>
+        <b>مثال‌ها</b> <br>
+        &ensp; <sample>negative &gt; positive</sample> <br>
+        &ensp; <sample>P - N &gt; 5</sample> (به بزرگی و کوچکی حروف حساس نیست) <br>
+        &ensp; <sample>p &gt; 3 & n &gt; 2 & (n / p &gt;= 120%)</sample> <br>
+        ]]>
+    </string>
+    <string name="missing_brackets">regex گروه ضبط () ندارد، برای جزئیات راهنما را بررسی کنید.</string>
+    <string name="negative_identifier_matches">تطابق‌های شناسه منفی</string>
+    <string name="positive_identifier_matches">تطابق‌های شناسه مثبت</string>
+    <string name="rating_count_template">امتیازهای مثبت: %s، امتیازهای منفی: %s</string>
+</resources>

@@ -17,8 +17,6 @@
     <string name="clear">پاک کردن</string>
     <string name="test">آزمایش</string>
     <string name="save">ذخیره</string>
-    <string name="whitelist">لیست سفید</string>
-    <string name="blacklist">لیست سیاه</string>
     <string name="content">محتوا</string>
     <string name="priority">اولویت</string>
     <string name="deleted_filter">(قانون حذف شده)</string>
@@ -30,20 +28,23 @@
     <string name="yes">بله</string>
     <string name="no">خیر</string>
     <string name="ok">باشه</string>
+    <string name="cancel">لغو</string>
     <string name="miscellaneous">متفرقه</string>
     <string name="quick_settings">تنظیمات سریع</string>
     <string name="regex_settings">تنظیمات عبارت منظم</string>
     <string name="backup">پشتیبان گیری</string>
     <string name="import_">وارد کردن</string>
     <string name="export">خروجی</string>
-    <string name="config_text">متن پیکربندی</string>
+    <string name="config_json">JSON پیکربندی</string>
     <string name="imported_successfully">با موفقیت وارد شد</string>
     <string name="import_fail">وارد کردن ناموفق</string>
+    <string name="exported_successfully">با موفقیت صادر شد</string>
+    <string name="export_fail">خطا در صادر کردن</string>
     <string name="prompt_go_to_permission_setting">
         <![CDATA[
         <translate>این ویژگی به مجوز نیاز دارد:</translate><br>
         <br>
-        <font color="#00BFFF">%s</font><br>
+        <title>%s</title><br>
         <br>
         <translate>باید به صورت دستی در تنظیمات سیستم فعال شود.</translate><br>
         <translate>صفحه تنظیمات را باز کنم؟</translate>
@@ -55,6 +56,7 @@
     <string name="label_content_rules">قوانین پیام</string>
     <string name="content_rule">قانون پیام</string>
     <string name="recent_apps"><short>برنامه‌های اخیر</short></string>
-    <string name="allow_contact">مخاطبین</string>
+    <string name="contacts">مخاطبین</string>
 
+    <string name="non_contacts">غیر مخاطبین</string>
 </resources>

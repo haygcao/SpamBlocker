@@ -1,16 +1,14 @@
 <resources>
     <string name="start_time">Waktu Mulai</string>
     <string name="end_time">Waktu Akhir</string>
-    <string name="switch_mode">Mode Peralihan</string>
+    <string name="regex_mode">Mode regex</string>
     <string name="contact_group">Grup Kontak</string>
-    <string name="text_too_long">Teks terlalu panjang, pengubahan dinonaktifkan</string>
-    <string name="follow_system"><short>Ikuti Sistem</short></string>
+    <string name="text_too_long">Teks melebihi %s karakter, pengeditan dinonaktifkan untuk alasan kinerja. Untuk meningkatkan batas:</string>
+    <string name="increase_text_limit">Tekan lama sebuah aturan -> Pengaturan -> Batas Kotak Teks</string>
+    <string name="system"><short>Sistem</short></string>
     <string name="theme">Tema</string>
-    <string-array name="theme_list">
-        <item>Terang</item>
-        <item>Gelap</item>
-    </string-array>
     <string-array name="rule_dropdown_menu">
+        <item>Ekspor</item>
         <item>Aturan Pencarian</item>
         <item>Aturan Penggandaan</item>
         <item>Aturan Penghapusan</item>
@@ -26,26 +24,26 @@
     </string>
     <string name="help_regex_mode_phone_number">
         <![CDATA[
-        <font color="#00BFFF"><b>Nomor Telepon</b></font>:<br>
+        <title><b>Nomor Telepon</b></title>:<br>
         &ensp; Mode default, regex akan mencocokkan nomor telepon.<br>
         ]]>
     </string>
     <string name="help_regex_mode_contact">
         <![CDATA[
-        <font color="#00BFFF"><b>Kontak</b></font>:<br>
+        <title><b>Kontak</b></title>:<br>
         &ensp; Regex akan mencocokkan nama kontak yang terkait dengan nomor telepon masuk.<br>
         &ensp;  - Contoh penggunaan:<br>
-        &emsp; <font color="#888888">Blokir semua non-kontak di akhir pekan dengan regex `.*`. </font><br>
+        &emsp; <sample>Blokir semua non-kontak di akhir pekan dengan regex `.*`. </sample><br>
         ]]>
     </string>
     <string name="help_regex_mode_contact_group">
         <![CDATA[
-        <font color="#00BFFF"><b>Grup Kontak</b></font>:<br>
+        <title><b>Grup Kontak</b></title>:<br>
         &ensp; Regex akan mencocokkan nama grup kontak yang terkait dengan nomor telepon masuk,
                  memengaruhi semua kontak dalam grup tersebut, sehingga Anda tidak perlu menambahkannya satu per satu,
                  dan tidak perlu memperbarui meskipun ada perubahan personel.<br>
         &ensp;  - Contoh penggunaan:<br>
-        &emsp; <font color="#888888">Blokir semua rekan kerja di akhir pekan dengan memblokir grup kontak \"kantor\". </font> <br>
+        &emsp; <sample>Blokir semua rekan kerja di akhir pekan dengan memblokir grup kontak \"kantor\". </sample> <br>
         ]]>
     </string>
 </resources>

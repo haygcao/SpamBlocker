@@ -1,0 +1,151 @@
+<resources>
+    <string name="perm_access_dir">Access Dir</string>
+    <string name="dir_not_specified">Dir not specified.</string>
+    <string name="no_access_to_dir">No access to dir: %s.</string>
+    <string name="grant_access_to_dir">
+        <![CDATA[
+        Grant access to dir: <br>
+        <highlight>%s</highlight>
+        ]]>
+    </string>
+    <string name="comment">Comment</string>
+    <string name="database_prefix">Database Prefix</string>
+    <string name="help_regex_mode_database_prefix">
+        <![CDATA[
+        <title><b>Database Prefix</b></title>:<br>
+        &ensp; Range blocking for database numbers.<br>
+        <br>
+        <warn>This regex must end with dots</warn>, in this regex mode, these trailing dots represent the variable digits. <br>
+        <br>
+        <b>For example:</b> <br>
+        &ensp; <sample><b>.{5,}..</b></sample> requires the prefix to be at least 5 digits long, while allowing a 2-digit variation at the end.
+        ]]>
+    </string>
+    <string name="help_regex_preset_database_prefix">
+        <![CDATA[
+        Matches database numbers by prefix, the prefix must be at least <minor><b>5</b></minor> digits long, while allowing a <minor><b>2</b></minor>-digit variation at the end. <br>
+        <br>
+        <b>For example</b>: <br>
+        &ensp; If <sample>12345678</sample><error>00</error> exists in database, a call from <sample>12345678</sample><error>99</error> will also be blocked.
+        ]]>
+    </string>
+    <string name="api_preset_remote_llm">Remote LLM</string>
+    <string name="help_api_preset_remote_llm">
+        <![CDATA[
+            Check SMS content using remote large language models. <br>
+            <br>
+            This is provided solely for <warn>demonstration purposes</warn>.<br>
+            <br>
+            Tap to open the wiki page for instructions.
+        ]]>
+    </string>
+    <string name="found_existing_auth_token">Found existing auth token</string>
+    <string name="use_this_token">Use this token</string>
+    <string name="login_and_get_a_token">Register and log in to the website and get your token.</string>
+    <string name="get_a_new_token">Get a new token</string>
+    <string name="token">Token</string>
+    <string name="enter_token_manually_desc">If you already have a token, enter it manually.</string>
+    <string name="enter_token_manually">Enter token manually</string>
+    <string name="others">Others</string>
+    <string name="api_settings">API Settings</string>
+    <string name="include_settings">Include Settings</string>
+    <string name="exclude_settings">Exclude Settings</string>
+    <string name="backup_missing_category">This setting is missing from the backup file and cannot be restored.</string>
+    <string name="warning_priority_conflict">
+        <![CDATA[
+        <highlight>Whitelist</highlight> and <error>blacklist</error> rules shouldn\'t have the same priority<br>
+        <br>
+        Conflicting rules:
+        ]]>
+    </string>
+    <string name="checking_template_new">%s Checking: %s</string>
+    <string name="textbox_limit">Text Box Limit</string>
+    <string name="help_rule_textbox_limit">
+        <![CDATA[
+        The maximum characters allowed in the input box. Exceeding this limit disables editing,
+          as excessively long text will freeze the UI. <br>
+          <br>
+        Default: <b>10000</b> characters
+        ]]>
+    </string>
+    <string name="clear_history">Clear History</string>
+    <string name="tip_clear_history">If the app crashes on startup and won\'t open, try clearing the history logs using the button below.</string>
+    <string name="direct_verdict">Direct Verdict</string>
+    <string name="formula">Formula</string>
+    <string name="strategy">Strategy</string>
+    <string name="help_api_result_strategy">
+        <![CDATA[
+        <title>Direct Verdict</title> <br>
+        The server returns an explicit spam category, common in API services. <br>
+        <br>
+        For example, the server returns: <br>
+        &ensp; <sample><no_translate>{ …, \"type\": \"fraud\", … }</no_translate></sample> <br>
+        Match it with regex: <br>
+        &ensp; <sample><no_translate>\"type\": \"(fraud|scam|political)\"</no_translate></sample> <br>
+        <br>
+        <title>Formula</title> <br>
+        Customize your own blocking logic based on the positive/negative rating counts returned by the server. <br>
+        <br>
+        For example, block when: <br>
+        &ensp; <sample><no_translate>(negative &gt; 5) &amp; (negative / positive &gt; 120%)</no_translate></sample> <br>
+        ]]>
+    </string>
+    <string name="hint_positive_identifier_strategy_formula">E.g.: (\\d+) positive</string>
+    <string name="hint_negative_identifier_strategy_formula">E.g.: (\\d+) negative</string>
+    <string name="help_positive_identifier_strategy_formula">
+        <![CDATA[
+        This regex is for extracting the positive rating count, a capturing group is required, meaning it should contain
+         <sample>(</sample> and <sample>)</sample>, defaults to 0 if no match is found. <br>
+        <br>
+        For example: <br>
+        &ensp; <sample>(\\d+) positive</sample>
+        ]]>
+    </string>
+    <string name="help_negative_identifier_strategy_formula">
+        <![CDATA[
+        This regex is for extracting the negative rating count, a capturing group is required, meaning it should contain
+         <sample>(</sample> and <sample>)</sample>, defaults to 0 if no match is found. <br>
+        <br>
+        For example: <br>
+        &ensp; <sample>(\\d+) negative</sample>
+        ]]>
+    </string>
+    <string name="positive_condition">Positive Condition</string>
+    <string name="negative_condition">Negative Condition</string>
+    <string name="help_positive_condition">
+        <![CDATA[
+        The number will be <highlight>allowed</highlight> if this condition is met.
+        ]]>
+    </string>
+    <string name="help_negative_condition">
+        <![CDATA[
+        The number will be <error>blocked</error> if this condition is met.
+        ]]>
+    </string>
+    <string name="supported_formula_syntax" formatted="false">
+        <![CDATA[
+        <title>Supported Syntax</title> <br>
+        <minor>positive &ensp; p &ensp; negative &ensp; n</minor> <br>
+        &ensp; Placeholders that will be replaced by the actual rating counts. <br>
+        <minor>+ &ensp; - &ensp; * &ensp; /</minor> <br>
+        &ensp; Math basics (N/0=N) <br>
+        <minor>%</minor> <br>
+        &ensp; Percentage <br>
+        <minor>&lt; &ensp; &gt; &ensp; &lt;= &ensp; &gt;=</minor> <br>
+        &ensp; Comparisons <br>
+        <minor>& &ensp; |</minor> <br>
+        &ensp; Logical AND/OR <br>
+        <minor>( &ensp; )</minor> <br>
+        &ensp; Parentheses <br>
+        <br>
+        <b>Examples</b> <br>
+        &ensp; <sample>negative &gt; positive</sample> <br>
+        &ensp; <sample>P - N &gt; 5</sample> (case insensitive) <br>
+        &ensp; <sample>p &gt; 3 & n &gt; 2 & (n / p &gt;= 120%)</sample> <br>
+        ]]>
+    </string>
+    <string name="missing_brackets">Regex missing capturing group (), check the tooltip for details.</string>
+    <string name="negative_identifier_matches">Negative identifier matches</string>
+    <string name="positive_identifier_matches">Positive identifier matches</string>
+    <string name="rating_count_template">Positive ratings: %s, negative ratings: %s</string>
+</resources>

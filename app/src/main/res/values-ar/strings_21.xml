@@ -1,23 +1,10 @@
 <resources>
     <string name="perm_write_settings">كتابة الإعدادات</string>
-    <string name="set_to">تعيين إلى</string>
-    <string name="help_set_ringtone_to">
-    <![CDATA[
-        عيّن نغمة الرنين لميزة معينة، أو اجعلها صامتة. <br>
-        <br>
-        على سبيل المثال، لتعيين نغمة الرنين لقاعدة تعبير نمطي (regex): <br><br>
-        <font color="#888888">
-        &emsp; { \"regex\": \"rule_desc\" }
-        </font>
-        <br><br>
-        المكالمات المسموح بها بهذه القاعدة ستشغل نغمة الرنين المحددة.<br>
-    ]]>
-    </string>
     <string name="ringtone">نغمة الرنين</string>
     <string name="call_to_test_ringtone">قم بإجراء مكالمة فعلية لاختبار نغمة الرنين.</string>
     <string name="help_ringtone">
     <![CDATA[
-        خصص نغمة الرنين لميزة معينة، المكالمات المسموح بها بهذه الميزة ستشغل نغمة الرنين المحددة.
+        تعيين نغمات رنين مختلفة للمكالمات المسموح بها بواسطة ميزات مختلفة.
     ]]>
     </string>
     <string name="help_target_rule_desc">
@@ -28,7 +15,7 @@
         اكتب <b>العمل</b> في هذا الحقل.
     ]]>
     </string>
-    <string name="invalid_config">تهيئة غير صالحة</string>
+
     <string name="custom">مخصص</string>
     <string name="quick_tile">مربع الإعدادات السريعة</string>
     <string name="help_quick_tile">
@@ -47,16 +34,15 @@
     ]]>
     </string>
     <string name="quick_tile_is_active">مربع الإعدادات السريعة المخصص نشط.</string>
-    <string name="http_status_code_template">رمز حالة HTTP: %d</string>
     <string name="help_preset_ringtone">
     <![CDATA[
         خصص نغمة الرنين لقاعدة تعبير نمطي، وسيتم تشغيل نغمة الرنين المحددة عندما تكون المكالمة
         مسموح بها بموجب هذه القاعدة. <br>
         <br>
         <b>حالة الاستخدام:<b> <br>
-        <font color="#888888">
-        &ensp; اضبط نغمات رنين مختلفة لأشخاص معينين، أو مجموعات جهات اتصال، أو نطاقات أرقام هواتف.
-        </font>
+        <sample>
+        &ensp; تعيين نغمات رنين مختلفة لجهات اتصال معينة، أو نطاقات أرقام، أو مكالمات متكررة.
+        </sample>
     ]]>
     </string>
     <string name="remote_setup">الإعداد عن بعد</string>
@@ -93,8 +79,8 @@
         <br>
         تعمل سير العمل يوميًا، حيث تقوم بتنزيل مجموعة البيانات الكاملة لمدة 90 يومًا في التشغيل الأول، ثم تقوم بإجراء تحديثات تراكمية فقط في التشغيلات اللاحقة. <br>
         <br>
-        <font color="#ffa500"><b>ملاحظة:</b></font> <br>
-        <font color="#888888">&ensp; عادةً ما يتم تحديث مجموعة البيانات كل يوم عمل تقريبًا عند الظهر بتوقيت شرق الولايات المتحدة. </font><br>
+        <warn><b>ملاحظة:</b></warn> <br>
+        <sample>&ensp; عادةً ما يتم تحديث مجموعة البيانات كل يوم عمل تقريبًا عند الظهر بتوقيت شرق الولايات المتحدة. </sample><br>
         <br>
         لذلك يتم جدولتها في الساعة 18:00، حيث من المتوقع أن تكون مجموعة البيانات متاحة بحلول ذلك الوقت. <br>
     ]]>
@@ -102,9 +88,5 @@
     <string name="csv_missing_column">
         العمود المطلوب %s مفقود. يمكنك استخدام الرأس %s لعمود رقم الهاتف، أو تعيين رأس موجود
         إلى %s في \"تحليل CSV\".
-    </string>
-    <string name="enable_reporting_number">تمكين الإبلاغ</string>
-    <string name="help_enable_reporting_number">
-        تدعم واجهة برمجة التطبيقات هذه أيضًا الإبلاغ عن الأرقام، قم بتمكين هذا لتوليد سير عمل الإبلاغ أيضًا.
     </string>
 </resources>

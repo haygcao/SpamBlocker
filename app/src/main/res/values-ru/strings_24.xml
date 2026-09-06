@@ -1,7 +1,7 @@
 <resources>
     <string name="warning_double_sms">
         <![CDATA[
-        Обязательно <font color="#fa7f71"><b>отключите уведомления приложения SMS</b></font> в системных настройках,
+        Обязательно <error><b>отключите уведомления приложения SMS</b></error> в системных настройках,
          чтобы избежать двойных уведомлений. <br>
         <br>
         Если приложение SMS требует разрешение на уведомления, вы можете оставить его предоставленным
@@ -18,23 +18,15 @@
     </string>
     <string name="help_regex_mode_caller_name">
         <![CDATA[
-        <font color="#00BFFF"><b>Имя звонящего</b></font>:<br>
+        <title><b>Имя звонящего</b></title>:<br>
         &ensp; Регулярное выражение будет применяться к отображаемому имени звонящего (CNAP). <br>
         <br>
         В журнале истории вызовов имя звонящего будет отображаться после номера телефона в скобках, если оно существует, например: <br>
-        &ensp; <font color="#888888">12345 (Отображаемое имя)</font> <br>
+        &ensp; <sample>12345 (Отображаемое имя)</sample> <br>
         ]]>
     </string>
     <string name="caller_name">Имя звонящего</string>
     <string name="caller_name_rule">Правило для имени звонящего</string>
-    <string name="help_regex_preset_caller_name">
-        <![CDATA[
-        Разрешить звонки, которые содержат информацию <b>CNAP (Представление имени звонящего)</b>, что является телекоммуникационной функцией, которая
-         отображает зарегистрированное имя звонящего (вместе с номером телефона) на экране телефона получателя во время входящего звонка. <br>
-        <br>
-        Для стран, которые применяют KYC-проверенный CNAP, звонки, имеющие имя звонящего, скорее всего, являются действительными.
-        ]]>
-    </string>
     <string name="forwarded_call">Переадресованный звонок</string>
     <string name="help_regex_preset_forwarded_call">
         <![CDATA[
@@ -46,13 +38,13 @@
     <string name="explanation_forwarded_call">
         <![CDATA[
         Это <b>зависит от оператора</b>, некоторые операторы форматируют переадресованные звонки как два номера, объединенных символом \"&\",
-         например <font color="#888888">222&111</font>. <br>
+         например <sample>222&111</sample>. <br>
         <br>
         В этом формате: <br>
-        &ensp; - Первая часть (<font color="#888888">222</font>) обычно является номером переадресации. <br>
-        &ensp; - Вторая часть (<font color="#888888">111</font>) является исходным номером. <br>
+        &ensp; - Первая часть (<sample>222</sample>) обычно является номером переадресации. <br>
+        &ensp; - Вторая часть (<sample>111</sample>) является исходным номером. <br>
         <br>
-        Также могут быть <font color="#888888">333&111</font> и <font color="#888888">444&111</font>,
+        Также могут быть <sample>333&111</sample> и <sample>444&111</sample>,
          где исходный номер остается тем же, а номер переадресации меняется.
         ]]>
     </string>
@@ -67,32 +59,30 @@
         <br>
         <b>Опции</b>: <br>
         <br>
-        <font color="#00BFFF"><b>Исходный</b></font> <br>
-        Запрашивать/сообщать исходный номер (<font color="#888888">222&111</font>), если API поддерживает этот формат. <br>
+        <title><b>Исходный</b></title> <br>
+        Запрашивать/сообщать исходный номер (<sample>222&111</sample>), если API поддерживает этот формат. <br>
         <br>
-        <font color="#00BFFF"><b>Оригинальный</b></font> <br>
-        Запрашивать/сообщать оригинальный номер (<font color="#888888">111</font>), это обходной путь для API, которые не поддерживают исходный формат. <br>
+        <title><b>Оригинальный</b></title> <br>
+        Запрашивать/сообщать оригинальный номер (<sample>111</sample>), это обходной путь для API, которые не поддерживают исходный формат. <br>
         <br>
-        <font color="#00BFFF"><b>Переадресация</b></font> <br>
-        Запрашивать/сообщать номер переадресации (<font color="#888888">222</font>). <br>
+        <title><b>Переадресация</b></title> <br>
+        Запрашивать/сообщать номер переадресации (<sample>222</sample>). <br>
         ]]>
     </string>
     <string name="forwarded_number_modified_to">Этот переадресованный номер был изменен на %s.</string>
     <string name="filter">Фильтр</string>
-    <string name="geo_location">Геолокация</string>
-    <string name="geo_location_rule">Правило геолокации</string>
-    <string name="help_regex_mode_geo_location">
+    <string name="geolocation">Геолокация</string>
+    <string name="geolocation_rule">Правило геолокации</string>
+    <string name="help_regex_mode_geolocation">
         <![CDATA[
-        <font color="#00BFFF"><b>Геолокация</b></font>:<br>
+        <title><b>Геолокация</b></title>:<br>
         &ensp; Регулярное выражение будет сопоставлять геолокацию номера. <br>
         <br>
         &ensp; Это использует библиотеку Google <a href="https://github.com/google/libphonenumber">libphonenumber</a>,
-         автономную библиотеку, предоставляющую географическую информацию о номерах телефонов. <br>
+         автономную базу данных, предоставляющую географическую информацию о номерах телефонов. <br>
         <br>
-        &ensp; Если вы заметили проблемы с точностью базы данных, вы можете
-        <a href="https://groups.google.com/g/libphonenumber-discuss">открыть обсуждение</a>
-        или
-        <a href="https://issuetracker.google.com/issues/new?component=192347">сообщить о проблеме</a>. <br>
+        Например: <br>
+        &ensp; Блокируйте номера из <no_translate><sample>San Francisco, CA</sample></no_translate> с помощью regex <no_translate><error>san fr.*</error></no_translate> <br>
         ]]>
     </string>
     <string name="label_value_pair">%s: %s</string>
@@ -105,10 +95,10 @@
         <![CDATA[
         Разрешить локальные вызовы из того же региона и блокировать остальные. <br>
         <br>
-        Замените заполнитель ___ вашим фактическим регионом. <br>
+        Замените <sample>Milan</sample> вашим фактическим регионом. <br>
         <br>
-        Синтаксис <font color="#fa7f71">(?!___$).*</font> означает: <br>
-        &ensp; Совпадение любого текста, который не является <font color="#fa7f71">___</font>.
+        Синтаксис <error>(?!Milan$).*</error> означает: <br>
+        &ensp; Совпадение любого текста, который не является <error>Milan</error>.
         ]]>
     </string>
 </resources>

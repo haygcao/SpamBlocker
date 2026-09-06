@@ -8,7 +8,6 @@
         %s
         ]]>
     </string>
-    <string name="invalid_auth_credentials">请输入有效的授权信息。</string>
     <string name="delay">延迟</string>
     <string name="report_number_require_call_log_permission">
         为防止重复呼叫或回拨号码被误报，举报号码需要通话记录权限。
@@ -28,29 +27,36 @@
     </string>
     <string name="running_services">正在运行的服务</string>
     <string name="report_number">举报号码</string>
-    <string-array name="spam_categories">
-        <item>有效号码</item>
-        <item>诈骗</item>
-        <item>营销</item>
-        <item>调查</item>
-        <item>政治</item>
-        <item>其他垃圾来电</item>
-    </string-array>
+    <string name="valid_number">有效号码</string>
+    <string name="valid_sms">有效短信</string>
+    <string name="fraud">诈骗</string>
+    <string name="promotional">推销广告</string>
+    <string name="survey">调查</string>
+    <string name="reminder">提醒通知</string>
     <string name="action_category_config">类别配置</string>
     <string name="help_action_category_config">
         <![CDATA[
-        仅支持以下垃圾电话类别，API 中的任何其他类别都应映射到其中一个。<br>
-        <br>
-         - <font color="#03DAC5"><b>{valid}</b></font><br>
-        &ensp; 标记为有效号码，而非垃圾电话。<br>
-        <br>
-         - <font color="#fa7f71"><b>{fraud}</b></font><br>
-         - <font color="#fa7f71"><b>{marketing}</b></font><br>
-         - <font color="#fa7f71"><b>{survey}</b></font><br>
-         - <font color="#fa7f71"><b>{political}</b></font><br>
-        <br>
-         - <font color="#fa7f71"><b>{other}</b></font><br>
-        &ensp; 备用垃圾电话类型，在以上类别均不适用时使用。<br>
+                仅支持以下类别：<br>
+                <br>
+                 - <highlight><b>{valid}</b></highlight><br>
+                &ensp; 标记为有效电话号码，而不是骚扰来电。<br>
+                <br>
+                 - <error><b>{fraud}</b></error><br>
+                 - <error><b>{promotional}</b></error><br>
+                 - <error><b>{survey}</b></error><br>
+                 - <error><b>{reminder}</b></error><br>
+                 - <error><b>{other}</b></error><br>
+                &ensp; 后备骚扰来电类型，在以上类别均不适用时使用。<br>
+                <br>
+                它会生成标签 <title>{category}</title>，可在后续 HTTP 请求中使用。 <br>
+                <br>
+                例如，POST 请求体： <br>
+                <sample>
+                { <br>
+                    &ensp; \"phone\": \"{number}\", <br>
+                    &ensp; \"rating\": \"{category}\" <br>
+                }
+                </sample>
         ]]>
     </string>
     <string name="missing_category">
@@ -75,19 +81,20 @@
         有些服务会先发短信通知您即将有来电，通常在一分钟内。<br>
         <br>
         例如，一条类似这样的短信：<br>
-        &ensp; <font color="#888888">[某个服务] 我们正在致电您以告知……，请随时接听。</font><br>
+        &ensp; <sample>[某个服务] 我们正在致电您以告知……，请随时接听。</sample><br>
         <br>
         此类消息的正则表达式为：<br>
-        &ensp; <font color="#03DAC5"><b><translate>.*请.*接听.*</translate></b></font> <br>
+        &ensp; <highlight><b><translate>.*请.*接听.*</translate></b></highlight> <br>
         <br>
-        默认设置 <font color="#03DAC5"><b>120 秒</b></font> 表示在收到此类消息后接下来的两分钟内所有来电都将被允许。<br>
+        默认设置 <highlight><b>120 秒</b></highlight> 表示在收到此类消息后接下来的两分钟内所有来电都将被允许。<br>
         <br>
         它适用于普通短信和闪信（0 类短信）。<br>
         <br>
-        <font color="#ea86ff"><b>优先级：10</b></font>
+        即使未启用全局短信筛选，它也能正常工作。<br>
+        <br>
+        <priority><b>优先级：10</b></priority>
         ]]>
     </string>
     <string name="waning_using_wildcard_as_regex">通配符`*`未使用点作为前缀，您的意思是`.*`吗？</string>
     <string name="import_as">导入为</string>
-    <string name="api_key">API 密钥</string>
 </resources>

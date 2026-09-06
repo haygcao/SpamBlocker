@@ -28,19 +28,20 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
-import spam.blocker.ui.theme.Salmon
-import spam.blocker.ui.theme.SkyBlue
 import spam.blocker.ui.widgets.Button
 import spam.blocker.ui.widgets.DrawableImage
 import spam.blocker.ui.widgets.GreyButton
 import spam.blocker.ui.widgets.GreyIcon16
+import spam.blocker.ui.widgets.GreyIcon18
 import spam.blocker.ui.widgets.GreyLabel
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.PriorityBox
 import spam.blocker.ui.widgets.PriorityLabel
+import spam.blocker.ui.widgets.RowVCenterSpaced
 import spam.blocker.ui.widgets.Str
 import spam.blocker.ui.widgets.StrInputBox
 import spam.blocker.util.AppInfo
@@ -66,7 +67,7 @@ private fun PopupMeetingConfig(
             PriorityBox(priority.value) { newValue, hasError ->
                 if (!hasError) {
                     priority.value = newValue!!
-                    spf.MeetingMode(ctx).setPriority(newValue)
+                    spf.MeetingMode(ctx).priority = newValue
                 }
             }
         }
@@ -76,10 +77,12 @@ private fun PopupMeetingConfig(
 
 @Composable
 fun MeetingMode() {
+    val C = G.palette
+
     val ctx = LocalContext.current
     val spf = spf.MeetingMode(ctx)
 
-    val priority = remember { mutableIntStateOf(spf.getPriority()) }
+    val priority = remember { mutableIntStateOf(spf.priority) }
 
     val buttonPopupTrigger = rememberSaveable { mutableStateOf(false) }
     val appsPopupTrigger = rememberSaveable { mutableStateOf(false) }
@@ -133,7 +136,7 @@ fun MeetingMode() {
                     )
 
                     // Label "Running Foreground Services"
-                    Text(Str(R.string.running_services), color = SkyBlue)
+                    Text(Str(R.string.running_services), color = C.infoBlue)
 
                     // The list
                     val services = remember { mutableStateListOf<String>() }
@@ -224,9 +227,8 @@ fun MeetingMode() {
                     if (enabledAppInfos.isNotEmpty()) {
                         Button(
                             content = {
-                                PriorityLabel(priority.intValue, color = Salmon)
+                                PriorityLabel(priority.intValue, color = C.error)
                             },
-//                            borderColor = Salmon
                         ) {
                             buttonPopupTrigger.value = true
                         }
@@ -251,7 +253,7 @@ fun MeetingMode() {
                     }
                 }
             }
-            if (enabledAppInfos.isEmpty()) {
+            if (!Permission.usageStats.isGranted || enabledAppInfos.isEmpty()) {
                 AppChooserIcon { granted ->
                     Permission.usageStats.isGranted = granted
                     if (granted)
@@ -270,4 +272,50 @@ private fun clearUninstalledMeetingApps(ctx: Context) {
         Util.isPackageInstalled(ctx, it.pkgName)
     }
     spf.setList(cleared)
+}
+
+@Composable
+fun MeetingModeSummary() {
+    val C = G.palette
+    val ctx = LocalContext.current
+    val spf = spf.MeetingMode(ctx)
+
+    if (Permission.usageStats.isGranted) {
+        val priority = remember { mutableIntStateOf(spf.priority) }
+        val enabledAppInfos = remember {
+            mutableStateListOf<MeetingAppInfo>()
+        }
+
+        SideEffect {
+            enabledAppInfos.clear()
+            enabledAppInfos.addAll(spf.getList())
+        }
+
+        if (enabledAppInfos.isNotEmpty()) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End,
+            ) {
+                Button(
+                    enabled = false,
+                    content = {
+                        RowVCenterSpaced(4) {
+                            GreyIcon18(R.drawable.ic_video_call)
+                            if (priority.intValue != 20) {
+                                PriorityLabel(priority.intValue, color = C.error)
+                            }
+                            enabledAppInfos.forEach {
+                                DrawableImage(
+                                    AppInfo.fromPackage(ctx, it.pkgName).icon,
+                                    modifier = M
+                                        .size(22.dp)
+                                        .padding(horizontal = 2.dp)
+                                )
+                            }
+                        }
+                    },
+                )
+            }
+        }
+    }
 }

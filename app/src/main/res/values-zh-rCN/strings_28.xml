@@ -1,0 +1,151 @@
+<resources>
+    <string name="perm_access_dir">访问文件夹</string>
+    <string name="dir_not_specified">未指定文件夹。</string>
+    <string name="no_access_to_dir">无法访问文件夹：%s。</string>
+    <string name="grant_access_to_dir">
+        <![CDATA[
+        授予文件夹访问权限：<br>
+        <highlight>%s</highlight>
+        ]]>
+    </string>
+    <string name="comment">备注</string>
+    <string name="database_prefix">数据库前缀</string>
+    <string name="help_regex_mode_database_prefix">
+        <![CDATA[
+        <title><b>数据库前缀</b></title>:<br>
+        &ensp; 对数据库中的电话号码进行范围屏蔽。<br>
+        <br>
+        <warn>此正则表达式必须以点结尾</warn>，在此正则模式下，这些结尾的点表示可变数字。 <br>
+        <br>
+        <b>例如：</b> <br>
+        &ensp; <sample><b>.{5,}..</b></sample> 要求前缀至少为 5 位数字，同时允许末尾有 2 位数字的变化。
+        ]]>
+    </string>
+    <string name="help_regex_preset_database_prefix">
+        <![CDATA[
+        按前缀匹配数据库中的电话号码，前缀必须至少为 <minor><b>5</b></minor> 位数字，同时允许末尾有 <minor><b>2</b></minor> 位数字的变化。 <br>
+        <br>
+        <b>例如</b>: <br>
+        &ensp; 如果 <sample>12345678</sample><error>00</error> 存在于数据库中，则来自 <sample>12345678</sample><error>99</error> 的来电也会被屏蔽。
+        ]]>
+    </string>
+    <string name="api_preset_remote_llm">远程 LLM</string>
+    <string name="help_api_preset_remote_llm">
+        <![CDATA[
+            使用远程大语言模型检查短信内容。 <br>
+            <br>
+            此功能仅用于<warn>演示目的</warn>。<br>
+            <br>
+            点击打开 Wiki 页面查看说明。
+        ]]>
+    </string>
+    <string name="found_existing_auth_token">发现已有的身份验证令牌</string>
+    <string name="use_this_token">使用此令牌</string>
+    <string name="login_and_get_a_token">注册并登录网站，然后获取你的令牌。</string>
+    <string name="get_a_new_token">获取新令牌</string>
+    <string name="token">令牌</string>
+    <string name="enter_token_manually_desc">如果你已有令牌，请手动输入。</string>
+    <string name="enter_token_manually">手动输入令牌</string>
+    <string name="others">其他</string>
+    <string name="api_settings">API 设置</string>
+    <string name="include_settings">包含设置</string>
+    <string name="exclude_settings">排除设置</string>
+    <string name="backup_missing_category">此设置在备份文件中缺失，无法恢复。</string>
+    <string name="warning_priority_conflict">
+        <![CDATA[
+        <highlight>白名单</highlight>和<error>黑名单</error>规则不应具有相同的优先级<br>
+        <br>
+        冲突的规则：
+        ]]>
+    </string>
+    <string name="checking_template_new">%s 正在检查：%s</string>
+    <string name="textbox_limit">文本框限制</string>
+    <string name="help_rule_textbox_limit">
+        <![CDATA[
+        输入框允许的最大字符数。超过此限制将禁用编辑，
+          因为过长的文本会导致界面卡死。 <br>
+          <br>
+        默认值：<b>10000</b> 个字符
+        ]]>
+    </string>
+    <string name="clear_history">清空历史记录</string>
+    <string name="tip_clear_history">如果应用在启动时崩溃且无法打开，请尝试使用下方按钮清空历史日志。</string>
+    <string name="direct_verdict">直接判定</string>
+    <string name="formula">公式</string>
+    <string name="strategy">策略</string>
+    <string name="help_api_result_strategy">
+        <![CDATA[
+        <title>直接判定</title> <br>
+        服务器返回明确的骚扰类别，这在 API 服务中很常见。 <br>
+        <br>
+        例如，服务器返回： <br>
+        &ensp; <sample><no_translate>{ …, \"type\": \"fraud\", … }</no_translate></sample> <br>
+        使用正则匹配： <br>
+        &ensp; <sample><no_translate>\"type\": \"(fraud|scam|political)\"</no_translate></sample> <br>
+        <br>
+        <title>公式</title> <br>
+        你可以基于服务器返回的正向/负向评分数量，来自定义拦截逻辑。 <br>
+        <br>
+        例如，当满足以下条件时拦截： <br>
+        &ensp; <sample><no_translate>(negative &gt; 5) &amp; (negative / positive &gt; 120%)</no_translate></sample> <br>
+        ]]>
+    </string>
+    <string name="hint_positive_identifier_strategy_formula">例如：(\\d+) 正向</string>
+    <string name="hint_negative_identifier_strategy_formula">例如：(\\d+) 负向</string>
+    <string name="help_positive_identifier_strategy_formula">
+        <![CDATA[
+        此正则表达式用于提取正向评分数量，必须包含一个捕获组，也就是它应包含
+         <sample>(</sample> 和 <sample>)</sample>，如果未找到匹配项则默认为 0。 <br>
+        <br>
+        例如：<br>
+        &ensp; <sample>(\\d+) 正向</sample>
+        ]]>
+    </string>
+    <string name="help_negative_identifier_strategy_formula">
+        <![CDATA[
+        此正则表达式用于提取负向评分数量，必须包含一个捕获组，也就是它应包含
+         <sample>(</sample> 和 <sample>)</sample>，如果未找到匹配项则默认为 0。 <br>
+        <br>
+        例如：<br>
+        &ensp; <sample>(\\d+) 负向</sample>
+        ]]>
+    </string>
+    <string name="positive_condition">正向条件</string>
+    <string name="negative_condition">负向条件</string>
+    <string name="help_positive_condition">
+        <![CDATA[
+        如果满足此条件，该号码将被<highlight>允许</highlight>。
+        ]]>
+    </string>
+    <string name="help_negative_condition">
+        <![CDATA[
+        如果满足此条件，该号码将被<error>拦截</error>。
+        ]]>
+    </string>
+    <string name="supported_formula_syntax" formatted="false">
+        <![CDATA[
+        <title>支持的语法</title> <br>
+        <minor>positive &ensp; p &ensp; negative &ensp; n</minor> <br>
+        &ensp; 占位符，会被替换为实际评分数量。 <br>
+        <minor>+ &ensp; - &ensp; * &ensp; /</minor> <br>
+        &ensp; 基础数学运算 (N/0=N) <br>
+        <minor>%</minor> <br>
+        &ensp; 百分比 <br>
+        <minor>&lt; &ensp; &gt; &ensp; &lt;= &ensp; &gt;=</minor> <br>
+        &ensp; 比较 <br>
+        <minor>& &ensp; |</minor> <br>
+        &ensp; 逻辑 AND/OR <br>
+        <minor>( &ensp; )</minor> <br>
+        &ensp; 括号 <br>
+        <br>
+        <b>示例</b> <br>
+        &ensp; <sample>negative &gt; positive</sample> <br>
+        &ensp; <sample>P - N &gt; 5</sample>（不区分大小写）<br>
+        &ensp; <sample>p &gt; 3 & n &gt; 2 & (n / p &gt;= 120%)</sample> <br>
+        ]]>
+    </string>
+    <string name="missing_brackets">Regex 缺少捕获组 ()，详情请查看提示。</string>
+    <string name="negative_identifier_matches">负向标识符匹配</string>
+    <string name="positive_identifier_matches">正向标识符匹配</string>
+    <string name="rating_count_template">正向评分：%s，负向评分：%s</string>
+</resources>

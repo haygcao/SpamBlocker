@@ -1,23 +1,10 @@
 <resources>
     <string name="perm_write_settings">Modifier les paramètres</string>
-    <string name="set_to">Définir sur</string>
-    <string name="help_set_ringtone_to">
-    <![CDATA[
-        Définir la sonnerie pour une fonctionnalité particulière, ou la mettre en sourdine. <br>
-        <br>
-        Par exemple, pour définir la sonnerie pour une règle d\'expression régulière : <br><br>
-        <font color="#888888">
-        &emsp; { \"regex\": \"rule_desc\" }
-        </font>
-        <br><br>
-        Les appels autorisés par cette règle joueront la sonnerie spécifiée.<br>
-    ]]>
-    </string>
     <string name="ringtone">Sonnerie</string>
     <string name="call_to_test_ringtone">Effectuez un véritable appel pour tester la sonnerie.</string>
     <string name="help_ringtone">
     <![CDATA[
-        Personnalisez la sonnerie pour une fonctionnalité particulière, les appels autorisés par cette fonctionnalité joueront la sonnerie spécifiée.
+        Configurez différentes sonneries pour les appels autorisés par différentes fonctionnalités.
     ]]>
     </string>
     <string name="help_target_rule_desc">
@@ -28,7 +15,7 @@
         tapez <b>Travail</b> dans ce champ.
     ]]>
     </string>
-    <string name="invalid_config">Configuration invalide</string>
+
     <string name="custom">Personnalisé</string>
     <string name="quick_tile">Tuile rapide</string>
     <string name="help_quick_tile">
@@ -47,16 +34,15 @@
     ]]>
     </string>
     <string name="quick_tile_is_active">La tuile rapide personnalisée est active.</string>
-    <string name="http_status_code_template">Code d\'état Http : %d</string>
     <string name="help_preset_ringtone">
     <![CDATA[
         Personnalisez la sonnerie pour une règle d\'expression régulière ; la sonnerie spécifiée sera jouée lorsque l\'appel est
         autorisé par cette règle. <br>
         <br>
         <b>Cas d\'utilisation :<b> <br>
-        <font color="#888888">
-        &ensp; Définissez différentes sonneries pour des personnes particulières, des groupes de contacts ou des plages de numéros de téléphone.
-        </font>
+        <sample>
+        &ensp; Définissez des sonneries différentes pour des contacts particuliers, des plages de numéros ou des appels répétés.
+        </sample>
     ]]>
     </string>
     <string name="remote_setup">Configuration à distance</string>
@@ -93,17 +79,13 @@
         <br>
         Le flux de travail s\'exécute quotidiennement, il télécharge l\'ensemble complet de données de 90 jours lors de la première exécution, puis effectue uniquement des mises à jour incrémentielles lors des exécutions suivantes. <br>
         <br>
-        <font color="#ffa500"><b>Note :</b></font> <br>
-        <font color="#888888">&ensp; L\'ensemble de données est généralement mis à jour chaque jour de la semaine aux alentours de midi, heure de l\'Est. </font><br>
+        <warn><b>Note :</b></warn> <br>
+        <sample>&ensp; L\'ensemble de données est généralement mis à jour chaque jour de la semaine aux alentours de midi, heure de l\'Est. </sample><br>
         <br>
         Il est donc programmé à 18 h, car l\'ensemble de données devrait être disponible d\'ici là. <br>
     ]]>
     </string>
     <string name="csv_missing_column">
         Colonne requise %s manquante. Vous pouvez utiliser l\'en-tête %s pour la colonne des numéros de téléphone, ou mapper un en-tête existant à %s dans \"Analyser le CSV\".
-    </string>
-    <string name="enable_reporting_number">Activer le signalement</string>
-    <string name="help_enable_reporting_number">
-        Cette API prend également en charge le signalement des numéros de téléphone, activez ceci pour générer également le flux de travail de signalement.
     </string>
 </resources>

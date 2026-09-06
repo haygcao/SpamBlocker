@@ -3,25 +3,15 @@ package spam.blocker.util
 import android.util.Base64
 import java.io.BufferedReader
 import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
 import java.io.InputStreamReader
 import java.security.MessageDigest
 import java.util.zip.GZIPInputStream
-import java.util.zip.GZIPOutputStream
 
 fun ByteArray.toHexString(): String {
     return joinToString("") { String.format("%02x", it) }
 }
 
 object Algorithm {
-
-    fun compressString(data: String): ByteArray {
-        val bos = ByteArrayOutputStream(data.length)
-        val gzip = GZIPOutputStream(bos)
-        gzip.write(data.toByteArray())
-        gzip.close()
-        return bos.toByteArray()
-    }
 
     fun decompressToString(compressed: ByteArray): String {
         val bis = ByteArrayInputStream(compressed)

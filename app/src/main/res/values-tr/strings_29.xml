@@ -1,0 +1,108 @@
+<resources>
+    <string name="call_screened">Arama Filtrelendi</string>
+    <string name="help_call_screened">
+        <![CDATA[
+        Arama filtrelendikten sonra tetiklenir.
+        ]]>
+    </string>
+    <string name="text_reply">Metin Yanıtı</string>
+    <string name="text_to_reply">Yanıtlanacak Metin</string>
+    <string name="cant_talk_in_meeting">Şu an toplantıdayım, size daha sonra döneceğim.</string>
+    <string name="busy_right_now">Şu an konuşamıyorum, size daha sonra ulaşacağım.</string>
+    <string name="help_action_text_reply">
+        <![CDATA[
+        Arama filtreleme sonucuna göre otomatik yanıt metni oluşturur.
+        ]]>
+    </string>
+    <string name="send_sms">SMS Gönder</string>
+    <string name="result">Sonuç</string>
+    <string name="contacts_only">Sadece Kişiler</string>
+    <string name="blocked_by">Engellendi</string>
+    <string name="sms_sent_successfully">SMS başarıyla gönderildi</string>
+    <string name="failed_to_send_sms">SMS gönderilemedi: %s</string>
+    <string name="replying_text">Yanıt metni: %s</string>
+    <string name="help_action_send_sms">
+        <![CDATA[
+        Bir SMS mesajı gönder. <br>
+        <br>
+        <title>Numara</title> <br>
+        Birden fazla kaynağı sırayla kontrol eder, bulunan ilk eşleşmeyi benimser: <br>
+        &ensp; Etiket <sample><no_translate>send_sms_to</no_translate></sample> (<b>Etiket Ayarla</b> kullanılarak oluşturulabilir) <br>
+        &ensp; Gelen numara <br>
+        <br>
+        <title>SMS İçeriği</title> <br>
+        Birden fazla kaynağı sırayla kontrol eder: <br>
+        &ensp; Etiket <sample><no_translate>send_sms_content</no_translate></sample> <br>
+        &ensp; Önceki adımdan gelen metin çıktısı <br>
+        ]]>
+    </string>
+    <string name="help_call_screening_number_filter">
+        <![CDATA[
+        Sabit hatlar veya uluslararası numaralar gibi belirli numaraları hariç tutmak için bu regex\'i kullanın. <br>
+        <br>
+        Örneğin <br>
+        &ensp; <sample>\\d{10,11}</sample> <br>
+        &ensp; 10 ila 11 haneli numaralar.
+        ]]>
+    </string>
+    <string name="sms_reply">SMS Yanıtı</string>
+    <string name="help_bot_preset_sms_reply">
+        <![CDATA[
+        Aramaları engellendiğinde kişilere otomatik olarak SMS gönder. <br>
+        Toplantı Modu ve diğer engelleme özellikleri için farklı mesajlar ayarlanabilir. <br>
+        <br>
+        <warn>Not</warn> <br>
+        Uygulama ilk kez bir SMS gönderdiğinde, sistem bir açılır pencere ile sizi olası ücretler konusunda uyaracaktır.
+        Gelecekte bu uyarıyı görmemek için <sample>Seçimimi hatırla</sample> seçeneğine dokunun.
+        ]]>
+    </string>
+    <string name="find_regex_rule_by_description">
+        <![CDATA[
+        Karşılık gelen regex kuralıyla eşleşmesi için bir açıklama girin.
+        ]]>
+    </string>
+    <string name="rules">Kurallar</string>
+    <string name="rule_description">Kural Açıklaması</string>
+    <string name="priority_in_order">Öncelik, bu listenin sırasına göre belirlenir.</string>
+    <string name="help_ringtone_trigger">
+        <![CDATA[
+        Aramanın izin verilme nedeni. <br>
+        <br>
+        Örneğin, <b>Tekrarlanan Arama</b>, arama <b>Tekrarlanan Arama</b> tarafından izin verildiğinde belirtilen zil sesinin çalacağı anlamına gelir.
+        ]]>
+    </string>
+    <string name="copy_tag">Etiket Kopyala</string>
+    <string name="tag_is_copied_from">Etiket %s, %s\'den kopyalandı</string>
+    <string name="help_copy_tag">Aynı değere sahip ancak farklı isimli yeni bir etiket oluşturun.</string>
+    <string name="from_tag">Kaynak Etiket</string>
+    <string name="to_tag">Hedef Etiket</string>
+    <string name="allow_7726">7726\'ya İzin Ver</string>
+    <string name="help_bot_preset_7726">
+        <![CDATA[
+        Yalnızca <warn>gösterim amaçlıdır</warn>.<br>
+        <br>
+        Spam metinlerini <error>7726</error> (evrensel kısa kod <error>SPAM</error>) numarasına yönlendirir,
+         birçok mobil operatör tarafından desteklenen bir özelliktir. <br>
+        <br>
+        <warn>Uyarı</warn> <br>
+        Bunu yalnızca operatörünüz 7726\'yı destekliyorsa etkinleştirin. Aksi takdirde standart SMS ücretleri uygulanabilir. <br>
+        <br>
+        Hem bir <minor>iş akışı</minor> hem de bir SMS <minor>regex kuralı</minor> oluşturur: <br>
+        <br>
+        - <minor>İş akışı</minor> <br>
+        &ensp; 1. Spam metnini 7726\'ya gönder. <br>
+        &ensp; 2. 10 saniye bekle. <br>
+        &ensp; 3. Numarayı 7726\'ya gönder. <br>
+        <br>
+        - <minor>Regex kuralı</minor> \"7726\'ya İzin Ver\" <br>
+        &ensp; 7726\'dan gelen mesajlara izin ver, örneğin: <br>
+        &emsp; <sample>Bildirdiğiniz için teşekkürler, lütfen telefon numarasıyla yanıt verin</sample>. <br>
+        <br>
+        10 saniyelik gecikmeyi operatörünüzün yanıt süresine göre ayarlayın, operatörünüz tarafından desteklenmiyorsa numara bildirimini kaldırın.
+        ]]>
+    </string>
+    <string name="report_sms">SMS bildirim</string>
+    <string name="regex_starts_with_plus">%s, düzenli ifadelerde (örneğin %s) özel bir karakterdir, %s şeklinde kaçış karakteri kullanın</string>
+    <string name="sms_content_is_null">SMS içeriği boş, SMS içeriği günlüğü etkin mi?</string>
+    <string name="ignore">Yoksay</string>
+</resources>

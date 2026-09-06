@@ -1,0 +1,107 @@
+<resources>
+    <string name="call_screened">電話已篩選</string>
+    <string name="help_call_screened">
+        <![CDATA[
+        在電話篩選後觸發。
+        ]]>
+    </string>
+    <string name="text_reply">文字回覆</string>
+    <string name="text_to_reply">回覆文字</string>
+    <string name="cant_talk_in_meeting">現在在開會，稍後聯繫。</string>
+    <string name="busy_right_now">現在不方便接電話，稍後聯繫。</string>
+    <string name="help_action_text_reply">
+        <![CDATA[
+        根據電話篩選結果生成自動回覆文字。
+        ]]>
+    </string>
+    <string name="send_sms">發送簡訊</string>
+    <string name="result">結果</string>
+    <string name="contacts_only">僅聯絡人</string>
+    <string name="blocked_by">被攔截者</string>
+    <string name="sms_sent_successfully">簡訊發送成功</string>
+    <string name="failed_to_send_sms">簡訊發送失敗: %s</string>
+    <string name="replying_text">正在回覆的文字: %s</string>
+    <string name="help_action_send_sms">
+        <![CDATA[
+        發送一條簡訊。<br>
+        <br>
+        <title>號碼</title><br>
+        按順序檢查多個來源，採用找到的第一個匹配項：<br>
+        &ensp; 標記 <sample><no_translate>send_sms_to</no_translate></sample> (可以使用 <b>設定標記</b> 建立)<br>
+        &ensp; 撥入號碼<br>
+        <br>
+        <title>簡訊內容</title><br>
+        按順序檢查多個來源：<br>
+        &ensp; 標記 <sample><no_translate>send_sms_content</no_translate></sample><br>
+        &ensp; 上一步的文字輸出<br>
+        ]]>
+    </string>
+    <string name="help_call_screening_number_filter">
+        <![CDATA[
+        使用此正規表達式排除特定號碼，例如市話或國際號碼。<br>
+        <br>
+        例如<br>
+        &ensp; <sample>\\d{10,11}</sample><br>
+        &ensp; 10 到 11 位數字。
+        ]]>
+    </string>
+    <string name="sms_reply">簡訊回覆</string>
+    <string name="help_bot_preset_sms_reply">
+        <![CDATA[
+        當聯絡人的通話被攔截時，自動向其發送簡訊。<br>
+        可以為會議模式和其他攔截功能設定不同的訊息。<br>
+        <br>
+        <warn>注意</warn> <br>
+        應用程式首次發送簡訊時，系統彈出視窗會提醒您可能會產生費用。<br>
+        點擊<sample>記住我的選擇</sample>以在今後避免此提醒。
+        ]]>
+    </string>
+    <string name="find_regex_rule_by_description">
+        <![CDATA[
+        輸入描述以匹配相應的正則表達式規則。
+        ]]>
+    </string>
+    <string name="rules">規則</string>
+    <string name="rule_description">規則描述</string>
+    <string name="priority_in_order">優先級由該列表的順序決定。</string>
+    <string name="help_ringtone_trigger">
+        <![CDATA[
+        通話被允許的原因。<br>
+        <br>
+        例如，「重複來電」表示當通話被「重複來電」允許時，將播放指定的鈴聲。
+        ]]>
+    </string>
+    <string name="copy_tag">複製標籤</string>
+    <string name="tag_is_copied_from">標籤 %s 已從 %s 複製</string>
+    <string name="help_copy_tag">建立具有相同值但不同名稱的新標籤。</string>
+    <string name="from_tag">來源標籤</string>
+    <string name="to_tag">目標標籤</string>
+    <string name="allow_7726">允許 7726</string>
+    <string name="help_bot_preset_7726">
+        <![CDATA[
+        僅用於<warn>簡介示範</warn>。<br>
+        <br>
+        將垃圾簡訊轉發至 <error>7726</error>（<error>SPAM</error> 的通用短代碼），這是許多行動電信業者支援的功能。<br>
+        <br>
+        <warn>警告</warn> <br>
+        僅在您的電信業者支援 7726 時才啟用此功能。否則，可能會產生標準簡訊費用。<br>
+        <br>
+        它會同時建立一個<minor>工作流程</minor>和一個簡訊<minor>正規表達式規則</minor>：<br>
+        <br>
+        - <minor>工作流程</minor> <br>
+        &ensp; 1. 將垃圾簡訊傳送至 7726。<br>
+        &ensp; 2. 等待 10 秒。<br>
+        &ensp; 3. 將號碼傳送至 7726。<br>
+        <br>
+        - <minor>正規表達式規則</minor> 「允許 7726」 <br>
+        &ensp; 允許來自 7726 的訊息，例如：<br>
+        &emsp; <sample>感謝您的舉報，請回覆電話號碼</sample>。<br>
+        <br>
+        根據電信業者的回應時間調整 10 秒延遲；如果您的電信業者不支援號碼舉報，請刪除該步驟。
+        ]]>
+    </string>
+    <string name="report_sms">報告簡訊</string>
+    <string name="regex_starts_with_plus">%s 是正規表達式中的特殊字元（例如 %s），請像 %s 這樣對其進行轉義</string>
+    <string name="sms_content_is_null">SMS 內容為空，是否啟用了 SMS 內容日誌記錄？</string>
+    <string name="ignore">忽略</string>
+</resources>

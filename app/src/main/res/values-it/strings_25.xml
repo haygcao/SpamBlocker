@@ -19,9 +19,9 @@
         È legato al flusso di lavoro e verrà eliminato automaticamente quando il flusso di lavoro viene eliminato. <br>
         <br>
         <b>Caso d\'uso</b>: <br>
-        <font color="#888888">
+        <sample>
           &ensp; In scenari che coinvolgono aggiornamenti incrementali, una variabile simile a un puntatore deve essere salvata e riutilizzata nei successivi avvii.
-        </font>
+        </sample>
     ]]>
     </string>
     <string name="load_tag">Carica tag</string>
@@ -45,13 +45,74 @@
         <br>
         <b>Opzioni</b> <br>
         <br>
-        <font color="#00BFFF"><b>Tipo di analisi</b></font> <br>
+        <title><b>Tipo di analisi</b></title> <br>
         Analizza il valore del tag, supporta regex e xpath. <br>
         <br>
-        <font color="#00BFFF"><b>Nome tag</b></font> <br>
+        <title><b>Nome tag</b></title> <br>
         Il nome del tag da generare. <br>
-        Ad esempio, se il nome del tag è <font color="#03DAC5">my_token</font>,
-         allora puoi usare <font color="#03DAC5">{my_token}</font> nelle query HTTP successive. <br>
+        Ad esempio, se il nome del tag è <highlight>my_token</highlight>,
+         allora puoi usare <highlight>{my_token}</highlight> nelle query HTTP successive. <br>
+    ]]>
+    </string>
+    <string name="max"><short>Max</short></string>
+    <string name="exporting_database">
+    <![CDATA[
+        Esportazione di %s numeri dal database, potrebbe richiedere circa %s secondi.
+    ]]>
+    </string>
+    <string name="time_color">Colore del tempo</string>
+    <string name="help_time_color">
+    <![CDATA[
+        Evidenzia il timestamp in colori diversi in base a quanto è recente il record. <br>
+        <br>
+        <b>Caso d\'uso</b>: <br>
+        &ensp; <sample>Rivedi le chiamate di oggi di notte controllando tutti i record con un timestamp blu. </sample>
+    ]]>
+    </string>
+    <string name="help_time_color_values">
+    <![CDATA[
+        Deve essere o <title><no_translate>today</no_translate></title> o
+        un numero seguito da <b><no_translate>min</no_translate></b>
+        (ad es. <title><no_translate>5min</no_translate></title>,
+        <title><no_translate>120min</no_translate></title>)
+    ]]>
+    </string>
+    <string name="invalid_value_see_tooltip">Valore non valido, vedere il tooltip per aiuto</string>
+    <string name="faq"><short>FAQ</short></string>
+    <string name="faq_priority">
+    <![CDATA[
+        Ogni filtro ha il suo valore di priorità; come suggerisce il termine, determina l\'ordine in cui la chiamata viene controllata. <br>
+        <br>
+        Per impostazione predefinita, <br>
+        <br>
+        - <highlight>Whitelist rules</highlight> hanno priorità <priority>10</priority> <br>
+        &ensp; <sample>Ad es. Contatti, RepeatedCall, RecentApps, ecc </sample><br>
+        <br>
+        - <error>Blacklist rules</error> hanno priorità <priority>0</priority> <br>
+        &ensp; <sample>Ad es. STIR, Database, ecc </sample> <br>
+        <br>
+        Quando sono entrambe abilitate, le regole della whitelist sovrascrivono quelle della blacklist poiché 10 > 0. <br>
+        <br>
+        Per le regole regex, la priorità può essere impostata a qualsiasi numero compreso tra <priority>-2147483648</priority>
+          e <priority>2147483647</priority>. <br>
+        Regole diverse possono avere la stessa priorità finché sono dello stesso tipo, tuttavia,
+          <warn><b>non assegnare mai la stessa priorità sia alle regole della whitelist sia a quelle della blacklist</b></warn>, poiché può causare comportamenti casuali. <br>
+        <br>
+        La funzionalità <title>Meeting Mode</title> ha priorità <priority>20</priority> per impostazione predefinita,
+          poiché dovrebbe bloccare tutte le chiamate durante una riunione. <br>
+        E <priority>-1</priority> per <title>Instant Query</title>,
+          così viene controllata solo dopo che la chiamata ha superato tutti i filtri locali. <br>
+        <br>
+        <b>Casi d\'uso</b> per personalizzare la priorità: <br>
+        <br>
+        - <sample>Blocca sempre un numero specifico, indipendentemente dal fatto che si ripeta</sample> <br>
+         &ensp; Imposta una regola con priorità > 10 per sovrascrivere <title>Repeated Call</title>. <br>
+        <br>
+        - <sample>Consenti sempre un numero</sample> <br>
+         &ensp; Impostala a > 20 per sovrascrivere <title>Meeting Mode</title>. <br>
+        <br>
+        - <sample>Testa una regola regex</sample> <br>
+         &ensp; Impostala a 999 per sovrascrivere tutti gli altri filtri, così non dovrai disabilitarli temporaneamente uno per uno.
     ]]>
     </string>
 </resources>

@@ -8,7 +8,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.ui.Modifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.async
@@ -17,13 +16,13 @@ import kotlinx.coroutines.yield
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.builtins.ListSerializer
 import spam.blocker.service.checker.CheckContext
-import spam.blocker.util.BotJson
+import spam.blocker.service.checker.ICheckResult
 import spam.blocker.util.ILogger
-import spam.blocker.util.Permission
+import spam.blocker.util.MyJson
 import spam.blocker.util.PermissionWrapper
 
 // When adding a new IAction type, follow all the steps:
-//  - implement it in Actions.kt
+//  - implement it in ActionsX.kt or Triggers.kt
 //  - add to  `botTriggers` / `botActions` / `apiActions` below
 //  - add to  `botModule` in SerializersModule.kt
 
@@ -37,6 +36,7 @@ val botTriggers = listOf(
     CalendarEvent(),
     Ringtone(),
     QuickTile(),
+    CallScreened()
 )
 val botActions = listOf(
     HttpRequest(),
@@ -46,6 +46,7 @@ val botActions = listOf(
     ParseXML(),
     RegexExtract(),
     ImportAsRegexRule(),
+    ImportAsMultipleRegexRules(),
     ImportToSpamDB(),
     FindRules(),
     ModifyRules(),
@@ -61,6 +62,10 @@ val botActions = listOf(
     SaveBotTag(),
     LoadBotTag(),
     SetTag(),
+    CopyTag(),
+    Wait(),
+    TextReply(),
+    SendSms(),
 )
 
 val apiActions = listOf(
@@ -73,6 +78,10 @@ val apiActions = listOf(
     ImportToSpamDB(),
     CategoryConfig(),
     GenerateTag(),
+    SetTag(),
+    CopyTag(),
+    Wait(),
+    SendSms(),
 )
 
 
@@ -110,8 +119,10 @@ data class ActionContext(
     var smsContent: String? = null,
     // The spam category, used when reporting.
     //  tagCategory will be converted to realCategory in Action CategoryConfig, and will then be used in http request
-    var tagCategory: String? = null,
-    var realCategory: String? = null,
+    var tagCategoryValue: String? = null,
+    var realCategoryValue: String? = null,
+    var tagCommentValue: String? = null,
+
     // set by HttpDownload, used by ImportToSpamDB as detailInfo
     var httpUrl: String? = null,
     // The check result by the first api that successfully identified the number,
@@ -136,6 +147,10 @@ data class ActionContext(
 
     // for action `Generate Tag`
     var customTags: MutableMap<String, String> = mutableMapOf(),
+
+    // for trigger `AfterCallScreening`
+    var checkResult: ICheckResult? = null,
+
 )
 
 interface IAction {
@@ -144,7 +159,7 @@ interface IAction {
     // When it fails, it returns: <false, errorReasonString>
     fun execute(ctx: Context, aCtx: ActionContext): Boolean
 
-    // It returns a list of missing permissions.
+    // Returns a list of missing permissions.
     fun requiredPermissions(ctx: Context): List<PermissionWrapper>
 
     // The display name of this action
@@ -173,20 +188,18 @@ interface IAction {
 
 // Trigger types: OnCall/OnSMS/OnCalendarEvents/
 interface ITriggerAction : IAction {
-    @Composable
-    fun TriggerType(modifier: Modifier)
     fun isActivated(): Boolean
 }
 
 // Serialize self to json string
 fun ITriggerAction.serialize(): String {
-    return BotJson.encodeToString(PolymorphicSerializer(ITriggerAction::class), this)
+    return MyJson.encodeToString(PolymorphicSerializer(ITriggerAction::class), this)
 }
 
 // Generate a *concrete* ITriggerAction from json string.
 fun String.parseTrigger(): ITriggerAction {
 //    return try {
-    return BotJson.decodeFromString(PolymorphicSerializer(ITriggerAction::class), this)
+    return MyJson.decodeFromString(PolymorphicSerializer(ITriggerAction::class), this)
 //    } catch(_: Exception) {
 //        Manual()
 //    }
@@ -210,29 +223,6 @@ interface IPermissiveAction : IAction {
     }
 }
 
-// Actions that require Internet permission, such as HTTP, FTP ...
-//interface IInternetAction: IAction {
-//    override fun isPermissionGranted(ctx: Context): Boolean {
-//        return Permissions.isInternetPermissionGranted(ctx)
-//    }
-//    override fun askForPermission(ctx: Context) { }
-//}
-
-// Actions that require file read/write permissions
-interface IFileAction : IAction {
-    override fun requiredPermissions(ctx: Context): List<PermissionWrapper> {
-        val ret = mutableListOf<PermissionWrapper>()
-
-        if (!Permission.fileRead.isGranted)
-            ret.add(PermissionWrapper(Permission.fileRead))
-        if (!Permission.fileWrite.isGranted)
-            ret.add(PermissionWrapper(Permission.fileWrite))
-
-        return ret
-    }
-}
-
-
 val actionsSaver = Saver<SnapshotStateList<IAction>, String>(
     save = { it.serialize() },
     restore = { mutableStateListOf(*it.parseActions().toTypedArray()) }
@@ -250,15 +240,21 @@ fun IAction.clone(): IAction {
 }
 
 fun IAction.serialize(): String {
-    return BotJson.encodeToString(PolymorphicSerializer(IAction::class), this)
+    return MyJson.encodeToString(PolymorphicSerializer(IAction::class), this)
 }
 
 fun String.parseAction(): IAction {
-    return BotJson.decodeFromString(PolymorphicSerializer(IAction::class), this)
+    return MyJson.decodeFromString(PolymorphicSerializer(IAction::class), this)
 }
 
 fun List<IAction>.serialize(): String {
-    return BotJson.encodeToString(ListSerializer(PolymorphicSerializer(IAction::class)), this)
+    return MyJson.encodeToString(ListSerializer(PolymorphicSerializer(IAction::class)), this)
+}
+
+fun List<IAction>.requiredPermissions(ctx: Context): List<PermissionWrapper> {
+    return this.flatMap {
+        it.requiredPermissions(ctx)
+    }
 }
 
 fun String.parseActions(): List<IAction> {
@@ -266,7 +262,7 @@ fun String.parseActions(): List<IAction> {
         return listOf()
 
     return try {
-        BotJson.decodeFromString(ListSerializer(PolymorphicSerializer(IAction::class)), this)
+        MyJson.decodeFromString(ListSerializer(PolymorphicSerializer(IAction::class)), this)
     } catch (_: Exception) {
         listOf()
     }

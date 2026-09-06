@@ -15,7 +15,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import spam.blocker.ui.theme.LocalPalette
+import spam.blocker.G
 
 @SuppressLint("ComposableNaming") @Composable
 fun Str(strId: Int): String {
@@ -40,11 +40,50 @@ fun ResIcon(
     )
 }
 @Composable
+fun ResIcon16(
+    iconId: Int,
+    modifier: Modifier = Modifier,
+    color: Color = LocalContentColor.current,
+) {
+    Icon(
+        modifier = modifier.size(16.dp),
+        tint = color,
+        painter = painterResource(id = iconId),
+        contentDescription = ""
+    )
+}
+@Composable
+fun ResIcon20(
+    iconId: Int,
+    modifier: Modifier = Modifier,
+    color: Color = LocalContentColor.current,
+) {
+    Icon(
+        modifier = modifier.size(20.dp),
+        tint = color,
+        painter = painterResource(id = iconId),
+        contentDescription = ""
+    )
+}
+@Composable
+fun ResIcon18(
+    iconId: Int,
+    modifier: Modifier = Modifier,
+    color: Color = LocalContentColor.current,
+) {
+    Icon(
+        modifier = modifier.size(18.dp),
+        tint = color,
+        painter = painterResource(id = iconId),
+        contentDescription = ""
+    )
+}
+@Composable
 fun GreyIcon(
     iconId: Int,
     modifier: Modifier = Modifier,
 ) {
-    ResIcon(iconId, modifier = modifier, color = LocalPalette.current.textGrey)
+    ResIcon(iconId, modifier = modifier, color = G.palette.textGrey)
 }
 @Composable
 fun GreyIcon16(

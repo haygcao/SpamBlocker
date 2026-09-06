@@ -9,12 +9,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import spam.blocker.ui.theme.CustomColorsPalette
-import spam.blocker.ui.theme.DarkOrange
-import spam.blocker.ui.theme.Emerald
-import spam.blocker.ui.theme.Salmon
-import spam.blocker.ui.theme.SilverGrey
-import spam.blocker.ui.theme.SkyBlue
+import spam.blocker.G
 
 // For showing detailed execution steps when testing
 interface ILogger {
@@ -77,7 +72,6 @@ class AdbLogger : ILogger {
 // It appends text to a `MutableState<AnnotatedString>` that used by a `@Composable Text()`
 class JetpackTextLogger(
     private val text: MutableState<AnnotatedString>,
-    private val palette: CustomColorsPalette,
 ) : ILogger {
     private fun output(message: String, defaultColor: Color) {
         text.value = buildAnnotatedString {
@@ -88,25 +82,15 @@ class JetpackTextLogger(
         }
     }
 
-    override fun debug(message: String) {
-        output(message, palette.textGrey)
-    }
+    override fun debug(message: String) = output(message, G.palette.textGrey)
 
-    override fun info(message: String) {
-        output(message, SkyBlue)
-    }
+    override fun info(message: String) = output(message, G.palette.infoBlue)
 
-    override fun warn(message: String) {
-        output(message, DarkOrange)
-    }
+    override fun warn(message: String) = output(message, G.palette.warning)
 
-    override fun success(message: String) {
-        output(message, palette.pass)
-    }
+    override fun success(message: String) = output(message, G.palette.success)
 
-    override fun error(message: String) {
-        output(message, palette.block)
-    }
+    override fun error(message: String) = output(message, G.palette.error)
 
     private fun outputAnnotated(message: AnnotatedString, color: Color) {
         text.value = buildAnnotatedString {
@@ -118,11 +102,11 @@ class JetpackTextLogger(
         }
     }
 
-    override fun debug(message: AnnotatedString) = outputAnnotated(message, palette.textGrey)
-    override fun info(message: AnnotatedString) = outputAnnotated(message, SkyBlue)
-    override fun warn(message: AnnotatedString) = outputAnnotated(message, DarkOrange)
-    override fun success(message: AnnotatedString) = outputAnnotated(message, palette.pass)
-    override fun error(message: AnnotatedString) = outputAnnotated(message, palette.block)
+    override fun debug(message: AnnotatedString) = outputAnnotated(message, G.palette.textGrey)
+    override fun info(message: AnnotatedString) = outputAnnotated(message, G.palette.infoBlue)
+    override fun warn(message: AnnotatedString) = outputAnnotated(message, G.palette.warning)
+    override fun success(message: AnnotatedString) = outputAnnotated(message, G.palette.success)
+    override fun error(message: AnnotatedString) = outputAnnotated(message, G.palette.error)
 }
 
 @Serializable
@@ -132,80 +116,181 @@ data class Markup(
     val color : Int,
 )
 
-// Create an AnnotatedString from text and markups
-fun String.applyAnnotatedMarkups(markups: List<Markup>): AnnotatedString {
-    return buildAnnotatedString {
-        append(this@applyAnnotatedMarkups)
-        markups.forEach { markup ->
-            addStyle(
-                style = SpanStyle(color = Color(markup.color)),
-                start = markup.start,
-                end = markup.end
-            )
+@Serializable
+data class StringMarkup(
+    val start: Int,
+    val end: Int,
+    val tag: String,
+    val value: String,
+)
+
+@Serializable
+data class MarkupText(
+    var text: String = "",
+    val markups: MutableList<Markup> = mutableListOf(),
+    val stringMarkups: MutableList<StringMarkup> = mutableListOf(),
+) {
+    fun serialize(): String {
+        return try {
+            Json.encodeToString(this)
+        } catch (_: Exception) {
+            ""
+        }
+    }
+
+    // Create an AnnotatedString from the text and markups
+    fun toAnnotatedString(): AnnotatedString {
+        return buildAnnotatedString {
+            append(text)
+            markups.forEach { markup ->
+                addStyle(
+                    style = SpanStyle(color = Color(markup.color)),
+                    start = markup.start,
+                    end = markup.end
+                )
+            }
+            stringMarkups.forEach { markup ->
+                addStringAnnotation(
+                    tag = markup.tag,
+                    annotation = markup.value,
+                    start = markup.start,
+                    end = markup.end
+                )
+            }
+        }
+    }
+
+    companion object {
+        private val PermissiveJson = Json { ignoreUnknownKeys = true }
+        fun parse(jsonStr: String): MarkupText {
+            return PermissiveJson.decodeFromString(jsonStr)
         }
     }
 }
 
 // Serializable logger class
-@Serializable
-data class SaveableLogger(
-    var text: String = "",
-    val markups: MutableList<Markup> = mutableListOf()
+class SaveableLogger(
+    val output : MarkupText = MarkupText()
 ) : ILogger {
     private fun add(message: String, color: Color) {
-        val start = text.length
-        text += message + "\n"
-        val end = text.length
-        markups += Markup(start, end, color.toArgb())
+        val start = output.text.length
+        output.text += message + "\n"
+        val end = output.text.length
+        output.markups += Markup(start, end, color.toArgb())
     }
 
     override fun debug(message: String) {
-        add(message, SilverGrey)
+        add(message, G.palette.textGrey)
     }
 
     override fun info(message: String) {
-        add(message, SkyBlue)
+        add(message, G.palette.infoBlue)
     }
 
     override fun warn(message: String) {
-        add(message, DarkOrange)
+        add(message, G.palette.warning)
     }
 
     override fun success(message: String) {
-        add(message, Emerald)
+        add(message, G.palette.success)
     }
 
     override fun error(message: String) {
-        add(message, Salmon)
+        add(message, G.palette.error)
     }
 
-    private fun addAnnotated(message: AnnotatedString) {
-        val startOffset = text.length
-        text += message.text + "\n"
+    private fun addAnnotated(message: AnnotatedString, defaultColor: Color) {
+        val startOffset = output.text.length
+
+        // 1. Append plain text
+        output.text += message.text + "\n"
+
+        // 2. Apply default color to the whole new line first
+        output.markups += Markup(
+            start = startOffset,
+            end = startOffset + message.text.length,
+            color = defaultColor.toArgb()
+        )
+
+        // 3. Apply block colors that override the defaultColor
         message.spanStyles.forEach { span ->
             val start = startOffset + span.start
             val end = startOffset + span.end
             val color = span.item.color
             if (color != Color.Unspecified) {
-                markups += Markup(start, end, color.toArgb())
+                output.markups += Markup(start, end, color.toArgb())
             }
         }
-    }
 
-    override fun debug(message: AnnotatedString) = addAnnotated(message)
-    override fun info(message: AnnotatedString) = addAnnotated(message)
-    override fun warn(message: AnnotatedString) = addAnnotated(message)
-    override fun success(message: AnnotatedString) = addAnnotated(message)
-    override fun error(message: AnnotatedString) = addAnnotated(message)
-
-    fun serialize(): String {
-        return Json.encodeToString(this)
-    }
-
-    companion object {
-        private val PermissiveJson = Json { ignoreUnknownKeys = true }
-        fun parse(jsonStr: String): SaveableLogger {
-            return PermissiveJson.decodeFromString(jsonStr)
+        message.getStringAnnotations(start = 0, end = message.length).forEach { annotation ->
+            output.stringMarkups += StringMarkup(
+                start = startOffset + annotation.start,
+                end = startOffset + annotation.end,
+                tag = annotation.tag,
+                value = annotation.item
+            )
         }
     }
+
+    override fun debug(message: AnnotatedString) = addAnnotated(message, G.palette.textGrey)
+    override fun info(message: AnnotatedString) = addAnnotated(message, G.palette.infoBlue)
+    override fun warn(message: AnnotatedString) = addAnnotated(message, G.palette.warning)
+    override fun success(message: AnnotatedString) = addAnnotated(message, G.palette.success)
+    override fun error(message: AnnotatedString) = addAnnotated(message, G.palette.error)
 }
+
+
+// It outputs to the `adb logcat`, for debugging and troubleshooting
+class MultiLogger(
+    val loggers: List<ILogger>
+) : ILogger {
+    override fun debug(message: String) {
+        loggers.forEach { it.debug(message) }
+    }
+
+    override fun info(message: String) {
+        loggers.forEach { it.info(message) }
+    }
+
+    override fun warn(message: String) {
+        loggers.forEach { it.warn(message) }
+    }
+
+    override fun success(message: String) {
+        loggers.forEach { it.success(message) }
+    }
+
+    override fun error(message: String) {
+        loggers.forEach { it.error(message) }
+    }
+
+    override fun debug(message: AnnotatedString) {
+        loggers.forEach { it.debug(message) }
+    }
+
+    override fun info(message: AnnotatedString) {
+        loggers.forEach { it.info(message) }
+    }
+
+    override fun warn(message: AnnotatedString) {
+        loggers.forEach { it.warn(message) }
+    }
+
+    override fun success(message: AnnotatedString) {
+        loggers.forEach { it.success(message) }
+    }
+
+    override fun error(message: AnnotatedString) {
+        loggers.forEach { it.error(message) }
+    }
+}
+
+fun ILogger.getSaveableOutput(): MarkupText? =
+    when (this) {
+        is SaveableLogger -> this.output
+        is MultiLogger -> {
+            val log = this.loggers.firstOrNull { it is SaveableLogger } as? SaveableLogger
+            log?.output
+        }
+        else -> null
+    }

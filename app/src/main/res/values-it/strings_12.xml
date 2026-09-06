@@ -3,11 +3,11 @@
         <![CDATA[
         Interroga il numero in arrivo online in tempo reale. <br>
         <br>
-        Verranno interrogati simultaneamente più endpoint API, utilizzando il primo risultato ricevuto e ignorando tutti i risultati successivi. <br>
+        Verranno interrogati simultaneamente più endpoint API, usando il primo risultato ricevuto e ignorando tutti i risultati successivi. <br>
         <br>
-        Ha la priorità più bassa per impostazione predefinita, il che significa che verrà attivato solo quando la chiamata supera tutte le altre regole.<br>
+        Ha la priorità più bassa per impostazione predefinita, il che significa che verrà attivato solo dopo che la chiamata ha superato tutte le regole locali.<br>
         <br>
-        <font color="#ea86ff"><b>Priorità predefinita: -1</b></font>
+        <priority><b>Priorità predefinita: -1</b></priority>
         ]]>
     </string>
     <string name="instant_query">Query Istantanea</string>
@@ -37,23 +37,18 @@
     </string>
     <string name="help_category_identifier">
         <![CDATA[
-        Estrai la <font color="#00BFFF">categoria</font> e i <font color="#00BFFF">commenti</font>
-         dal risultato della query e visualizzali nella notifica e nel registro storico. (opzionale)<br>
+        Estrai la <title>categoria</title> dal risultato della query per visualizzarla nella notifica e nel registro storico. (opzionale)<br>
         <br>
         Ad esempio, per questo risultato della query: <br>
-        <font color="#888888">
+        <sample>
         { <br>
           &ensp; \"type\": \"MARKETING\", <br>
-          &ensp; \"comments\": \"Better call Saul\", <br>
           &ensp;  … <br>
         } <br>
-        </font>
+        </sample>
         <br>
-        - Estrai solo la <font color="#00BFFF">categoria</font>: <br>
-        &ensp; <font color="#888888">\"type\": \"(.+?)\"</font> <br>
-        <br>
-        - Estrai sia la <font color="#00BFFF">categoria</font> che i <font color="#00BFFF">commenti</font>: <br>
-        &ensp; <font color="#888888">(?:\"type\":\"(.+?)\"|\"comments\":\"(.+?)\")</font><br>
+        Estraila con: <br>
+        &ensp; <sample>\"type\": \"(.+?)\"</sample> <br>
         ]]>
     </string>
     <string name="action_parse_query_result">Analizza Risultato</string>
@@ -64,23 +59,14 @@
         Può essere usata una regex aggiuntiva per estrarre la categoria spam (opzionale).
         ]]>
     </string>
-    <string name="action_intercept_call">Intercetta Chiamata</string>
-    <string name="help_action_intercept_call">
+    <string name="action_parse_incoming_number">Analizza numero</string>
+    <string name="help_action_parse_incoming_number">
         <![CDATA[
-        Il numero di telefono in arrivo verrà intercettato e analizzato in diversi tag:<br>
+        Il numero della chiamata in arrivo verrà analizzato in diversi tag:<br>
         <br>
         %s
         <br>
-        Questi tag verranno utilizzati per costruire l\'URL HTTP, ad esempio:<br>
-        <br>
-        1. Per numeri internazionali come <b>+122222</b>, questi due sono equivalenti:<br>
-        - https://test.com/number=<b>{number}</b><br>
-        - https://test.com/number=<b>{cc}{domestic}</b><br>
-        Sarà analizzato come:<br>
-        https://test.com/number=<b>122222</b><br>
-        <br>
-        2. Per numeri nazionali come <b>12345</b>, è necessario fornire il prefisso internazionale nelle impostazioni,<br>
-        oppure lasciare che l\'app lo rilevi automaticamente.<br>
+        Questi tag possono essere usati nelle richieste HTTP successive.<br>
         ]]>
     </string>
     <string name="query_api">API Query</string>
@@ -93,26 +79,34 @@
         Questa regex filtra i numeri di conseguenza; i numeri in arrivo che non corrispondono a questa regex verranno saltati.<br>
         <br>
         - Controlla solo i <b>numeri internazionali</b>:<br>
-        &ensp; <font color="#03DAC5"><b>\\+.*</b></font><br>
+        &ensp; <highlight><b>\\+.*</b></highlight><br>
         <br>
         - Controlla solo i <b>numeri nazionali</b>:<br>
-        &ensp; <font color="#03DAC5"><b>0{1,2}.*</b></font><br>
+        &ensp; <highlight><b>0{1,2}.*</b></highlight><br>
         <br>
         - Controlla <b>qualsiasi numero</b>:<br>
-        &ensp; <font color="#03DAC5"><b>.*</b></font>
-        ]]>
+        &ensp; <highlight><b>.*</b></highlight>
+        ]]>  
     </string>
-    <string name="checking_template">Controllo: %s, priorità: %s</string>
+    <string name="content_filter">Filtro Contenuto</string>
+    <string name="help_content_filter">
+        <![CDATA[
+        Sebbene le regole SMS abbiano già filtrato questo contenuto, puoi usare questo filtro aggiuntivo per restringerlo ulteriormente.
+        ]]>  
+    </string>
     <string name="skip_for_testing">Salta per test.</string>
     <string name="allowed_by">Permesso da: %s</string>
-    <string name="blocked_by">Bloccato da: %s</string>
-    <string name="outside_time_schedule">Fuori dalla programmazione, salta.</string>
+    <string name="blocked_by_template">Bloccato da: %s</string>
     <string name="android_ver_lower_than_11">Versione Android inferiore all\'11, salta.</string>
-    <string name="action_intercept_sms">Intercetta SMS</string>
-    <string name="help_action_intercept_sms">
+    <string name="action_parse_incoming_sms">Analizza SMS</string>
+    <string name="help_action_parse_incoming_sms">
         <![CDATA[
-        L\'SMS in arrivo verrà intercettato e il contenuto verrà analizzato nel tag <b>{sms}</b>,<br>
-        che può essere utilizzato dalle azioni successive.
+        Il contenuto dell\'SMS in arrivo verrà analizzato nelle seguenti tag per un utilizzo nei passaggi successivi: <br>
+        <br>
+        %s
+        <br>
+        - <title><b>{sms_content}</b></title> <br>
+        &ensp; Il contenuto dell\'SMS
         ]]>
     </string>
 </resources>

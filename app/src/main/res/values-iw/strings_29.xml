@@ -1,0 +1,108 @@
+<resources>
+    <string name="call_screened">שיחה מסוננת</string>
+    <string name="help_call_screened">
+        <![CDATA[
+        מופעל לאחר סינון השיחה.
+        ]]>
+    </string>
+    <string name="text_reply">תשובה טקסטואלית</string>
+    <string name="text_to_reply">טקסט למענה</string>
+    <string name="cant_talk_in_meeting">אני בפגישה כרגע, אחזור אליך מאוחר יותר.</string>
+    <string name="busy_right_now">אני לא יכול לדבר עכשיו, אצור קשר מאוחר יותר.</string>
+    <string name="help_action_text_reply">
+        <![CDATA[
+        מייצר את טקסט המענה האוטומטי בהתבסס על תוצאת סינון השיחה.
+        ]]>
+    </string>
+    <string name="send_sms">שלח SMS</string>
+    <string name="result">תוצאה</string>
+    <string name="contacts_only">רק אנשי קשר</string>
+    <string name="blocked_by">נחסם על ידי</string>
+    <string name="sms_sent_successfully">ה-SMS נשלח בהצלחה</string>
+    <string name="failed_to_send_sms">שליחת ה-SMS נכשלה: %s</string>
+    <string name="replying_text">טקסט מענה: %s</string>
+    <string name="help_action_send_sms">
+        <![CDATA[
+        שלח הודעת SMS. <br>
+        <br>
+        <title>מספר</title> <br>
+        בודק מספר מקורות לפי הסדר, ומאמץ את ההתאמה הראשונה שנמצאה: <br>
+        &ensp; תגית <sample><no_translate>send_sms_to</no_translate></sample> (ניתן ליצור באמצעות <b>הגדר תגית</b>) <br>
+        &ensp; המספר הנכנס <br>
+        <br>
+        <title>תוכן ה-SMS</title> <br>
+        בודק מספר מקורות לפי הסדר: <br>
+        &ensp; תגית <sample><no_translate>send_sms_content</no_translate></sample> <br>
+        &ensp; פלט טקסט מהשלב הקודם <br>
+        ]]>
+    </string>
+    <string name="help_call_screening_number_filter">
+        <![CDATA[
+        השתמש ב-regex זה כדי להחריג מספרים ספציפיים, כגון טלפונים קוויים או מספרים בינלאומיים. <br>
+        <br>
+        לדוגמה <br>
+        &ensp; <sample>\\d{10,11}</sample> <br>
+        &ensp; מספרים בני 10 עד 11 ספרות.
+        ]]>
+    </string>
+    <string name="sms_reply">מענה SMS</string>
+    <string name="help_bot_preset_sms_reply">
+        <![CDATA[
+        שליחה אוטומטית של SMS לאנשי קשר כאשר שיחותיהם נחסמות. <br>
+        ניתן להגדיר הודעות שונות עבור מצב פגישה ותכונות חסימה אחרות. <br>
+        <br>
+        <warn>הערה</warn> <br>
+        בפעם הראשונה שהאפליקציה שולחת SMS, תופיע הודעת מערכת המזהירה מפני חיובים פוטנציאליים.
+        הקש על <sample>זכור את בחירתי</sample> כדי למנוע אזהרה זו בעתיד.
+        ]]>
+    </string>
+    <string name="find_regex_rule_by_description">
+        <![CDATA[
+        הזן תיאור כדי להתאים לכלל הרגקס המתאים.
+        ]]>
+    </string>
+    <string name="rules">כללים</string>
+    <string name="rule_description">תיאור כלל</string>
+    <string name="priority_in_order">העדיפות נקבעת לפי סדר הרשימה הזו.</string>
+    <string name="help_ringtone_trigger">
+        <![CDATA[
+        הסיבה לכך שהשיחה מאושרת. <br>
+        <br>
+        לדוגמה, <b>שיחה חוזרת</b> פירושה שצלצול המכשיר המוגדר יופעל כאשר השיחה מאושרת על ידי <b>שיחה חוזרת</b>.
+        ]]>
+    </string>
+    <string name="copy_tag">עותק תגית</string>
+    <string name="tag_is_copied_from">התגית %s נעותקת מ-%s</string>
+    <string name="help_copy_tag">יצירת תגית חדשה עם אותה ערך אך בשם שונה.</string>
+    <string name="from_tag">מתגית</string>
+    <string name="to_tag">לתגית</string>
+    <string name="allow_7726">אפשר 7726</string>
+    <string name="help_bot_preset_7726">
+        <![CDATA[
+        למטרות <warn>הדגמה</warn> בלבד.<br>
+        <br>
+        מעביר הודעות ספאם ל-<error>7726</error> (הקוד הקצר האוניברסלי עבור <error>SPAM</error>),
+         תכונה הנתמכת על ידי ספקי תקשורת ניידת רבים. <br>
+        <br>
+        <warn>אזהרה</warn> <br>
+        הפעל זאת רק אם ספק התקשורת שלך תומך ב-7726. אחרת, עשויים לחול דמי SMS סטנדרטיים. <br>
+        <br>
+        זה יוצר הן <minor>זרימת עבודה</minor> והן <minor>כלל ביטוי רגולרי</minor> ל-SMS: <br>
+        <br>
+        - <minor>זרימת העבודה</minor> <br>
+        &ensp; 1. שלח את טקסט הספאם ל-7726. <br>
+        &ensp; 2. המתן 10 שניות. <br>
+        &ensp; 3. שלח את המספר ל-7726. <br>
+        <br>
+        - <minor>כלל הביטוי הרגולרי</minor> \"אפשר 7726\" <br>
+        &ensp; אפשר הודעות מ-7726, כגון: <br>
+        &emsp; <sample>תודה על הדיווח, אנא השיבו עם מספר הטלפון</sample>. <br>
+        <br>
+        התאם את העיכוב של 10 השניות בהתאם לזמן התגובה של ספק התקשורת שלך, והסר את דיווח המספר אם הוא אינו נתמך על ידי ספק התקשורת שלך.
+        ]]>
+    </string>
+    <string name="report_sms">דווח על SMS</string>
+    <string name="regex_starts_with_plus">%s הוא תו מיוחד ב-regex (למשל %s), בצע לו escape כך: %s</string>
+    <string name="sms_content_is_null">תוכן ה-SMS ריק, האם רישום תוכן ה-SMS מופעל?</string>
+    <string name="ignore">התעלם</string>
+</resources>

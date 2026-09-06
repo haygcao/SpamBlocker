@@ -17,8 +17,6 @@
     <string name="clear">مسح</string>
     <string name="test">اختبار</string>
     <string name="save">حفظ</string>
-    <string name="whitelist">القائمة البيضاء</string>
-    <string name="blacklist">القائمة السوداء</string>
     <string name="content">المحتوى</string>
     <string name="priority">الأولوية</string>
     <string name="deleted_filter">(قاعدة محذوفة)</string>
@@ -30,20 +28,23 @@
     <string name="yes">نعم</string>
     <string name="no">لا</string>
     <string name="ok">موافق</string>
+    <string name="cancel">إلغاء</string>
     <string name="miscellaneous">متفرقات</string>
     <string name="quick_settings">إعدادات سريعة</string>
     <string name="regex_settings">إعدادات التعبير النمطي</string>
     <string name="backup">نسخ احتياطي</string>
     <string name="import_">استيراد</string>
     <string name="export">تصدير</string>
-    <string name="config_text">نص التهيئة</string>
+    <string name="config_json">JSON التهيئة</string>
     <string name="imported_successfully">تم الاستيراد بنجاح</string>
     <string name="import_fail">فشل الاستيراد</string>
+    <string name="exported_successfully">تم التصدير بنجاح</string>
+    <string name="export_fail">فشل التصدير</string>
     <string name="prompt_go_to_permission_setting">
         <![CDATA[
         هذه الميزة تتطلب إذنًا:<br>
         <br>
-        <font color="#00BFFF">%s</font><br>
+        <title>%s</title><br>
         <br>
         يجب تمكينه يدويًا في إعدادات النظام.<br>
         فتح صفحة الإعدادات هذه؟
@@ -55,5 +56,6 @@
     <string name="label_content_rules">قواعد الرسائل</string>
     <string name="content_rule">قاعدة رسالة</string>
     <string name="recent_apps"><short>الأخيرة</short></string>
-    <string name="allow_contact">جهات الاتصال</string>
+    <string name="contacts">جهات الاتصال</string>
+    <string name="non_contacts">غير جهات الاتصال</string>
 </resources>

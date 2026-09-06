@@ -1,7 +1,7 @@
 <resources>
     <string name="warning_double_sms">
         <![CDATA[
-        Assicurati di <font color="#fa7f71"><b>disattivare le notifiche dell\'app SMS</b></font> nelle impostazioni di sistema
+        Assicurati di <error><b>disattivare le notifiche dell\'app SMS</b></error> nelle impostazioni di sistema
          per evitare doppie notifiche. <br>
         <br>
         Se l\'app SMS impone l\'autorizzazione alle notifiche, puoi mantenerla concessa
@@ -18,23 +18,15 @@
     </string>
     <string name="help_regex_mode_caller_name">
         <![CDATA[
-        <font color="#00BFFF"><b>Nome del chiamante</b></font>:<br>
+        <title><b>Nome del chiamante</b></title>:<br>
         &ensp; L\'espressione regolare corrisponderà al nome visualizzato del chiamante (CNAP). <br>
         <br>
         Nel registro della cronologia delle chiamate, il nome del chiamante apparirà dopo il numero di telefono tra parentesi, se esiste, come: <br>
-        &ensp; <font color="#888888">12345 (Nome visualizzato)</font> <br>
+        &ensp; <sample>12345 (Nome visualizzato)</sample> <br>
         ]]>
     </string>
     <string name="caller_name">Nome del chiamante</string>
     <string name="caller_name_rule">Regola nome chiamante</string>
-    <string name="help_regex_preset_caller_name">
-        <![CDATA[
-        Consente chiamate che hanno informazioni <b>CNAP (Caller Name Presentation)</b>, che è una funzionalità di telecomunicazione che
-         visualizza il nome registrato del chiamante (insieme al numero di telefono) sullo schermo del telefono del destinatario durante una chiamata in arrivo. <br>
-        <br>
-        Per i paesi che impongono CNAP verificato KYC, le chiamate con un nome chiamante sono probabilmente valide.
-        ]]>
-    </string>
     <string name="forwarded_call">Chiamata Inoltrata</string>
     <string name="help_regex_preset_forwarded_call">
         <![CDATA[
@@ -46,13 +38,13 @@
     <string name="explanation_forwarded_call">
         <![CDATA[
         Questo è <b>specifico dell\'operatore</b>, alcuni operatori formattano le chiamate inoltrate come due numeri concatenati con una \"&\",
-         come <font color="#888888">222&111</font>. <br>
+         come <sample>222&111</sample>. <br>
         <br>
         In questo formato: <br>
-        &ensp; - La prima parte (<font color="#888888">222</font>) è tipicamente il numero di inoltro. <br>
-        &ensp; - La seconda parte (<font color="#888888">111</font>) è il numero originale. <br>
+        &ensp; - La prima parte (<sample>222</sample>) è tipicamente il numero di inoltro. <br>
+        &ensp; - La seconda parte (<sample>111</sample>) è il numero originale. <br>
         <br>
-        Potrebbero esserci anche <font color="#888888">333&111</font> e <font color="#888888">444&111</font>,
+        Potrebbero esserci anche <sample>333&111</sample> e <sample>444&111</sample>,
          dove il numero di origine rimane lo stesso e il numero di inoltro cambia.
         ]]>
     </string>
@@ -67,32 +59,30 @@
         <br>
         <b>Opzioni</b>: <br>
         <br>
-        <font color="#00BFFF"><b>Raw</b></font> <br>
-        Interroga/segnala il numero raw (<font color="#888888">222&111</font>), se l\'API supporta questo formato. <br>
+        <title><b>Raw</b></title> <br>
+        Interroga/segnala il numero raw (<sample>222&111</sample>), se l\'API supporta questo formato. <br>
         <br>
-        <font color="#00BFFF"><b>Originale</b></font> <br>
-        Interroga/segnala il numero originale (<font color="#888888">111</font>), questo è un workaround per le API che non supportano il formato raw. <br>
+        <title><b>Originale</b></title> <br>
+        Interroga/segnala il numero originale (<sample>111</sample>), questo è un workaround per le API che non supportano il formato raw. <br>
         <br>
-        <font color="#00BFFF"><b>Inoltro</b></font> <br>
-        Interroga/segnala il numero di inoltro (<font color="#888888">222</font>). <br>
+        <title><b>Inoltro</b></title> <br>
+        Interroga/segnala il numero di inoltro (<sample>222</sample>). <br>
         ]]>
     </string>
     <string name="forwarded_number_modified_to">Questo numero inoltrato è stato modificato in %s.</string>
     <string name="filter">Filtro</string>
-    <string name="geo_location">Geolocalizzazione</string>
-    <string name="geo_location_rule">Regola di geolocalizzazione</string>
-    <string name="help_regex_mode_geo_location">
+    <string name="geolocation">Geolocalizzazione</string>
+    <string name="geolocation_rule">Regola di geolocalizzazione</string>
+    <string name="help_regex_mode_geolocation">
         <![CDATA[
-        <font color="#00BFFF"><b>Geolocalizzazione</b></font>:<br>
+        <title><b>Geolocalizzazione</b></title>:<br>
         &ensp; L\'espressione regolare corrisponderà alla posizione geografica del numero. <br>
         <br>
         &ensp; Questo si basa sulla libreria di Google <a href="https://github.com/google/libphonenumber">libphonenumber</a>,
-         una libreria offline che fornisce informazioni geografiche per i numeri di telefono. <br>
+         un database offline che fornisce informazioni geografiche per i numeri di telefono. <br>
         <br>
-        &ensp; Se noti problemi con l\'accuratezza del database, puoi
-        <a href="https://groups.google.com/g/libphonenumber-discuss">aprire una discussione</a>
-        o
-        <a href="https://issuetracker.google.com/issues/new?component=192347">segnalare un problema</a>. <br>
+        Per esempio: <br>
+        &ensp; Blocca i numeri da <no_translate><sample>San Francisco, CA</sample></no_translate> con la regex <no_translate><error>san fr.*</error></no_translate> <br>
         ]]>
     </string>
     <string name="label_value_pair">%s: %s</string>
@@ -105,10 +95,10 @@
         <![CDATA[
         Consenti le chiamate locali dalla stessa regione e blocca le altre. <br>
         <br>
-        Sostituisci il segnaposto ___ con la tua regione effettiva. <br>
+        Sostituisci <sample>Milan</sample> con la tua regione effettiva. <br>
         <br>
-        La sintassi <font color="#fa7f71">(?!___$).*</font> significa: <br>
-        &ensp; Trova qualsiasi testo che non sia <font color="#fa7f71">___</font>.
+        La sintassi <error>(?!Milan$).*</error> significa: <br>
+        &ensp; Trova qualsiasi testo che non sia <error>Milan</error>.
         ]]>
     </string>
 </resources>

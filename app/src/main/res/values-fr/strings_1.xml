@@ -17,8 +17,6 @@
     <string name="clear">Effacer</string>
     <string name="test">Tester</string>
     <string name="save">Enregistrer</string>
-    <string name="whitelist">Liste blanche</string>
-    <string name="blacklist">Liste noire</string>
     <string name="content">Contenu</string>
     <string name="priority">Priorité</string>
     <string name="deleted_filter">(règle supprimée)</string>
@@ -30,20 +28,23 @@
     <string name="yes">Oui</string>
     <string name="no">Non</string>
     <string name="ok">OK</string>
+    <string name="cancel">Annuler</string>
     <string name="miscellaneous">Divers</string>
     <string name="quick_settings">Paramètres rapides</string>
     <string name="regex_settings">Paramètres de l\'expression régulière</string>
     <string name="backup">Sauvegarde</string>
     <string name="import_">Importer</string>
     <string name="export">Exporter</string>
-    <string name="config_text">Texte de configuration</string>
+    <string name="config_json">JSON de configuration</string>
     <string name="imported_successfully">Importé avec succès</string>
     <string name="import_fail">Échec de l\'importation</string>
+    <string name="exported_successfully">Exporté avec succès</string>
+    <string name="export_fail">Échec de l\'exportation</string>
     <string name="prompt_go_to_permission_setting">
         <![CDATA[
         Cette fonctionnalité nécessite l\'autorisation :<br>
         <br>
-        <font color="#00BFFF">%s</font><br>
+        <title>%s</title><br>
         <br>
         Elle doit être activée manuellement dans les paramètres système.<br>
         Ouvrir cette page de paramètres ?
@@ -53,8 +54,9 @@
     <string name="label_number_rules">Règles de numéros</string>
     <string name="label_content_rules">Règles de messages</string>
     <string name="recent_apps"><short>Applications récentes</short></string>
-    <string name="allow_contact">Contacts</string>
+    <string name="contacts">Contacts</string>
 
     <string name="number_rule">Règle de numéro</string>
     <string name="content_rule">Règle de message</string>
+    <string name="non_contacts">Non-contacts</string>
 </resources>

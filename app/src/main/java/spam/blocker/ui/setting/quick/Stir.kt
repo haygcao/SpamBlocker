@@ -1,7 +1,7 @@
 package spam.blocker.ui.setting.quick
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -10,28 +10,51 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import spam.blocker.G
 import spam.blocker.R
+import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
-import spam.blocker.ui.theme.LocalPalette
-import spam.blocker.ui.theme.Salmon
 import spam.blocker.ui.widgets.Button
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.PriorityBox
 import spam.blocker.ui.widgets.PriorityLabel
+import spam.blocker.ui.widgets.ResIcon
+import spam.blocker.ui.widgets.ResIcon18
 import spam.blocker.ui.widgets.RowVCenterSpaced
 import spam.blocker.ui.widgets.Str
 import spam.blocker.ui.widgets.SwitchBox
 import spam.blocker.util.spf
 
 @Composable
+fun StirSummaryIcons(
+    includeUnverified: Boolean,
+    priority: Int,
+) {
+    val C = G.palette
+    RowVCenterSpaced(6) {
+        ResIcon18(R.drawable.ic_incognito, color = C.error)
+        if (includeUnverified) {
+            ResIcon(
+                R.drawable.ic_question,
+                modifier = M.size(16.dp),
+                color = C.error
+            )
+        }
+        if (priority != 0) {
+            PriorityLabel(priority)
+        }
+    }
+}
+
+@Composable
 fun Stir() {
     val ctx = LocalContext.current
-    val C = LocalPalette.current
     val spf = spf.Stir(ctx)
 
-    var isEnabled by remember { mutableStateOf(spf.isEnabled()) }
-    var includeUnverified by remember { mutableStateOf(spf.isIncludeUnverified()) }
-    var priority by remember { mutableIntStateOf(spf.getPriority()) }
+    var isEnabled by remember { mutableStateOf(spf.isEnabled) }
+    var includeUnverified by remember { mutableStateOf(spf.isIncludeUnverified) }
+    var priority by remember { mutableIntStateOf(spf.priority) }
 
     val popupTrigger = rememberSaveable { mutableStateOf(false) }
 
@@ -42,13 +65,13 @@ fun Stir() {
                 LabeledRow(labelId = R.string.stir_include_unverified) {
                     SwitchBox(checked = includeUnverified, onCheckedChange = { isTurningOn ->
                         includeUnverified = isTurningOn
-                        spf.setIncludeUnverified(isTurningOn)
+                        spf.isIncludeUnverified = isTurningOn
                     })
                 }
                 PriorityBox(priority) { newValue, hasError ->
                     if (!hasError) {
                         priority = newValue!!
-                        spf.setPriority(newValue)
+                        spf.priority = newValue
                     }
                 }
             }
@@ -62,27 +85,35 @@ fun Stir() {
             if (isEnabled) {
                 Button(
                     content = {
-                        RowVCenterSpaced(6) {
-                            Text(
-                                text = Str(
-                                    if (includeUnverified) R.string.strict else R.string.lenient
-                                ),
-                                color = Salmon,
-                            )
-                            if (priority != 0) {
-                                PriorityLabel(priority)
-                            }
-                        }
+                        StirSummaryIcons(priority = priority, includeUnverified = includeUnverified)
                     },
-//                    borderColor = if (isStrict) Salmon else C.textGrey
                 ) {
                     popupTrigger.value = true
                 }
             }
             SwitchBox(isEnabled) { isTurningOn ->
-                spf.setEnabled(isTurningOn)
+                spf.isEnabled = isTurningOn
                 isEnabled = isTurningOn
             }
         }
     )
+}
+
+@Composable
+fun StirSummary() {
+    val ctx = LocalContext.current
+    val spf = spf.Stir(ctx)
+
+    val isEnabled by remember { mutableStateOf(spf.isEnabled) }
+    if (isEnabled) {
+        val includeUnverified by remember { mutableStateOf(spf.isIncludeUnverified) }
+        val priority by remember { mutableIntStateOf(spf.priority) }
+
+        Button(
+            enabled = false,
+            content = {
+                StirSummaryIcons(priority = priority, includeUnverified = includeUnverified)
+            },
+        )
+    }
 }

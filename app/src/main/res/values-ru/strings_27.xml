@@ -1,0 +1,134 @@
+<resources>
+    <string name="normal_text">Обычный текст</string>
+    <string name="info_feature">Информация / Функция</string>
+    <string name="success_allow">Успешно / Разрешить</string>
+    <string name="error_block">Ошибка / Блокировать</string>
+    <string name="disable">Отключить</string>
+    <string name="dialog_bg">Фон диалога</string>
+    <string name="app_bg">Фон приложения</string>
+    <string name="should_import_as_instant_query">
+        <![CDATA[
+        Это, кажется, рабочий процесс \"API query\", его следует импортировать в вышеуказанный раздел \"Instant Query\".
+        ]]>
+    </string>
+    <string name="at_time">Время</string>
+    <string name="interval">Интервал</string>
+    <string name="contact_prefix">Префикс контакта</string>
+    <string name="help_regex_mode_contact_prefix">
+        <![CDATA[
+        <title><b>Префикс контакта</b></title>:<br>
+        &ensp; Разрешать звонки на основе совпадения префикса контакта, идеально для организаций, использующих
+          последовательные номера, например клиник или юридических фирм. <br>
+        <br>
+        <warn>Это регулярное выражение должно заканчиваться точками</warn>, в этом режиме эти точки в конце обозначают переменные цифры. <br>
+        <br>
+        <b>Например:</b> <br>
+        &ensp; <sample><b>.*..</b></sample> <br>
+        &ensp; Оно соответствует любому контакту с тем же префиксом, допуская отличие в 2 цифры в конце.<br>
+        &ensp; Если у вас сохранён контакт <sample>1111<b>22</b></sample>, то входящий звонок с номера <sample>1111<b>33</b></sample> тоже будет разрешён.<br>
+        <br>
+        <b>Другой пример:</b> <br>
+        &ensp; <sample><b>(?!(04|03))\d{5}..</b></sample> <br>
+        Разбор: <br>
+        &ensp; - <b><sample>(?!(03|04))</sample></b> <br>
+        &emsp;   Исключить номера, начинающиеся с 03 или 04 <br>
+        &ensp; - <b><sample>\d{5}</sample></b> <br>
+        &emsp;   Номер должен состоять из 7 цифр всего, включая переменный 2-значный суффикс <br>
+        &ensp; - <b><sample>..</sample></b> <br>
+        &emsp;   Переменный 2-значный суффикс <br>
+        ]]>
+    </string>
+    <string name="help_regex_preset_contact_prefix">
+        <![CDATA[
+        Сопоставляет контакты по префиксу, допуская различие в последних <minor><b>2</b></minor> цифрах, что идеально подходит для организаций, использующих последовательную нумерацию, например, клиник или юридических фирм. <br>
+        <br>
+        <b>Например</b>: <br>
+        &ensp; Если у вас сохранён контакт <sample>111111</sample><highlight>22</highlight>, то звонок с номера <sample>111111</sample><highlight>33</highlight> тоже будет разрешён.
+        ]]>
+    </string>
+    <string name="caller_id">АОН</string>
+    <string name="help_caller_id">
+        <![CDATA[
+        Показывает определитель номера в плавающем окне. <br>
+        <br>
+        Перетащите, чтобы переместить. <br>
+        <br>
+        <b>Примечание</b> <br>
+        Вы можете заметить системное предупреждение в панели уведомлений, пока плавающее окно активно,
+          сообщающее, что это приложение показывает окно поверх других приложений.
+        Это связано с тем, что плавающие окна исторически использовались вредоносными программами для отображения поддельных экранов входа. <br>
+        Просто игнорируйте это предупреждение, оно исчезнет вместе с плавающим окном.
+        ]]>
+    </string>
+    <string name="perm_show_overlay">Показывать поверх</string>
+    <string name="preview">Предпросмотр</string>
+    <string name="content_template">Шаблон содержимого</string>
+    <string name="help_caller_id_template">
+        <![CDATA[
+        Содержимое, отображаемое в окне определителя номера, в формате HTML. <br>
+        <br>
+        Если значение пустое, отображается дефис (-), например когда для номера нет информации об операторе.
+        <br>
+        <title>Поддерживаемые теги</title>: <br>
+        - <minor>{reason}</minor> <br>
+        &emsp; Почему вызов был разрешён, та же причина отображается в истории вызовов. <br>
+        - <minor>{geolocation}</minor> <br>
+        &emsp; Геолокация телефонного номера. <br>
+        - <minor>{carrier}</minor> <br>
+        &emsp; Название оператора номера телефона. <br>
+        <br>
+        <title>Поддерживаемые HTML-теги</title>: <br>
+        См.: <a href="%s">link</a>
+        ]]>
+    </string>
+    <string name="background_color">Цвет фона</string>
+    <string name="wait">Ждать</string>
+    <string name="help_action_wait">
+        <![CDATA[
+        Задержка на N секунд. <br>
+        <br>
+        <b>Пример использования</b>: <br>
+        <sample>
+        Для функции <b>SMS-оповещение</b> сообщения иногда приходят одновременно со звонком
+         или через несколько секунд после него, и добавление задержки проверки звонка на 2~3 секунды может предотвратить такие проблемы.
+        </sample>
+        ]]>
+    </string>
+    <string name="comment_identifier">Идентификатор комментария</string>
+    <string name="hint_comment_identifier">
+        Например: \"comment\":\"(.+?)\"
+    </string>
+    <string name="help_comment_identifier">
+        <![CDATA[
+        Извлеките <title>комментарий</title> из результата запроса, чтобы отображать его в уведомлении и журнале истории. (необязательно)<br>
+        <br>
+        Например, для этого результата запроса: <br>
+        <sample>
+        { <br>
+          &ensp; \"type\": \"MARKETING\", <br>
+          &ensp; \"comment\": \"Better call Saul\", <br>
+          &ensp;  … <br>
+        } <br>
+        </sample>
+        <br>
+        Извлеките его с помощью: <br>
+        &ensp; <sample>\"comment\": \"(.+?)\"</sample> <br>
+        ]]>
+    </string>
+    <string name="carrier">Оператор</string>
+    <string name="carrier_rule">Правило оператора</string>
+    <string name="help_regex_mode_carrier">
+        <![CDATA[
+        <title><b>Оператор</b></title>:<br>
+        &ensp; Регулярное выражение будет сопоставлять название оператора номера телефона. <br>
+        <br>
+        <warn>Примечание</warn> <br>
+        &ensp; Информация об операторе основана на первоначальной регистрации и может
+        быть неточной, если номер был перенесён к другому оператору. <br>
+        <br>
+        Например: <br>
+        &ensp; Блокировать номера от <no_translate><sample>Verizon Wireless</sample></no_translate>
+        с помощью регулярного выражения <no_translate><error>verizon.*</error></no_translate> <br>
+        ]]>
+    </string>
+</resources>

@@ -22,7 +22,6 @@ import spam.blocker.R
 import spam.blocker.def.Def
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.regex.DisableNestedScrolling
-import spam.blocker.ui.theme.LightMagenta
 import spam.blocker.ui.widgets.ConfigExportDialog
 import spam.blocker.ui.widgets.DropdownWrapper
 import spam.blocker.ui.widgets.GreyIcon20
@@ -34,7 +33,7 @@ import spam.blocker.ui.widgets.PriorityBox
 import spam.blocker.ui.widgets.ResIcon
 import spam.blocker.ui.widgets.SnackBar
 import spam.blocker.ui.widgets.SwipeInfo
-import spam.blocker.util.BotPrettyJson
+import spam.blocker.util.MyPrettyJson
 import spam.blocker.util.spf
 
 
@@ -42,6 +41,7 @@ import spam.blocker.util.spf
 @Composable
 fun ApiList(vm: ApiViewModel) {
     val ctx = LocalContext.current
+    val C = G.palette
     val coroutineScope = rememberCoroutineScope()
 
     val editTrigger = rememberSaveable { mutableStateOf(false) }
@@ -58,7 +58,8 @@ fun ApiList(vm: ApiViewModel) {
 
                 // 2. reload UI
                 vm.reloadDb(ctx)
-            }
+            },
+            onDismiss = { vm.reloadDb(ctx) }
         )
     }
 
@@ -66,18 +67,18 @@ fun ApiList(vm: ApiViewModel) {
     if (exportTrigger.value) {
         ConfigExportDialog(
             trigger = exportTrigger,
-            initialText = BotPrettyJson.encodeToString(vm.apis[clickedIndex]),
+            initialText = MyPrettyJson.encodeToString(vm.apis[clickedIndex]),
         )
     }
 
     val spf = spf.ApiQueryOptions(ctx)
     val priorityTrigger = remember { mutableStateOf(false) }
     PopupDialog(priorityTrigger) {
-        var apiPriority by remember { mutableIntStateOf(spf.getPriority()) }
+        var apiPriority by remember { mutableIntStateOf(spf.priority) }
         PriorityBox(apiPriority) { newValue, hasError ->
             if (!hasError) {
                 apiPriority = newValue!!
-                spf.setPriority(apiPriority)
+                spf.priority = apiPriority
                 G.apiQueryVM.reloadDb(ctx)
             }
         }
@@ -88,7 +89,7 @@ fun ApiList(vm: ApiViewModel) {
         // Export
         LabelItem(
             label = ctx.getString(R.string.export),
-            leadingIcon = { GreyIcon20(R.drawable.ic_backup_export) }
+            leadingIcon = { GreyIcon20(R.drawable.ic_export) }
         ) {
             exportTrigger.value = true
         },
@@ -98,7 +99,7 @@ fun ApiList(vm: ApiViewModel) {
             // Priority
             LabelItem(
                 label = ctx.getString(R.string.priority),
-                leadingIcon = { ResIcon(R.drawable.ic_priority, modifier = M.size(18.dp), color = LightMagenta) }
+                leadingIcon = { ResIcon(R.drawable.ic_priority, modifier = M.size(18.dp), color = C.priority) }
             ) {
                 priorityTrigger.value = true
             }
@@ -130,7 +131,7 @@ fun ApiList(vm: ApiViewModel) {
                                     ctx.getString(R.string.undelete),
                                 ) {
                                     // 1. add to db
-                                    vm.table.addRecordWithId(ctx, api)
+                                    vm.table.addWithId(ctx, api)
                                     // 2. add to UI
                                     vm.apis.add(index, api)
                                 }

@@ -1,0 +1,83 @@
+<resources>
+    <string name="known_android_issue">
+    <![CDATA[
+        Questo è un problema noto di Android, già segnalato al team Android, una correzione è ancora in attesa. <br>
+        <br>
+        Vedi la causa e la soluzione temporanea qui: <br>
+         <a href=\"%s\">%s</a>
+    ]]>
+    </string>
+    <string name="import_numbers">Importa numeri</string>
+    <string name="faq_import_numbers">
+    <![CDATA[
+        Importa numeri da file locali o remoti utilizzando i flussi di lavoro. <br>
+        <br>
+        <title><b>Una configurazione tipica</b></title>: <br>
+        <br>
+        1. <minor><b>Leggi File</b></minor> / <minor><b>Richiesta Http</b></minor> <br>
+          &ensp; Ottieni il contenuto del file. <br>
+          <br>
+        2. <minor><b>Analizza CSV</b></minor> / <minor><b>Analizza XML</b></minor> / <minor><b>Estrai Regex</b></minor> <br>
+          &ensp; Analizzalo e ottieni un elenco di numeri. <br>
+          <br>
+        3. <minor><b>Sostituisci Numero</b></minor> (opzionale) <br>
+          &ensp; Modifica il formato del numero <br>
+          &ensp; Caso d\'uso: <br>
+          <sample>
+            &emsp; Quando si migrano i numeri da altre app, converti formati come <b>123#####</b> in regex <b>123.....</b> o <b>123.*</b> <br>
+          </sample>
+          <br>
+        4. <minor><b>Importa nel Database Spam</b></minor> / <minor><b>Importa nella Regola Regex</b></minor> <br>
+        <br>
+        <br>
+        <title><b>Esempi</b></title>: <br>
+          - Il preset <no_translate><b>FTC-DNC</b></no_translate> <br>
+        <br>
+        Altri esempi online: <br>
+          - <a href=\"%s\">Testo normale</a> <br>
+          - <a href=\"%s\">CSV</a> <br>
+          - <a href=\"%s\">XML</a> <br>
+          - <a href=\"%s\">JSON</a> - JsonPath non è ancora supportato, usa invece <minor><b>Estrai Regex</b></minor>.
+    ]]>
+    </string>
+    <string name="faq_regex">
+    <![CDATA[
+        Un tutorial sulle regex per non programmatori. <br>
+        <br>
+        <title><b>Livello base - Jolly</b></title> <br>
+        &ensp; Ogni volta che vuoi usare un carattere jolly <sample><b>*</b></sample>, metti un punto <sample><b>.</b></sample> prima di esso, come <sample><b>.*</b></sample>; questo dovrebbe coprire la maggior parte dei casi d\'uso. <br>
+        <br>
+        <title><b>Avanzato - Uso dell\'IA</b></title> <br>
+        &ensp; Ad esempio, per ottenere la seguente regex per le verifiche SMS: <br>
+        &ensp; <sample>.*(verification|validation).*code.*\\d{5,6}.*</sample> <br>
+        <br>
+        Chiedi all\'IA: <br>
+        <sample>
+        %s
+        </sample>
+        <br>
+        <br>
+        <highlight><b>Provalo online</b></highlight> <br>
+          &ensp; 1. <a href=\"copy\"><big>Copia il prompt sopra</big></a> <br>
+          &ensp; 2. <a href=\"try_it\"><big>Avvia l\'IA online</big></a> <br>
+    ]]>
+    </string>
+    <string name="ai_regex_prompt">
+    <![CDATA[
+        Fornisci una regex semplice a corrispondenza completa per Kotlin per catturare i codici di verifica SMS. <br>
+        <br>
+        Requisiti: <br>
+        - Deve contenere la parola \"verification\" o \"validation\", seguita da \"code\" e poi da un numero di 5 o 6 cifre. <br>
+        - Usa .* per gestire qualsiasi testo variabile prima, tra o dopo questi elementi, in modo che corrisponda all\'intero messaggio. <br>
+        - Non serve considerare maiuscole/minuscole, interruzioni di riga né gli anchor ^ o $. <br>
+        - Evita le funzionalità regex avanzate. <br>
+        - Racchiudi la regex finale tra backtick (``) e restituisci solo la regex. <br>
+        <br>
+        Deve corrispondere a: <br>
+        - "Your verification code is 123456, expires after 5 minutes." <br>
+        - "Your validation code: [12345]"
+    ]]>
+    </string>
+    <string name="copied_to_clipboard">Copiato negli appunti</string>
+    <string name="api_query_timeout">Timeout della query API</string>
+</resources>

@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        Es tut uns leid, die App ist abgestürzt.\n\n
-        Bitte kopieren Sie den Inhalt unten und melden Sie dieses Problem auf Github,
-        entfernen Sie alle sensiblen Informationen, bevor Sie sie melden.
+    <![CDATA[
+        Entschuldigung, die App ist abgestürzt. <br>
+        <br>
+        Bitte kopieren Sie den untenstehenden Inhalt und melden Sie dieses Problem auf GitHub,
+        entfernen Sie vorher alle sensiblen Informationen.
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>So</item>
@@ -16,18 +19,16 @@
 
 
 
-    <string name="confirm_delete_all_records">Bestätigen Sie, dass Sie alle Datensätze löschen möchten?</string>
+    <string name="confirm_delete_all_records">
+        <![CDATA[
+        Bestätigen Sie, dass Sie <error>alle</error> Datensätze löschen möchten?
+        ]]>
+    </string>
     <string name="expiry">Ablauf</string>
     <string name="days">Tage</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        Wenn aktiviert, wird der SMS-Inhalt ebenfalls in der Datenbank protokolliert und in dieser Liste angezeigt, er wird nicht in der Datenbank protokolliert, wenn er deaktiviert ist.<br>
-        <br>
-        - Wenn aktiviert:<br>
-        &emsp; <b>Tippen</b> Sie, um die vollständige Nachricht zu erweitern/einzuklappen.<br>
-        <br>
-        - Wenn deaktiviert:<br>
-        &emsp; <b>Tippen</b> Sie, um die Konversation in der Standard-App zu öffnen.
+        Wenn aktiviert, wird der SMS-Inhalt ebenfalls in der Datenbank protokolliert und in dieser Liste angezeigt, er wird nicht in der Datenbank protokolliert, wenn er deaktiviert ist.
         ]]>
     </string>
 
@@ -42,21 +43,40 @@
     <string name="repeated_call">Wiederholter Anruf</string>
     <string name="help_repeated_call">
         <![CDATA[
-        Zulassen, wenn der Anruf innerhalb eines Zeitraums wiederholt wird, da dies eher wichtig als ein Spam-Anruf ist. <br>
+        Erlaube wiederholte Anrufe, da diese eher dringend als Spam-Anrufe sind. <br>
+        <br>
+        Standardmäßig wird der zweite Anruf innerhalb von <highlight><b>5 Minuten</b></highlight> zugelassen. <br>
         <br>
         <b>Optionen:</b><br>
         <br>
-        <h6><font color="#00BFFF">- Häufigkeit</h6>
-        Die Standardeinstellung <font color="#03DAC5"><b>1 / 5 Min</b></font> bedeutet, dass der zweite Anruf innerhalb von 5 Minuten zugelassen wird. <br>
+        - <title><b>Max. Intervall</b></title> <br>
+        Nur Anrufe innerhalb dieses Zeitrahmens werden als Wiederholungen betrachtet. <br>
         <br>
-        <h6><font color="#00BFFF">- SMS einbeziehen</font></h6>
-        Wenn aktiviert, zählt auch der Empfang von SMS-Nachrichten von dieser Nummer.<br>
+        - <title><b>Min. Intervall</b></title> <br>
+        Wenn eine Nummer früher als dies erneut anruft, wird sie ignoriert. Spam-Anruf-Bots wählen normalerweise sofort erneut; erhöhen Sie in diesem Fall diesen Wert. Das Einstellen des Blockierungsmodus auf „Stumm“ kann ebenfalls helfen, lesen Sie dazu den Tooltip. <br>
         <br>
-        <font color="#ea86ff"><b>Priorität: 10</b></font>
+        - <title><b>Wiederholungsanzahl</b></title> <br>
+        Die minimale Anzahl an Wiederholungen. <br>
+        Für Beispiel: <br>
+        <sample>
+        Wenn auf 2 eingestellt, muss ein Anruf zweimal wiederholt werden. Insgesamt sind drei Anrufe erforderlich: <br>
+         &ensp; - ignorieren <br>
+         &ensp; - ignorieren <br>
+         &ensp; - zulassen <br>
+        </sample>
+        <br>
+        - <title><b>SMS einschließen</b></title> <br>
+        Wenn aktiviert, zählt auch der Empfang von SMS-Nachrichten von dieser Nummer. <br>
+        <br>
+        <priority><b>Priorität: 10</b></priority>
         ]]>
     </string>
 
 
+    <string name="max_interval_min">Max. Intervall (Min)</string>
+    <string name="min_interval_sec">Min. Intervall (Sek)</string>
+    <string name="repeat_times">Wiederholungsanzahl</string>
+    <string name="call_repeated_too_soon">Nur %s Millisekunden seit dem letzten Anruf von dieser Nummer, das erforderliche Minimum beträgt %s Millisekunden, ignorieren.</string>
     <string name="about">Über</string>
     <string name="version">Version</string>
     <string name="source_code">Quellcode</string>
@@ -69,9 +89,9 @@
         <item>Importiere .csv als mehrere Regeln</item>
     </string-array>
     <string name="open_settings">Einstellungen öffnen</string>
-    <string name="remove_db_number">Nummer aus Spam-Datenbank löschen</string>
+    <string name="remove_from_db">Aus Datenbank entfernen</string>
     <string name="copy_number">Nummer kopieren</string>
-    <string name="add_num_to_regex_rule">Nummer zu Regex-Regel hinzufügen</string>
-    <string name="add_num_to_db">Nummer zur Spam-Datenbank hinzufügen</string>
-    <string name="mark_all_as_read">Alle als gelesen markieren</string>
+    <string name="add_to_regex_rule">Zu Regex-Regel hinzufügen</string>
+    <string name="edit_regex_rule">Regex-Regel bearbeiten</string>
+    <string name="add_to_db">Zur Datenbank hinzufügen</string>
 </resources>

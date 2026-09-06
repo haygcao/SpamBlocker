@@ -1,16 +1,14 @@
 <resources>
     <string name="start_time">開始時間</string>
     <string name="end_time">結束時間</string>
-    <string name="switch_mode">切換模式</string>
+    <string name="regex_mode">正則模式</string>
     <string name="contact_group">聯絡人群組</string>
-    <string name="text_too_long">文字太長，已停用編輯功能</string>
-    <string name="follow_system"><short>跟隨系統</short></string>
+    <string name="text_too_long">文字超過 %s 個字元，出於效能原因，已停用編輯功能。要增加限制：</string>
+    <string name="increase_text_limit">長按規則 -> 設定 -> 文字方塊限制</string>
+    <string name="system"><short>系統</short></string>
     <string name="theme">佈景主題</string>
-    <string-array name="theme_list">
-        <item>淺色</item>
-        <item>深色</item>
-    </string-array>
     <string-array name="rule_dropdown_menu">
+        <item>匯出</item>
         <item>搜尋規則</item>
         <item>複製規則</item>
         <item>刪除規則</item>
@@ -26,24 +24,24 @@
     </string>
     <string name="help_regex_mode_phone_number">
         <![CDATA[
-        <font color="#00BFFF"><b>電話號碼</b></font>:<br>
+        <title><b>電話號碼</b></title>:<br>
         &ensp; 預設模式，正規表達式將匹配電話號碼。<br>
         ]]>
     </string>
     <string name="help_regex_mode_contact">
         <![CDATA[
-        <font color="#00BFFF"><b>聯絡人</b></font>:<br>
+        <title><b>聯絡人</b></title>:<br>
         &ensp; 正規表達式將匹配與來電號碼相關聯的聯絡人姓名。<br>
         &ensp;  - 使用案例：<br>
-        &emsp; <font color="#888888">在週末使用正規表達式 `.*` 阻擋所有非聯絡人。 </font><br>
+        &emsp; <sample>在週末使用正規表達式 `.*` 阻擋所有非聯絡人。 </sample><br>
         ]]>
     </string>
     <string name="help_regex_mode_contact_group">
         <![CDATA[
-        <font color="#00BFFF"><b>聯絡人群組</b></font>:<br>
+        <title><b>聯絡人群組</b></title>:<br>
         &ensp; 正規表達式將匹配與來電號碼相關聯的聯絡人群組名稱，影響該群組中的所有聯絡人，因此您無需單獨添加他們，即使人員變動也無需更新。<br>
         &ensp;  - 使用案例：<br>
-        &emsp; <font color="#888888">在週末阻擋聯絡人群組「工作」來阻擋所有同事。 </font> <br>
+        &emsp; <sample>在週末阻擋聯絡人群組「工作」來阻擋所有同事。 </sample> <br>
         ]]>
     </string>
 </resources>

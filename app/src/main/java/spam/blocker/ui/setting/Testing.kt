@@ -1,7 +1,7 @@
 package spam.blocker.ui.setting
 
+import android.annotation.SuppressLint
 import android.os.Build
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,26 +16,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import spam.blocker.G
 import spam.blocker.R
-import spam.blocker.db.ContentRegexTable
-import spam.blocker.db.Db
-import spam.blocker.db.NumberRegexTable
-import spam.blocker.def.Def
 import spam.blocker.def.Def.ANDROID_12
-import spam.blocker.def.Def.FLAG_REGEX_FOR_CNAP
 import spam.blocker.service.CallScreeningService
 import spam.blocker.service.SmsReceiver
-import spam.blocker.ui.theme.DarkOrange
-import spam.blocker.ui.theme.LocalPalette
-import spam.blocker.ui.theme.Teal200
+import spam.blocker.ui.priorityInlineMap
+import spam.blocker.ui.setting.regex.RegexMode.ModeType
 import spam.blocker.ui.widgets.AnimatedVisibleV
 import spam.blocker.ui.widgets.BalloonQuestionMark
+import spam.blocker.ui.widgets.FloatingWindow
 import spam.blocker.ui.widgets.GreyLabel
-import spam.blocker.ui.widgets.GreyText
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.PopupSize
 import spam.blocker.ui.widgets.RadioGroup
@@ -45,8 +38,16 @@ import spam.blocker.ui.widgets.SimPicker
 import spam.blocker.ui.widgets.Str
 import spam.blocker.ui.widgets.StrInputBox
 import spam.blocker.ui.widgets.StrokeButton
+import spam.blocker.ui.widgets.SwitchBox
+import spam.blocker.util.A
+import spam.blocker.util.Clipboard
 import spam.blocker.util.JetpackTextLogger
+import spam.blocker.util.MultiLogger
+import spam.blocker.util.Permission
+import spam.blocker.util.PermissionWrapper
+import spam.blocker.util.SaveableLogger
 import spam.blocker.util.Util
+import spam.blocker.util.spf
 
 
 class TestingViewModel {
@@ -55,15 +56,17 @@ class TestingViewModel {
     val callerName = mutableStateOf("")
     val sms = mutableStateOf("")
     val simSlot = mutableStateOf<Int?>(null)
+    val showCallerID = mutableStateOf(false)
 }
 
 
+@SuppressLint("LocalContextGetResourceValueCall")
 @Composable
-fun PopupTesting(
+fun TestDialog(
     trigger: MutableState<Boolean>,
 ) {
     val ctx = LocalContext.current
-    val C = LocalPalette.current
+    val C = G.palette
 
     val coroutine = rememberCoroutineScope()
 
@@ -80,11 +83,21 @@ fun PopupTesting(
     val logTrigger = rememberSaveable { mutableStateOf(false) }
     PopupDialog(
         trigger = logTrigger,
-        popupSize = PopupSize(percentage = 0.7f, minWidth = 320, maxWidth = 600),
+        popupSize = PopupSize(maxWidthPercentage = 0.9f, minWidthDp = 320, maxWidthDp = 1200),
+        buttons = if (logStr.value.text.length > 3000){
+            {
+                StrokeButton(Str(R.string.copy), color = C.teal200) {
+                    Clipboard.copy(ctx, logStr.value.text)
+                }
+            }
+        } else {
+            null
+        }
     ) {
         Text(
             text = logStr.value,
             color = C.textGrey, // the default text color
+            inlineContent = priorityInlineMap()
         )
     }
 
@@ -97,7 +110,12 @@ fun PopupTesting(
 
     PopupDialog(
         trigger = trigger,
-        popupSize = PopupSize(percentage = 0.8f, minWidth = 340, maxWidth = 600),
+        popupSize = PopupSize(maxWidthPercentage = 0.8f, minWidthDp = 340, maxWidthDp = 500),
+        onDismiss = {
+            if (spf.CallerID(ctx).isEnabled) {
+                FloatingWindow.hide(ctx)
+            }
+        },
         title = {
             RowVCenter {
                 GreyLabel(Str(R.string.title_rule_testing))
@@ -112,53 +130,39 @@ fun PopupTesting(
                 }
             }
 
-            // "Please enable call/sms first"
-            val warningTrigger = remember { mutableStateOf(false) }
-            PopupDialog(
-                trigger = warningTrigger
-            ) {
-                Text(
-                    text = Str(
-                        if (isForCall)
-                            R.string.enable_call_screening_first
-                        else
-                            R.string.enable_sms_screening_first
-                    ),
-                    color = DarkOrange,
-                )
-                GreyText(Str(R.string.it_is_at_top))
-            }
-
             // Test Button
-            StrokeButton(label = Str(R.string.test), color = Teal200) {
-                // Prompt to "enable the call/sms option first"
-                if ((isForCall && !G.callEnabled.value) || (!isForCall && !G.smsEnabled.value)) {
-                    warningTrigger.value = true
-                    return@StrokeButton
-                }
-
+            StrokeButton(label = Str(R.string.test), color = C.teal200) {
                 clearPreviousResult()
                 logTrigger.value = true
 
-                val textLogger = JetpackTextLogger(logStr, C)
+                val multiLogger = MultiLogger(listOf(
+                    JetpackTextLogger(logStr),
+                    SaveableLogger()
+                ))
 
                 coroutine.launch(IO) {
                     if (isForCall)
-                        CallScreeningService().processCall(
+                        CallScreeningService.processCall(
                             ctx, rawNumber = vm.phone.value, simSlot = vm.simSlot.value,
                             callDetails = null, cnap = vm.callerName.value.ifEmpty { null },
-                            isTest = true, logger = textLogger,
+                            isTest = true, logger = multiLogger, showCallerId = vm.showCallerID.value
                         )
                     else
-                        SmsReceiver().processSms(
-                            ctx, vm.phone.value, vm.sms.value, simSlot = vm.simSlot.value, isTest = true, logger = textLogger)
+                        SmsReceiver.processSms(
+                            ctx, rawNumber = vm.phone.value, messageBody = vm.sms.value,
+                            simSlot = vm.simSlot.value, isTest = true, logger = multiLogger
+                        )
                 }
             }
         },
         content = {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
+            Column {
+                val isForCall by remember {
+                    derivedStateOf {
+                        vm.selectedType.intValue == 0
+                    }
+                }
+
                 // Type   [Call, SMS]
                 LabeledRow(labelId = R.string.type) {
                     RadioGroup(items = items, selectedIndex = vm.selectedType.intValue) { newSel ->
@@ -175,8 +179,38 @@ fun PopupTesting(
                     SimPicker(vm.simSlot)
                 }
 
+                // Show Caller ID
+                AnimatedVisibleV(spf.CallerID(ctx).isEnabled && isForCall) {
+                    LabeledRow(
+                        labelId = R.string.caller_id
+                    ) {
+                        SwitchBox(vm.showCallerID.value) { isTurningOn ->
+                            if (isTurningOn) {
+                                G.permissionChain.ask(
+                                    ctx,
+                                    listOf(
+                                        PermissionWrapper(Permission.showOverlay),
+                                        // Permission.phoneState is needed to close the floating dialog when the call gets answered or rejected in real case.
+                                        // It's also needed here, otherwise the dialog would work fine when testing but fail on real calls.
+                                        PermissionWrapper(Permission.phoneState),
+                                    )
+                                ) { granted ->
+                                    if (granted) {
+                                        vm.showCallerID.value = true
+                                    }
+                                }
+                            } else {
+                                vm.showCallerID.value = false
+                            }
+                        }
+                    }
+                }
+
                 val geoLocation = remember(vm.phone.value) {
                     Util.numberGeoLocation(ctx, vm.phone.value)
+                }
+                val carrier = remember(vm.phone.value) {
+                    Util.numberCarrier(ctx, vm.phone.value)
                 }
 
                 // Phone number
@@ -188,31 +222,37 @@ fun PopupTesting(
                         vm.phone.value = it
                         clearPreviousResult()
                     },
-                    supportingTextStr = geoLocation?.let {
-                        // Geo Location
-                        Str(R.string.label_value_pair).format(
-                            Str(R.string.geo_location), geoLocation
-                        )
-                    },
-                    supportingTextColor = C.textGrey,
+                    supportingText = listOfNotNull(
+                        // Geolocation
+                        geoLocation?.let {
+                            Str(R.string.label_value_pair).format(
+                                Str(R.string.geolocation), geoLocation
+                            )
+                        },
+                        // Carrier
+                        carrier?.let {
+                            Str(R.string.label_value_pair).format(
+                                Str(R.string.carrier), carrier
+                            )
+                        }
+                    ).takeIf { it.isNotEmpty() }?.joinToString("\n")?.A(C.textGrey),
                 )
 
                 // Only show the Caller Name field when there's at least 1 CNAP rule configured
                 var hasCnapRule by remember(G.NumberRuleVM.rules, G.ContentRuleVM.rules) {
-                    // either `patterFlags` or `patternExtraFlags` has CNAP flag
-                    val foundNumberRule = NumberRegexTable().findByFilter(ctx,
-                        " WHERE (${Db.COLUMN_PATTERN_FLAGS} & ${FLAG_REGEX_FOR_CNAP}) = $FLAG_REGEX_FOR_CNAP LIMIT 1"
-                    ).isNotEmpty()
+                    val foundNumberRule = G.NumberRuleVM.rules.any {
+                        it.patternModeType == ModeType.CallerName
+                    }
 
-                    val foundContentRule = ContentRegexTable().findByFilter(ctx,
-                        " WHERE (${Db.COLUMN_PATTERN_EXTRA_FLAGS} & ${FLAG_REGEX_FOR_CNAP}) = $FLAG_REGEX_FOR_CNAP LIMIT 1"
-                    ).isNotEmpty()
+                    val foundContentRule = G.ContentRuleVM.rules.any {
+                        it.patternExtraModeType == ModeType.CallerName
+                    }
 
                     mutableStateOf(foundNumberRule || foundContentRule)
                 }
 
                 // Caller Name
-                AnimatedVisibleV(vm.selectedType.intValue == Def.ForNumber && hasCnapRule) {
+                AnimatedVisibleV(isForCall && hasCnapRule) {
                     StrInputBox(
                         text = vm.callerName.value,
                         label = { GreyLabel(Str(R.string.caller_name)) },
@@ -224,7 +264,7 @@ fun PopupTesting(
                     )
                 }
                 // SMS content
-                AnimatedVisibleV(vm.selectedType.intValue != Def.ForNumber) {
+                AnimatedVisibleV(!isForCall) {
                     StrInputBox(
                         text = vm.sms.value,
                         label = { GreyLabel(Str(R.string.sms_content)) },
@@ -233,6 +273,18 @@ fun PopupTesting(
                             vm.sms.value = it
                             clearPreviousResult()
                         }
+                    )
+                }
+
+                if ((isForCall && !G.callEnabled.value) || (!isForCall && !G.smsEnabled.value)) {
+                    Text(
+                        text = Str(
+                            if (isForCall)
+                                R.string.call_screening_not_enabled
+                            else
+                                R.string.sms_screening_not_enabled
+                        ),
+                        color = C.warning,
                     )
                 }
             }

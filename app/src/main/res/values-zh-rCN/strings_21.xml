@@ -1,23 +1,10 @@
 <resources>
     <string name="perm_write_settings">写入设置</string>
-    <string name="set_to">设置为</string>
-    <string name="help_set_ringtone_to">
-    <![CDATA[
-        为特定功能设置铃声，或将其静音。<br>
-        <br>
-        例如，为正则表达式规则设置铃声：<br><br>
-        <font color="#888888">
-        &emsp; { \"regex\": \"rule_desc\" }
-        </font>
-        <br><br>
-        此规则允许的呼叫将播放指定的铃声。<br>
-    ]]>
-    </string>
     <string name="ringtone">铃声</string>
     <string name="call_to_test_ringtone">拨打实际电话以测试铃声。</string>
     <string name="help_ringtone">
     <![CDATA[
-        为特定功能自定义铃声，该功能允许的呼叫将播放指定的铃声。
+        为不同功能允许的呼叫设置不同的铃声。
     ]]>
     </string>
     <string name="help_target_rule_desc">
@@ -28,7 +15,7 @@
         请在此字段中输入 <b>Work</b>。
     ]]>
     </string>
-    <string name="invalid_config">无效配置</string>
+
     <string name="custom">自定义</string>
     <string name="quick_tile">快捷磁贴</string>
     <string name="help_quick_tile">
@@ -45,15 +32,14 @@
     ]]>
     </string>
     <string name="quick_tile_is_active">自定义快捷磁贴已激活。</string>
-    <string name="http_status_code_template">Http 状态码：%d</string>
     <string name="help_preset_ringtone">
     <![CDATA[
         自定义正则表达式规则的铃声，当呼叫被此规则允许时，将播放指定的铃声。 <br>
         <br>
         <b>使用场景:<b> <br>
-        <font color="#888888">
-        &ensp; 为特定联系人、联系人群组或电话号码范围设置不同的铃声。
-        </font>
+        <sample>
+        &ensp; 为特定联系人、号码范围或重复呼叫设置不同的铃声。
+        </sample>
     ]]>
     </string>
     <string name="remote_setup">远程设置</string>
@@ -90,17 +76,13 @@
         <br>
         工作流每天运行，首次运行时下载完整的 90 天数据集，随后仅执行增量更新。 <br>
         <br>
-        <font color="#ffa500"><b>注意：</b></font> <br>
-        <font color="#888888">&ensp; 该数据集通常在每个工作日大约美国东部时间中午更新。 </font><br>
+        <warn><b>注意：</b></warn> <br>
+        <sample>&ensp; 该数据集通常在每个工作日大约美国东部时间中午更新。 </sample><br>
         <br>
         因此计划在 18:00 执行，因为预计届时数据集已可用。 <br>
     ]]>
     </string>
     <string name="csv_missing_column">
         缺少必需的列 %s。您可以将标头 %s 用作电话号码列，或者在“解析 CSV”中将现有标头映射到 %s。
-    </string>
-    <string name="enable_reporting_number">启用报告</string>
-    <string name="help_enable_reporting_number">
-        此 API 也支持报告电话号码，启用此项可同时生成报告工作流程。
     </string>
 </resources>

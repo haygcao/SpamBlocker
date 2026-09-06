@@ -19,10 +19,12 @@ import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.db.RegexRule
 import spam.blocker.def.Def
+import spam.blocker.def.Def.ForNumber
+import spam.blocker.def.Def.ForSms
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.quick.ChannelIcons
-import spam.blocker.ui.theme.LightMagenta
-import spam.blocker.ui.theme.LocalPalette
+import spam.blocker.ui.setting.regex.RegexMode.ModeType
+import spam.blocker.ui.setting.regex.RegexMode.regexModeInlineMap
 import spam.blocker.ui.widgets.GreyIcon16
 import spam.blocker.ui.widgets.GreyIcon20
 import spam.blocker.ui.widgets.OutlineCard
@@ -38,7 +40,7 @@ fun RegexCard(
     forType: Int,
     modifier: Modifier = Modifier,
 ) {
-    val C = LocalPalette.current
+    val C = G.palette
     val ctx = LocalContext.current
     val spf = spf.RegexOptions(ctx)
 
@@ -60,12 +62,12 @@ fun RegexCard(
                         text = rule.colorfulRegexStr(
                             ctx = LocalContext.current,
                             forType = forType,
-                            palette = C,
                         ),
+                        inlineContent = regexModeInlineMap(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         modifier = M.padding(top = 2.dp),
-                        maxLines = spf.getMaxRegexRows(),
+                        maxLines = spf.maxRegexRows,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
@@ -75,7 +77,7 @@ fun RegexCard(
                     Text(
                         text = rule.description,
                         fontSize = 18.sp,
-                        maxLines = spf.getMaxDescRows(),
+                        maxLines = spf.maxDescRows,
                         overflow = TextOverflow.Ellipsis,
                         color = C.textGrey,
                         modifier = M.padding(start = 10.dp),
@@ -110,12 +112,12 @@ fun RegexCard(
                             ResIcon(
                                 iconId = R.drawable.ic_call,
                                 modifier = M.size(20.dp),
-                                color = if (rule.isForCall()) C.enabled else C.disabled
+                                color = if (rule.isForCall()) C.teal200 else C.disabled
                             )
                         ResIcon(
                             iconId = R.drawable.ic_sms,
                             modifier = M.size(20.dp),
-                            color = if (rule.isForSms()) C.enabled else C.disabled
+                            color = if (rule.isForSms()) C.teal200 else C.disabled
                         )
                     }
                 }
@@ -124,14 +126,25 @@ fun RegexCard(
                 RowVCenterSpaced(space = 8) {
 
                     // [NotifyType]
-                    val ch = G.notificationChannels.find { it.channelId == rule.channel }
-                    ChannelIcons(ch?.importance, ch?.mute)
+                    val forCNAP = forType == ForNumber && rule.patternModeType == ModeType.CallerName
+                    val applyToSms = rule.isForSms()
+
+                    val visible = when (forType) {
+                        ForNumber -> rule.isBlacklist || (!forCNAP && applyToSms)
+                        ForSms   -> true
+                        else     -> false
+                    }
+
+                    if (visible) {
+                        val ch = G.notificationChannels.find { it.channelId == rule.channel }
+                        ChannelIcons(ch?.importance, ch?.mute)
+                    }
 
                     // [Priority]
-                    ResIcon(R.drawable.ic_priority, color = LightMagenta, modifier = M.size(18.dp).offset(6.dp))
+                    ResIcon(R.drawable.ic_priority, color = C.priority, modifier = M.size(18.dp).offset(6.dp))
                     Text(
                         text = "${rule.priority}",
-                        color = LightMagenta,
+                        color = C.priority,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
                     )

@@ -6,7 +6,7 @@
 
     <string name="notification">Benachrichtigung</string>
     <string name="type">Typ</string>
-    <string name="times">Zeiten</string>
+
     <plurals name="days">
         <item quantity="one">%d Tag</item>
         <item quantity="two">%d Tage</item>
@@ -31,32 +31,36 @@
     <string name="help_for_particular_number">Wenn aktiviert, gilt die Regel nur, wenn sowohl Nummer als auch Inhalt übereinstimmen.</string>
     <string name="help_dialed">
         <![CDATA[
-        Anrufe von zuvor gewählten Nummern zulassen.<br>
+        Anrufe von zuvor gewählten Nummern erlauben.<br>
         <br>
         <b>Optionen:</b><br>
         <br>
-        <h6><font color="#00BFFF">- Innerhalb von Tagen</font></h6>
-        Anrufe, die vor <font color="cyan">%s Tagen</font> getätigt wurden, werden ignoriert.<br>
+        <h6><title>- Zeitraum</title></h6>
+        &ensp; - <minor>Alle Zeiten</minor> <br>
+        &emsp; Gewählte Nummern immer erlauben.<br>
+        &ensp; - <minor>Innerhalb von Tagen</minor> <br>
+        &emsp; Anrufe, die vor X Tagen erfolgten, werden ignoriert.<br>
         <br>
-        <h6><font color="#00BFFF">- SMS einschließen</font></h6>
-        Wenn aktiviert, zählt auch das Senden einer SMS an diese Nummer.<br>
+        <h6><title>- SMS einbeziehen</title></h6>
+        Wenn aktiviert, zählt auch das Versenden einer SMS an diese Nummer.<br>
         <br>
-        <font color="#ea86ff"><b>Priorität: 10</b></font>
+        <priority><b>Priorität: 10</b></priority>
         ]]>
     </string>
     <string name="help_recent_apps">
         <![CDATA[
-        Jeder Anruf würde durchgehen, wenn eine der Apps in der Liste kürzlich verwendet wurde.<br>
+        Jeder Anruf würde durchgelassen, wenn eine App in der Liste kürzlich verwendet wurde.<br>
         <br>
-        Ein typischer Anwendungsfall:<br>
-        &emsp; Sie haben gerade eine Pizza in PizzaApp bestellt, bald rufen sie Sie an, um Ihnen eine Rückerstattung anzubieten, weil sie schließen. Dieser Anruf würde durchgehen, wenn PizzaApp hier aktiviert ist. <br>
+        Anwendungsfall:<br>
+        <sample>
+          &ensp; Eine PizzaApp-Bestellung löst einen sofortigen Rückruf wegen der Schließung des Restaurants aus, dieser Anruf wird durchgelassen, wenn PizzaApp hier aktiviert ist. <br>
+        </sample>
         <br>
-        Die Standardeinstellung <font color="03DAC5"><b>5 Min</b></font> bedeutet, dass jeder Anruf durchgeht, wenn eine der Apps innerhalb von 5 Minuten verwendet wurde,
-        mit `verwendet` ist gemeint, dass sie entweder aktiviert, deaktiviert, minimiert oder beendet wurde. <br>
+        Die Standardeinstellung <highlight><b>5 Min</b></highlight> bedeutet, dass alle Anrufe durchgelassen werden, wenn eine der Apps innerhalb von 5 Minuten verwendet wurde, wobei \"verwendet\" jede der folgenden Aktionen meint: <highlight>aktiviert, deaktiviert, minimiert, oder beendet</highlight>.<br>
         <br>
-        Gilt nur für Anrufe, <b>nicht</b> für Textnachrichten. <br>
+        Gilt nur für Anrufe, nicht für Textnachrichten. <br>
         <br>
-        <font color="#ea86ff"><b>Priorität: 10</b></font>
+        <priority><b>Priorität: 10</b></priority>
         ]]>
     </string>
     <string name="help_hang_up_delay">Die Verzögerung, bevor der Anruf beendet wird.</string>
@@ -67,21 +71,21 @@
     </string-array>
     <string name="help_block_type">
         <![CDATA[
-        - <font color="#00BFFF"><b>Ablehnen</b></font>: <br>
+        - <title><b>Ablehnen</b></title>: <br>
          Wie das Drücken der Ablehnen-Taste. Funktioniert völlig geräuschlos, der Sperrbildschirm wird nicht eingeschaltet.<br>
         <br>
-        - <font color="#00BFFF"><b>Stummschalten</b></font>: <br>
-         Es klingelt im Hintergrund lautlos, wodurch der Anrufer den Eindruck erhält, dass Sie nicht erreichbar waren und den Anruf verpasst haben. <br>
+        - <title><b>Stummschalten</b></title>: <br>
+        Der Anruf wird auf Ihrer Seite sofort abgelehnt, klingelt aber beim Anrufer weiter, was den Eindruck erweckt, dass Sie nicht erreichbar sind. <br>
         <br>
-         Es kann auch helfen, wenn Sie wiederholt Spam-Anrufe erhalten, da es die Anrufdauer verlängert und es für Spammer weniger effizient macht, was sie möglicherweise davon abhält, Sie erneut anzurufen.<br>
+        Dies kann auch helfen, wiederholte Spam-Anrufe zu reduzieren. Es verlängert die Anrufdauer, was sie weniger effizient macht und die Spammer möglicherweise davon abschreckt, Sie erneut anzurufen.<br>
         <br>
-        - <font color="#00BFFF"><b>Auflegen</b></font>: <br>
+        - <title><b>Auflegen</b></title>: <br>
         Den Anruf annehmen und sofort auflegen, um zu verhindern, dass er auf die Mailbox weitergeleitet wird. <br>
         <br>
         Wird ein Spam-Anruf während eines laufenden Gesprächs empfangen, wird auf „Ablehnen“ umgeschaltet,
          um zu vermeiden, das laufende Gespräch zu beenden. <br>
         <br>
-        <font color="#FFA500">Hinweis</font> Der Sperrbildschirm kann kurz eingeschaltet werden,
+        <warn>Hinweis</warn> Der Sperrbildschirm kann kurz eingeschaltet werden,
         Sie könnten auch einen Anrufbeendigungston hören (einige Telefone bieten eine Option, diesen Ton stummzuschalten). <br>
         <br>
         - Die <b>Verzögerung</b>: <br>
@@ -90,4 +94,6 @@
         &emsp; Wenn Sie Anrufe aufzeichnen möchten, installieren Sie eine Anrufaufzeichnungs-App und erhöhen Sie die Verzögerung entsprechend.
         ]]>
     </string>
+    <string name="time_range">Zeitraum</string>
+    <string name="all_time">Alle Zeiten</string>
 </resources>

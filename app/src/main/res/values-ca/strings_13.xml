@@ -10,7 +10,8 @@
     <string name="parsed_n_rules">Analitzades %s regles.</string>
     <string name="add_n_numbers_to_spam_db">S\'estan afegint %s números a la base de dades de correu brossa.</string>
     <string name="nothing_to_import">La llista de números està buida, no hi ha res per importar.</string>
-    <string name="importing_n_numbers">S\'estan important %s números com a regla regex.</string>
+    <string name="importing_n_numbers">S\'estan important %s números.</string>
+    <string name="importing_n_rules">S\'estan important %s regles.</string>
     <string name="create_rule_with_numbers">Creant regla amb %s números.</string>
     <string name="replace_rule_with_desc">Substituint la regla per la descripció: %s.</string>
     <string name="rule_with_desc_not_found">No s\'ha trobat cap regla amb la descripció %s.</string>
@@ -20,68 +21,69 @@
     <string name="find_rule_with_desc">S\'han trobat %s regles amb la descripció %s.</string>
     <string name="modify_n_rules">Modificant %s regles.</string>
     <string name="number_not_match_filter">El número %s no coincideix amb el filtre %s, s\'omet.</string>
+    <string name="content_not_match_filter">El contingut no coincideix amb el filtre, s\'omet.</string>
     <string name="fail_detect_cc">No s\'ha pogut detectar el codi de país.</string>
-    <string name="identified_as_spam">Identificat com a número de correu brossa, categoria: %s.</string>
-    <string name="identified_as_valid">Identificat com a número vàlid, categoria: %s.</string>
+    <string name="identified_as_spam">Identificat com a número de telèfon spam, categoria: %s, comentari: %s.</string>
+    <string name="identified_as_valid">Identificat com a número de telèfon vàlid, categoria: %s, comentari: %s.</string>
     <string name="unidentified_number">Número no identificat.</string>
     <string name="auto_detect_cc_permission">Es requereix el permís READ_PHONE_STATE per detectar el codi de país.</string>
     <string name="number_tags">
         <![CDATA[
-        - <font color="#00BFFF"><b><no_translate>{cc}</no_translate></b></font><br>
+        - <title><b><no_translate>{cc}</no_translate></b></title><br>
         &ensp; El codi de país.<br>
-        - <font color="#00BFFF"><b><no_translate>{domestic}</no_translate></b></font><br>
+        - <title><b><no_translate>{domestic}</no_translate></b></title><br>
         &ensp; La part domèstica.<br>
-        - <font color="#00BFFF"><b><no_translate>{number}</no_translate></b></font><br>
+        - <title><b><no_translate>{number}</no_translate></b></title><br>
         &ensp; El número complet, incloent tant el codi de país com la part domèstica, sense \'+\' o \'0\'s inicials.<br>
-        - <font color="#00BFFF"><b><no_translate>{origin_number}</no_translate></b></font><br>
+        - <title><b><no_translate>{raw_number}</no_translate></b></title><br>
         &ensp; El número original que pot contenir \'+\' o \'0\'s inicials.<br>
         ]]>
     </string>
     <string name="sms_tags">
         <![CDATA[
-        - <font color="#00BFFF"><b>{sms}</b></font><br>
+        - <title><b>{sms}</b></title><br>
         &ensp; El contingut del SMS.<br>
         ]]>
     </string>
     <string name="time_tags">
         <![CDATA[
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {year}<br>
           {month}<br>
           {day}<br>
           {hour}<br>
           {minute}<br>
           {second}<br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; Els números d\'un sol dígit s\'ompliran amb un zero al principi, p. ex.: <br>
-        &emsp; <font color="#888888"><no_translate>{year}-{month}-{day} {hour}:{minute}:{second}</no_translate></font> <br>
+        &emsp; <sample><no_translate>{year}-{month}-{day} {hour}:{minute}:{second}</no_translate></sample> <br>
         &emsp; es converteix en <br>
-        &emsp; <font color="#888888">2020-01-22 03:44:05</font><br>
+        &emsp; <sample>2020-01-22 03:44:05</sample><br>
         <br>
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {month_index} <br>
           {day_index} <br>
           {hour_index} <br>
           {minute_index} <br>
           {second_index} <br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; Aquests valors no s\'ompliran, p. ex.: <br>
-        &emsp; <font color="#888888"><no_translate>{month_index}-{day_index}</no_translate></font> <br>
+        &emsp; <sample><no_translate>{month_index}-{day_index}</no_translate></sample> <br>
         &emsp; es converteix en <br>
-        &emsp; <font color="#888888">1-2</font><br>
+        &emsp; <sample>1-2</sample><br>
         <br>
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {day_of_week} <br>
           {day_of_week_index} <br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; Aquests es poden utilitzar per simular un programa de rotació, per exemple: <br>
-        &emsp; <font color="#888888">Realitza còpies de seguretat diàries i conserva només les set còpies de seguretat més recents.</font> <br>
+        &emsp; <sample>Realitza còpies de seguretat diàries i conserva només les set còpies de seguretat més recents.</sample> <br>
         <br>
-        <font color="#ffa500"><b>Nota:</b></font><br>
+        <warn><b>Nota:</b></warn><br>
          Aquestes etiquetes de temps admeten operacions aritmètiques simples, com ara
-          <font color="#00BFFF"><b><no_translate>{day-1}</no_translate></b></font>
+          <title><b><no_translate>{day-1}</no_translate></b></title>
          i
-          <font color="#00BFFF"><b><no_translate>{hour+2}</no_translate></b></font>.
+          <title><b><no_translate>{hour+2}</no_translate></b></title>.
         ]]>
     </string>
     <string name="help_http_url">
@@ -98,21 +100,13 @@
         <![CDATA[
         Dissenyat principalment per al FRITZ!Box alemany, també funciona amb números de telèfon d\'altres països.<br>
         <br>
-        Admet consultes per hash en comptes del número en si, proporcionant una millor privacitat.<br>
+        <b>Aspectes destacats</b>: <br>
+        - <highlight>Consultes per hash</highlight> en comptes del número de telèfon real, proporcionant una millor privacitat. <br>
+        - Utilitza <highlight>detecció basada en rangs</highlight> quan no es troba el número exacte, ignorant els dos últims dígits. <br>
         <br>
         Lloc web: <a href="https://phoneblock.net">https://phoneblock.net</a><br>
         <br>
         API: <a href="https://phoneblock.net/phoneblock/api/">https://phoneblock.net/phoneblock/api/</a>
-        ]]>
-    </string>
-    <string name="help_api_preset_phoneblock_authorization">
-        <![CDATA[
-        1. Registreu un compte a <a href="https://phoneblock.net/phoneblock/login">https://phoneblock.net/phoneblock/login</a><br>
-        <br>
-        2. A la pàgina de configuració: <a href="https://phoneblock.net/phoneblock/settings">https://phoneblock.net/phoneblock/settings</a>,
-         premeu el botó \"Genera clau API\".<br>
-        <br>
-        3. Introduïu la clau API generada a continuació.
         ]]>
     </string>
     <string name="not_enough_time_left">
@@ -129,12 +123,17 @@
     <string name="canceling_thread">Cancel·lant fil d\'execució.</string>
     <string name="suggest_to_swipe">
         <![CDATA[
-        <font color="#03DAC5"><b>Llisca cap a l\'esquerra</b></font> per suprimir-lo.<br>
+        <highlight><b>Llisca cap a l\'esquerra</b></highlight> per suprimir-lo.<br>
         <br>
         La majoria d\'elements de la interfície d\'usuari semblants a targetes d\'aquesta aplicació estan associats a gestos de lliscament,
-        alguns dels quals també admeten <font color="#03DAC5"><b>lliscament cap a la dreta</b></font>, per exemple, els registres de l\'historial.
+        alguns dels quals també admeten <highlight><b>lliscament cap a la dreta</b></highlight>, per exemple, els registres de l\'historial.
         ]]>
-    </string>>
-    <string name="bug_number">Si aquest és un número vàlid, informa\'l a github.</string>>
-    <string name="skip_alpha_empty_number">Omet el número alfanumèric o buit.</string>>
+    </string>
+    <string name="bug_number">Si aquest és un número vàlid, informa\'l a GitHub.</string>
+    <string name="escape_tags">
+        <![CDATA[
+        - <title><b><no_translate>{escape(…)}</no_translate></b></title><br>
+        &ensp; Escapa el contingut entre els claudàtors, utilitzat per al contingut dins de les cometes. <br>
+        ]]>
+    </string>
 </resources>

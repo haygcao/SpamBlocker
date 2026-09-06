@@ -1,0 +1,151 @@
+<resources>
+    <string name="perm_access_dir">Доступ к папке</string>
+    <string name="dir_not_specified">Папка не указана.</string>
+    <string name="no_access_to_dir">Нет доступа к папке: %s.</string>
+    <string name="grant_access_to_dir">
+        <![CDATA[
+        Предоставьте доступ к папке: <br>
+        <highlight>%s</highlight>
+        ]]>
+    </string>
+    <string name="comment">Комментарий</string>
+    <string name="database_prefix">Префикс базы данных</string>
+    <string name="help_regex_mode_database_prefix">
+        <![CDATA[
+        <title><b>Префикс базы данных</b></title>:<br>
+        &ensp; Блокировка диапазонов для телефонных номеров из базы данных.<br>
+        <br>
+        <warn>Это регулярное выражение должно заканчиваться точками</warn>, в этом режиме регулярного выражения такие завершающие точки обозначают изменяемые цифры. <br>
+        <br>
+        <b>Например:</b> <br>
+        &ensp; <sample><b>.{5,}..</b></sample> требует, чтобы префикс был длиной не менее 5 цифр, допуская изменение 2 цифр в конце.
+        ]]>
+    </string>
+    <string name="help_regex_preset_database_prefix">
+        <![CDATA[
+        Сопоставляет телефонные номера в базе данных по префиксу; префикс должен быть длиной не менее <minor><b>5</b></minor> цифр, допуская изменение <minor><b>2</b></minor> цифр в конце. <br>
+        <br>
+        <b>Например</b>: <br>
+        &ensp; Если <sample>12345678</sample><error>00</error> есть в базе данных, звонок с <sample>12345678</sample><error>99</error> также будет заблокирован.
+        ]]>
+    </string>
+    <string name="api_preset_remote_llm">Удаленная LLM</string>
+    <string name="help_api_preset_remote_llm">
+        <![CDATA[
+            Проверка содержимого SMS с помощью удаленных больших языковых моделей. <br>
+            <br>
+            Это предоставляется только в <warn>демонстрационных целях</warn>.<br>
+            <br>
+            Нажмите, чтобы открыть страницу wiki с инструкциями.
+        ]]>
+    </string>
+    <string name="found_existing_auth_token">Найден существующий токен аутентификации</string>
+    <string name="use_this_token">Использовать этот токен</string>
+    <string name="login_and_get_a_token">Зарегистрируйтесь и войдите на сайт, чтобы получить свой токен.</string>
+    <string name="get_a_new_token">Получить новый токен</string>
+    <string name="token">Токен</string>
+    <string name="enter_token_manually_desc">Если у вас уже есть токен, введите его вручную.</string>
+    <string name="enter_token_manually">Ввести токен вручную</string>
+    <string name="others">Другое</string>
+    <string name="api_settings">Настройки API</string>
+    <string name="include_settings">Включены в резервную копию</string>
+    <string name="exclude_settings">Исключены из резервной копии</string>
+    <string name="backup_missing_category">Этот параметр отсутствует в файле резервной копии и не может быть восстановлен.</string>
+    <string name="warning_priority_conflict">
+        <![CDATA[
+        <highlight>Правила белого списка</highlight> и <error>правила черного списка</error> не должны иметь одинаковый приоритет<br>
+        <br>
+        Конфликтующие правила:
+        ]]>
+    </string>
+    <string name="checking_template_new">%s Проверка: %s</string>
+    <string name="textbox_limit">Лимит текстового поля</string>
+    <string name="help_rule_textbox_limit">
+        <![CDATA[
+        Максимальное количество символов, разрешенное в поле ввода. Превышение этого лимита отключает редактирование,
+          так как слишком длинный текст приведет к зависанию интерфейса. <br>
+          <br>
+        По умолчанию: <b>10000</b> символов
+        ]]>
+    </string>
+    <string name="clear_history">Очистить историю</string>
+    <string name="tip_clear_history">Если приложение вылетает при запуске и не открывается, попробуйте очистить записи истории с помощью кнопки ниже.</string>
+    <string name="direct_verdict">Прямой вердикт</string>
+    <string name="formula">Формула</string>
+    <string name="strategy">Стратегия</string>
+    <string name="help_api_result_strategy">
+        <![CDATA[
+        <title>Прямой вердикт</title> <br>
+        Сервер возвращает явную категорию спама, что часто встречается в API-сервисах. <br>
+        <br>
+        Например, сервер возвращает: <br>
+        &ensp; <sample><no_translate>{ …, \"type\": \"fraud\", … }</no_translate></sample> <br>
+        Сопоставьте его с регулярным выражением: <br>
+        &ensp; <sample><no_translate>\"type\": \"(fraud|scam|political)\"</no_translate></sample> <br>
+        <br>
+        <title>Формула</title> <br>
+        Настройте собственную логику блокировки на основе количества положительных/отрицательных оценок, возвращаемых сервером. <br>
+        <br>
+        Например, блокировать, когда: <br>
+        &ensp; <sample><no_translate>(negative &gt; 5) &amp; (negative / positive &gt; 120%)</no_translate></sample> <br>
+        ]]>
+    </string>
+    <string name="hint_positive_identifier_strategy_formula">Например: (\\d+) положительно</string>
+    <string name="hint_negative_identifier_strategy_formula">Например: (\\d+) отрицательно</string>
+    <string name="help_positive_identifier_strategy_formula">
+        <![CDATA[
+        Это регулярное выражение используется для извлечения количества положительных оценок, требуется захватывающая группа, то есть он должен содержать
+         <sample>(</sample> и <sample>)</sample>, по умолчанию используется 0, если совпадение не найдено. <br>
+        <br>
+        Например: <br>
+        &ensp; <sample>(\\d+) положительно</sample>
+        ]]>
+    </string>
+    <string name="help_negative_identifier_strategy_formula">
+        <![CDATA[
+        Это регулярное выражение используется для извлечения количества отрицательных оценок, требуется захватывающая группа, то есть он должен содержать
+         <sample>(</sample> и <sample>)</sample>, по умолчанию используется 0, если совпадение не найдено. <br>
+        <br>
+        Например: <br>
+        &ensp; <sample>(\\d+) отрицательно</sample>
+        ]]>
+    </string>
+    <string name="positive_condition">Положительное условие</string>
+    <string name="negative_condition">Отрицательное условие</string>
+    <string name="help_positive_condition">
+        <![CDATA[
+        Номер будет <highlight>разрешен</highlight>, если это условие выполнено.
+        ]]>
+    </string>
+    <string name="help_negative_condition">
+        <![CDATA[
+        Номер будет <error>заблокирован</error>, если это условие выполнено.
+        ]]>
+    </string>
+    <string name="supported_formula_syntax" formatted="false">
+        <![CDATA[
+        <title>Поддерживаемый синтаксис</title> <br>
+        <minor>positive &ensp; p &ensp; negative &ensp; n</minor> <br>
+        &ensp; Заполнители, которые будут заменены фактическими числами оценок. <br>
+        <minor>+ &ensp; - &ensp; * &ensp; /</minor> <br>
+        &ensp; Основные математические операции (N/0=N) <br>
+        <minor>%</minor> <br>
+        &ensp; Процент <br>
+        <minor>&lt; &ensp; &gt; &ensp; &lt;= &ensp; &gt;=</minor> <br>
+        &ensp; Сравнения <br>
+        <minor>& &ensp; |</minor> <br>
+        &ensp; Логическое AND/OR <br>
+        <minor>( &ensp; )</minor> <br>
+        &ensp; Скобки <br>
+        <br>
+        <b>Примеры</b> <br>
+        &ensp; <sample>negative &gt; positive</sample> <br>
+        &ensp; <sample>P - N &gt; 5</sample> (без учета регистра) <br>
+        &ensp; <sample>p &gt; 3 & n &gt; 2 & (n / p &gt;= 120%)</sample> <br>
+        ]]>
+    </string>
+    <string name="missing_brackets">В регулярном выражении отсутствует захватывающая группа (), подробности см. во всплывающей подсказке.</string>
+    <string name="negative_identifier_matches">Совпадения отрицательного идентификатора</string>
+    <string name="positive_identifier_matches">Совпадения положительного идентификатора</string>
+    <string name="rating_count_template">Положительные оценки: %s, отрицательные оценки: %s</string>
+</resources>

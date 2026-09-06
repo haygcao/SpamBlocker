@@ -8,7 +8,6 @@
         %s
         ]]>
     </string>
-    <string name="invalid_auth_credentials">Veuillez saisir des informations d\'autorisation valides.</string>
     <string name="delay">Délai</string>
     <string name="report_number_require_call_log_permission">
         Pour éviter les faux signalements d\'appels répétés ou rappelés,
@@ -29,29 +28,36 @@
     </string>
     <string name="running_services">Services en cours d\'exécution</string>
     <string name="report_number">Signaler un numéro</string>
-    <string-array name="spam_categories">
-        <item>Numéro valide</item>
-        <item>Fraude</item>
-        <item>Marketing</item>
-        <item>Sondage</item>
-        <item>Politique</item>
-        <item>Autres spams</item>
-    </string-array>
+    <string name="valid_number">Numéro valide</string>
+    <string name="valid_sms">SMS valide</string>
+    <string name="fraud">Fraude</string>
+    <string name="promotional">Promotionnel</string>
+    <string name="survey">Sondage</string>
+    <string name="reminder">Rappel</string>
     <string name="action_category_config">Config. Catégorie</string>
     <string name="help_action_category_config">
         <![CDATA[
-        Seules les catégories de spams suivantes sont prises en charge ; toute autre catégorie de l\'API doit être mappée à l\'une d\'elles.<br>
-        <br>
-         - <font color="#03DAC5"><b>{valid}</b></font><br>
-        &ensp; Signaler comme numéro valide, pas un spam.<br>
-        <br>
-         - <font color="#fa7f71"><b>{fraud}</b></font><br>
-         - <font color="#fa7f71"><b>{marketing}</b></font><br>
-         - <font color="#fa7f71"><b>{survey}</b></font><br>
-         - <font color="#fa7f71"><b>{political}</b></font><br>
-        <br>
-         - <font color="#fa7f71"><b>{other}</b></font><br>
-        &ensp; Type de spam par défaut, utilisé lorsqu\'aucune des catégories ci-dessus ne s\'applique.<br>
+                Seules les catégories suivantes sont prises en charge :<br>
+                <br>
+                 - <highlight><b>{valid}</b></highlight><br>
+                &ensp; Signaler comme numéro de téléphone valide, pas comme appel indésirable.<br>
+                <br>
+                 - <error><b>{fraud}</b></error><br>
+                 - <error><b>{promotional}</b></error><br>
+                 - <error><b>{survey}</b></error><br>
+                 - <error><b>{reminder}</b></error><br>
+                 - <error><b>{other}</b></error><br>
+                &ensp; Le type d\'appel indésirable de secours, utilisé lorsqu\'aucune des catégories ci-dessus ne s\'applique.<br>
+                <br>
+                Cela génère la balise <title>{category}</title>, qui peut être utilisée dans les requêtes HTTP suivantes. <br>
+                <br>
+                Par exemple, corps POST : <br>
+                <sample>
+                { <br>
+                    &ensp; \"phone\": \"{number}\", <br>
+                    &ensp; \"rating\": \"{category}\" <br>
+                }
+                </sample>
         ]]>
     </string>
     <string name="missing_category">
@@ -76,20 +82,21 @@
         Certains services vous enverront d\'abord un SMS pour vous informer qu\'un appel est imminent, généralement dans la minute.<br>
         <br>
         Par exemple, un SMS comme :<br>
-        &ensp; <font color="#888888">[quelque service] Nous vous appelons pour vous informer…, n\'hésitez pas à répondre.</font><br>
+        &ensp; <sample>[quelque service] Nous vous appelons pour vous informer…, n\'hésitez pas à répondre.</sample><br>
         <br>
         Une expression régulière pour ce type de message serait :<br>
-        &ensp; <font color="#03DAC5"><b><translate>.*répondre.*</translate></b></font> <br>
+        &ensp; <highlight><b><translate>.*répondre.*</translate></b></highlight> <br>
         <br>
-        Le paramètre par défaut <font color="#03DAC5"><b>120 secondes</b></font> signifie que tous les appels seront
+        Le paramètre par défaut <highlight><b>120 secondes</b></highlight> signifie que tous les appels seront
         autorisés dans les deux minutes suivant la réception de ce message.<br>
         <br>
         Cela fonctionne pour les SMS réguliers et les SMS flash (SMS de classe 0).<br>
         <br>
-        <font color="#ea86ff"><b>Priorité : 10</b></font>
+        Cela fonctionne sans que le filtrage global des SMS soit activé.<br>
+        <br>
+        <priority><b>Priorité : 10</b></priority>
         ]]>
     </string>
     <string name="waning_using_wildcard_as_regex">Le caractère générique `*` est utilisé sans point précédent, vouliez-vous dire `.*` ?</string>
     <string name="import_as">Importer comme</string>
-    <string name="api_key">Clé API</string>
 </resources>

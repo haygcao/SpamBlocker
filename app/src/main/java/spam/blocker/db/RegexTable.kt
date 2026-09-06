@@ -5,7 +5,8 @@ import android.app.NotificationManager.IMPORTANCE_HIGH
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.text.appendInlineContent
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -28,28 +29,46 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonPrimitive
 import org.json.JSONObject
+import spam.blocker.G
+import spam.blocker.db.Db.Companion.COLUMN_BLOCK_TYPE
+import spam.blocker.db.Db.Companion.COLUMN_BLOCK_TYPE_CONFIG
+import spam.blocker.db.Db.Companion.COLUMN_CHANNEL_ID
+import spam.blocker.db.Db.Companion.COLUMN_DESC
+import spam.blocker.db.Db.Companion.COLUMN_FLAGS
+import spam.blocker.db.Db.Companion.COLUMN_ID
+import spam.blocker.db.Db.Companion.COLUMN_IS_BLACK
+import spam.blocker.db.Db.Companion.COLUMN_PATTERN
+import spam.blocker.db.Db.Companion.COLUMN_PATTERN_EXTRA
+import spam.blocker.db.Db.Companion.COLUMN_PATTERN_EXTRA_FLAGS
+import spam.blocker.db.Db.Companion.COLUMN_PATTERN_EXTRA_MODE_TYPE
+import spam.blocker.db.Db.Companion.COLUMN_PATTERN_FLAGS
+import spam.blocker.db.Db.Companion.COLUMN_PATTERN_MODE_TYPE
+import spam.blocker.db.Db.Companion.COLUMN_PRIORITY
+import spam.blocker.db.Db.Companion.COLUMN_SCHEDULE
+import spam.blocker.db.Db.Companion.COLUMN_SIM_SLOT
 import spam.blocker.db.Notification.CHANNEL_HIGH
 import spam.blocker.db.Notification.CHANNEL_LOW
 import spam.blocker.db.Notification.CHANNEL_NONE
 import spam.blocker.def.Def
-import spam.blocker.ui.theme.CustomColorsPalette
-import spam.blocker.ui.theme.DodgeBlue
-import spam.blocker.ui.theme.Salmon
+import spam.blocker.ui.lighten
+import spam.blocker.ui.setting.regex.RegexMode
+import spam.blocker.ui.setting.regex.RegexMode.ModeType
+import spam.blocker.ui.setting.regex.RegexMode.isForNumberRegexMode
+import spam.blocker.ui.setting.regex.RegexMode.regexModeByType
 import spam.blocker.util.PermissiveJson
 import spam.blocker.util.TimeSchedule
 import spam.blocker.util.Util
-import spam.blocker.util.Util.truncate
+import spam.blocker.util.enabledRegexFlagsStr
 import spam.blocker.util.hasFlag
 import spam.blocker.util.regexMatches
 import spam.blocker.util.setFlag
-import spam.blocker.util.toFlagStr
+import spam.blocker.util.truncate
 
 
 // v4.15 changed `importance`(Int) to `channel`(String), use this class for history compatibility
 // (Remove this after 2027-01-01)
 object CompatibleChannelSerializer : KSerializer<String> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("channel", PrimitiveKind.STRING)
-
     override fun serialize(encoder: Encoder, value: String) {
         encoder.encodeString(value)
     }
@@ -80,22 +99,22 @@ object CompatibleChannelSerializer : KSerializer<String> {
 @Serializable
 data class RegexRule(
     var id: Long = 0,
+
     var pattern: String = "",
+
+    var patternFlags: Int = Def.DefaultRegexFlags, // regex flags, e.g. Case Sensitive
+    var patternModeType: Int = ModeType.PhoneNumber, // PhoneNumber/ContactPrefix/Geolocation/...
 
     // for now, this is only used for ParticularNumber
     var patternExtra: String = "",
-
-//    @Serializable(with = CompatibleFlagSerializer::class)
-    var patternFlags: Int = Def.DefaultRegexFlags,
-//    @Serializable(with = CompatibleFlagSerializer::class)
-    var patternExtraFlags: Int = Def.DefaultRegexFlags,
+    var patternExtraFlags: Int = Def.DefaultRegexFlags, // regex flags, e.g. Case Sensitive
+    var patternExtraModeType: Int = ModeType.PhoneNumber, // PhoneNumber/ContactPrefix/Geolocation/...
 
     var description: String = "",
     var priority: Int = 0,
     var isBlacklist: Boolean = true,
 
-//    @Serializable(with = CompatibleFlagSerializer::class)
-    var flags: Int = Def.FLAG_FOR_SMS or Def.FLAG_FOR_CALL, // it applies to SMS or Call or both
+    var flags: Int = Def.FLAG_FOR_SMS or Def.FLAG_FOR_CALL, // applies to SMS or Call or both
 
     @Serializable(with = CompatibleChannelSerializer::class)
     var channel: String = if(isBlacklist) Def.DEF_SPAM_CHANNEL else CHANNEL_HIGH, // notification channel
@@ -107,11 +126,10 @@ data class RegexRule(
     var simSlot: Int? = null,
 ) {
 
-    fun summary(): String {
-        return if (description.isNotEmpty())
-            description
-        else
-            truncate(patternStr(), limit = 40)
+    fun descOrPattern(): String {
+        return description.ifEmpty {
+            patternStr().truncate(limit = 40)
+        }
     }
 
     // This function is only used for matching normal text like sms content or anything other than
@@ -140,74 +158,91 @@ data class RegexRule(
 
     fun patternStr(): String {
         return if (patternExtra != "")
-            "${truncate(pattern)}   <-   $patternExtra"
+            "${pattern.truncate()}   <-   $patternExtra"
         else
-            truncate(pattern)
+            pattern.truncate()
     }
 
     fun colorfulRegexStr(
         ctx: Context,
         forType: Int,
-        palette: CustomColorsPalette,
     ): AnnotatedString {
+        val C = G.palette
+
         val regexColor = if (forType == Def.ForQuickCopy) {
             // QuickCopy rule color is based on flags(passed/blocked)
             val passed = flags.hasFlag(Def.FLAG_FOR_PASSED)
             val blocked = flags.hasFlag(Def.FLAG_FOR_BLOCKED)
             if (passed && blocked)
-                DodgeBlue
+                lerp(C.success, C.error, 0.5f) // mix green + red -> poop yellow
             else if (!passed && !blocked)
-                palette.textGrey
+                C.textGrey
             else
-                if (passed) palette.textGreen else Salmon
+                if (passed) C.success else C.error
         } else
-            if (isBlacklist) Salmon else palette.textGreen
+            if (isBlacklist) C.error else C.success
 
         return buildAnnotatedString {
             // 1. Time schedule
             val sch = TimeSchedule.parseFromStr(schedule)
             if (sch.enabled) {
-                withStyle(style = SpanStyle(fontSize = 12.sp, color = palette.schedule)) {
+                withStyle(style = SpanStyle(fontSize = 12.sp, color = C.infoBlue.lighten(0.2f))) {
                     append(sch.toDisplayStr(ctx))
                     append("\n")
                 }
             }
 
-            // 2. imdlc
+            // 2. Regex modes
+            if (patternModeType.isForNumberRegexMode() && patternModeType != ModeType.PhoneNumber) {
+                val m = regexModeByType(patternModeType) as RegexMode.NumberMode
+                appendInlineContent(id = m.textPlaceholder)
+            }
+
+
+            // 3. Regex flags
             // format:
             //   imdl .*   <-   imdl particular.*
-            val imdlc = patternFlags.toFlagStr()
+            val imdlc = patternFlags.enabledRegexFlagsStr()
             withStyle(
                 style = SpanStyle(
                     fontSize = 12.sp,
-                    color = Color.Magenta
+                    color = C.regexFlags
                 )
             ) {
                 append(if (imdlc.isEmpty()) "" else "$imdlc ")
             }
 
-            // 3. regex
+            // 4. regex
             withStyle(style = SpanStyle(fontWeight = FontWeight.Bold, color = regexColor)) {
                 append(
                     // For old xml layout, when the TextView has maxLines=10, it will truncate the
                     //  rest content when it exceeds 10 lines, but the performance is very low for
                     //  super long string. So manually truncate it first.
                     // For jetpack compose Text, not tested yet ,
-                    truncate(pattern)
+                    pattern.truncate()
                 )
             }
 
-            // 4. Particular Number
+            // 5. Particular Number
             if (patternExtra != "") {
-                withStyle(style = SpanStyle(color = palette.textGrey/*old: LightGrey*/)) {
+                withStyle(style = SpanStyle(color = G.palette.textGrey/*old: LightGrey*/)) {
                     append("   <-   ")
                 }
 
-                val imdlcEx = patternExtraFlags.toFlagStr()
+                // 6. Regex mode (particular number)
+                if(patternExtraModeType != ModeType.PhoneNumber) {
+                    if (patternExtraModeType.isForNumberRegexMode() && patternExtraModeType != ModeType.PhoneNumber) {
+                        val m = regexModeByType(patternExtraModeType) as RegexMode.NumberMode
+                        appendInlineContent(id = m.textPlaceholder)
+                    }
+                }
+
+                // Regex Flags (particular number)
+                val imdlcEx = patternExtraFlags.enabledRegexFlagsStr()
                 withStyle(
                     style = SpanStyle(
                         fontSize = 12.sp,
-                        color = Color.Magenta
+                        color = C.regexFlags
                     )
                 ) {
                     append(if (imdlcEx.isEmpty()) "" else "$imdlcEx ")
@@ -237,121 +272,72 @@ fun defaultRegexRuleByType(forType: Int): RegexRule {
     }
 }
 
-fun newRegexRule(
-    id: Long,
-    pattern: String,
-    patternExtra: String,
-    patternFlags: Int,
-    patternExtraFlags: Int,
-    description: String,
-    priority: Int,
-    isBlacklist: Boolean,
-    flags: Int,
-    channel: String,
-    schedule: String,
-    blockType: Int,
-    blockTypeConfig: String,
-    simSlot: Int?,
-): RegexRule {
-    return RegexRule(
-        id = id,
-        pattern = pattern,
-        patternExtra = patternExtra,
-        patternFlags = patternFlags,
-        patternExtraFlags = patternExtraFlags,
-        description = description,
-        priority = priority,
-        isBlacklist = isBlacklist,
-        flags = flags,
-        channel = channel,
-        schedule = schedule,
-        blockType = blockType,
-        blockTypeConfig = blockTypeConfig,
-        simSlot = simSlot,
-    )
-}
 
 
-abstract class RegexTable {
+abstract class RegexTable(
+    private val tableNameStr: String
+) : BasicTable<RegexRule>(tableNameStr) {
 
-    abstract fun tableName(): String
-
-
-    fun count(ctx: Context): Int {
-        val db = Db.getInstance(ctx).readableDatabase
-        val sql = "SELECT COUNT(*) FROM ${tableName()} "
-
-        val cursor = db.rawQuery(sql, null)
-
-        var count = 0
-        cursor.use {
-            if (it.moveToFirst()) {
-                count = cursor.getInt(0)
-            }
-        }
-        return count
-    }
+    fun tableName(): String = tableNameStr
 
     @SuppressLint("Range")
-    private fun ruleFromCursor(it: Cursor): RegexRule {
+    override fun fromCursor(cursor: Cursor): RegexRule {
         return RegexRule(
-            id = it.getLong(it.getColumnIndex(Db.COLUMN_ID)),
-            pattern = it.getString(it.getColumnIndex(Db.COLUMN_PATTERN)),
-            patternExtra = it.getStringOrNull(it.getColumnIndex(Db.COLUMN_PATTERN_EXTRA)) ?: "",
-            patternFlags = it.getInt(it.getColumnIndex(Db.COLUMN_PATTERN_FLAGS)),
-            patternExtraFlags = it.getInt(it.getColumnIndex(Db.COLUMN_PATTERN_EXTRA_FLAGS)),
-            description = it.getString(it.getColumnIndex(Db.COLUMN_DESC)),
-            priority = it.getInt(it.getColumnIndex(Db.COLUMN_PRIORITY)),
-            isBlacklist = it.getInt(it.getColumnIndex(Db.COLUMN_IS_BLACK)) == 1,
-            flags = it.getInt(it.getColumnIndex(Db.COLUMN_FLAGS)),
-            channel = it.getStringOrNull(it.getColumnIndex(Db.COLUMN_CHANNEL_ID))
+            id = cursor.getLong(cursor.getColumnIndex(Db.COLUMN_ID)),
+            pattern = cursor.getString(cursor.getColumnIndex(Db.COLUMN_PATTERN)),
+            patternExtra = cursor.getStringOrNull(cursor.getColumnIndex(Db.COLUMN_PATTERN_EXTRA)) ?: "",
+            patternFlags = cursor.getInt(cursor.getColumnIndex(Db.COLUMN_PATTERN_FLAGS)),
+            patternExtraFlags = cursor.getInt(cursor.getColumnIndex(Db.COLUMN_PATTERN_EXTRA_FLAGS)),
+            patternModeType = cursor.getInt(cursor.getColumnIndex(Db.COLUMN_PATTERN_MODE_TYPE)),
+            patternExtraModeType = cursor.getInt(cursor.getColumnIndex(Db.COLUMN_PATTERN_EXTRA_MODE_TYPE)),
+            description = cursor.getString(cursor.getColumnIndex(Db.COLUMN_DESC)),
+            priority = cursor.getInt(cursor.getColumnIndex(Db.COLUMN_PRIORITY)),
+            isBlacklist = cursor.getInt(cursor.getColumnIndex(Db.COLUMN_IS_BLACK)) == 1,
+            flags = cursor.getInt(cursor.getColumnIndex(Db.COLUMN_FLAGS)),
+            channel = cursor.getStringOrNull(cursor.getColumnIndex(Db.COLUMN_CHANNEL_ID))
                 ?: Def.DEF_SPAM_CHANNEL,
-            schedule = it.getStringOrNull(it.getColumnIndex(Db.COLUMN_SCHEDULE)) ?: "",
-            blockType = it.getIntOrNull(it.getColumnIndex(Db.COLUMN_BLOCK_TYPE))
+            schedule = cursor.getStringOrNull(cursor.getColumnIndex(Db.COLUMN_SCHEDULE)) ?: "",
+            blockType = cursor.getIntOrNull(cursor.getColumnIndex(Db.COLUMN_BLOCK_TYPE))
                 ?: Def.DEF_BLOCK_TYPE,
-            blockTypeConfig = it.getStringOrNull(it.getColumnIndex(Db.COLUMN_BLOCK_TYPE_CONFIG))
+            blockTypeConfig = cursor.getStringOrNull(cursor.getColumnIndex(Db.COLUMN_BLOCK_TYPE_CONFIG))
                 ?: "",
-            simSlot = it.getIntOrNull(it.getColumnIndex(Db.COLUMN_SIM_SLOT)),
+            simSlot = cursor.getIntOrNull(cursor.getColumnIndex(Db.COLUMN_SIM_SLOT)),
         )
     }
 
-    @SuppressLint("Range")
-    fun findByFilter(ctx: Context, filterSql: String): List<RegexRule> {
-
-        val sql = "SELECT * FROM ${tableName()} $filterSql"
-
-        val ret: MutableList<RegexRule> = mutableListOf()
-
-        val db = Db.getInstance(ctx).readableDatabase
-        val cursor = db.rawQuery(sql, null)
-        cursor.use {
-            if (it.moveToFirst()) {
-                do {
-                    ret += ruleFromCursor(it)
-                } while (it.moveToNext())
-            }
-            return ret
+    override fun toContentValues(item: RegexRule, includeId: Boolean): ContentValues {
+        val cv = ContentValues()
+        if (includeId) {
+            cv.put(COLUMN_ID, item.id)
         }
+        cv.put(COLUMN_PATTERN, item.pattern)
+        cv.put(COLUMN_PATTERN_EXTRA, item.patternExtra)
+        cv.put(COLUMN_PATTERN_FLAGS, item.patternFlags)
+        cv.put(COLUMN_PATTERN_EXTRA_FLAGS, item.patternExtraFlags)
+        cv.put(COLUMN_PATTERN_MODE_TYPE, item.patternModeType)
+        cv.put(COLUMN_PATTERN_EXTRA_MODE_TYPE, item.patternExtraModeType)
+        cv.put(COLUMN_DESC, item.description)
+        cv.put(COLUMN_PRIORITY, item.priority)
+        cv.put(COLUMN_FLAGS, item.flags)
+        cv.put(COLUMN_IS_BLACK, if (item.isBlacklist) 1 else 0)
+        cv.put(COLUMN_CHANNEL_ID, item.channel)
+        cv.put(COLUMN_SCHEDULE, item.schedule)
+        cv.put(COLUMN_BLOCK_TYPE, item.blockType)
+        cv.put(COLUMN_BLOCK_TYPE_CONFIG, item.blockTypeConfig)
+        cv.put(COLUMN_SIM_SLOT, item.simSlot)
+        return cv
     }
 
-    @SuppressLint("Range")
-    fun findRuleById(ctx: Context, id: Long): RegexRule? {
-        val db = Db.getInstance(ctx).readableDatabase
-        val sql = "SELECT * FROM ${tableName()} WHERE ${Db.COLUMN_ID} = $id"
-
-        val cursor = db.rawQuery(sql, null)
-
-        cursor.use {
-            return if (it.moveToFirst()) {
-                ruleFromCursor(it)
-            } else {
-                null
-            }
-        }
+    fun findByPattern(ctx: Context, pattern: String): RegexRule? {
+        return listAll(
+            ctx,
+            whereClause = "$COLUMN_PATTERN = ?",
+            whereParams = arrayOf(pattern),
+            limit = 1
+        ).firstOrNull()
     }
 
-    @SuppressLint("Range")
-    fun findRuleByDesc(
+    fun findByDesc(
         ctx: Context,
         descPattern: String,
         descFlags: Int = Def.DefaultRegexFlags
@@ -367,10 +353,10 @@ abstract class RegexTable {
     fun listAll(
         ctx: Context,
     ): List<RegexRule> {
-        val sql =
-            " ORDER BY ${Db.COLUMN_PRIORITY} DESC, ${Db.COLUMN_DESC} ASC, ${Db.COLUMN_PATTERN} ASC"
-
-        return findByFilter(ctx, sql)
+        return listAll(
+            ctx,
+            orderBy = "$COLUMN_PRIORITY DESC, $COLUMN_DESC ASC, $COLUMN_PATTERN ASC"
+        )
     }
 
 
@@ -381,7 +367,7 @@ abstract class RegexTable {
         val db = Db.getInstance(ctx).readableDatabase
 
         val sql = "SELECT * FROM ${tableName()}" +
-                " GROUP BY ${Db.COLUMN_PATTERN}, ${Db.COLUMN_PATTERN_EXTRA}, ${Db.COLUMN_PATTERN_FLAGS}, ${Db.COLUMN_PATTERN_EXTRA_FLAGS}, ${Db.COLUMN_SCHEDULE}" +
+                " GROUP BY ${COLUMN_PATTERN}, ${COLUMN_PATTERN_EXTRA}, ${COLUMN_PATTERN_FLAGS}, ${COLUMN_PATTERN_EXTRA_FLAGS}, ${Db.COLUMN_SCHEDULE}" +
                 " HAVING COUNT(*) > 1"
 
         val cursor = db.rawQuery(sql, null)
@@ -389,11 +375,11 @@ abstract class RegexTable {
         cursor.use {
             if (it.moveToFirst()) {
                 do {
-                    val first = ruleFromCursor(it)
+                    val first = fromCursor(it)
 
                     val sql2 = """
                         SELECT * FROM ${tableName()}
-                        WHERE ${Db.COLUMN_PATTERN} = ? AND ${Db.COLUMN_PATTERN_EXTRA} = ? AND ${Db.COLUMN_PATTERN_FLAGS} = ? AND ${Db.COLUMN_PATTERN_EXTRA_FLAGS} = ? AND ${Db.COLUMN_SCHEDULE} = ?
+                        WHERE $COLUMN_PATTERN = ? AND $COLUMN_PATTERN_EXTRA = ? AND $COLUMN_PATTERN_FLAGS = ? AND $COLUMN_PATTERN_EXTRA_FLAGS = ? AND $COLUMN_SCHEDULE = ?
                         AND id != ?
                     """
                     val cursor2 = db.rawQuery(sql2, arrayOf(
@@ -407,7 +393,7 @@ abstract class RegexTable {
                     cursor2.use {
                         if (cursor2.moveToFirst()) {
                             do {
-                                ret += ruleFromCursor(cursor2)
+                                ret += fromCursor(cursor2)
                             } while (cursor2.moveToNext())
                         }
                     }
@@ -417,105 +403,11 @@ abstract class RegexTable {
         return ret
     }
 
-    fun addNewRule(ctx: Context, f: RegexRule): Long {
-        val db = Db.getInstance(ctx).writableDatabase
-        val cv = ContentValues()
-        cv.put(Db.COLUMN_PATTERN, f.pattern)
-        cv.put(Db.COLUMN_PATTERN_EXTRA, f.patternExtra)
-        cv.put(Db.COLUMN_PATTERN_FLAGS, f.patternFlags)
-        cv.put(Db.COLUMN_PATTERN_EXTRA_FLAGS, f.patternExtraFlags)
-        cv.put(Db.COLUMN_DESC, f.description)
-        cv.put(Db.COLUMN_PRIORITY, f.priority)
-        cv.put(Db.COLUMN_FLAGS, f.flags)
-        cv.put(Db.COLUMN_IS_BLACK, if (f.isBlacklist) 1 else 0)
-        cv.put(Db.COLUMN_CHANNEL_ID, f.channel)
-        cv.put(Db.COLUMN_SCHEDULE, f.schedule)
-        cv.put(Db.COLUMN_BLOCK_TYPE, f.blockType)
-        cv.put(Db.COLUMN_BLOCK_TYPE_CONFIG, f.blockTypeConfig)
-        cv.put(Db.COLUMN_SIM_SLOT, f.simSlot)
-
-        return db.insert(tableName(), null, cv)
-    }
-
-    fun addRuleWithId(ctx: Context, f: RegexRule) {
-        val db = Db.getInstance(ctx).writableDatabase
-        val cv = ContentValues()
-        cv.put(Db.COLUMN_ID, f.id)
-        cv.put(Db.COLUMN_PATTERN, f.pattern)
-        cv.put(Db.COLUMN_PATTERN_EXTRA, f.patternExtra)
-        cv.put(Db.COLUMN_PATTERN_FLAGS, f.patternFlags)
-        cv.put(Db.COLUMN_PATTERN_EXTRA_FLAGS, f.patternExtraFlags)
-        cv.put(Db.COLUMN_DESC, f.description)
-        cv.put(Db.COLUMN_PRIORITY, f.priority)
-        cv.put(Db.COLUMN_FLAGS, f.flags)
-        cv.put(Db.COLUMN_IS_BLACK, if (f.isBlacklist) 1 else 0)
-        cv.put(Db.COLUMN_CHANNEL_ID, f.channel)
-        cv.put(Db.COLUMN_SCHEDULE, f.schedule)
-        cv.put(Db.COLUMN_BLOCK_TYPE, f.blockType)
-        cv.put(Db.COLUMN_BLOCK_TYPE_CONFIG, f.blockTypeConfig)
-        cv.put(Db.COLUMN_SIM_SLOT, f.simSlot)
-
-        db.insert(tableName(), null, cv)
-    }
-
-    fun updateRuleById(ctx: Context, id: Long, f: RegexRule): Boolean {
-        val db = Db.getInstance(ctx).writableDatabase
-        val cv = ContentValues()
-        cv.put(Db.COLUMN_PATTERN, f.pattern)
-        cv.put(Db.COLUMN_PATTERN_EXTRA, f.patternExtra)
-        cv.put(Db.COLUMN_PATTERN_FLAGS, f.patternFlags)
-        cv.put(Db.COLUMN_PATTERN_EXTRA_FLAGS, f.patternExtraFlags)
-        cv.put(Db.COLUMN_DESC, f.description)
-        cv.put(Db.COLUMN_PRIORITY, f.priority)
-        cv.put(Db.COLUMN_FLAGS, f.flags)
-        cv.put(Db.COLUMN_IS_BLACK, if (f.isBlacklist) 1 else 0)
-        cv.put(Db.COLUMN_CHANNEL_ID, f.channel)
-        cv.put(Db.COLUMN_SCHEDULE, f.schedule)
-        cv.put(Db.COLUMN_BLOCK_TYPE, f.blockType)
-        cv.put(Db.COLUMN_BLOCK_TYPE_CONFIG, f.blockTypeConfig)
-        cv.put(Db.COLUMN_SIM_SLOT, f.simSlot)
-
-        return db.update(tableName(), cv, "${Db.COLUMN_ID} = $id", null) >= 0
-    }
-
-    fun deleteById(ctx: Context, id: Long): Boolean {
-        return deleteByIds(ctx, listOf(id))
-    }
-
-    fun deleteByIds(ctx: Context, ids: List<Long>): Boolean {
-        val db = Db.getInstance(ctx).writableDatabase
-        val sql = "DELETE FROM ${tableName()} WHERE ${Db.COLUMN_ID} IN (${ids.joinToString(",")})"
-        val cursor = db.rawQuery(sql, null)
-
-        return cursor.use {
-            it.moveToFirst()
-        }
-    }
-
-    fun clearAll(ctx: Context) {
-        val db = Db.getInstance(ctx).writableDatabase
-        val sql = "DELETE FROM ${tableName()}"
-        db.execSQL(sql)
-    }
 }
 
-open class NumberRegexTable : RegexTable() {
-    override fun tableName(): String {
-        return Db.TABLE_NUMBER_RULE
-    }
-}
-
-open class ContentRegexTable : RegexTable() {
-    override fun tableName(): String {
-        return Db.TABLE_CONTENT_RULE
-    }
-}
-
-open class QuickCopyRegexTable : RegexTable() {
-    override fun tableName(): String {
-        return Db.TABLE_QUICK_COPY_RULE
-    }
-}
+open class NumberRegexTable : RegexTable(Db.TABLE_NUMBER_RULE)
+open class ContentRegexTable : RegexTable(Db.TABLE_CONTENT_RULE)
+open class QuickCopyRegexTable : RegexTable(Db.TABLE_QUICK_COPY_RULE)
 
 fun ruleTableForType(forType: Int): RegexTable {
     return when (forType) {

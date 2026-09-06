@@ -19,9 +19,9 @@
         Tag ini terikat pada alur kerja dan akan dihapus secara otomatis ketika alur kerja dihapus. <br>
         <br>
         <b>Kasus penggunaan</b>: <br>
-        <font color="#888888">
+        <sample>
           &ensp; Dalam skenario pembaruan inkremental, variabel mirip pointer harus disimpan dan digunakan kembali pada run berikutnya.
-        </font>
+        </sample>
     ]]>
     </string>
     <string name="load_tag">Muat Tag</string>
@@ -45,13 +45,75 @@
         <br>
         <b>Opsi</b> <br>
         <br>
-        <font color="#00BFFF"><b>Tipe Penguraian</b></font> <br>
+        <title><b>Tipe Penguraian</b></title> <br>
         Uraikan nilai tag, ini mendukung regex dan xpath. <br>
         <br>
-        <font color="#00BFFF"><b>Nama Tag</b></font> <br>
+        <title><b>Nama Tag</b></title> <br>
         Nama tag yang akan dihasilkan. <br>
-        Misalnya, jika nama tag adalah <font color="#03DAC5">my_token</font>,
-         maka Anda dapat menggunakan <font color="#03DAC5">{my_token}</font> dalam kueri HTTP berikutnya. <br>
+        Misalnya, jika nama tag adalah <highlight>my_token</highlight>,
+         maka Anda dapat menggunakan <highlight>{my_token}</highlight> dalam kueri HTTP berikutnya. <br>
+    ]]>
+    </string>
+    <string name="max"><short>Maks</short></string>
+    <string name="exporting_database">
+    <![CDATA[
+        Mengekspor %s nomor dari basis data, ini mungkin memakan sekitar %s detik.
+    ]]>
+    </string>
+    <string name="time_color">Warna Waktu</string>
+    <string name="help_time_color">
+    <![CDATA[
+        Sorot stempel waktu dengan warna berbeda berdasarkan seberapa baru catatan tersebut. <br>
+        <br>
+        <b>Kasus penggunaan</b>: <br>
+        &ensp; <sample>Tinjau panggilan hari ini pada malam hari dengan memeriksa semua catatan yang memiliki stempel waktu biru. </sample>
+    ]]>
+    </string>
+    <string name="help_time_color_values">
+    <![CDATA[
+        Harus berupa <title><no_translate>today</no_translate></title> atau
+        angka yang diikuti <b><no_translate>min</no_translate></b>
+        (misalnya <title><no_translate>5min</no_translate></title>,
+        <title><no_translate>120min</no_translate></title>)
+    ]]>
+    </string>
+    <string name="invalid_value_see_tooltip">Nilai tidak valid, lihat tooltip untuk bantuan</string>
+    <string name="faq"><short>Tanya</short></string>
+    <string name="faq_priority">
+    <![CDATA[
+        Setiap filter memiliki nilai prioritasnya, sebagaimana istilahnya, menentukan urutan pemeriksaan panggilan. <br>
+        <br>
+        Secara Default, <br>
+        <br>
+        - <highlight>Whitelist rules</highlight> memiliki prioritas <priority>10</priority> <br>
+        &ensp; <sample>Contoh: Kontak, RepeatedCall, RecentApps, dll </sample><br>
+        <br>
+        - <error>Blacklist rules</error> memiliki prioritas <priority>0</priority> <br>
+        &ensp; <sample>Contoh: STIR, Database, dll </sample> <br>
+        <br>
+        Ketika keduanya diaktifkan, aturan whitelist akan menggantikan aturan blacklist karena 10 > 0. <br>
+        <br>
+        Untuk aturan regex, prioritas dapat diatur ke angka berapa pun antara <priority>-2147483648</priority>
+          dan <priority>2147483647</priority>. <br>
+        Berbagai aturan dapat memiliki prioritas yang sama selama mereka bertipe sama, namun,
+          <warn><b>jangan pernah memberikan prioritas yang sama kepada
+          whitelist dan blacklist rules</b></warn>, karena dapat menyebabkan perilaku acak. <br>
+        <br>
+        Fitur <title>Meeting Mode</title> memiliki prioritas <priority>20</priority> secara default,
+          karena seharusnya memblokir semua panggilan selama rapat. <br>
+        Dan <priority>-1</priority> untuk <title>Instant Query</title>,
+          sehingga hanya diperiksa setelah panggilan melewati semua filter lokal. <br>
+        <br>
+        <b>Contoh penggunaan</b> penyesuaian prioritas: <br>
+        <br>
+        - <sample>Selalu blokir nomor tertentu, tidak peduli apakah berulang</sample> <br>
+         &ensp; Atur aturan dengan prioritas > 10 untuk menggantikan <title>Repeated Call</title>. <br>
+        <br>
+        - <sample>Selalu izinkan nomor</sample> <br>
+         &ensp; Atur menjadi > 20 untuk menggantikan <title>Meeting Mode</title>. <br>
+        <br>
+        - <sample>Uji aturan regex</sample> <br>
+         &ensp; Atur menjadi 999 untuk menggantikan semua filter lain sehingga Anda tidak perlu menonaktifkannya satu per satu secara sementara.
     ]]>
     </string>
 </resources>

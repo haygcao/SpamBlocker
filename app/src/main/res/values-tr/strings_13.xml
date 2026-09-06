@@ -10,7 +10,8 @@
     <string name="parsed_n_rules">%s kural çözümlendi.</string>
     <string name="add_n_numbers_to_spam_db">Spam veritabanına %s numara ekleniyor.</string>
     <string name="nothing_to_import">Numara listesi boş, içe aktarılacak hiçbir şey yok.</string>
-    <string name="importing_n_numbers">%s numara regex kuralı olarak içe aktarılıyor.</string>
+    <string name="importing_n_numbers">%s numara içe aktarılıyor.</string>
+    <string name="importing_n_rules">%s kural içe aktarılıyor.</string>
     <string name="create_rule_with_numbers">%s numara ile kural oluşturuluyor.</string>
     <string name="replace_rule_with_desc">Kural, açıklaması: %s ile değiştiriliyor.</string>
     <string name="rule_with_desc_not_found">Açıklaması %s olan kural bulunamadı.</string>
@@ -20,8 +21,8 @@
     <string name="find_rule_with_desc">Açıklaması %s olan %s kural bulundu.</string>
     <string name="modify_n_rules">%s kural değiştiriliyor.</string>
     <string name="fail_detect_cc">Ülke kodu tespit edilemedi.</string>
-    <string name="identified_as_spam">Spam numarası olarak tanımlandı, kategori: %s.</string>
-    <string name="identified_as_valid">Geçerli numara olarak tanımlandı, kategori: %s.</string>
+    <string name="identified_as_spam">Spam numarası olarak tanımlandı, kategori: %s, yorum: %s.</string>
+    <string name="identified_as_valid">Geçerli numara olarak tanımlandı, kategori: %s, yorum: %s.</string>
     <string name="unidentified_number">Tanımlanamayan numara.</string>
     <string name="help_http_url">
         <![CDATA[
@@ -33,12 +34,15 @@
         ]]>
     </string>
     <string name="number_not_match_filter">%s numarası %s filtresine uymuyor, atlanıyor.</string>
+    <string name="content_not_match_filter">İçerik filtreye uymuyor, atlanıyor.</string>
     <string name="api_preset_phoneblock"><no_translate>PhoneBlock 🇩🇪 🌐</no_translate></string>
     <string name="help_api_preset_phoneblock">
         <![CDATA[
         Öncelikle Alman FRITZ!Box için tasarlanmıştır, ancak diğer ülkelerden gelen telefon numaraları için de çalışır.<br>
         <br>
-        Numaranın kendisi yerine karma ile sorguyu destekler, daha iyi gizlilik sağlar.<br>
+        <b>Öne çıkanlar</b>: <br>
+        - Gerçek telefon numarası yerine <highlight>karma ile sorgular</highlight>, daha iyi gizlilik sağlar. <br>
+        - Tam numara bulunamadığında son iki basamağı yok sayarak <highlight>aralık tabanlı algılama</highlight> kullanır. <br>
         <br>
         Web sitesi: <a href="https://phoneblock.net">https://phoneblock.net</a><br>
         <br>
@@ -53,83 +57,79 @@
         ]]>
     </string>
     <string name="canceling_thread">İşlem iptal ediliyor.</string>
-    <string name="help_api_preset_phoneblock_authorization">
-        <![CDATA[
-        1. <a href="https://phoneblock.net/phoneblock/login">https://phoneblock.net/phoneblock/login</a> adresinden hesap oluşturun.<br>
-        <br>
-        2. Ayarlar sayfasında: <a href="https://phoneblock.net/phoneblock/settings">https://phoneblock.net/phoneblock/settings</a>, \"API anahtarı oluştur\" düğmesine basın.<br>
-        <br>
-        3. Oluşturulan API anahtarını aşağıya girin.
-        ]]>
-    </string>
     <string name="auto_detect_cc_permission">Ülke kodunu algılamak için READ_PHONE_STATE izni gereklidir.</string>
     <string name="suggest_to_swipe">
         <![CDATA[
-        Silmek için <font color="#03DAC5"><b>sola kaydırın</b></font>.<br>
+        Silmek için <highlight><b>sola kaydırın</b></highlight>.<br>
         <br>
         Bu uygulamadaki çoğu kart benzeri UI öğesi kaydırma hareketleriyle ilişkilendirilmiştir,
-        bazıları da <font color="#03DAC5"><b>sağa kaydırmayı</b></font> destekler, örneğin geçmiş kayıtları.
+        bazıları da <highlight><b>sağa kaydırmayı</b></highlight> destekler, örneğin geçmiş kayıtları.
         ]]>
     </string>
-    <string name="bug_number">Bu geçerli bir numara ise lütfen github\'da bildirin.</string>
+    <string name="bug_number">Bu geçerli bir numara ise lütfen GitHub\'da bildirin.</string>
     <string name="number_tags">
         <![CDATA[
-        - <font color="#00BFFF"><b><no_translate>{cc}</no_translate></b></font><br>
+        - <title><b><no_translate>{cc}</no_translate></b></title><br>
         &ensp; Ülke kodu.<br>
-        - <font color="#00BFFF"><b><no_translate>{domestic}</no_translate></b></font><br>
+        - <title><b><no_translate>{domestic}</no_translate></b></title><br>
         &ensp; Yurtiçi kısım.<br>
-        - <font color="#00BFFF"><b><no_translate>{number}</no_translate></b></font><br>
+        - <title><b><no_translate>{number}</no_translate></b></title><br>
         &ensp; Başındaki + veya 0\'lar olmadan, ülke kodu ve yurtiçi kısmı dahil olmak üzere tam numara.<br>
-        - <font color="#00BFFF"><b><no_translate>{origin_number}</no_translate></b></font><br>
+        - <title><b><no_translate>{raw_number}</no_translate></b></title><br>
         &ensp; Başında + veya 0\'lar içerebilen orijinal numara.<br>
         ]]>
     </string>
     <string name="time_tags">
         <![CDATA[
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {year}<br>
           {month}<br>
           {day}<br>
           {hour}<br>
           {minute}<br>
           {second}<br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; Tek haneli sayılar başına sıfır eklenerek doldurulur, örn: <br>
-        &emsp; <font color="#888888"><no_translate>{year}-{month}-{day} {hour}:{minute}:{second}</no_translate></font> <br>
+        &emsp; <sample><no_translate>{year}-{month}-{day} {hour}:{minute}:{second}</no_translate></sample> <br>
         &emsp; şuna dönüşür <br>
-        &emsp; <font color="#888888">2020-01-22 03:44:05</font><br>
+        &emsp; <sample>2020-01-22 03:44:05</sample><br>
         <br>
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {month_index} <br>
           {day_index} <br>
           {hour_index} <br>
           {minute_index} <br>
           {second_index} <br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; Bu değerlere dolgu eklenmez, örn: <br>
-        &emsp; <font color="#888888"><no_translate>{month_index}-{day_index}</no_translate></font> <br>
+        &emsp; <sample><no_translate>{month_index}-{day_index}</no_translate></sample> <br>
         &emsp; şuna dönüşür <br>
-        &emsp; <font color="#888888">1-2</font><br>
+        &emsp; <sample>1-2</sample><br>
         <br>
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {day_of_week} <br>
           {day_of_week_index} <br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; Bunlar, örneğin bir rotasyon programını simüle etmek için kullanılabilir: <br>
-        &emsp; <font color="#888888">Günlük yedeklemeler yapın ve yalnızca en son yedi yedeklemeyi saklayın.</font> <br>
+        &emsp; <sample>Günlük yedeklemeler yapın ve yalnızca en son yedi yedeklemeyi saklayın.</sample> <br>
         <br>
-        <font color="#ffa500"><b>Not:</b></font><br>
+        <warn><b>Not:</b></warn><br>
          Bu zaman etiketleri, gibi basit aritmetik işlemleri destekler
-          <font color="#00BFFF"><b><no_translate>{day-1}</no_translate></b></font>
+          <title><b><no_translate>{day-1}</no_translate></b></title>
          ve
-          <font color="#00BFFF"><b><no_translate>{hour+2}</no_translate></b></font>.
+          <title><b><no_translate>{hour+2}</no_translate></b></title>.
         ]]>
     </string>
-    <string name="skip_alpha_empty_number">Alfabetik veya boş numara atlanıyor.</string>
     <string name="sms_tags">
         <![CDATA[
-        - <font color="#00BFFF"><b>{sms}</b></font><br>
+        - <title><b>{sms}</b></title><br>
         &ensp; SMS içeriği.<br>
+        ]]>
+    </string>
+    <string name="escape_tags">
+        <![CDATA[
+        - <title><b><no_translate>{escape(…)}</no_translate></b></title><br>
+        &ensp; Parantez içindeki içeriği kaçırın, alıntı işaretleri içindeki içerik için kullanılır. <br>
         ]]>
     </string>
 </resources>

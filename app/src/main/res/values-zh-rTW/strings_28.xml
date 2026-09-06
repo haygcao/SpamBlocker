@@ -1,0 +1,151 @@
+<resources>
+    <string name="perm_access_dir">存取資料夾</string>
+    <string name="dir_not_specified">未指定資料夾。</string>
+    <string name="no_access_to_dir">無法存取資料夾：%s。</string>
+    <string name="grant_access_to_dir">
+        <![CDATA[
+        授予資料夾存取權限：<br>
+        <highlight>%s</highlight>
+        ]]>
+    </string>
+    <string name="comment">備註</string>
+    <string name="database_prefix">資料庫前綴</string>
+    <string name="help_regex_mode_database_prefix">
+        <![CDATA[
+        <title><b>資料庫前綴</b></title>:<br>
+        &ensp; 對資料庫中的電話號碼進行範圍封鎖。<br>
+        <br>
+        <warn>此正規表示式必須以點號結尾</warn>，在此正則模式下，這些結尾的點號表示可變數字。 <br>
+        <br>
+        <b>例如：</b> <br>
+        &ensp; <sample><b>.{5,}..</b></sample> 要求前綴至少為 5 位數字，同時允許末尾有 2 位數字的變化。
+        ]]>
+    </string>
+    <string name="help_regex_preset_database_prefix">
+        <![CDATA[
+        按前綴比對資料庫中的電話號碼，前綴必須至少為 <minor><b>5</b></minor> 位數字，同時允許末尾有 <minor><b>2</b></minor> 位數字的變化。 <br>
+        <br>
+        <b>例如</b>: <br>
+        &ensp; 如果 <sample>12345678</sample><error>00</error> 存在於資料庫中，則來自 <sample>12345678</sample><error>99</error> 的來電也會被封鎖。
+        ]]>
+    </string>
+    <string name="api_preset_remote_llm">遠端 LLM</string>
+    <string name="help_api_preset_remote_llm">
+        <![CDATA[
+            使用遠端大型語言模型檢查簡訊內容。 <br>
+            <br>
+            此功能僅供<warn>示範用途</warn>。<br>
+            <br>
+            點擊以開啟 Wiki 頁面查看說明。
+        ]]>
+    </string>
+    <string name="found_existing_auth_token">找到現有的驗證權杖</string>
+    <string name="use_this_token">使用此權杖</string>
+    <string name="login_and_get_a_token">註冊並登入網站，然後取得你的權杖。</string>
+    <string name="get_a_new_token">取得新權杖</string>
+    <string name="token">權杖</string>
+    <string name="enter_token_manually_desc">如果你已有權杖，請手動輸入。</string>
+    <string name="enter_token_manually">手動輸入權杖</string>
+    <string name="others">其他</string>
+    <string name="api_settings">API 設定</string>
+    <string name="include_settings">包含設定</string>
+    <string name="exclude_settings">排除設定</string>
+    <string name="backup_missing_category">此設定在備份檔案中缺失，無法還原。</string>
+    <string name="warning_priority_conflict">
+        <![CDATA[
+        <highlight>白名單</highlight>和<error>黑名單</error>規則不應具有相同的優先權<br>
+        <br>
+        衝突的規則：
+        ]]>
+    </string>
+    <string name="checking_template_new">%s 正在檢查：%s</string>
+    <string name="textbox_limit">文字方塊限制</string>
+    <string name="help_rule_textbox_limit">
+        <![CDATA[
+        輸入框允許的最大字元數。超過此限制將停用編輯，
+          因為過長的文字會導致介面凍結。 <br>
+          <br>
+        預設值：<b>10000</b> 個字元
+        ]]>
+    </string>
+    <string name="clear_history">清除歷史記錄</string>
+    <string name="tip_clear_history">如果應用程式在啟動時閃退且無法開啟，請嘗試使用下方按鈕清除歷史記錄日誌。</string>
+    <string name="direct_verdict">直接判定</string>
+    <string name="formula">公式</string>
+    <string name="strategy">策略</string>
+    <string name="help_api_result_strategy">
+        <![CDATA[
+        <title>直接判定</title> <br>
+        伺服器會回傳明確的騷擾電話類別，這在 API 服務中很常見。 <br>
+        <br>
+        例如，伺服器回傳： <br>
+        &ensp; <sample><no_translate>{ …, \"type\": \"fraud\", … }</no_translate></sample> <br>
+        使用正規表示式比對： <br>
+        &ensp; <sample><no_translate>\"type\": \"(fraud|scam|political)\"</no_translate></sample> <br>
+        <br>
+        <title>公式</title> <br>
+        你可以基於伺服器回傳的正面/負面評分數量，來自訂攔截邏輯。 <br>
+        <br>
+        例如，當滿足以下條件時攔截： <br>
+        &ensp; <sample><no_translate>(negative &gt; 5) &amp; (negative / positive &gt; 120%)</no_translate></sample> <br>
+        ]]>
+    </string>
+    <string name="hint_positive_identifier_strategy_formula">例如：(\\d+) 正面</string>
+    <string name="hint_negative_identifier_strategy_formula">例如：(\\d+) 負面</string>
+    <string name="help_positive_identifier_strategy_formula">
+        <![CDATA[
+        此正規表示式用於提取正面評分數量，必須包含一個擷取群組，也就是它應包含
+         <sample>(</sample> 和 <sample>)</sample>，如果找不到符合項則預設為 0。 <br>
+        <br>
+        例如：<br>
+        &ensp; <sample>(\\d+) 正面</sample>
+        ]]>
+    </string>
+    <string name="help_negative_identifier_strategy_formula">
+        <![CDATA[
+        此正規表示式用於提取負面評分數量，必須包含一個擷取群組，也就是它應包含
+         <sample>(</sample> 和 <sample>)</sample>，如果找不到符合項則預設為 0。 <br>
+        <br>
+        例如：<br>
+        &ensp; <sample>(\\d+) 負面</sample>
+        ]]>
+    </string>
+    <string name="positive_condition">正面條件</string>
+    <string name="negative_condition">負面條件</string>
+    <string name="help_positive_condition">
+        <![CDATA[
+        如果符合此條件，號碼將被<highlight>允許</highlight>。
+        ]]>
+    </string>
+    <string name="help_negative_condition">
+        <![CDATA[
+        如果符合此條件，號碼將被<error>封鎖</error>。
+        ]]>
+    </string>
+    <string name="supported_formula_syntax" formatted="false">
+        <![CDATA[
+        <title>支援的語法</title> <br>
+        <minor>positive &ensp; p &ensp; negative &ensp; n</minor> <br>
+        &ensp; 佔位符，會被替換為實際評分數量。 <br>
+        <minor>+ &ensp; - &ensp; * &ensp; /</minor> <br>
+        &ensp; 基礎數學運算 (N/0=N) <br>
+        <minor>%</minor> <br>
+        &ensp; 百分比 <br>
+        <minor>&lt; &ensp; &gt; &ensp; &lt;= &ensp; &gt;=</minor> <br>
+        &ensp; 比較 <br>
+        <minor>& &ensp; |</minor> <br>
+        &ensp; 邏輯 AND/OR <br>
+        <minor>( &ensp; )</minor> <br>
+        &ensp; 括號 <br>
+        <br>
+        <b>範例</b> <br>
+        &ensp; <sample>negative &gt; positive</sample> <br>
+        &ensp; <sample>P - N &gt; 5</sample>（不區分大小寫）<br>
+        &ensp; <sample>p &gt; 3 & n &gt; 2 & (n / p &gt;= 120%)</sample> <br>
+        ]]>
+    </string>
+    <string name="missing_brackets">正規表示式缺少擷取群組 ()，詳情請查看提示。</string>
+    <string name="negative_identifier_matches">負面識別匹配</string>
+    <string name="positive_identifier_matches">正面識別匹配</string>
+    <string name="rating_count_template">正面評分：%s，負面評分：%s</string>
+</resources>

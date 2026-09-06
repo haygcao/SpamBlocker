@@ -2,6 +2,7 @@ package spam.blocker
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -23,11 +24,10 @@ class Event {
     @Composable
     fun Listen(callback: Lambda1<Any?>) {
         val lifecycleOwner = LocalLifecycleOwner.current
+        val latestCallback = rememberUpdatedState(callback)
 
-        // To prevent the event bound multiple times during multiple recompositions.
-        DisposableEffect(Unit) {
-            val observer : Observer<Any?> = Observer { callback(it) }
-
+        DisposableEffect(lifecycleOwner) {
+            val observer: Observer<Any?> = Observer { latestCallback.value(it) }
             liveData.observe(lifecycleOwner, observer)
 
             onDispose {
@@ -55,9 +55,6 @@ object Events {
 
     // An event triggered when regex rule list is updated, maybe triggered by Workflow
     val regexRuleUpdated = Event()
-
-    // An event triggered when push alert list is updated
-    val pushAlertUpdated = Event()
 
     // An event triggered when one or multiple Bot is updated, maybe triggered by Workflow
     val botUpdated = Event()

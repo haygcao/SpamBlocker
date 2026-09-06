@@ -1,13 +1,13 @@
 <resources>
     <string name="help_instant_query">
         <![CDATA[
-        Fragt die eingehende Nummer online in Echtzeit ab. <br>
+        Abfrage der eingehenden Nummer online in Echtzeit. <br>
         <br>
-        Mehrere API-Endpunkte werden gleichzeitig abgefragt, wobei das erste erhaltene Ergebnis verwendet und alle späteren Ergebnisse ignoriert werden. <br>
+        Mehrere API-Endpunkte werden gleichzeitig abgefragt, wobei das zuerst erhaltene Ergebnis verwendet und alle späteren Ergebnisse ignoriert werden. <br>
         <br>
-        Es hat standardmäßig die niedrigste Priorität, was bedeutet, dass es nur ausgelöst wird, wenn der Anruf alle anderen Regeln erfüllt.<br>
+        Sie hat standardmäßig die niedrigste Priorität, das heißt, sie wird erst ausgelöst, nachdem der Anruf alle lokalen Regeln durchlaufen hat.<br>
         <br>
-        <font color="#ea86ff"><b>Standardpriorität: -1</b></font>
+        <priority><b>Standardpriorität: -1</b></priority>
         ]]>
     </string>
     <string name="instant_query">Sofortige Abfrage</string>
@@ -35,23 +35,18 @@
     </string>
     <string name="help_category_identifier">
         <![CDATA[
-        Extrahieren Sie die <font color="#00BFFF">Kategorie</font> und <font color="#00BFFF">Kommentare</font>
-         aus dem Abfrageergebnis und zeigen Sie diese in der Benachrichtigung und dem Verlaufsprotokoll an. (optional)<br>
+        Extrahieren Sie die <title>Kategorie</title> aus dem Abfrageergebnis, um sie in der Benachrichtigung und dem Verlaufsprotokoll anzuzeigen. (optional)<br>
         <br>
         Zum Beispiel für dieses Abfrageergebnis: <br>
-        <font color="#888888">
+        <sample>
         { <br>
           &ensp; \"type\": \"MARKETING\", <br>
-          &ensp; \"comments\": \"Better call Saul\", <br>
           &ensp;  … <br>
         } <br>
-        </font>
+        </sample>
         <br>
-        - Nur die <font color="#00BFFF">Kategorie</font> extrahieren: <br>
-        &ensp; <font color="#888888">\"type\": \"(.+?)\"</font> <br>
-        <br>
-        - Sowohl die <font color="#00BFFF">Kategorie</font> als auch die <font color="#00BFFF">Kommentare</font> extrahieren: <br>
-        &ensp; <font color="#888888">(?:\"type\":\"(.+?)\"|\"comments\":\"(.+?)\")</font><br>
+        Extrahieren Sie sie mit: <br>
+        &ensp; <sample>\"type\": \"(.+?)\"</sample> <br>
         ]]>
     </string>
     <string name="action_parse_query_result">Ergebnis parsen</string>
@@ -62,22 +57,14 @@
         Ein zusätzliches Regex kann verwendet werden, um die Spam-Kategorie zu extrahieren (optional).
         ]]>
     </string>
-    <string name="action_intercept_call">Anruf abfangen</string>
-    <string name="help_action_intercept_call">
+    <string name="action_parse_incoming_number">Nummer parsen</string>
+    <string name="help_action_parse_incoming_number">
         <![CDATA[
-        Die eingehende Rufnummer wird abgefangen und in verschiedene Tags zerlegt:<br>
+        Die Nummer des eingehenden Anrufs wird in verschiedene Tags geparst:<br>
         <br>
         %s
         <br>
-        Diese Tags werden verwendet, um die HTTP-URL zu erstellen, zum Beispiel:<br>
-        <br>
-        1. Für internationale Nummern wie <b>+122222</b> sind diese beiden äquivalent:<br>
-        - https://test.com/number=<b>{number}</b><br>
-        - https://test.com/number=<b>{cc}{domestic}</b><br>
-        Es wird geparst zu:<br>
-        https://test.com/number=<b>122222</b><br>
-        <br>
-        2. Für inländische Nummern wie <b>12345</b> müssen Sie die Landesvorwahl in den Einstellungen angeben oder die App diese automatisch erkennen lassen.<br>
+        Diese Tags können in nachfolgenden HTTP-Anfragen verwendet werden.<br>
         ]]>
     </string>
     <string name="query_api">Abfrage-API</string>
@@ -89,27 +76,36 @@
         Dieser Regex filtert die Nummern entsprechend. Eingehende Nummern, die nicht mit diesem Regex übereinstimmen, werden nicht geprüft.<br>
         <br>
         - Nur <b>internationale Nummern</b> prüfen:<br>
-        &ensp; <font color="#03DAC5"><b>\\+.*</b></font><br>
+        &ensp; <highlight><b>\\+.*</b></highlight><br>
         <br>
         - Nur <b>nationale Nummern</b> prüfen:<br>
-        &ensp; <font color="#03DAC5"><b>0{1,2}.*</b></font><br>
+        &ensp; <highlight><b>0{1,2}.*</b></highlight><br>
         <br>
         - <b>Jede Nummer</b> prüfen:<br>
-        &ensp; <font color="#03DAC5"><b>.*</b></font>
+        &ensp; <highlight><b>.*</b></highlight>
         ]]>
     </string>
-    <string name="checking_template">Prüfe: %s, Priorität: %s</string>
+    <string name="content_filter">Inhaltfilter</string>
+    <string name="help_content_filter">
+        <![CDATA[
+        Obwohl die SMS-Regeln diesen Inhalt bereits gefiltert haben, können Sie diesen zusätzlichen Filter verwenden, um ihn weiter einzugrenzen.
+        ]]>  
+    </string>
     <string name="skip_for_testing">Zum Testen überspringen.</string>
     <string name="allowed_by">Zulässig durch: %s</string>
-    <string name="blocked_by">Blockiert durch: %s</string>
-    <string name="outside_time_schedule">Außerhalb des Zeitplans, überspringen.</string>
+    <string name="blocked_by_template">Blockiert durch: %s</string>
     <string name="android_ver_lower_than_11">Android-Version ist niedriger als 11, überspringen.</string>
     <string name="query">Abfrage</string>
     <string name="report_api">Melde-API</string>
-    <string name="action_intercept_sms">SMS abfangen</string>
-    <string name="help_action_intercept_sms">
+    <string name="action_parse_incoming_sms">SMS parsen</string>
+    <string name="help_action_parse_incoming_sms">
         <![CDATA[
-        Die eingehende SMS wird abgefangen und der Inhalt wird in das Tag <b>{sms}</b> geparst, das von den folgenden Aktionen verwendet werden kann.
+        Der Inhalt der eingehenden SMS wird in die folgenden Tags geparst, um sie in nachfolgenden HTTP-Anfragen zu verwenden: <br>
+        <br>
+        %s
+        <br>
+        - <title><b>{sms_content}</b></title> <br>
+        &ensp; Der SMS-Inhalt
         ]]>
     </string>
 </resources>

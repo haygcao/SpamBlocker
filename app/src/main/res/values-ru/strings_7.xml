@@ -1,16 +1,14 @@
 <resources>
     <string name="start_time">Время начала</string>
     <string name="end_time">Время окончания</string>
-    <string name="switch_mode">Переключить режим</string>
+    <string name="regex_mode">Режим рег. выражения</string>
     <string name="contact_group">Группа контактов</string>
-    <string name="text_too_long">Текст слишком длинный, редактирование отключено</string>
-    <string name="follow_system"><short>Следовать системе</short></string>
+    <string name="text_too_long">Текст превышает %s символов, редактирование отключено по причинам производительности. Чтобы увеличить лимит:</string>
+    <string name="increase_text_limit">Удерживайте правило -> Настройки -> Лимит текстового поля</string>
+    <string name="system"><short>Система</short></string>
     <string name="theme">Тема</string>
-    <string-array name="theme_list">
-        <item>Светлая</item>
-        <item>Темная</item>
-    </string-array>
     <string-array name="rule_dropdown_menu">
+        <item>Экспорт</item>
         <item>Найти правило</item>
         <item>Клонировать правило</item>
         <item>Удалить правило</item>
@@ -26,26 +24,26 @@
     </string>
     <string name="help_regex_mode_phone_number">
         <![CDATA[
-        <font color="#00BFFF"><b>Номер телефона</b></font>:<br>
+        <title><b>Номер телефона</b></title>:<br>
         &ensp; Режим по умолчанию, регулярное выражение будет сопоставляться с номером телефона.<br>
         ]]>
     </string>
     <string name="help_regex_mode_contact">
         <![CDATA[
-        <font color="#00BFFF"><b>Контакты</b></font>:<br>
+        <title><b>Контакты</b></title>:<br>
         &ensp; Регулярное выражение будет сопоставляться с именем контакта, связанным с входящим номером.<br>
         &ensp;  - Пример использования:<br>
-        &emsp; <font color="#888888">Блокировать все неконтакты на выходных с помощью регулярного выражения `.*`. </font><br>
+        &emsp; <sample>Блокировать все неконтакты на выходных с помощью регулярного выражения `.*`. </sample><br>
         ]]>
     </string>
     <string name="help_regex_mode_contact_group">
         <![CDATA[
-        <font color="#00BFFF"><b>Группа контактов</b></font>:<br>
+        <title><b>Группа контактов</b></title>:<br>
         &ensp; Регулярное выражение будет сопоставляться с названием группы контактов, связанной с входящим номером,
                  затрагивая все контакты в этой группе, поэтому вам не нужно добавлять их по отдельности,
                  и нет необходимости обновлять его даже при кадровых изменениях.<br>
         &ensp;  - Пример использования:<br>
-        &emsp; <font color="#888888">Блокировать всех коллег на выходных, заблокировав группу контактов «работа». </font> <br>
+        &emsp; <sample>Блокировать всех коллег на выходных, заблокировав группу контактов «работа». </sample> <br>
         ]]>
     </string>
 </resources>

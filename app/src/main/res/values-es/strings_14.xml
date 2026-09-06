@@ -8,7 +8,6 @@
         %s
         ]]>
     </string>
-    <string name="invalid_auth_credentials">Por favor, introduzca información de autorización válida.</string>
     <string name="delay">Retraso</string>
     <string name="report_number_require_call_log_permission">
         Para evitar informes erróneos de llamadas repetidas o números marcados de nuevo,
@@ -29,29 +28,36 @@
     </string>
     <string name="running_services">Servicios en ejecución</string>
     <string name="report_number">Reportar Número</string>
-    <string-array name="spam_categories">
-        <item>Número Válido</item>
-        <item>Fraude</item>
-        <item>Marketing</item>
-        <item>Encuesta</item>
-        <item>Político</item>
-        <item>Otro Spam</item>
-    </string-array>
+    <string name="valid_number">Número Válido</string>
+    <string name="valid_sms">Mensaje de texto Válido</string>
+    <string name="fraud">Fraude</string>
+    <string name="promotional">Promocional</string>
+    <string name="survey">Encuesta</string>
+    <string name="reminder">Recordatorio</string>
     <string name="action_category_config">Configuración de Categoría</string>
     <string name="help_action_category_config">
         <![CDATA[
-        Solo se admiten las siguientes categorías de spam, cualquier otra categoría de la API debe asignarse a una de ellas.<br>
-        <br>
-         - <font color="#03DAC5"><b>{válido}</b></font><br>
-        &ensp; Reportar como número válido, no spam.<br>
-        <br>
-         - <font color="#fa7f71"><b>{fraude}</b></font><br>
-         - <font color="#fa7f71"><b>{marketing}</b></font><br>
-         - <font color="#fa7f71"><b>{encuesta}</b></font><br>
-         - <font color="#fa7f71"><b>{político}</b></font><br>
-        <br>
-         - <font color="#fa7f71"><b>{otro}</b></font><br>
-        &ensp; El tipo de spam de reserva, utilizado cuando ninguna de las categorías anteriores se aplica.<br>
+                Solo se admiten las siguientes categorías:<br>
+                <br>
+                 - <highlight><b>{válido}</b></highlight><br>
+                &ensp; Reportar como número de teléfono válido, no como llamada spam.<br>
+                <br>
+                 - <error><b>{fraude}</b></error><br>
+                 - <error><b>{promotional}</b></error><br>
+                 - <error><b>{encuesta}</b></error><br>
+                 - <error><b>{reminder}</b></error><br>
+                 - <error><b>{otro}</b></error><br>
+                &ensp; El tipo de llamada spam de respaldo, utilizado cuando ninguna de las categorías anteriores aplica.<br>
+                <br>
+                Genera la etiqueta <title>{category}</title>, que puede usarse en solicitudes HTTP posteriores. <br>
+                <br>
+                Por ejemplo, cuerpo POST: <br>
+                <sample>
+                { <br>
+                    &ensp; \"phone\": \"{number}\", <br>
+                    &ensp; \"rating\": \"{category}\" <br>
+                }
+                </sample>
         ]]>
     </string>
     <string name="missing_category">
@@ -76,19 +82,20 @@
         Algunos servicios le enviarán un mensaje de texto primero para informarle que una llamada es inminente, generalmente dentro de un minuto.<br>
         <br>
         Por ejemplo, un mensaje SMS como:<br>
-        &ensp; <font color="#888888">[algún servicio] Te llamamos para informarte ..., siéntete libre de contestar.</font><br>
+        &ensp; <sample>[algún servicio] Te llamamos para informarte ..., siéntete libre de contestar.</sample><br>
         <br>
         Una expresión regular para ese mensaje sería:<br>
-        &ensp; <font color="#03DAC5"><b>.*contestar.*</b></font> <br>
+        &ensp; <highlight><b>.*contestar.*</b></highlight> <br>
         <br>
-        La configuración predeterminada <font color="#03DAC5"><b>120 Segundos</b></font> significa que todas las llamadas se permitirán en los próximos dos minutos después de recibir dicho mensaje.<br>
+        La configuración predeterminada <highlight><b>120 Segundos</b></highlight> significa que todas las llamadas se permitirán en los próximos dos minutos después de recibir dicho mensaje.<br>
         <br>
         Funciona tanto para SMS normales como para SMS flash (SMS de clase 0).<br>
         <br>
-        <font color="#ea86ff"><b>Prioridad: 10</b></font>
+        Funciona sin que el filtrado global de SMS esté habilitado.<br>
+        <br>
+        <priority><b>Prioridad: 10</b></priority>
         ]]>
     </string>
     <string name="waning_using_wildcard_as_regex">Se usa el comodín `*` sin un punto anterior, ¿quiere decir `.*`?</string>
     <string name="import_as">Importar Como</string>
-    <string name="api_key">Clave API</string>
 </resources>

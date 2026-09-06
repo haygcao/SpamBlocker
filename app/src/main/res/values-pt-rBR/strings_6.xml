@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        Desculpe, o aplicativo travou.\n\n
-        Por favor, copie o conteúdo abaixo e reporte este problema no github,
-        remova quaisquer informações confidenciais antes de relatar.
+    <![CDATA[
+        Desculpe, o aplicativo travou. <br>
+        <br>
+        Por favor, copie o conteúdo abaixo e reporte este problema no GitHub,
+        remova qualquer informação sensível antes de relatar.
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>Dom</item>
@@ -16,18 +19,16 @@
 
 
 
-    <string name="confirm_delete_all_records">Confirmar a exclusão de todos os registros?</string>
+    <string name="confirm_delete_all_records">
+        <![CDATA[
+        Confirmar a exclusão de <error>todos</error> os registros?
+        ]]>
+    </string>
     <string name="expiry">Expiração</string>
     <string name="days">Dias</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        Quando habilitado, o conteúdo do SMS também será registrado no banco de dados e exibido nesta lista, ele não será registrado no banco de dados quando desabilitado.<br>
-        <br>
-        - Quando habilitado:<br>
-        &emsp; <b>Toque</b> para expandir/recolher a mensagem completa.<br>
-        <br>
-        - Quando desabilitado:<br>
-        &emsp; <b>Toque</b> para abrir a conversa no aplicativo padrão.
+        Quando habilitado, o conteúdo do SMS também será registrado no banco de dados e exibido nesta lista, ele não será registrado no banco de dados quando desabilitado.
         ]]>
     </string>
 
@@ -42,21 +43,40 @@
     <string name="repeated_call">Chamada Repetida</string>
     <string name="help_repeated_call">
         <![CDATA[
-        Permitir se a chamada for repetida dentro de um período de tempo, é provável que seja importante em vez de uma chamada de spam. <br>
+        Permitir chamadas repetidas, pois elas têm mais probabilidade de serem urgentes do que spam. <br>
+        <br>
+        Por padrão, a segunda chamada dentro de <highlight><b>5 minutos</b></highlight> será permitida. <br>
         <br>
         <b>Opções:</b><br>
         <br>
-        <h6><font color="#00BFFF">- Frequência</h6>
-        A configuração padrão <font color="#03DAC5"><b>1 / 5 Min</b></font> significa que a segunda chamada em 5 minutos será permitida. <br>
+        - <title><b>Intervalo Máx.</b></title> <br>
+        Apenas chamadas dentro deste intervalo de tempo são consideradas repetições. <br>
         <br>
-        <h6><font color="#00BFFF">- Incluir SMS</font></h6>
-        Quando ativado, o recebimento de mensagens SMS desse número também conta.<br>
+        - <title><b>Intervalo Mín.</b></title> <br>
+        Se um número ligar novamente antes disso, ele será ignorado. Bots de chamadas spam geralmente discam novamente instantaneamente; nesse caso, aumente este valor. Definir o modo de bloqueio como \"Silencioso\" também pode ajudar, verifique a dica de ferramenta para mais detalhes. <br>
         <br>
-        <font color="#ea86ff"><b>Prioridade: 10</b></font>
+        - <title><b>Vezes de Repetição</b></title> <br>
+        O número mínimo de repetições. <br>
+        Por exemplo: <br>
+        <sample>
+        Quando definido como 2, uma chamada deve se repetir duas vezes. No total, são necessárias três chamadas: <br>
+         &ensp; - ignorar <br>
+         &ensp; - ignorar <br>
+         &ensp; - permitir <br>
+        </sample>
+        <br>
+        - <title><b>Incluir SMS</b></title> <br>
+        Quando ativado, o recebimento de mensagens SMS desse número também conta. <br>
+        <br>
+        <priority><b>Prioridade: 10</b></priority>
         ]]>
     </string>
 
 
+    <string name="max_interval_min">Intervalo Máx (Min)</string>
+    <string name="min_interval_sec">Intervalo Mín (Seg)</string>
+    <string name="repeat_times">Vezes de repetição</string>
+    <string name="call_repeated_too_soon">Apenas %s milissegundos desde a última chamada deste número, o mínimo exigido é de %s milissegundos, ignorar.</string>
     <string name="about">Sobre</string>
     <string name="version">Versão</string>
     <string name="source_code">Código-fonte</string>
@@ -69,9 +89,9 @@
         <item>Importar .csv como várias regras</item>
     </string-array>
     <string name="open_settings">Abrir configurações</string>
-    <string name="remove_db_number">Excluir número do banco de dados de spam</string>
+    <string name="remove_from_db">Remover do banco</string>
     <string name="copy_number">Copiar número</string>
-    <string name="add_num_to_regex_rule">Adicionar número à regra regex</string>
-    <string name="add_num_to_db">Adicionar número ao banco de dados de spam</string>
-    <string name="mark_all_as_read">Marcar tudo como lido</string>
+    <string name="add_to_regex_rule">Adicionar à regra regex</string>
+    <string name="edit_regex_rule">Editar regra regex</string>
+    <string name="add_to_db">Adicionar ao banco</string>
 </resources>

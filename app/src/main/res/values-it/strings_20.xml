@@ -1,7 +1,6 @@
 <resources>
-    <string name="enable_call_screening_first">Abilita prima lo screening delle chiamate.</string>
-    <string name="enable_sms_screening_first">Abilita prima lo screening degli SMS.</string>
-    <string name="it_is_at_top">È l\'opzione in alto.</string>
+    <string name="call_screening_not_enabled">Il filtro chiamate non è abilitato.</string>
+    <string name="sms_screening_not_enabled">Il filtro SMS non è abilitato.</string>
     <string name="category_mapping">Mappatura Categorie</string>
     <string name="help_category_mapping">
     <![CDATA[
@@ -31,14 +30,14 @@
     <br>
     <b>Opzioni:</b> <br>
     <br>
-    - <font color="#00BFFF"><b>Durata</b></font> <br>
+    - <title><b>Durata</b></title> <br>
     Le chiamate verranno bloccate durante questo periodo (in secondi). <br>
     <br>
-    - <font color="#00BFFF"><b>Inclusi i bloccati</b></font> <br>
+    - <title><b>Inclusi i bloccati</b></title> <br>
     Questa funzione verrà attivata dopo che qualsiasi chiamata è stata bloccata. <br>
     <br>
-    - <font color="#00BFFF"><b>Inclusi i risposti</b></font> <br>
-    - <font color="#00BFFF"><b>Durata minima chiamata</b></font> <br>
+    - <title><b>Inclusi i risposti</b></title> <br>
+    - <title><b>Durata minima chiamata</b></title> <br>
     Questa funzione verrà attivata dopo che una chiamata è stata risposta ma la durata della chiamata è troppo breve, poiché tale
      chiamata è considerata anche una chiamata spam. <br>
     ]]>
@@ -48,10 +47,10 @@
     Dopo aver bloccato una chiamata, blocca anche le chiamate successive che bypassano tutte le regole per un certo periodo. <br>
     <br>
     <b>Casi d\'uso:</b> <br>
-    <font color="#888888"> &ensp; Alcuni spammer usano numeri con prefissi comuni, che possono essere bloccati con regole regex.
-      Dopo che la prima chiamata è stata bloccata, passeranno a numeri casuali, effettuando chiamate che potrebbero bypassare tutte le regole. </font><br>
+    <sample> &ensp; Alcuni spammer usano numeri con prefissi comuni, che possono essere bloccati con regole regex.
+      Dopo che la prima chiamata è stata bloccata, passeranno a numeri casuali, effettuando chiamate che potrebbero bypassare tutte le regole. </sample><br>
     <br>
-    <font color="#ffa500"><b>Nota:</b></font> <br>
+    <warn><b>Nota:</b></warn> <br>
       Ciò comporta anche il rischio di bloccare una chiamata valida, è un compromesso.<br>
     <br>
     Questo creerà sia <b>una regola regex</b> che <b>un flusso di lavoro</b>, vedi il tooltip dell\'azione interna <b>Limitazione Chiamate</b> per una spiegazione dettagliata.<br>
@@ -67,14 +66,14 @@
     <br>
     <b>Opzioni:</b> <br>
     <br>
-    - <font color="#00BFFF"><b>Durata</b></font> <br>
+    - <title><b>Durata</b></title> <br>
     I messaggi SMS verranno bloccati durante questo periodo (in secondi). <br>
     <br>
-    - <font color="#00BFFF"><b>Limite Conteggio</b></font> <br>
+    - <title><b>Limite Conteggio</b></title> <br>
     Consenti le prime N notifiche. <br>
     <br>
-    - <font color="#00BFFF"><b>Inclusi i Risposti</b></font> <br>
-    - <font color="#00BFFF"><b>Durata Minima Chiamata</b></font> <br>
+    - <title><b>Inclusi i Risposti</b></title> <br>
+    - <title><b>Durata Minima Chiamata</b></title> <br>
     Se una chiamata a cui si è risposto è troppo breve, è anche considerata una chiamata spam e attiverà questa funzione. <br>
     ]]>
     </string>
@@ -83,7 +82,7 @@
     Disattiva le notifiche SMS consecutive dallo stesso numero per un certo periodo. <br>
     <br>
     <b>Casi d\'uso:</b> <br>
-    <font color="#888888">Consenti le prime tre notifiche da un numero e disattiva le restanti entro un minuto.</font> <br>
+    <sample>Consenti le prime tre notifiche da un numero e disattiva le restanti entro un minuto.</sample> <br>
     <br>
     Questo creerà sia <b>una regola regex</b> che <b>un flusso di lavoro</b>, vedi il tooltip dell\'azione interna <b>Limitazione SMS</b> per una spiegazione dettagliata.<br>
     ]]>
@@ -95,7 +94,6 @@
     <string name="sms_throttling">Limitazione SMS</string>
     <string name="sms_throttling_triggered">Limitazione SMS attivata</string>
     <string name="target_rule_desc">Descrizione Regola Target</string>
-    <string name="template_generated">Modello Generato.</string>
     <string name="throttled_call">Chiamata Limitata</string>
     <string name="throttled_sms">SMS Limitati</string>
 </resources>

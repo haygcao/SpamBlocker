@@ -1,8 +1,12 @@
 package spam.blocker.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -15,12 +19,95 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import spam.blocker.G
+import spam.blocker.R
+import spam.blocker.ui.widgets.ResIcon
+import spam.blocker.ui.widgets.RowVCenter
 import spam.blocker.util.Lambda
 
 typealias M = Modifier
+
+inline fun Modifier.thenIf(
+    condition: Boolean,
+    modifier: Modifier.() -> Modifier
+): Modifier = if (condition) this.modifier() else this
+
+fun Modifier.showSplitter(): Modifier =  this.height(IntrinsicSize.Min)
+
+fun priorityInlineMap() = mapOf(
+    "priority" to InlineTextContent(
+         placeholder = androidx.compose.ui.text.Placeholder(
+            (16+2).sp, // add 4.sp as the icon's paddingEnd
+            16.sp,
+            PlaceholderVerticalAlign.TextCenter
+        )
+    ) {
+        RowVCenter {
+            ResIcon(R.drawable.ic_priority, color = G.palette.priority, modifier = M.padding(end = 2.dp))
+        }
+    }
+)
+
+
+fun String.parseColorString(): Pair<Int, Int>? {
+    if (this.length != 8) {
+        return null
+    }
+
+    val alpha = this.substring(0, 2).toIntOrNull(16)
+    if (alpha == null)
+        return null
+
+    val rgb = this.substring(2, 8).toIntOrNull(16)
+    if (rgb == null)
+        return null
+
+    return Pair(alpha, rgb)
+}
+
+fun Color.luminance(): Double {
+    // Calculate the perceptive luminance (aka luma) - human eye favors green color...
+    return (0.299 * red) + (0.587 * green) + (0.114 * blue)
+}
+fun Color.isLight(): Boolean {
+    return luminance() > 0.55f
+}
+
+fun Color.contrastColor(): Color {
+    return if (isLight())
+        Color.Black
+    else
+        Color.White
+}
+
+// light_blue.darken() -> dark_blue
+fun Color.darken(percent: Float = 0.3f): Color {   // 0.0 = original, 1.0 = black
+    val f = 1f - percent.coerceIn(0f, 1f)
+    return copy(
+        red   = red   * f,
+        green = green * f,
+        blue  = blue  * f,
+        alpha = alpha
+    )
+}
+
+// dark_blue.lighten() -> light_blue
+fun Color.lighten(percent: Float = 0.6f): Color =
+    lerp(this, Color.White, percent.coerceIn(0f, 1f))
+
+fun Color.slightDiff(percent: Float = 0.2f): Color {
+    return if (luminance() > 0.55f)
+        darken(percent)
+    else
+        lighten(percent)
+}
 
 @Composable
 fun <T: Any> rememberSaveableMutableStateListOf(vararg elements: T): SnapshotStateList<T> {

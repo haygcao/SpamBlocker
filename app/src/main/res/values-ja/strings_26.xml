@@ -1,0 +1,83 @@
+<resources>
+    <string name="known_android_issue">
+    <![CDATA[
+        これは既知の Android の問題で、すでに Android チームに報告されていますが、修正はまだ待たれています。 <br>
+        <br>
+        原因と回避策はこちらをご覧ください: <br>
+         <a href=\"%s\">%s</a>
+    ]]>
+    </string>
+    <string name="import_numbers">電話番号をインポート</string>
+    <string name="faq_import_numbers">
+    <![CDATA[
+        ワークフローを使用して、ローカルまたはリモートファイルから番号をインポートします。<br>
+        <br>
+        <title><b>典型的な設定</b></title>: <br>
+        <br>
+        1. <minor><b>ファイルを読み込み</b></minor> / <minor><b>HTTPリクエスト</b></minor> <br>
+          &ensp; ファイルの内容を取得します。<br>
+          <br>
+        2. <minor><b>CSV解析</b></minor> / <minor><b>XML解析</b></minor> / <minor><b>正規表現抽出</b></minor> <br>
+          &ensp; 解析して番号のリストを取得します。<br>
+          <br>
+        3. <minor><b>番号の置換</b></minor> (オプション) <br>
+          &ensp; 番号の形式を変更します<br>
+          &ensp; 使用例:<br>
+          <sample>
+            &emsp; 他のアプリから番号を移行する際、<b>123#####</b> のような形式を正規表現 <b>123.....</b> または <b>123.*</b> に変換します <br>
+          </sample>
+          <br>
+        4. <minor><b>スパムデータベースにインポート</b></minor> / <minor><b>正規表現ルールにインポート</b></minor> <br>
+        <br>
+        <br>
+        <title><b>例</b></title>: <br>
+          - プリセット <no_translate><b>FTC-DNC</b></no_translate> <br>
+        <br>
+        その他のオンライン例: <br>
+          - <a href=\"%s\">プレーンテキスト</a> <br>
+          - <a href=\"%s\">CSV</a> <br>
+          - <a href=\"%s\">XML</a> <br>
+          - <a href=\"%s\">JSON</a> - JsonPathはまだサポートされていません。代わりに <minor><b>正規表現抽出</b></minor> を使用してください。
+    ]]>
+    </string>
+    <string name="faq_regex">
+    <![CDATA[
+        プログラマー以外のための正規表現チュートリアル。<br>
+        <br>
+        <title><b>初級 - ワイルドカード</b></title> <br>
+        &ensp; ワイルドカード <sample><b>*</b></sample> を使用したい場合は、その前にドット <sample><b>.</b></sample> を置きます（例: <sample><b>.*</b></sample>）。これでほとんどのケースに対応できます。<br>
+        <br>
+        <title><b>上級 - AIの使用</b></title> <br>
+        &ensp; 例えば、SMS認証用に以下の正規表現を取得する場合: <br>
+        &ensp; <sample>.*(verification|validation).*code.*\\d{5,6}.*</sample> <br>
+        <br>
+        AIに質問する: <br>
+        <sample>
+        %s
+        </sample>
+        <br>
+        <br>
+        <highlight><b>オンラインで試す</b></highlight> <br>
+          &ensp; 1. <a href=\"copy\"><big>上記のプロンプトをコピー</big></a> <br>
+          &ensp; 2. <a href=\"try_it\"><big>オンラインAIを起動</big></a> <br>
+    ]]>
+    </string>
+    <string name="ai_regex_prompt">
+    <![CDATA[
+        SMS認証コードを捉えるための、Kotlin向けのシンプルな完全一致regexを提示してください。 <br>
+        <br>
+        要件: <br>
+        - \"verification\" または \"validation\" という単語を含み、その後に \"code\"、さらにその後に5桁または6桁の数字が続くこと。 <br>
+        - これらの要素の前後や間に入る可変テキストには .* を使い、メッセージ全体に一致させること。 <br>
+        - 大文字小文字、改行、^ や $ のアンカーは考慮不要です。 <br>
+        - 高度なregex機能は避けてください。 <br>
+        - 最終的なregexはバックティック (``) で囲み、regex本体のみを出力してください。 <br>
+        <br>
+        次に一致する必要があります: <br>
+        - "Your verification code is 123456, expires after 5 minutes." <br>
+        - "Your validation code: [12345]"
+    ]]>
+    </string>
+    <string name="copied_to_clipboard">クリップボードにコピーしました</string>
+    <string name="api_query_timeout">API クエリのタイムアウト</string>
+</resources>

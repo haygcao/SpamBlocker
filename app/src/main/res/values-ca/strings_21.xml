@@ -1,23 +1,10 @@
 <resources>
     <string name="perm_write_settings">Escriure configuració</string>
-    <string name="set_to">Establir a</string>
-    <string name="help_set_ringtone_to">
-    <![CDATA[
-        Estableix el to de trucada per a una característica particular, o silencia-lo. <br>
-        <br>
-        Per exemple, per establir el to de trucada per a una regla regex: <br><br>
-        <font color="#888888">
-        &emsp; { \"regex\": \"rule_desc\" }
-        </font>
-        <br><br>
-        Les trucades permeses per aquesta regla reproduiran el to de trucada especificat.<br>
-    ]]>
-    </string>
     <string name="ringtone">To de trucada</string>
     <string name="call_to_test_ringtone">Realitza una trucada real per provar el to de trucada.</string>
     <string name="help_ringtone">
     <![CDATA[
-        Personalitza el to de trucada per a una característica particular; les trucades permeses per aquesta característica reproduiran el to de trucada especificat.
+        Configureu tons de trucada diferents per a les trucades permeses per a diferents funcions.
     ]]>
     </string>
     <string name="help_target_rule_desc">
@@ -28,7 +15,7 @@
         escriu <b>Feina</b> en aquest camp.
     ]]>
     </string>
-    <string name="invalid_config">Configuració no vàlida</string>
+
     <string name="custom">Personalitzat</string>
     <string name="quick_tile">Rajola ràpida</string>
     <string name="help_quick_tile">
@@ -47,15 +34,14 @@
     ]]>
     </string>
     <string name="quick_tile_is_active">La rajola ràpida personalitzada està activa.</string>
-    <string name="http_status_code_template">Codi d\'estat Http: %d</string>
     <string name="help_preset_ringtone">
     <![CDATA[
         Personalitza el to de trucada per a una regla regex; el to de trucada especificat es reproduirà quan la trucada sigui permesa per aquesta regla. <br>
         <br>
         <b>Cas d\'ús:<b> <br>
-        <font color="#888888">
-        &ensp; Estableix diferents tons de trucada per a persones particulars, grups de contactes o rangs de números de telèfon.
-        </font>
+        <sample>
+        &ensp; Estableix tons de trucada diferents per a contactes específics, rangs de números o trucades repetides.
+        </sample>
     ]]>
     </string>
     <string name="remote_setup">Configuració Remota</string>
@@ -92,17 +78,13 @@
         <br>
         El flux de treball s\'executa diàriament, descarrega el conjunt de dades complet de 90 dies en la primera execució i després només realitza actualitzacions incrementals en execucions posteriors. <br>
         <br>
-        <font color="#ffa500"><b>Nota:</b></font> <br>
-        <font color="#888888">&ensp; Normalment, el conjunt de dades s\'actualitza cada dia laborable al voltant del migdia hora de l\'Est. </font><br>
+        <warn><b>Nota:</b></warn> <br>
+        <sample>&ensp; Normalment, el conjunt de dades s\'actualitza cada dia laborable al voltant del migdia hora de l\'Est. </sample><br>
         <br>
         Per tant, està programat a les 18:00, ja que s\'espera que el conjunt de dades estigui disponible per aleshores. <br>
     ]]>
     </string>
     <string name="csv_missing_column">
         Falta la columna obligatòria %s. Pots utilitzar la capçalera %s per a la columna de números de telèfon, o assignar una capçalera existent a %s a \"Analitzar CSV\".
-    </string>
-    <string name="enable_reporting_number">Activar informes</string>
-    <string name="help_enable_reporting_number">
-        Aquesta API també admet la notificació de números de telèfon, activa-ho per generar també el flux de treball d\'informes.
     </string>
 </resources>

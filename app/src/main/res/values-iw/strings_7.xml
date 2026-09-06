@@ -1,16 +1,14 @@
 <resources>
     <string name="start_time">שעת התחלה</string>
     <string name="end_time">שעת סיום</string>
-    <string name="switch_mode">החלף מצב</string>
+    <string name="regex_mode">מצב Regex</string>
     <string name="contact_group">קבוצת אנשי קשר</string>
-    <string name="text_too_long">טקסט ארוך מדי, העריכה מושבתת</string>
-    <string name="follow_system"><short>מערכת</short></string>
+    <string name="text_too_long">הטקסט חורג מ-%s תווים, העריכה מושבתת מסיבות ביצועים. כדי להגדיל את הגבול:</string>
+    <string name="increase_text_limit">לחיצה ארוכה על כלל -> הגדרות -> גבול תיבת טקסט</string>
+    <string name="system"><short>מערכת</short></string>
     <string name="theme">ערכת נושא</string>
-    <string-array name="theme_list">
-        <item>בהיר</item>
-        <item>כהה</item>
-    </string-array>
     <string-array name="rule_dropdown_menu">
+        <item>ייצוא</item>
         <item>חפש כלל</item>
         <item>שכפל כלל</item>
         <item>מחק כלל</item>
@@ -26,26 +24,26 @@
     </string>
     <string name="help_regex_mode_phone_number">
         <![CDATA[
-        <font color="#00BFFF"><b>מספר טלפון</b></font>:<br>
+        <title><b>מספר טלפון</b></title>:<br>
         &ensp; מצב ברירת המחדל, הביטוי הרגולרי יתאים למספר הטלפון.<br>
         ]]>
     </string>
     <string name="help_regex_mode_contact">
         <![CDATA[
-        <font color="#00BFFF"><b>אנשי קשר</b></font>:<br>
+        <title><b>אנשי קשר</b></title>:<br>
         &ensp; הביטוי הרגולרי יתאים לשם איש הקשר המשויך למספר הנכנס.<br>
         &ensp;  - מקרה שימוש:<br>
-        &emsp; <font color="#888888">חסום את כל מי שאינו איש קשר בסוף השבוע באמצעות הביטוי הרגולרי `.*`.</font><br>
+        &emsp; <sample>חסום את כל מי שאינו איש קשר בסוף השבוע באמצעות הביטוי הרגולרי `.*`.</sample><br>
         ]]>
     </string>
     <string name="help_regex_mode_contact_group">
         <![CDATA[
-        <font color="#00BFFF"><b>קבוצת אנשי קשר</b></font>:<br>
+        <title><b>קבוצת אנשי קשר</b></title>:<br>
         &ensp; הביטוי הרגולרי יתאים לשם קבוצת אנשי הקשר המשויכת למספר הנכנס,
                  וישפיע על כל אנשי הקשר בקבוצה זו, כך שאינך צריך להוסיף אותם בנפרד,
                  ואין צורך לעדכן אותו גם כאשר יש שינויים בכוח אדם.<br>
         &ensp;  - מקרה שימוש:<br>
-        &emsp; <font color="#888888">חסום את כל העמיתים לעבודה בסוף השבוע על ידי חסימת קבוצת אנשי הקשר \"עבודה\".</font> <br>
+        &emsp; <sample>חסום את כל העמיתים לעבודה בסוף השבוע על ידי חסימת קבוצת אנשי הקשר \"עבודה\".</sample> <br>
         ]]>
     </string>
 </resources>

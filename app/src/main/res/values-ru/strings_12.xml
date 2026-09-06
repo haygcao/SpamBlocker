@@ -1,13 +1,13 @@
 <resources>
     <string name="help_instant_query">
         <![CDATA[
-        Запрос входящего номера онлайн в реальном времени. <br>
+        Запросить входящий номер онлайн в реальном времени. <br>
         <br>
-        Одновременно будет запрашиваться несколько конечных точек API, при этом будет использоваться первый полученный результат, а все последующие результаты игнорироваться. <br>
+        Будут одновременно запрошены несколько конечных точек API, при этом будет использован первый полученный результат, а все последующие игнорируются. <br>
         <br>
-        По умолчанию имеет самый низкий приоритет, то есть будет срабатывать только тогда, когда звонок пройдет все остальные правила.<br>
+        По умолчанию имеет наименьший приоритет, то есть будет срабатывать только после того, как звонок пройдет все локальные правила.<br>
         <br>
-        <font color="#ea86ff"><b>Приоритет по умолчанию: -1</b></font>
+        <priority><b>Приоритет по умолчанию: -1</b></priority>
         ]]>
     </string>
     <string name="instant_query">Мгновенный запрос</string>
@@ -37,23 +37,18 @@
     </string>
     <string name="help_category_identifier">
         <![CDATA[
-        Извлекает <font color="#00BFFF">категорию</font> и <font color="#00BFFF">комментарии</font>
-         из результата запроса и отображает их в уведомлении и журнале истории. (необязательно)<br>
+        Извлеките <title>категорию</title> из результата запроса, чтобы отображать ее в уведомлении и журнале истории. (необязательно)<br>
         <br>
         Например, для этого результата запроса: <br>
-        <font color="#888888">
+        <sample>
         { <br>
           &ensp; \"type\": \"MARKETING\", <br>
-          &ensp; \"comments\": \"Better call Saul\", <br>
           &ensp;  … <br>
         } <br>
-        </font>
+        </sample>
         <br>
-        - Извлечь только <font color="#00BFFF">категорию</font>: <br>
-        &ensp; <font color="#888888">\"type\": \"(.+?)\"</font> <br>
-        <br>
-        - Извлечь как <font color="#00BFFF">категорию</font>, так и <font color="#00BFFF">комментарии</font>: <br>
-        &ensp; <font color="#888888">(?:\"type\":\"(.+?)\"|\"comments\":\"(.+?)\")</font><br>
+        Извлеките ее с помощью: <br>
+        &ensp; <sample>\"type\": \"(.+?)\"</sample> <br>
         ]]>
     </string>
     <string name="action_parse_query_result">Обработать результат</string>
@@ -64,30 +59,31 @@
         Дополнительное регулярное выражение может использоваться для извлечения категории спама. (необязательно)
         ]]>
     </string>
-    <string name="action_intercept_call">Перехватить звонок</string>
-    <string name="help_action_intercept_call">
+    <string name="action_parse_incoming_number">Разобрать номер</string>
+    <string name="help_action_parse_incoming_number">
         <![CDATA[
-        Входящий номер будет перехвачен и разобран на разные теги:<br>
+        Номер входящего звонка будет разобран на разные теги:<br>
         <br>
         %s
         <br>
-        Эти теги будут использоваться для построения HTTP-адреса ресурса, например:<br>
-        <br>
-        1. Для международного номера, например <b>+122222</b>, эти два варианта эквивалентны:<br>
-        - https://test.com/number=<b>{number}</b><br>
-        - https://test.com/number=<b>{cc}{domestic}</b><br>
-        Он будет преобразован в: <br>
-        https://test.com/number=<b>122222</b><br>
-        <br>
-        2. Для внутреннего номера, например <b>12345</b>, необходимо указать код страны в настройках 
-        или позволить приложению определить его автоматически.<br>
+        Эти теги можно использовать в последующих HTTP-запросах.<br>
         ]]>
     </string>
-    <string name="action_intercept_sms">Перехватить SMS</string>
-    <string name="help_action_intercept_sms">
+    <string name="content_filter">Фильтр содержимого</string>
+    <string name="help_content_filter">
         <![CDATA[
-        Входящее SMS будет перехвачено, и содержание будет разобрано в тег <b>{sms}</b>,
-        который может быть использован в запросах HTTP.
+        Хотя правила SMS уже отфильтровали этот контент, вы можете использовать этот дополнительный фильтр для дальнейшего сужения.
+        ]]>  
+    </string>
+    <string name="action_parse_incoming_sms">Разобрать SMS</string>
+    <string name="help_action_parse_incoming_sms">
+        <![CDATA[
+        Содержимое входящего SMS будет разобрано в следующие теги для использования в последующих шагах: <br>
+        <br>
+        %s
+        <br>
+        - <title><b>{sms_content}</b></title> <br>
+        &ensp; Содержимое SMS
         ]]>
     </string>
     <string name="query_api">API запроса</string>
@@ -100,20 +96,18 @@
         Это регулярное выражение фильтрует номера соответствующим образом, входящие номера, которые не соответствуют этому регулярному выражению, будут пропущены.<br>
         <br>
         - Проверять только <b>международные номера</b>:<br>
-        &ensp; <font color="#03DAC5"><b>\\+.*</b></font><br>
+        &ensp; <highlight><b>\\+.*</b></highlight><br>
         <br>
         - Проверять только <b>внутренние номера</b>:<br>
-        &ensp; <font color="#03DAC5"><b>0{1,2}.*</b></font><br>
+        &ensp; <highlight><b>0{1,2}.*</b></highlight><br>
         <br>
         - Проверять <b>любые номера</b>:<br>
-        &ensp; <font color="#03DAC5"><b>.*</b></font>
+        &ensp; <highlight><b>.*</b></highlight>
         ]]>
     </string>
-    <string name="checking_template">Проверка: %s, приоритет: %s</string>
     <string name="skip_for_testing">Пропустить для тестирования.</string>
     <string name="allowed_by">Разрешено: %s</string>
-    <string name="blocked_by">Заблокировано: %s</string>
-    <string name="outside_time_schedule">За пределами расписания, пропуск.</string>
+    <string name="blocked_by_template">Заблокировано: %s</string>
     <string name="android_ver_lower_than_11">Версия Android ниже 11, пропуск.</string>
 
 

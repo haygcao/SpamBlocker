@@ -1,7 +1,8 @@
 package spam.blocker.ui.setting.quick
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -10,35 +11,73 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import spam.blocker.G
 import spam.blocker.R
+import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
-import spam.blocker.ui.theme.LocalPalette
-import spam.blocker.ui.theme.Salmon
-import spam.blocker.ui.widgets.Button
+import spam.blocker.ui.showSplitter
+import spam.blocker.ui.widgets.AnimatedVisibleV
+import spam.blocker.ui.widgets.GreyIcon16
+import spam.blocker.ui.widgets.GreyIcon18
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.PriorityBox
 import spam.blocker.ui.widgets.PriorityLabel
-import spam.blocker.ui.widgets.RadioGroup
-import spam.blocker.ui.widgets.RadioItem
+import spam.blocker.ui.widgets.ResIcon
 import spam.blocker.ui.widgets.RowVCenterSpaced
+import spam.blocker.ui.widgets.Section
 import spam.blocker.ui.widgets.Str
+import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.ui.widgets.SwitchBox
 import spam.blocker.util.Permission
 import spam.blocker.util.PermissionWrapper
 import spam.blocker.util.spf
 
 @Composable
+fun ContactsButtonContent(
+    isStrict: Boolean,
+    priLenient: Int,
+    priStrict: Int,
+) {
+    RowVCenterSpaced(6, M.showSplitter()) {
+        // Contacts
+        RowVCenterSpaced(2) {
+            GreyIcon18(R.drawable.ic_contact_square)
+            if (priLenient != 10) {
+                PriorityLabel(priLenient)
+            }
+        }
+
+        // Non Contacts
+        if (isStrict) {
+            // Vertical Divider
+            VerticalDivider(thickness = 1.dp, color = G.palette.disabled)
+
+            RowVCenterSpaced(2) {
+                ResIcon(
+                    R.drawable.ic_question,
+                    modifier = M.size(16.dp),
+                    color = G.palette.error
+                )
+                if (priStrict != 0) {
+                    PriorityLabel(priStrict)
+                }
+            }
+        }
+    }
+}
+
+@Composable
 fun Contacts() {
     val ctx = LocalContext.current
-    val C = LocalPalette.current
+    val C = G.palette
 
     val spf = spf.Contact(ctx)
 
-    var isEnabled by remember { mutableStateOf(spf.isEnabled() && Permission.contacts.isGranted) }
-    var isStrict by remember { mutableStateOf(spf.isStrict()) }
-    var priLenient by remember { mutableIntStateOf(spf.getLenientPriority()) }
-    var priStrict by remember { mutableIntStateOf(spf.getStrictPriority()) }
+    var isEnabled by remember { mutableStateOf(spf.isEnabled && Permission.contacts.isGranted) }
+    var isStrict by remember { mutableStateOf(spf.isStrict) }
+    var priLenient by remember { mutableIntStateOf(spf.lenientPriority) }
+    var priStrict by remember { mutableIntStateOf(spf.strictPriority) }
 
     val popupTrigger = rememberSaveable { mutableStateOf(false) }
 
@@ -46,31 +85,49 @@ fun Contacts() {
         trigger = popupTrigger,
         content = {
             Column {
-                LabeledRow(labelId = R.string.type) {
-                    val items = listOf(
-                        RadioItem(Str(R.string.lenient), color = C.textGrey),
-                        RadioItem(Str(R.string.strict), color = Salmon),
-                    )
+                Section(
+                    title = Str(R.string.contacts),
+                    bgColor = C.dialogBg
+                ) {
+                    Column {
+                        LabeledRow(R.string.allow) {
+                            SwitchBox(isEnabled) { isTurningOn ->
+                                spf.isEnabled = isTurningOn
+                                isEnabled = isTurningOn
+                            }
+                        }
 
-                    RadioGroup(items = items, selectedIndex = if (isStrict) 1 else 0) { clickedIdx ->
-                        isStrict = clickedIdx == 1
-                        spf.setStrict(isStrict)
-                    }
-                }
-
-                if (isStrict) {
-                    PriorityBox(priStrict) { newValue, hasError ->
-                        if (!hasError) {
-                            priStrict = newValue!!
-                            spf.setStrictPriority(newValue)
+                        AnimatedVisibleV(isEnabled) {
+                            PriorityBox(priLenient) { newValue, hasError ->
+                                if (!hasError) {
+                                    priLenient = newValue!!
+                                    spf.lenientPriority = newValue
+                                }
+                            }
                         }
                     }
+                }
+                AnimatedVisibleV(isEnabled) {
+                    Section(
+                        title = Str(R.string.non_contacts),
+                        bgColor = C.dialogBg
+                    ) {
+                        Column {
+                            LabeledRow(R.string.block) {
+                                SwitchBox(isStrict) { isTurningOn ->
+                                    spf.isStrict = isTurningOn
+                                    isStrict = isTurningOn
+                                }
+                            }
 
-                } else {
-                    PriorityBox(priLenient)  { newValue, hasError ->
-                        if (!hasError) {
-                            priLenient = newValue!!
-                            spf.setLenientPriority(newValue)
+                            AnimatedVisibleV(isStrict) {
+                                PriorityBox(priStrict) { newValue, hasError ->
+                                    if (!hasError) {
+                                        priStrict = newValue!!
+                                        spf.strictPriority = newValue
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -79,32 +136,45 @@ fun Contacts() {
     )
 
     LabeledRow(
-        R.string.allow_contact,
-        helpTooltip = ctx.getString(R.string.help_contacts),
+        R.string.contacts,
+        helpTooltip = Str(R.string.help_contacts),
         content = {
             if (isEnabled) {
-                Button(
-                    content = {
+                StrokeButton(
+                    color = C.textGrey,
+                    icon = {
                         RowVCenterSpaced(6) {
-                            Text(
-                                text = Str(
-                                    strId = if (isStrict) R.string.strict else R.string.lenient
-                                ),
-                                color = if (isStrict) Salmon else C.textGrey,
-                            )
-                            if (isStrict && priStrict != 0) {
-                                PriorityLabel(priStrict)
+                            // Contacts
+                            RowVCenterSpaced(2) {
+                                GreyIcon16(R.drawable.ic_contact_square)
+                                if (priLenient != 10) {
+                                    PriorityLabel(priLenient)
+                                }
                             }
-                            if (!isStrict && priLenient != 10) {
-                                PriorityLabel(priLenient)
+
+                            // Non Contacts
+                            if (isStrict) {
+                                // Vertical Divider
+                                VerticalDivider(thickness = 1.dp, color = C.disabled)
+
+                                RowVCenterSpaced(2) {
+                                    ResIcon(
+                                        R.drawable.ic_question,
+                                        modifier = M.size(16.dp),
+                                        color = C.error
+                                    )
+                                    if (priStrict != 0) {
+                                        PriorityLabel(priStrict)
+                                    }
+                                }
                             }
                         }
-                    },
-//                    borderColor = if (isStrict) Salmon else C.textGrey
+                    }
                 ) {
                     popupTrigger.value = true
                 }
             }
+
             SwitchBox(isEnabled) { isTurningOn ->
                 if (isTurningOn) {
                     G.permissionChain.ask(
@@ -112,15 +182,42 @@ fun Contacts() {
                         listOf(PermissionWrapper(Permission.contacts))
                     ) { granted ->
                         if (granted) {
-                            spf.setEnabled(true)
+                            spf.isEnabled = true
                             isEnabled = true
                         }
                     }
                 } else {
-                    spf.setEnabled(false)
+                    spf.isEnabled = false
                     isEnabled = false
                 }
             }
         }
     )
+}
+
+@Composable
+fun ContactsSummary() {
+    val ctx = LocalContext.current
+    val C = G.palette
+
+    val spf = spf.Contact(ctx)
+
+    var isEnabled by remember { mutableStateOf(spf.isEnabled && Permission.contacts.isGranted) }
+    var isStrict by remember { mutableStateOf(spf.isStrict) }
+    var priLenient by remember { mutableIntStateOf(spf.lenientPriority) }
+    var priStrict by remember { mutableIntStateOf(spf.strictPriority) }
+
+    if (isEnabled) {
+        StrokeButton(
+            color = C.textGrey,
+            enabled = false,
+            icon = {
+                ContactsButtonContent(
+                    priLenient = priLenient,
+                    priStrict = priStrict,
+                    isStrict = isStrict
+                )
+            }
+        )
+    }
 }

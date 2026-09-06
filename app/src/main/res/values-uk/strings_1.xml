@@ -17,8 +17,6 @@
     <string name="clear">Очистити</string>
     <string name="test">Тест</string>
     <string name="save">Зберегти</string>
-    <string name="whitelist">Білий список</string>
-    <string name="blacklist">Чорний список</string>
     <string name="content">Зміст</string>
     <string name="priority">Пріоритет</string>
     <string name="deleted_filter">(видалене правило)</string>
@@ -30,20 +28,23 @@
     <string name="yes">Так</string>
     <string name="no">Ні</string>
     <string name="ok">OK</string>
+    <string name="cancel">Скасувати</string>
     <string name="miscellaneous">Різне</string>
     <string name="quick_settings">Швидкі налаштування</string>
     <string name="regex_settings">Налаштування регулярних виразів</string>
     <string name="backup">резервна копія</string>
     <string name="import_">Імпорт</string>
     <string name="export">Експорт</string>
-    <string name="config_text">Текст конфігурації</string>
+    <string name="config_json">JSON конфігурації</string>
     <string name="imported_successfully">Імпортовано успішно</string>
     <string name="import_fail">Не вдалося імпортувати</string>
+    <string name="exported_successfully">Успішно експортовано</string>
+    <string name="export_fail">Помилка експорту</string>
     <string name="prompt_go_to_permission_setting">
         <![CDATA[
         Для цієї функції потрібен дозвіл:<br>
         <br>
-        <font color="#00BFFF">%s</font><br>
+        <title>%s</title><br>
         <br>
         Його потрібно ввімкнути вручну в налаштуваннях системи.<br>
         Відкрити сторінку налаштувань?
@@ -53,8 +54,9 @@
     <string name="label_number_rules">Правила номерів</string>
     <string name="label_content_rules">Правила повідомлень</string>
     <string name="recent_apps"><short>Останні програми</short></string>
-    <string name="allow_contact">Контакти</string>
+    <string name="contacts">Контакти</string>
 
     <string name="number_rule">Правило для номера</string>
     <string name="content_rule">Правило для повідомлення</string>
+    <string name="non_contacts">Не в контактах</string>
 </resources>

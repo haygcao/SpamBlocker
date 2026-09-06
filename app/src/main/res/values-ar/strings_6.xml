@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        عذرًا، تعطل التطبيق.\n\n
-        يرجى نسخ المحتوى أدناه والإبلاغ عن هذه المشكلة على GitHub،
-        قم بإزالة أي معلومات حساسة قبل الإبلاغ.
+    <![CDATA[
+        عذرًا، التطبيق تعطل. <br>
+        <br>
+        يرجى نسخ المحتوى أدناه والإبلاغ عن هذه المشكلة على GitHub,
+        أزل أي معلومات حساسة قبل الإبلاغ.
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>الأحد</item>
@@ -16,25 +19,23 @@
 
 
 
-    <string name="confirm_delete_all_records">هل أنت متأكد من حذف جميع السجلات؟</string>
+    <string name="confirm_delete_all_records">
+        <![CDATA[
+        هل أنت متأكد من حذف <error>جميع</error> السجلات؟
+        ]]>
+    </string>
     <string name="expiry">انتهاء الصلاحية</string>
     <string name="days">أيام</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        عند التمكين، سيتم أيضًا تسجيل محتوى الرسائل القصيرة في قاعدة البيانات وعرضه في هذه القائمة، ولن يتم تسجيله في قاعدة البيانات عند التعطيل.<br>
-        <br>
-        - عند التمكين:<br>
-        &emsp; <b>اضغط</b> لتوسيع/طي الرسالة الكاملة.<br>
-        <br>
-        - عند التعطيل:<br>
-        &emsp; <b>اضغط</b> لفتح المحادثة في التطبيق الافتراضي.
+        عند التمكين، سيتم أيضًا تسجيل محتوى الرسائل القصيرة في قاعدة البيانات وعرضه في هذه القائمة، ولن يتم تسجيله في قاعدة البيانات عند التعطيل.
         ]]>
     </string>
     <string name="copy_number">نسخ الرقم</string>
-    <string name="add_num_to_regex_rule">إضافة الرقم إلى قاعدة التعبير النمطي</string>
-    <string name="add_num_to_db">إضافة الرقم إلى قاعدة بيانات الرسائل المزعجة</string>
-    <string name="mark_all_as_read">تعليم الكل كمقروء</string>
-    <string name="remove_db_number">حذف الرقم من قاعدة بيانات الرسائل المزعجة</string>
+    <string name="add_to_regex_rule">إضافة إلى قاعدة regex</string>
+    <string name="edit_regex_rule">تحرير قاعدة regex</string>
+    <string name="add_to_db">إضافة إلى قاعدة البيانات</string>
+    <string name="remove_from_db">حذف من قاعدة البيانات</string>
 
     <string name="language">اللغة</string>
     <string name="help_language">
@@ -45,21 +46,40 @@
     <string name="repeated_call">مكالمة متكررة</string>
     <string name="help_repeated_call">
         <![CDATA[
-        السماح إذا تكررت المكالمة خلال فترة زمنية، فمن المحتمل أن تكون مهمة وليست مكالمة مزعجة. <br>
+        السماح بالمكالمات المتكررة، فمن المرجح أن تكون عاجلة أكثر من كونها رسائل مزعجة. <br>
+        <br>
+        بشكل افتراضي، سيتم السماح بالمكالمة الثانية في غضون <highlight><b>5 دقائق</b></highlight>. <br>
         <br>
         <b>الخيارات:</b><br>
         <br>
-        <h6><font color="#00BFFF">- التردد</h6>
-        الإعداد الافتراضي <font color="#03DAC5"><b>1 / 5 دقيقة</b></font> يعني أنه سيتم السماح بالمكالمة الثانية خلال 5 دقائق. <br>
+        - <title><b>الحد الأقصى للفاصل الزمني</b></title> <br>
+        تعتبر المكالمات التي تتم ضمن هذا الإطار الزمني فقط كمكالمات متكررة. <br>
         <br>
-        <h6><font color="#00BFFF">- تضمين الرسائل النصية القصيرة</font></h6>
-        عند التمكين، يتم احتساب استلام الرسائل النصية القصيرة من هذا الرقم أيضًا.<br>
+        - <title><b>الحد الأدنى للفاصل الزمني</b></title> <br>
+        إذا اتصل رقم ما مرة أخرى قبل هذا الوقت، فسيتم تجاهله. عادة ما تعيد بوتات مكالمات السبام الاتصال فوراً، في هذه الحالة، قم بزيادة هذه القيمة. يمكن أيضاً أن يساعد ضبط وضع الحظر على \"صامت\"، تحقق من تلميح الأداة لمزيد من التفاصيل. <br>
         <br>
-        <font color="#ea86ff"><b>الأولوية: 10</b></font>
+        - <title><b>عدد التكرارات</b></title> <br>
+        الحد الأدنى لمرات التكرار. <br>
+        على سبيل المثال: <br>
+        <sample>
+        عند ضبطه على 2، يجب أن تتكرر المكالمة مرتين. في المجموع، يتطلب الأمر ثلاث مكالمات: <br>
+         &ensp; - تجاهل <br>
+         &ensp; - تجاهل <br>
+         &ensp; - سماح <br>
+        </sample>
+        <br>
+        - <title><b>تضمين الرسائل القصيرة</b></title> <br>
+        عند التفعيل، يتم أيضاً احتساب استلام رسائل SMS من هذا الرقم. <br>
+        <br>
+        <priority><b>الأولوية: 10</b></priority>
         ]]>
     </string>
 
 
+    <string name="max_interval_min">الحد الأقصى للفترة (دقيقة)</string>
+    <string name="min_interval_sec">الحد الأدنى للفترة (ثانية)</string>
+    <string name="repeat_times">عدد مرات التكرار</string>
+    <string name="call_repeated_too_soon">مرّت %s ميلي ثانية فقط منذ آخر مكالمة من هذا الرقم، الحد الأدنى المطلوب هو %s ميلي ثانية، يتم تجاهلها.</string>
     <string name="about">حول</string>
     <string name="version">الإصدار</string>
     <string name="source_code">كود المصدر</string>

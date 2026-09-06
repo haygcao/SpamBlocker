@@ -1,0 +1,134 @@
+<resources>
+    <string name="normal_text">Teks Normal</string>
+    <string name="info_feature">Informasi / Fitur</string>
+    <string name="success_allow">Berhasil / Izinkan</string>
+    <string name="error_block">Kesalahan / Blokir</string>
+    <string name="disable">Nonaktifkan</string>
+    <string name="dialog_bg">Latar Belakang Dialog</string>
+    <string name="app_bg">Latar Belakang Aplikasi</string>
+    <string name="should_import_as_instant_query">
+        <![CDATA[
+        Ini tampaknya merupakan alur kerja \"API query\", seharusnya diimpor ke bagian di atas \"Instant Query\".
+        ]]>
+    </string>
+    <string name="at_time">Pada Waktu</string>
+    <string name="interval">Interval</string>
+    <string name="contact_prefix">Prefiks Kontak</string>
+    <string name="help_regex_mode_contact_prefix">
+        <![CDATA[
+        <title><b>Prefiks Kontak</b></title>:<br>
+        &ensp; Izinkan panggilan berdasarkan kecocokan prefiks kontak, ideal untuk organisasi yang menggunakan
+          nomor berurutan, misalnya klinik atau firma hukum. <br>
+        <br>
+        <warn>Regex ini harus diakhiri dengan titik</warn>, dalam mode regex ini, titik-titik di akhir tersebut mewakili digit yang bervariasi. <br>
+        <br>
+        <b>Contoh:</b> <br>
+        &ensp; <sample><b>.*..</b></sample> <br>
+        &ensp; Ini cocok dengan kontak mana pun yang memiliki prefiks sama, sehingga perbedaan 2 digit di akhir tetap diizinkan.<br>
+        &ensp; Jika Anda menyimpan <sample>1111<b>22</b></sample> sebagai kontak, panggilan masuk dari <sample>1111<b>33</b></sample> juga akan diizinkan.<br>
+        <br>
+        <b>Contoh lain:</b> <br>
+        &ensp; <sample><b>(?!(04|03))\d{5}..</b></sample> <br>
+        Rincian: <br>
+        &ensp; - <b><sample>(?!(03|04))</sample></b> <br>
+        &emsp;   Kecualikan nomor yang diawali 03 atau 04 <br>
+        &ensp; - <b><sample>\d{5}</sample></b> <br>
+        &emsp;   Nomor harus terdiri dari total 7 digit, termasuk sufiks variabel 2 digit <br>
+        &ensp; - <b><sample>..</sample></b> <br>
+        &emsp;   Sufiks variabel 2 digit <br>
+        ]]>
+    </string>
+    <string name="help_regex_preset_contact_prefix">
+        <![CDATA[
+        Cocokkan kontak berdasarkan prefiks, dengan mengizinkan variasi pada <minor><b>2</b></minor> digit terakhir, ideal untuk organisasi yang menggunakan nomor berurutan, misalnya klinik atau firma hukum. <br>
+        <br>
+        <b>Contoh</b>: <br>
+        &ensp; Jika Anda menyimpan <sample>111111</sample><highlight>22</highlight> sebagai kontak, panggilan dari <sample>111111</sample><highlight>33</highlight> juga akan diizinkan.
+        ]]>
+    </string>
+    <string name="caller_id">ID Penelepon</string>
+    <string name="help_caller_id">
+        <![CDATA[
+        Tampilkan ID penelepon dalam jendela mengambang. <br>
+        <br>
+        Seret untuk memindahkannya. <br>
+        <br>
+        <b>Catatan</b> <br>
+        Anda mungkin melihat peringatan sistem di panel notifikasi saat jendela mengambang aktif,
+          yang menunjukkan bahwa aplikasi ini menampilkan jendela di atas aplikasi lain.
+        Hal itu terjadi karena jendela mengambang secara historis pernah disalahgunakan oleh malware untuk menampilkan layar masuk palsu. <br>
+        Abaikan saja peringatan ini, karena akan hilang bersama jendela mengambang.
+        ]]>
+    </string>
+    <string name="perm_show_overlay">Tampilkan Overlay</string>
+    <string name="preview">Pratinjau</string>
+    <string name="content_template">Templat Konten</string>
+    <string name="help_caller_id_template">
+        <![CDATA[
+        Konten yang ditampilkan di jendela ID penelepon, dalam format HTML. <br>
+        <br>
+        Tanda hubung (-) ditampilkan jika nilainya kosong, misalnya saat tidak ada informasi operator untuk nomor tersebut.
+        <br>
+        <title>Tag yang didukung</title>: <br>
+        - <minor>{reason}</minor> <br>
+        &emsp; Mengapa panggilan diizinkan, alasan yang sama seperti yang ditampilkan di riwayat panggilan. <br>
+        - <minor>{geolocation}</minor> <br>
+        &emsp; Lokasi geografis nomor telepon. <br>
+        - <minor>{carrier}</minor> <br>
+        &emsp; Nama operator nomor telepon. <br>
+        <br>
+        <title>Tag HTML yang didukung</title>: <br>
+        Lihat: <a href="%s">link</a>
+        ]]>
+    </string>
+    <string name="background_color">Warna Latar Belakang</string>
+    <string name="wait">Tunggu</string>
+    <string name="help_action_wait">
+        <![CDATA[
+        Tunda selama N detik. <br>
+        <br>
+        <b>Kasus penggunaan</b>: <br>
+        <sample>
+        Untuk fitur <b>Prt. SMS</b>, pesan kadang tiba bersamaan dengan panggilan
+         atau beberapa detik setelah panggilan; menambahkan jeda penyaringan panggilan 2~3 detik dapat mencegah masalah seperti ini.
+        </sample>
+        ]]>
+    </string>
+    <string name="comment_identifier">Pengenal Komentar</string>
+    <string name="hint_comment_identifier">
+        Contoh: \"comment\":\"(.+?)\"
+    </string>
+    <string name="help_comment_identifier">
+        <![CDATA[
+        Ekstrak <title>komentar</title> dari hasil kueri untuk ditampilkan dalam notifikasi dan log riwayat. (opsional)<br>
+        <br>
+        Sebagai contoh, untuk hasil kueri ini: <br>
+        <sample>
+        { <br>
+          &ensp; \"type\": \"MARKETING\", <br>
+          &ensp; \"comment\": \"Better call Saul\", <br>
+          &ensp;  … <br>
+        } <br>
+        </sample>
+        <br>
+        Ekstrak dengan: <br>
+        &ensp; <sample>\"comment\": \"(.+?)\"</sample> <br>
+        ]]>
+    </string>
+    <string name="carrier">Operator</string>
+    <string name="carrier_rule">Aturan Operator</string>
+    <string name="help_regex_mode_carrier">
+        <![CDATA[
+        <title><b>Operator</b></title>:<br>
+        &ensp; Regex akan mencocokkan nama operator nomor telepon. <br>
+        <br>
+        <warn>Catatan</warn> <br>
+        &ensp; Informasi operator didasarkan pada pendaftaran awal dan mungkin tidak
+        akurat jika nomor telah dipindahkan ke operator lain. <br>
+        <br>
+        Misalnya: <br>
+        &ensp; Blokir nomor dari <no_translate><sample>Verizon Wireless</sample></no_translate>
+        dengan regex <no_translate><error>verizon.*</error></no_translate> <br>
+        ]]>
+    </string>
+</resources>

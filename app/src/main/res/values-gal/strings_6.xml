@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        Pena, a aplicación fallou.\n\n
-        Por favor, copia o contido de abaixo e reporta este problema en github,
+    <![CDATA[
+        Sentímolo, a aplicación bloqueouse. <br>
+        <br>
+        Por favor, copia o contido abaixo e informa deste problema en GitHub,
         elimina calquera información sensible antes de informar.
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>Dom</item>
@@ -16,18 +19,16 @@
 
 
 
-    <string name="confirm_delete_all_records">Confirmar eliminar todos os rexistros?</string>
+    <string name="confirm_delete_all_records">
+        <![CDATA[
+        Confirmar eliminar <error>todos</error> os rexistros?
+        ]]>
+    </string>
     <string name="expiry">Caducidade</string>
     <string name="days">Días</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        Cando está habilitado, o contido do SMS tamén se rexistrará na base de datos e se mostrará nesta lista, non se rexistrará na base de datos cando estea desactivado.<br>
-        <br>
-        - Cando está habilitado:<br>
-        &emsp; <b>Toca</b> para expandir/colapsar a mensaxe completa.<br>
-        <br>
-        - Cando está desactivado:<br>
-        &emsp; <b>Toca</b> para abrir a conversa na aplicación predeterminada.
+        Cando está habilitado, o contido do SMS tamén se rexistrará na base de datos e se mostrará nesta lista, non se rexistrará na base de datos cando estea desactivado.
         ]]>
     </string>
 
@@ -42,21 +43,40 @@
     <string name="repeated_call">Chamada repetida</string>
     <string name="help_repeated_call">
         <![CDATA[
-        Permitir se a chamada se repite nun período de tempo; é probable que sexa importante en lugar de ser unha chamada de spam.<br>
+        Permitir chamadas repetidas, é máis probable que sexan urxentes que spam. <br>
+        <br>
+        Por defecto, permírase a segunda chamada nun prazo de <highlight><b>5 minutos</b></highlight>. <br>
         <br>
         <b>Opcións:</b><br>
         <br>
-        <h6><font color="#00BFFF">- Frecuencia</h6>
-        A configuración predeterminada <font color="#03DAC5"><b>1 / 5 Min</b></font> significa que a segunda chamada dentro de 5 minutos será permitida.<br>
+        - <title><b>Intervalo Máx.</b></title> <br>
+        Só as chamadas dentro deste intervalo considéranse repeticións. <br>
         <br>
-        <h6><font color="#00BFFF">- Incluír SMS</font></h6>
-        Cando está activado, tamén conta a recepción de mensaxes SMS dese número.<br>
+        - <title><b>Intervalo Mín.</b></title> <br>
+        Se un número chama de novo antes deste tempo, será ignorado. Os bots de chamadas spam adoitan volver a chamar instantaneamente; nesse caso, aumente este valor. Configurar o modo de bloqueo en \"Silencio\" tamén pode axudar, consulte a súa descrición emergente para máis detalles. <br>
         <br>
-        <font color="#ea86ff"><b>Prioridade: 10</b></font>
+        - <title><b>Veces de Repetición</b></title> <br>
+        O número mínimo de repeticións. <br>
+        Por exemplo: <br>
+        <sample>
+        Cando se establece en 2, unha chamada debe repetirse dúas veces. En total, fan falta tres chamadas: <br>
+         &ensp; - ignorar <br>
+         &ensp; - ignorar <br>
+         &ensp; - permitir <br>
+        </sample>
+        <br>
+        - <title><b>Incluír SMS</b></title> <br>
+        Cando está activado, recibir mensaxes SMS dese número tamén conta. <br>
+        <br>
+        <priority><b>Prioridade: 10</b></priority>
         ]]>
     </string>
 
 
+    <string name="max_interval_min">Intervalo máximo (min)</string>
+    <string name="min_interval_sec">Intervalo mínimo (seg)</string>
+    <string name="repeat_times">Veces de repetición</string>
+    <string name="call_repeated_too_soon">Só %s milisegundos dende a última chamada deste número, o mínimo requirido son %s milisegundos, ignorar.</string>
     <string name="about">Acerca de</string>
     <string name="version">Versión</string>
     <string name="source_code">Código fonte</string>
@@ -69,9 +89,9 @@
         <item>Importar .csv como varias regras</item>
     </string-array>
     <string name="open_settings">Abrir configuración</string>
-    <string name="remove_db_number">Eliminar número da base de datos de chamadas non desexadas</string>
+    <string name="remove_from_db">Eliminar da base</string>
     <string name="copy_number">Copiar número</string>
-    <string name="add_num_to_regex_rule">Engadir número á regra regex</string>
-    <string name="add_num_to_db">Engadir número á base de datos de chamadas non desexadas</string>
-    <string name="mark_all_as_read">Marcar todo como lido</string>
+    <string name="add_to_regex_rule">Engadir á regra regex</string>
+    <string name="edit_regex_rule">Editar regra regex</string>
+    <string name="add_to_db">Engadir á base</string>
 </resources>

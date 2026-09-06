@@ -1,0 +1,108 @@
+<resources>
+    <string name="call_screened">Дзвінок відфільтровано</string>
+    <string name="help_call_screened">
+        <![CDATA[
+        Спрацьовує після фільтрації дзвінка.
+        ]]>
+    </string>
+    <string name="text_reply">Текстова відповідь</string>
+    <string name="text_to_reply">Текст відповіді</string>
+    <string name="cant_talk_in_meeting">Я зараз на зустрічі, зв\'яжуся з вами пізніше.</string>
+    <string name="busy_right_now">Не можу зараз говорити, напишу пізніше.</string>
+    <string name="help_action_text_reply">
+        <![CDATA[
+        Генерує текст автовідповіді на основі результату фільтрації дзвінка.
+        ]]>
+    </string>
+    <string name="send_sms">Надіслати SMS</string>
+    <string name="result">Результат</string>
+    <string name="contacts_only">Тільки контакти</string>
+    <string name="blocked_by">Заблоковано</string>
+    <string name="sms_sent_successfully">SMS успішно надіслано</string>
+    <string name="failed_to_send_sms">Помилка надсилання SMS: %s</string>
+    <string name="replying_text">Текст відповіді: %s</string>
+    <string name="help_action_send_sms">
+        <![CDATA[
+        Надіслати SMS-повідомлення. <br>
+        <br>
+        <title>Номер</title> <br>
+        Перевіряє кілька джерел по порядку та використовує перше знайдене співпадіння: <br>
+        &ensp; Тег <sample><no_translate>send_sms_to</no_translate></sample> (можна створити за допомогою <b>Встановити тег</b>) <br>
+        &ensp; Вхідний номер <br>
+        <br>
+        <title>Вміст SMS</title> <br>
+        Перевіряє кілька джерел по порядку: <br>
+        &ensp; Тег <sample><no_translate>send_sms_content</no_translate></sample> <br>
+        &ensp; Текстовий вивід попереднього кроку <br>
+        ]]>
+    </string>
+    <string name="help_call_screening_number_filter">
+        <![CDATA[
+        Використовуйте цей регулярний вираз, щоб виключити певні номери, такі як стаціонарні або міжнародні. <br>
+        <br>
+        Наприклад <br>
+        &ensp; <sample>\\d{10,11}</sample> <br>
+        &ensp; номери з 10-11 цифр.
+        ]]>
+    </string>
+    <string name="sms_reply">SMS-відповідь</string>
+    <string name="help_bot_preset_sms_reply">
+        <![CDATA[
+        Автоматично надсилати SMS-повідомлення контактам, коли їхні дзвінки заблоковано. <br>
+        Для режиму «Нарада» та інших функцій блокування можна встановити різні повідомлення. <br>
+        <br>
+        <warn>Примітка</warn> <br>
+        Коли додаток надішле SMS вперше, з\'явиться системне спливаюче вікно з попередженням про можливу оплату.
+        Натисніть <sample>Запам\'ятати мій вибір</sample>, щоб уникнути цього попередження в майбутньому.
+        ]]>
+    </string>
+    <string name="find_regex_rule_by_description">
+        <![CDATA[
+        Введіть опис, щоб знайти відповідне правило регулярного виразу.
+        ]]>
+    </string>
+    <string name="rules">Правила</string>
+    <string name="rule_description">Опис правила</string>
+    <string name="priority_in_order">Пріоритет визначається послідовністю цього списку.</string>
+    <string name="help_ringtone_trigger">
+        <![CDATA[
+        Причина, чому дзвінок дозволено. <br>
+        <br>
+        Наприклад, <b>Повторний дзвінок</b> означає, що визначена мелодія відтворить, коли дзвінок буде дозволено через <b>Повторний дзвінок</b>.
+        ]]>
+    </string>
+    <string name="copy_tag">Копіювати тег</string>
+    <string name="tag_is_copied_from">Тег %s скопійовано з %s</string>
+    <string name="help_copy_tag">Створіть новий тег з тим самим значенням, але іншою назвою.</string>
+    <string name="from_tag">Від тега</string>
+    <string name="to_tag">До тега</string>
+    <string name="allow_7726">Дозволити 7726</string>
+    <string name="help_bot_preset_7726">
+        <![CDATA[
+        Лише для <warn>демонстраційних цілей</warn>.<br>
+        <br>
+        Пересилає спам-повідомлення на номер <error>7726</error> (універсальний короткий код для <error>SPAM</error>),
+         ця функція підтримується багатьма мобільними операторами. <br>
+        <br>
+        <warn>Попередження</warn> <br>
+        Увімкніть цю функцію лише в тому випадку, якщо ваш оператор підтримує номер 7726. В іншому випадку може стягуватися стандартна плата за SMS. <br>
+        <br>
+        Це створює як <minor>робочий процесс</minor>, так і <minor>правило регулярного виразу</minor> для SMS: <br>
+        <br>
+        - <minor>Робочий процес</minor> <br>
+        &ensp; 1. Надіслати спам-текст на 7726. <br>
+        &ensp; 2. Зачекати 10 секунд. <br>
+        &ensp; 3. Надіслати номер на 7726. <br>
+        <br>
+        - <minor>Правило регулярного виразу</minor> \"Дозволити 7726\" <br>
+        &ensp; Дозволити повідомлення від 7726, такі як: <br>
+        &emsp; <sample>Дякуємо за повідомлення, будь ласка, дайте відповідь із номером телефону</sample>. <br>
+        <br>
+        Відрегулюйте 10-секундну затримку відповідно до часу відповіді вашого оператора та вилучіть надсилання номера, якщо воно не підтримується вашим оператором.
+        ]]>
+    </string>
+    <string name="report_sms">Звіт про SMS</string>
+    <string name="regex_starts_with_plus">%s — це спеціальний символ у регулярних виразах (наприклад, %s), екрануйте його як %s</string>
+    <string name="sms_content_is_null">Вміст SMS порожній, чи ввімкнено логування вмісту SMS?</string>
+    <string name="ignore">Ігнорувати</string>
+</resources>

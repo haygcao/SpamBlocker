@@ -8,7 +8,6 @@
         %s
         ]]>
     </string>
-    <string name="invalid_auth_credentials">Bitte geben Sie gültige Autorisierungsinformationen ein.</string>
     <string name="delay">Verzögerung</string>
     <string name="report_number_require_call_log_permission">
         Um eine Fehlmeldung wiederholter oder zurückgewählter Anrufe zu verhindern,
@@ -29,29 +28,36 @@
     </string>
     <string name="running_services">Laufende Dienste</string>
     <string name="report_number">Nummer melden</string>
-    <string-array name="spam_categories">
-        <item>Gültige Nummer</item>
-        <item>Betrug</item>
-        <item>Marketing</item>
-        <item>Umfrage</item>
-        <item>Politik</item>
-        <item>Sonstige Spam-Anrufe</item>
-    </string-array>
+    <string name="valid_number">Gültige Nummer</string>
+    <string name="valid_sms">Gültige SMS</string>
+    <string name="fraud">Betrug</string>
+    <string name="promotional">Werbung</string>
+    <string name="survey">Umfrage</string>
+    <string name="reminder">Erinnerung</string>
     <string name="action_category_config">Kategorie Konfiguration</string>
     <string name="help_action_category_config">
         <![CDATA[
-        Es werden nur die folgenden Spam-Kategorien unterstützt. Alle anderen Kategorien aus der API sollten einer dieser Kategorien zugeordnet werden.<br>
-        <br>
-         - <font color="#03DAC5"><b>{valid}</b></font><br>
-        &ensp; Als gültige Nummer melden, kein Spam.<br>
-        <br>
-         - <font color="#fa7f71"><b>{fraud}</b></font><br>
-         - <font color="#fa7f71"><b>{marketing}</b></font><br>
-         - <font color="#fa7f71"><b>{survey}</b></font><br>
-         - <font color="#fa7f71"><b>{political}</b></font><br>
-        <br>
-         - <font color="#fa7f71"><b>{other}</b></font><br>
-        &ensp; Der Standard-Spam-Typ, der verwendet wird, wenn keine der oben genannten Kategorien zutrifft.<br>
+                Es werden nur die folgenden Kategorien unterstützt:<br>
+                <br>
+                 - <highlight><b>{valid}</b></highlight><br>
+                &ensp; Als gültige Telefonnummer melden, nicht als Spam-Anruf.<br>
+                <br>
+                 - <error><b>{fraud}</b></error><br>
+                 - <error><b>{promotional}</b></error><br>
+                 - <error><b>{survey}</b></error><br>
+                 - <error><b>{reminder}</b></error><br>
+                 - <error><b>{other}</b></error><br>
+                &ensp; Der Fallback-Typ für Spam-Anrufe, der verwendet wird, wenn keine der oben genannten Kategorien zutrifft.<br>
+                <br>
+                Dadurch wird das Tag <title>{category}</title> erzeugt, das in nachfolgenden HTTP-Anfragen verwendet werden kann. <br>
+                <br>
+                Zum Beispiel, POST-Body: <br>
+                <sample>
+                { <br>
+                    &ensp; \"phone\": \"{number}\", <br>
+                    &ensp; \"rating\": \"{category}\" <br>
+                }
+                </sample>
         ]]>
     </string>
     <string name="missing_category">
@@ -76,19 +82,20 @@
         Einige Dienste senden Ihnen zuerst eine SMS, um Sie darüber zu informieren, dass ein Anruf bevorsteht, in der Regel innerhalb einer Minute.<br>
         <br>
         Beispielsweise eine SMS wie:<br>
-        &ensp; <font color="#888888">[irgendein Dienst] Wir rufen Sie an, um zu informieren…, Sie können gerne antworten.</font><br>
+        &ensp; <sample>[irgendein Dienst] Wir rufen Sie an, um zu informieren…, Sie können gerne antworten.</sample><br>
         <br>
         Ein regulärer Ausdruck für eine solche Nachricht wäre:<br>
-        &ensp; <font color="#03DAC5"><b>.*bitte.*antworten.*</b></font> <br>
+        &ensp; <highlight><b>.*bitte.*antworten.*</b></highlight> <br>
         <br>
-        Die Standardeinstellung <font color="#03DAC5"><b>120 Sekunden</b></font> bedeutet, dass alle Anrufe in den nächsten zwei Minuten nach Erhalt einer solchen Nachricht zugelassen werden.<br>
+        Die Standardeinstellung <highlight><b>120 Sekunden</b></highlight> bedeutet, dass alle Anrufe in den nächsten zwei Minuten nach Erhalt einer solchen Nachricht zugelassen werden.<br>
         <br>
         Es funktioniert sowohl für reguläre SMS als auch für Flash-SMS (Klasse 0 SMS).<br>
         <br>
-        <font color="#ea86ff"><b>Priorität: 10</b></font>
+        Es funktioniert, ohne dass die globale SMS-Filterung aktiviert sein muss.<br>
+        <br>
+        <priority><b>Priorität: 10</b></priority>
         ]]>
     </string>
     <string name="waning_using_wildcard_as_regex">Platzhalter `*` wird ohne vorangestellten Punkt verwendet, meinen Sie `.*`?</string>
     <string name="import_as">Importieren als</string>
-    <string name="api_key">API-Schlüssel</string>
 </resources>

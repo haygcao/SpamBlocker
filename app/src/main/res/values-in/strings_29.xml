@@ -1,0 +1,108 @@
+<resources>
+    <string name="call_screened">Panggilan Disaring</string>
+    <string name="help_call_screened">
+        <![CDATA[
+        Dipicu setelah panggilan disaring.
+        ]]>
+    </string>
+    <string name="text_reply">Balasan Teks</string>
+    <string name="text_to_reply">Teks untuk Membalas</string>
+    <string name="cant_talk_in_meeting">Sedang rapat sekarang, nanti saya hubungi lagi.</string>
+    <string name="busy_right_now">Tidak bisa bicara sekarang, nanti saya hubungi lagi.</string>
+    <string name="help_action_text_reply">
+        <![CDATA[
+        Menghasilkan teks balasan otomatis berdasarkan hasil penyaringan panggilan.
+        ]]>
+    </string>
+    <string name="send_sms">Kirim SMS</string>
+    <string name="result">Hasil</string>
+    <string name="contacts_only">Hanya Kontak</string>
+    <string name="blocked_by">Diblokir Oleh</string>
+    <string name="sms_sent_successfully">SMS berhasil dikirim</string>
+    <string name="failed_to_send_sms">Gagal mengirim SMS: %s</string>
+    <string name="replying_text">Teks balasan: %s</string>
+    <string name="help_action_send_sms">
+        <![CDATA[
+        Kirim pesan SMS. <br>
+        <br>
+        <title>Nomor</title> <br>
+        Memeriksa beberapa sumber secara berurutan, mengadopsi kecocokan pertama yang ditemukan: <br>
+        &ensp; Tag <sample><no_translate>send_sms_to</no_translate></sample> (dapat dibuat menggunakan <b>Set Tag</b>) <br>
+        &ensp; Nomor yang masuk <br>
+        <br>
+        <title>Konten SMS</title> <br>
+        Memeriksa beberapa sumber secara berurutan: <br>
+        &ensp; Tag <sample><no_translate>send_sms_content</no_translate></sample> <br>
+        &ensp; Output teks dari langkah sebelumnya <br>
+        ]]>
+    </string>
+    <string name="help_call_screening_number_filter">
+        <![CDATA[
+        Gunakan regex ini untuk mengecualikan nomor tertentu, seperti telepon rumah atau nomor internasional. <br>
+        <br>
+        Contoh <br>
+        &ensp; <sample>\\d{10,11}</sample> <br>
+        &ensp; nomor dengan 10 hingga 11 digit.
+        ]]>
+    </string>
+    <string name="sms_reply">Balasan SMS</string>
+    <string name="help_bot_preset_sms_reply">
+        <![CDATA[
+        Kirim SMS secara otomatis kepada kontak saat panggilan mereka diblokir. <br>
+        Pesan yang berbeda dapat diatur untuk Mode Rapat dan fitur pemblokiran lainnya. <br>
+        <br>
+        <warn>Catatan</warn> <br>
+        Pertama kali aplikasi mengirim SMS, pop-up sistem akan memperingatkan Anda tentang kemungkinan biaya.
+        Ketuk <sample>Ingat pilihan saya</sample> untuk menghindari peringatan ini di masa mendatang.
+        ]]>
+    </string>
+    <string name="find_regex_rule_by_description">
+        <![CDATA[
+        Masukkan deskripsi untuk mencocokkan aturan regex yang sesuai.
+        ]]>
+    </string>
+    <string name="rules">Aturan</string>
+    <string name="rule_description">Deskripsi Aturan</string>
+    <string name="priority_in_order">Prioritas ditentukan oleh urutan daftar ini.</string>
+    <string name="help_ringtone_trigger">
+        <![CDATA[
+        Alasan mengapa panggilan diizinkan. <br>
+        <br>
+        Sebagai contoh, <b>Panggilan Berulang</b> berarti nada dering yang ditentukan akan berbunyi ketika panggilan diizinkan oleh <b>Panggilan Berulang</b>.
+        ]]>
+    </string>
+    <string name="copy_tag">Salin Tag</string>
+    <string name="tag_is_copied_from">Tag %s disalin dari %s</string>
+    <string name="help_copy_tag">Buat tag baru dengan nilai yang sama tapi nama yang berbeda.</string>
+    <string name="from_tag">Dari Tag</string>
+    <string name="to_tag">Ke Tag</string>
+    <string name="allow_7726">Izinkan 7726</string>
+    <string name="help_bot_preset_7726">
+        <![CDATA[
+        Hanya untuk <warn>tujuan demonstrasi</warn>.<br>
+        <br>
+        Meneruskan pesan spam ke <error>7726</error> (kode singkat universal untuk <error>SPAM</error>),
+         fitur yang didukung oleh banyak operator seluler. <br>
+        <br>
+        <warn>Peringatan</warn> <br>
+        Aktifkan ini hanya jika operator Anda mendukung 7726. Jika tidak, biaya SMS standar mungkin berlaku. <br>
+        <br>
+        Ini membuat <minor>alur kerja</minor> dan <minor>aturan regex</minor> SMS: <br>
+        <br>
+        - <minor>Alur kerja</minor> <br>
+        &ensp; 1. Kirim teks spam ke 7726. <br>
+        &ensp; 2. Tunggu selama 10 detik. <br>
+        &ensp; 3. Kirim nomor ke 7726. <br>
+        <br>
+        - <minor>Aturan regex</minor> \"Izinkan 7726\" <br>
+        &ensp; Izinkan pesan dari 7726, seperti: <br>
+        &emsp; <sample>Terima kasih telah melapor, silakan balas dengan nomor telepon</sample>. <br>
+        <br>
+        Sesuaikan penundaan 10 detik sesuai waktu respons operator Anda, hapus pelaporan nomor jika tidak didukung oleh operator Anda.
+        ]]>
+    </string>
+    <string name="report_sms">Laporkan SMS</string>
+    <string name="regex_starts_with_plus">%s adalah karakter khusus dalam regex (contoh: %s), gunakan escape seperti %s</string>
+    <string name="sms_content_is_null">Konten SMS kosong, apakah pencatatan konten SMS diaktifkan?</string>
+    <string name="ignore">Abaikan</string>
+</resources>

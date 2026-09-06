@@ -3,14 +3,15 @@
         Cleaning up history db, deleting records before timestamp: %s.
     </string>
     <string name="cleaning_up_spam_db">
-        Cleaning up spam db, deleting %s records before timestamp: %s\".
+        Cleaning up spam db, deleting %s records before timestamp: %s.
     </string>
     <string name="resolved_url">Resolved url: %s</string>
     <string name="time_cost">Time cost: %s milliseconds.</string>
     <string name="parsed_n_rules">Parsed %s rules.</string>
     <string name="add_n_numbers_to_spam_db">Adding %s numbers to spam db.</string>
     <string name="nothing_to_import">Number list is empty, nothing to import.</string>
-    <string name="importing_n_numbers">Importing %s numbers as regex rule.</string>
+    <string name="importing_n_numbers">Importing %s numbers.</string>
+    <string name="importing_n_rules">Importing %s rules.</string>
     <string name="create_rule_with_numbers">Creating rule with %s numbers.</string>
     <string name="replace_rule_with_desc">Replacing the rule with description: %s.</string>
     <string name="rule_with_desc_not_found">Rule with description %s not found.</string>
@@ -20,68 +21,75 @@
     <string name="find_rule_with_desc">Found %s rules with description %s.</string>
     <string name="modify_n_rules">Modifying %s rules.</string>
     <string name="number_not_match_filter">The number %s doesn\'t match the filter %s, skip.</string>
+    <string name="content_not_match_filter">The content doesn\'t match the filter, skip.</string>
     <string name="fail_detect_cc">Failed to detect country code.</string>
-    <string name="identified_as_spam">Identified as spam number, category: %s.</string>
-    <string name="identified_as_valid">Identified as valid number, category: %s.</string>
+    <string name="identified_as_spam">Identified as spam number, category: %s, comment: %s.</string>
+    <string name="identified_as_valid">Identified as valid number, category: %s, comment: %s.</string>
     <string name="unidentified_number">Unidentified number.</string>
     <string name="auto_detect_cc_permission">The permission READ_PHONE_STATE is required for detecting country code.</string>
     <string name="number_tags">
         <![CDATA[
-        - <font color="#00BFFF"><b><no_translate>{cc}</no_translate></b></font><br>
+        - <title><b><no_translate>{cc}</no_translate></b></title><br>
         &ensp; The country code.<br>
-        - <font color="#00BFFF"><b><no_translate>{domestic}</no_translate></b></font><br>
+        - <title><b><no_translate>{domestic}</no_translate></b></title><br>
         &ensp; The domestic part.<br>
-        - <font color="#00BFFF"><b><no_translate>{number}</no_translate></b></font><br>
+        - <title><b><no_translate>{number}</no_translate></b></title><br>
         &ensp; The full number, including both country code and domestic part, without leading + or 0s.<br>
-        - <font color="#00BFFF"><b><no_translate>{origin_number}</no_translate></b></font><br>
-        &ensp; The origin number that can contain leading + or 0s.<br>
+        - <title><b><no_translate>{raw_number}</no_translate></b></title><br>
+        &ensp; The raw number that may contain leading + or 0s.<br>
         ]]>
     </string>
     <string name="sms_tags">
         <![CDATA[
-        - <font color="#00BFFF"><b>{sms}</b></font><br>
+        - <title><b>{sms}</b></title><br>
         &ensp; The SMS content.<br>
+        ]]>
+    </string>
+    <string name="escape_tags">
+        <![CDATA[
+        - <title><b><no_translate>{escape(…)}</no_translate></b></title><br>
+        &ensp; Escape the content in the brackets, used for content inside quotation marks. <br>
         ]]>
     </string>
     <string name="time_tags">
         <![CDATA[
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {year}<br>
           {month}<br>
           {day}<br>
           {hour}<br>
           {minute}<br>
           {second}<br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; Single-digit number will be padded with a leading zero, e.g.: <br>
-        &emsp; <font color="#888888"><no_translate>{year}-{month}-{day} {hour}:{minute}:{second}</no_translate></font> <br>
+        &emsp; <sample><no_translate>{year}-{month}-{day} {hour}:{minute}:{second}</no_translate></sample> <br>
         &emsp; becomes <br>
-        &emsp; <font color="#888888">2020-01-22 03:44:05</font><br>
+        &emsp; <sample>2020-01-22 03:44:05</sample><br>
         <br>
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {month_index} <br>
           {day_index} <br>
           {hour_index} <br>
           {minute_index} <br>
           {second_index} <br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; These values will not be padded, e.g.: <br>
-        &emsp; <font color="#888888"><no_translate>{month_index}-{day_index}</no_translate></font> <br>
+        &emsp; <sample><no_translate>{month_index}-{day_index}</no_translate></sample> <br>
         &emsp; becomes <br>
-        &emsp; <font color="#888888">1-2</font><br>
+        &emsp; <sample>1-2</sample><br>
         <br>
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {day_of_week} <br>
           {day_of_week_index} <br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; These can be used to simulate a rotation schedule, for instance: <br>
-        &emsp; <font color="#888888">Perform daily backups and only keep the seven most recent backups.</font> <br>
+        &emsp; <sample>Perform daily backups and only keep the seven most recent backups.</sample> <br>
         <br>
-        <font color="#ffa500"><b>Note:</b></font><br>
+        <warn><b>Note:</b></warn><br>
          These time tags support simple arithmetic operations, such as
-          <font color="#00BFFF"><b><no_translate>{day-1}</no_translate></b></font>
+          <title><b><no_translate>{day-1}</no_translate></b></title>
          and
-          <font color="#00BFFF"><b><no_translate>{hour+2}</no_translate></b></font>.
+          <title><b><no_translate>{hour+2}</no_translate></b></title>.
         ]]>
     </string>
     <string name="help_http_url">
@@ -98,27 +106,19 @@
         <![CDATA[
         Primarily designed for the German FRITZ!Box, it also works with phone numbers from any other countries.<br>
         <br>
-        It supports querying by hash instead of the number itself, providing better privacy.<br>
+        <b>Highlights</b>: <br>
+        - <highlight>Queries by hash</highlight> instead of the actual phone number, providing better privacy. <br>
+        - Uses <highlight>range-based detection</highlight> when the exact number is not found, ignoring the last two digits. <br>
         <br>
         Website: <a href="https://phoneblock.net">https://phoneblock.net</a><br>
         <br>
         API: <a href="https://phoneblock.net/phoneblock/api/">https://phoneblock.net/phoneblock/api/</a>
         ]]>
     </string>
-    <string name="help_api_preset_phoneblock_authorization">
-        <![CDATA[
-        1. Register an account on <a href="https://phoneblock.net/phoneblock/login">https://phoneblock.net/phoneblock/login</a><br>
-        <br>
-        2. On the settings page: <a href="https://phoneblock.net/phoneblock/settings">https://phoneblock.net/phoneblock/settings</a>,
-         press the button \"Generate API key\".<br>
-        <br>
-        3. Fill the generated API key in below.
-        ]]>
-    </string>
     <string name="not_enough_time_left">
         The call screening time limit is 5 seconds, with a %s ms buffer
-        for the inaccuracy of time functions, the total time limit is actually %s ms.
-        The previous steps cost %s ms, not enough time left, skip.
+        for time function inaccuracy. The total time limit is actually %s ms.
+        Previous steps cost %s ms, not enough time left, skip.
     </string>
     <string name="action_filter_query_result">Filter Spam</string>
     <string name="help_action_filter_query_result">
@@ -126,15 +126,14 @@
         Generate a <u>list of numbers</u> containing the spam number identified from the previous step, and ready to be imported to the database.
         ]]>
     </string>
-    <string name="canceling_thread">Canceling thread.</string>>
+    <string name="canceling_thread">Canceling thread.</string>
     <string name="suggest_to_swipe">
         <![CDATA[
-        <font color="#03DAC5"><b>Swipe left</b></font> to delete it.<br>
+        <highlight><b>Swipe left</b></highlight> to delete it.<br>
         <br>
         Most card-like UI elements in this app are associated with swiping gestures,
-        some of which also support <font color="#03DAC5"><b>swiping right</b></font>, for example, the history records.
+        some of which also support <highlight><b>swiping right</b></highlight>, for example, the history records.
         ]]>
-    </string>>
-    <string name="bug_number">If this is a valid number, please report it on github.</string>>
-    <string name="skip_alpha_empty_number">Skip alpha or empty number.</string>>
+    </string>
+    <string name="bug_number">If this is a valid number, please report it on GitHub.</string>
 </resources>

@@ -17,8 +17,6 @@
     <string name="clear">נקה</string>
     <string name="test">בדיקה</string>
     <string name="save">שמור</string>
-    <string name="whitelist">רשימה לבנה</string>
-    <string name="blacklist">רשימה שחורה</string>
     <string name="content">תוכן</string>
     <string name="priority">עדיפות</string>
     <string name="deleted_filter">(כלל שנמחק)</string>
@@ -30,20 +28,23 @@
     <string name="yes">כן</string>
     <string name="no">לא</string>
     <string name="ok">אישור</string>
+    <string name="cancel">ביטול</string>
     <string name="miscellaneous">שונות</string>
     <string name="quick_settings">הגדרות מהירות</string>
     <string name="regex_settings">הגדרות ביטוי רגולרי</string>
     <string name="backup">גיבוי</string>
     <string name="import_">ייבוא</string>
     <string name="export">ייצוא</string>
-    <string name="config_text">טקסט תצורה</string>
+    <string name="config_json">JSON תצורה</string>
     <string name="imported_successfully">יובא בהצלחה</string>
     <string name="import_fail">הייבוא נכשל</string>
+    <string name="exported_successfully">יצא בהצלחה</string>
+    <string name="export_fail">שגיאה בייצוא</string>
     <string name="prompt_go_to_permission_setting">
         <![CDATA[
         תכונה זו דורשת הרשאה:<br>
         <br>
-        <font color="#00BFFF">%s</font><br>
+        <title>%s</title><br>
         <br>
         יש להפעיל אותה ידנית בהגדרות המערכת.<br>
         לפתוח את דף ההגדרות?
@@ -55,5 +56,6 @@
     <string name="label_content_rules">כללי הודעות</string>
     <string name="content_rule">כלל הודעה</string>
     <string name="recent_apps">אחרונות</string>
-    <string name="allow_contact">אנשי קשר</string>
+    <string name="contacts">אנשי קשר</string>
+    <string name="non_contacts">לא-אנשי קשר</string>
 </resources>

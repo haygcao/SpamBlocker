@@ -1,0 +1,134 @@
+<resources>
+    <string name="normal_text">متن عادی</string>
+    <string name="info_feature">اطلاعات / ویژگی</string>
+    <string name="success_allow">موفقیت / اجازه</string>
+    <string name="error_block">خطا / مسدود</string>
+    <string name="disable">غیرفعال</string>
+    <string name="dialog_bg">پس‌زمینه دیالوگ</string>
+    <string name="app_bg">پس‌زمینه برنامه</string>
+    <string name="should_import_as_instant_query">
+        <![CDATA[
+        به نظر می‌رسد این یک جریان کاری \"پرس‌وجوی API\" باشد، باید به بخش \"پرس‌وجوی فوری\" بالا وارد شود.
+        ]]>
+    </string>
+    <string name="at_time">در زمان</string>
+    <string name="interval">فاصله</string>
+    <string name="contact_prefix">پیش‌شماره مخاطب</string>
+    <string name="help_regex_mode_contact_prefix">
+        <![CDATA[
+        <title><b>پیش‌شماره مخاطب</b></title>:<br>
+        &ensp; اجازه دادن به تماس‌ها بر اساس تطبیق پیش‌شماره مخاطب، مناسب برای سازمان‌هایی که از
+          شماره‌های ترتیبی استفاده می‌کنند، مانند درمانگاه‌ها یا دفاتر حقوقی. <br>
+        <br>
+        <warn>این regex باید با نقطه‌ها تمام شود</warn>، در این حالت regex این نقطه‌های پایانی نشان‌دهنده رقم‌های متغیر هستند. <br>
+        <br>
+        <b>برای مثال:</b> <br>
+        &ensp; <sample><b>.*..</b></sample> <br>
+        &ensp; با هر مخاطبی که پیش‌شماره یکسانی داشته باشد مطابقت می‌دهد و اختلاف ۲ رقمی در انتها را مجاز می‌کند.<br>
+        &ensp; اگر <sample>1111<b>22</b></sample> را به‌عنوان مخاطب ذخیره کرده باشید، تماس ورودی از <sample>1111<b>33</b></sample> هم مجاز خواهد بود.<br>
+        <br>
+        <b>مثال دیگر:</b> <br>
+        &ensp; <sample><b>(?!(04|03))\d{5}..</b></sample> <br>
+        توضیح بخش‌ها: <br>
+        &ensp; - <b><sample>(?!(03|04))</sample></b> <br>
+        &emsp;   شماره‌هایی را که با 03 یا 04 شروع می‌شوند حذف می‌کند <br>
+        &ensp; - <b><sample>\d{5}</sample></b> <br>
+        &emsp;   شماره باید در مجموع ۷ رقم باشد، شامل پسوند متغیر ۲ رقمی <br>
+        &ensp; - <b><sample>..</sample></b> <br>
+        &emsp;   پسوند متغیر ۲ رقمی <br>
+        ]]>
+    </string>
+    <string name="help_regex_preset_contact_prefix">
+        <![CDATA[
+        مخاطبان را بر اساس پیش‌شماره تطبیق می‌دهد و تغییر در <minor><b>۲</b></minor> رقم پایانی را مجاز می‌کند، برای سازمان‌هایی که از شماره‌های ترتیبی استفاده می‌کنند، مانند درمانگاه‌ها یا دفاتر حقوقی، ایده‌آل است. <br>
+        <br>
+        <b>برای مثال</b>: <br>
+        &ensp; اگر <sample>111111</sample><highlight>22</highlight> را به‌عنوان مخاطب ذخیره کرده باشید، تماس از <sample>111111</sample><highlight>33</highlight> هم مجاز خواهد بود.
+        ]]>
+    </string>
+    <string name="caller_id">شناسه تماس</string>
+    <string name="help_caller_id">
+        <![CDATA[
+        شناسه تماس‌گیرنده را در یک پنجره شناور نشان می‌دهد. <br>
+        <br>
+        برای جابه‌جایی، آن را بکشید. <br>
+        <br>
+        <b>توجه</b> <br>
+        ممکن است هنگام فعال بودن پنجره شناور، یک هشدار سیستمی در نوار اعلان ببینید
+          که نشان می‌دهد این برنامه پنجره‌ای را روی سایر برنامه‌ها نمایش می‌دهد.
+        این به این دلیل است که پنجره‌های شناور در گذشته توسط بدافزارها برای نمایش صفحه‌های ورود جعلی سوءاستفاده شده‌اند. <br>
+        فقط این هشدار را نادیده بگیرید؛ همراه با پنجره شناور ناپدید می‌شود.
+        ]]>
+    </string>
+    <string name="perm_show_overlay">نمایش پنجره شناور</string>
+    <string name="preview">پیش‌نمایش</string>
+    <string name="content_template">قالب محتوا</string>
+    <string name="help_caller_id_template">
+        <![CDATA[
+        محتوای نمایش‌داده‌شده در پنجره شناسه تماس‌گیرنده، در قالب HTML. <br>
+        <br>
+        اگر مقدار خالی باشد، یک خط تیره (-) نمایش داده می‌شود، برای مثال وقتی اطلاعات اپراتور برای شماره وجود ندارد.
+        <br>
+        <title>برچسب‌های پشتیبانی‌شده</title>: <br>
+        - <minor>{reason}</minor> <br>
+        &emsp; دلیل مجاز شدن تماس، همان دلیلی که در سابقه تماس نمایش داده می‌شود. <br>
+        - <minor>{geolocation}</minor> <br>
+        &emsp; موقعیت جغرافیایی شماره تلفن. <br>
+        - <minor>{carrier}</minor> <br>
+        &emsp; نام اپراتور شماره تلفن. <br>
+        <br>
+        <title>برچسب‌های HTML پشتیبانی‌شده</title>: <br>
+        ببینید: <a href="%s">link</a>
+        ]]>
+    </string>
+    <string name="background_color">رنگ پس‌زمینه</string>
+    <string name="wait">مکث</string>
+    <string name="help_action_wait">
+        <![CDATA[
+        به مدت N ثانیه تأخیر می‌اندازد. <br>
+        <br>
+        <b>مورد استفاده</b>: <br>
+        <sample>
+        برای قابلیت <b>هشدار پیامکی</b>، گاهی پیام‌ها هم‌زمان با تماس
+         یا چند ثانیه پس از آن می‌رسند؛ افزودن 2~3 ثانیه تأخیر در غربال تماس می‌تواند از این مشکلات جلوگیری کند.
+        </sample>
+        ]]>
+    </string>
+    <string name="comment_identifier">شناسه نظر</string>
+    <string name="hint_comment_identifier">
+        مثال: \"comment\":\"(.+?)\"
+    </string>
+    <string name="help_comment_identifier">
+        <![CDATA[
+        <title>نظر</title> را از نتیجه بررسی استخراج کرده و در اعلان و تاریخچه نمایش دهید. (اختیاری)<br>
+        <br>
+        برای مثال، برای این نتیجه بررسی: <br>
+        <sample>
+        { <br>
+          &ensp; \"type\": \"MARKETING\", <br>
+          &ensp; \"comment\": \"Better call Saul\", <br>
+          &ensp;  … <br>
+        } <br>
+        </sample>
+        <br>
+        آن را با این الگو استخراج کنید: <br>
+        &ensp; <sample>\"comment\": \"(.+?)\"</sample> <br>
+        ]]>
+    </string>
+    <string name="carrier">اپراتور</string>
+    <string name="carrier_rule">قانون اپراتور</string>
+    <string name="help_regex_mode_carrier">
+        <![CDATA[
+        <title><b>اپراتور</b></title>:<br>
+        &ensp; عبارت منظم با نام اپراتور شماره مطابقت می‌کند. <br>
+        <br>
+        <warn>توجه</warn> <br>
+        &ensp; اطلاعات اپراتور بر پایه ثبت اولیه است و اگر شماره به اپراتور دیگری
+        منتقل شده باشد ممکن است نادقیق باشد. <br>
+        <br>
+        برای مثال: <br>
+        &ensp; شماره‌های مربوط به <no_translate><sample>Verizon Wireless</sample></no_translate> را
+        با regex <no_translate><error>verizon.*</error></no_translate> مسدود کن <br>
+        ]]>
+    </string>
+</resources>

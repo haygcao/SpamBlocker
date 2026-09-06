@@ -1,5 +1,6 @@
 package spam.blocker.ui.setting.quick
 
+import android.annotation.SuppressLint
 import android.app.NotificationManager.IMPORTANCE_DEFAULT
 import android.app.NotificationManager.IMPORTANCE_HIGH
 import android.app.NotificationManager.IMPORTANCE_LOW
@@ -7,6 +8,8 @@ import android.app.NotificationManager.IMPORTANCE_NONE
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -20,6 +23,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -29,23 +33,25 @@ import spam.blocker.R
 import spam.blocker.db.ContentRegexTable
 import spam.blocker.db.Notification.Channel
 import spam.blocker.db.Notification.ChannelTable
+import spam.blocker.db.Notification.DefaultRepeatInterval
 import spam.blocker.db.NumberRegexTable
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
-import spam.blocker.ui.theme.DarkOrange
-import spam.blocker.ui.theme.LocalPalette
-import spam.blocker.ui.theme.Salmon
-import spam.blocker.ui.theme.Teal200
+import spam.blocker.ui.showSplitter
 import spam.blocker.ui.widgets.AnimatedVisibleV
 import spam.blocker.ui.widgets.ColorPickerButton
 import spam.blocker.ui.widgets.ComboBox
+import spam.blocker.ui.widgets.FileChooser
 import spam.blocker.ui.widgets.FooterButton
 import spam.blocker.ui.widgets.GreyButton
 import spam.blocker.ui.widgets.GreyIcon18
 import spam.blocker.ui.widgets.GreyLabel
 import spam.blocker.ui.widgets.GreyText
 import spam.blocker.ui.widgets.HtmlText
+import spam.blocker.ui.widgets.InitFile
 import spam.blocker.ui.widgets.LabelItem
+import spam.blocker.ui.widgets.MIME_ICON
+import spam.blocker.ui.widgets.NumberInputBox
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.ResIcon
 import spam.blocker.ui.widgets.RingtonePicker
@@ -55,7 +61,8 @@ import spam.blocker.ui.widgets.Str
 import spam.blocker.ui.widgets.StrInputBox
 import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.ui.widgets.SwitchBox
-import spam.blocker.ui.widgets.rememberFileReadChooser
+import spam.blocker.util.FileUtils.readDataFromUri
+import spam.blocker.util.Lambda
 import spam.blocker.util.Lambda2
 import spam.blocker.util.Notification
 import spam.blocker.util.Notification.createChannel
@@ -63,16 +70,21 @@ import spam.blocker.util.Notification.isBuiltInChannel
 import spam.blocker.util.Notification.manager
 import spam.blocker.util.Notification.openChannelSettings
 import spam.blocker.util.Notification.reloadChannels
+import spam.blocker.util.Permission
+import spam.blocker.util.PermissionWrapper
 import spam.blocker.util.RingtoneUtil
+import spam.blocker.util.Util.scaleIcon
 import spam.blocker.util.spf
 import androidx.compose.foundation.Image as ComposeImage
 
+
+const val Notification_Icon_Last_Dir_Tag = "notification_icon_last_dir_tag"
 
 @Composable
 fun ChannelIcons(
     importance: Int?,
     mute: Boolean?,
-    color: Color = LocalPalette.current.textGrey,
+    color: Color = G.palette.textGrey,
 ) {
 
     G.notificationChannels
@@ -100,10 +112,11 @@ fun ChannelIcons(
             }
         }
     } else {
-        ResIcon(R.drawable.ic_question, modifier = M.size(16.dp), color = DarkOrange)
+        ResIcon(R.drawable.ic_question_circle, modifier = M.size(16.dp), color = G.palette.warning)
     }
 }
 
+@SuppressLint("LocalContextGetResourceValueCall")
 @Composable
 fun EditChannelDialog(
     editTrigger: MutableState<Boolean>,
@@ -113,7 +126,7 @@ fun EditChannelDialog(
     if (!editTrigger.value) {
         return
     }
-    val C = LocalPalette.current
+    val C = G.palette
 
     var chId by remember { mutableStateOf(initChannel.channelId) }
     var importance by remember { mutableIntStateOf(initChannel.importance) }
@@ -125,7 +138,8 @@ fun EditChannelDialog(
     var iconColor by remember { mutableStateOf<Int?>(initChannel.iconColor) }
     var led by remember { mutableStateOf(initChannel.led) }
     var ledColor by remember { mutableIntStateOf(initChannel.ledColor) }
-
+    var repeat by remember { mutableStateOf(initChannel.repeat && Permission.scheduleAlarm.isGranted) }
+    var repeatInterval by remember { mutableStateOf(initChannel.repeatInterval) }
 
     val isCreatingNewChannel by remember { mutableStateOf(initChannel.channelId == "") }
     val isBuiltin by remember(chId) { mutableStateOf(isBuiltInChannel(chId)) }
@@ -144,7 +158,7 @@ fun EditChannelDialog(
                 PopupDialog(
                     trigger = deleteConfirm,
                     buttons = {
-                        StrokeButton(label = Str(R.string.delete), color = Salmon) {
+                        StrokeButton(label = Str(R.string.delete), color = C.error) {
                             Notification.deleteChannel(ctx, chId)
                             ChannelTable.deleteByChannelId(ctx, chId)
                             reloadChannels(ctx)
@@ -156,13 +170,13 @@ fun EditChannelDialog(
                     // Show a warning: this channel is currently used by following rules...
                     val usedByRules = (NumberRegexTable().listAll(ctx) + ContentRegexTable().listAll(ctx))
                         .filter { it.channel == chId }
-                        .map { ctx.getString(R.string.regex_pattern) + " " + it.summary() }
+                        .map { ctx.getString(R.string.regex_pattern) + " " + it.descOrPattern() }
                         .toMutableList()
                     val spf = spf.Notification(ctx)
-                    if (spf.getSpamCallChannelId() == chId) {
+                    if (spf.spamCallChannelId == chId) {
                         usedByRules += ctx.getString(R.string.call)
                     }
-                    if (spf.getSpamSmsChannelId() == chId || spf.getValidSmsChannelId() == chId) {
+                    if (spf.spamSmsChannelId == chId || spf.validSmsChannelId == chId) {
                         usedByRules += ctx.getString(R.string.sms)
                     }
                     if (usedByRules.isNotEmpty()) {
@@ -175,7 +189,7 @@ fun EditChannelDialog(
                 StrokeButton(
                     label = Str(R.string.delete),
                     enabled = !isBuiltin && chId.isNotEmpty(),
-                    color = if (!isBuiltin && chId.isNotEmpty()) Salmon else C.disabled
+                    color = if (!isBuiltin && chId.isNotEmpty()) C.error else C.disabled
                 ) {
                     deleteConfirm.value = true
                 }
@@ -184,7 +198,7 @@ fun EditChannelDialog(
                 StrokeButton(
                     label = Str(R.string.save),
                     enabled = !anyError,
-                    color = if (anyError) C.disabled else Teal200
+                    color = if (anyError) C.disabled else C.teal200
                 ) {
                     val newCh = Channel(
                         channelId = chId,
@@ -196,11 +210,17 @@ fun EditChannelDialog(
                         iconColor = iconColor,
                         led = led,
                         ledColor = ledColor,
+                        repeat = repeat,
+                        repeatInterval = repeatInterval,
                     )
                     // 1. create notification channel
                     createChannel(ctx, newCh)
                     // 2. update db
-                    ChannelTable.addOrReplace(ctx, newCh)
+                    if (isCreatingNewChannel) {
+                        ChannelTable.add(ctx, newCh)
+                    } else {
+                        ChannelTable.updateById(ctx, initChannel.id, newCh)
+                    }
                     // 3. refresh the channel list
                     reloadChannels(ctx)
 
@@ -296,7 +316,7 @@ fun EditChannelDialog(
                 }
             }
 
-            // Mute + Sound
+            // Mute + Sound + Repeat
             AnimatedVisibleV(importance >= IMPORTANCE_DEFAULT) {
                 Column {
                     // Mute + Sound
@@ -340,25 +360,65 @@ fun EditChannelDialog(
                             }
                         }
                     }
+
+                    // Repeat
+                    AnimatedVisibleV(!mute) {
+                        Column {
+                            // Repeat
+                            LabeledRow(
+                                R.string.repeat,
+                                helpTooltip = Str(R.string.help_repeat),
+                            ) {
+                                SwitchBox(repeat) { isTurningOn ->
+                                    if (isTurningOn) {
+                                        G.permissionChain.ask(ctx, listOf(
+                                            PermissionWrapper(Permission.scheduleAlarm)
+                                        )) { granted ->
+                                            if (granted) {
+                                                repeat = true
+                                            }
+                                        }
+                                    } else {
+                                        repeat = false
+                                    }
+                                }
+                            }
+                            // Repeat Interval
+                            AnimatedVisibleV(repeat) {
+                                NumberInputBox(
+                                    intValue = repeatInterval ?: DefaultRepeatInterval,
+                                    labelId = R.string.repeat_interval_min,
+                                    onValueChange = { newVal, hasError ->
+                                        if (!hasError) {
+                                            repeatInterval = newVal!!
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    }
                 }
             }
 
             // Icon
             LabeledRow(R.string.icon) {
-                val fileReader = rememberFileReadChooser()
-                fileReader.Compose()
                 fun choose() {
-                    fileReader.popup(
-                        mimeTypes = arrayOf(
-                            "image/png", "image/jpeg", "image/x-icon", "image/vnd.microsoft.icon",
-                            "image/bmp", "mage/x-bmp"
-                        )
-                    ) { _, raw ->
-                        if (raw == null)
-                            return@popup
+                    FileChooser.popupRead(
+                        init = InitFile(
+                            filename = "",
+                            mimeType = MIME_ICON,
+                            rememberDirTag = Notification_Icon_Last_Dir_Tag,
+                        ),
+                        onResult = { uri ->
+                            if (uri != null) {
+                                val raw = readDataFromUri(ctx, uri) ?: return@popupRead
 
-                        icon = raw
-                    }
+                                val scaled = scaleIcon(raw) ?: return@popupRead
+
+                                icon = scaled
+                            }
+                        }
+                    )
                 }
 
                 if (icon == null) {
@@ -391,11 +451,11 @@ fun EditChannelDialog(
             ) {
                 RowVCenterSpaced(4) {
                     ColorPickerButton(
-                        color = iconColor,
-                        defaultText = Str(R.string.automatic),
-                        clearable = true,
+                        color = iconColor?.let { Color(it) },
+                        text = if (iconColor == null) Str(R.string.automatic) else null,
+                        clearLabel = Str(R.string.clear),
                     ) {
-                        iconColor = it
+                        iconColor = it?.toArgb()
                     }
                 }
             }
@@ -417,11 +477,11 @@ fun EditChannelDialog(
                 ) {
                     RowVCenterSpaced(6) {
                         ColorPickerButton(
-                            color = ledColor,
+                            color = Color(ledColor),
                             enabled = isCreatingNewChannel,
                         ) {
                             it?.let {
-                                ledColor = it
+                                ledColor = it.toArgb()
                             }
                         }
 
@@ -437,6 +497,7 @@ fun EditChannelDialog(
     }
 }
 
+@SuppressLint("LocalContextGetResourceValueCall")
 @Composable
 fun ChannelPicker(
     selectedChannelId: String,
@@ -494,27 +555,91 @@ fun ChannelPicker(
         selected = selectedIndex.value,
 
         onLongClick = {
-            editingChannel = G.notificationChannels[selectedIndex.value]
-            editTrigger.value = true
+            if (selectedIndex.value in G.notificationChannels.indices) {
+                editingChannel = G.notificationChannels[selectedIndex.value]
+                editTrigger.value = true
+            }
         }
     )
 }
 
+@Composable
+fun NotificationSummary(
+    onCallClick: Lambda? = null,
+    onSmsClick: Lambda? = null,
+) {
+    val ctx = LocalContext.current
+    val C = G.palette
+
+    val spf = spf.Notification(ctx)
+
+    val spamCallChannelId = remember { spf.spamCallChannelId }
+    val spamSmsChannelId = remember { spf.spamSmsChannelId }
+    val validSmsChannelId = remember { spf.validSmsChannelId }
+
+    RowVCenterSpaced(4, modifier = M.showSplitter() ) {
+        // Call Button
+        if (G.callEnabled.value) {
+            val ch = G.notificationChannels.find {
+                it.channelId == spamCallChannelId
+            }
+            FooterButton(
+                footerIconId = R.drawable.ic_call,
+                footerSize = 10,
+                footerOffset = Pair(-2, -2),
+                enabled = onCallClick != null,
+                onClick = onCallClick,
+                icon = {
+                    ChannelIcons(ch?.importance, ch?.mute, color = C.error)
+                }
+            )
+        }
+
+        if (G.callEnabled.value && G.smsEnabled.value) {
+
+            if (G.smsEnabled.value) {
+                val chValid = G.notificationChannels.find {
+                    it.channelId == validSmsChannelId
+                }
+                val chSpam = G.notificationChannels.find {
+                    it.channelId == spamSmsChannelId
+                }
+                FooterButton(
+                    footerIconId = R.drawable.ic_sms,
+                    footerSize = 8,
+                    footerOffset = Pair(-3, -2),
+                    enabled = onSmsClick != null,
+                    icon = {
+                        RowVCenterSpaced(4) {
+                            // Valid SMS icon
+                            ChannelIcons(chValid?.importance, chValid?.mute)
+                            // Vertical Divider
+                            VerticalDivider(thickness = 1.dp, color = C.disabled)
+                            // Spam SMS icon
+                            ChannelIcons(chSpam?.importance, chSpam?.mute, color = C.error)
+                        }
+                    },
+                    onClick = onSmsClick
+                )
+            }
+        }
+    }
+}
 
 @Composable
 fun Notification() {
     val ctx = LocalContext.current
-    val C = LocalPalette.current
+    val C = G.palette
 
     val spf = spf.Notification(ctx)
 
     // Call
-    var spamCallChannelId by remember { mutableStateOf(spf.getSpamCallChannelId()) }
+    var spamCallChannelId by remember { mutableStateOf(spf.spamCallChannelId) }
 
     // SMS
-    var spamSmsChannelId by remember { mutableStateOf(spf.getSpamSmsChannelId()) }
-    var validSmsChannelId by remember { mutableStateOf(spf.getValidSmsChannelId()) }
-    var activeSmsChatChannelId by remember { mutableStateOf(spf.getActiveSmsChatChannelId()) }
+    var spamSmsChannelId by remember { mutableStateOf(spf.spamSmsChannelId) }
+    var validSmsChannelId by remember { mutableStateOf(spf.validSmsChannelId) }
+    var activeSmsChatChannelId by remember { mutableStateOf(spf.smsChatChannelId) }
 
     // Call config popup
     val configTrigger = rememberSaveable { mutableStateOf(false) }
@@ -535,7 +660,7 @@ fun Notification() {
                             ChannelPicker(
                                 spamCallChannelId,
                             ) { _, newCh ->
-                                spf.setSpamCallChannelId(newCh.channelId)
+                                spf.spamCallChannelId = newCh.channelId
                                 spamCallChannelId = newCh.channelId
                             }
                         }
@@ -555,7 +680,7 @@ fun Notification() {
                                 ChannelPicker(
                                     validSmsChannelId,
                                 ) { _, ch ->
-                                    spf.setValidSmsChannelId(ch.channelId)
+                                    spf.validSmsChannelId = ch.channelId
                                     validSmsChannelId = ch.channelId
                                 }
                             }
@@ -566,7 +691,7 @@ fun Notification() {
                                 ChannelPicker(
                                     spamSmsChannelId,
                                 ) { _, ch ->
-                                    spf.setSpamSmsChannelId(ch.channelId)
+                                    spf.spamSmsChannelId = ch.channelId
                                     spamSmsChannelId = ch.channelId
                                 }
                             }
@@ -577,7 +702,7 @@ fun Notification() {
                                 ChannelPicker(
                                     activeSmsChatChannelId,
                                 ) { _, ch ->
-                                    spf.setActiveSmsChatChannelId(ch.channelId)
+                                    spf.smsChatChannelId = ch.channelId
                                     activeSmsChatChannelId = ch.channelId
                                 }
                             }
@@ -592,52 +717,10 @@ fun Notification() {
         R.string.notification,
         helpTooltip = Str(R.string.help_notification),
         content = {
-            RowVCenterSpaced(4) {
-                // Call Button
-                if (G.callEnabled.value) {
-                    val ch = G.notificationChannels.find {
-                        it.channelId == spamCallChannelId
-                    }
-                    FooterButton(
-                        footerIconId = R.drawable.ic_call,
-                        footerSize = 10,
-                        footerOffset = Pair(-2, -2),
-                        icon = {
-                            ChannelIcons(ch?.importance, ch?.mute, color = Salmon)
-                        }
-                    ) {
-                        configTrigger.value = true
-                    }
-                }
-
-                // SMS Button
-                if (G.smsEnabled.value) {
-                    val chValid = G.notificationChannels.find {
-                        it.channelId == validSmsChannelId
-                    }
-                    val chSpam = G.notificationChannels.find {
-                        it.channelId == spamSmsChannelId
-                    }
-
-                    FooterButton(
-                        footerIconId = R.drawable.ic_sms,
-                        footerSize = 8,
-                        footerOffset = Pair(-3, -2),
-                        icon = {
-                            RowVCenterSpaced(4) {
-                                // Valid SMS icon
-                                ChannelIcons(chValid?.importance, chValid?.mute)
-                                // Vertical Divider
-                                VerticalDivider(thickness = 1.dp, color = C.disabled)
-                                // Spam SMS icon
-                                ChannelIcons(chSpam?.importance, chSpam?.mute, color = Salmon)
-                            }
-                        }
-                    ) {
-                        configTrigger.value = true
-                    }
-                }
-            }
+            NotificationSummary(
+                onCallClick = { configTrigger.value = true},
+                onSmsClick = { configTrigger.value = true }
+            )
         }
     )
 }

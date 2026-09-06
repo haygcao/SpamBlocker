@@ -1,0 +1,84 @@
+<resources>
+    <string name="known_android_issue">
+    <![CDATA[
+        این یک مشکل شناخته‌شده اندروید است که قبلاً به تیم اندروید گزارش شده، هنوز رفع آن منتظر است. <br>
+        <br>
+        دلیل و راه‌حل را در اینجا ببینید: <br>
+         <a href="%s">%s</a>
+    ]]>
+    </string>
+    <string name="import_numbers">وارد کردن Numbers</string>
+    <string name="faq_import_numbers">
+    <![CDATA[
+        وارد کردن شماره‌ها از فایل‌های محلی یا راه دور با استفاده از گردش‌کارها. <br>
+        <br>
+        <title><b>یک تنظیم معمول</b></title>: <br>
+        <br>
+        ۱. <minor><b>خواندن فایل</b></minor> / <minor><b>درخواست Http</b></minor> <br>
+          &ensp; دریافت محتوای فایل. <br>
+          <br>
+        ۲. <minor><b>تجزیه CSV</b></minor> / <minor><b>تجزیه XML</b></minor> / <minor><b>استخراج Regex</b></minor> <br>
+          &ensp; آن را تجزیه کنید و لیستی از شماره‌ها دریافت کنید. <br>
+          <br>
+        ۳. <minor><b>جایگزینی شماره</b></minor> (اختیاری) <br>
+          &ensp; تغییر فرمت شماره <br>
+          &ensp; مورد استفاده: <br>
+          <sample>
+            &emsp; هنگام انتقال شماره‌ها از برنامه‌های دیگر، فرمت‌هایی مانند <b>123#####</b> را به رجکس <b>123.....</b> یا <b>123.*</b> تبدیل کنید <br>
+          </sample>
+          <br>
+        ۴. <minor><b>وارد کردن به پایگاه داده اسپم</b></minor> / <minor><b>وارد کردن به قانون Regex</b></minor> <br>
+        <br>
+        <br>
+        <title><b>نمونه‌ها</b></title>: <br>
+          - پیش‌تنظیم شده <no_translate><b>FTC-DNC</b></no_translate> <br>
+        <br>
+        نمونه‌های آنلاین بیشتر: <br>
+          - <a href=\"%s\">متن ساده</a> <br>
+          - <a href=\"%s\">CSV</a> <br>
+          - <a href=\"%s\">XML</a> <br>
+          - <a href=\"%s\">JSON</a> - JsonPath هنوز پشتیبانی نمی‌شود، به جای آن از <minor><b>استخراج Regex</b></minor> استفاده کنید.
+    ]]>
+    </string>
+    <string name="faq_regex">
+    <![CDATA[
+        یک آموزش رجکس برای غیر برنامه‌نویسان. <br>
+        <br>
+        <title><b>سطح مقدماتی - وایلدکارد</b></title> <br>
+        &ensp; هر زمان که بخواهید از یک وایلدکارد <sample><b>*</b></sample> استفاده کنید، یک نقطه <sample><b>.</b></sample>
+          قبل از آن بگذارید، مانند <sample><b>.*</b></sample>، این باید اکثر موارد استفاده را پوشش دهد. <br>
+        <br>
+        <title><b>پیشرفته - استفاده از هوش مصنوعی</b></title> <br>
+        &ensp; برای مثال، برای دریافت رجکس زیر برای تأیید پیامک: <br>
+        &ensp; <sample>.*(verification|validation).*code.*\\d{5,6}.*</sample> <br>
+        <br>
+        از هوش مصنوعی بپرسید: <br>
+        <sample>
+        %s
+        </sample>
+        <br>
+        <br>
+        <highlight><b>آنلاین امتحان کنید</b></highlight> <br>
+          &ensp; ۱. <a href=\"copy\"><big>پرامپت بالا را کپی کنید</big></a> <br>
+          &ensp; ۲. <a href=\"try_it\"><big>هوش مصنوعی آنلاین را اجرا کنید</big></a> <br>
+    ]]>
+    </string>
+    <string name="ai_regex_prompt">
+    <![CDATA[
+        یک regex ساده با تطبیق کامل برای Kotlin ارائه بده تا کدهای تأیید پیامک را استخراج کند. <br>
+        <br>
+        الزامات: <br>
+        - باید شامل کلمه \"verification\" یا \"validation\" باشد، سپس \"code\" و بعد یک عدد ۵ یا ۶ رقمی بیاید. <br>
+        - برای هر متن متغیری که قبل، بین یا بعد از این بخش‌ها می‌آید از .* استفاده کن تا کل پیام مطابقت داشته باشد. <br>
+        - نیازی نیست به بزرگی/کوچکی حروف، شکست خط یا انکرهای ^ و $ توجه شود. <br>
+        - از قابلیت‌های پیشرفته regex استفاده نکن. <br>
+        - regex نهایی را داخل backtick (``) قرار بده و فقط خود regex را خروجی بده. <br>
+        <br>
+        باید با این‌ها مطابقت داشته باشد: <br>
+        - "Your verification code is 123456, expires after 5 minutes." <br>
+        - "Your validation code: [12345]"
+    ]]>
+    </string>
+    <string name="copied_to_clipboard">در کلیپ‌بورد کپی شد</string>
+    <string name="api_query_timeout">پایان زمان پرس‌وجو API</string>
+</resources>

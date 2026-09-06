@@ -1,5 +1,6 @@
 package spam.blocker.ui.setting
 
+import android.view.ViewTreeObserver
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,11 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -21,50 +25,74 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import spam.blocker.G
 import spam.blocker.R
+import spam.blocker.service.checker.IChecker
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.api.ApiHeader
 import spam.blocker.ui.setting.api.ApiList
 import spam.blocker.ui.setting.api.ApiQueryPresets
 import spam.blocker.ui.setting.api.ApiReportPresets
+import spam.blocker.ui.setting.api.ApiSummary
 import spam.blocker.ui.setting.bot.BotHeader
 import spam.blocker.ui.setting.bot.BotList
+import spam.blocker.ui.setting.bot.BotSummary
 import spam.blocker.ui.setting.misc.About
 import spam.blocker.ui.setting.misc.BackupRestore
+import spam.blocker.ui.setting.misc.FAQ
 import spam.blocker.ui.setting.misc.Language
 import spam.blocker.ui.setting.misc.Theme
+import spam.blocker.ui.setting.misc.VersionSummary
 import spam.blocker.ui.setting.quick.Answered
+import spam.blocker.ui.setting.quick.AnsweredSummary
 import spam.blocker.ui.setting.quick.BlockType
+import spam.blocker.ui.setting.quick.BlockTypeSummary
+import spam.blocker.ui.setting.quick.CallerID
+import spam.blocker.ui.setting.quick.CallerIDSummary
 import spam.blocker.ui.setting.quick.Contacts
+import spam.blocker.ui.setting.quick.ContactsSummary
 import spam.blocker.ui.setting.quick.Dialed
+import spam.blocker.ui.setting.quick.DialedSummary
 import spam.blocker.ui.setting.quick.EmergencySituation
+import spam.blocker.ui.setting.quick.EmergencySituationSummary
 import spam.blocker.ui.setting.quick.MeetingMode
+import spam.blocker.ui.setting.quick.MeetingModeSummary
 import spam.blocker.ui.setting.quick.Notification
+import spam.blocker.ui.setting.quick.NotificationSummary
 import spam.blocker.ui.setting.quick.OffTime
+import spam.blocker.ui.setting.quick.OffTimeSummary
 import spam.blocker.ui.setting.quick.RecentApps
+import spam.blocker.ui.setting.quick.RecentAppsSummary
 import spam.blocker.ui.setting.quick.RepeatedCall
+import spam.blocker.ui.setting.quick.RepeatedCallSummary
 import spam.blocker.ui.setting.quick.SpamDB
+import spam.blocker.ui.setting.quick.SpamDBSummary
 import spam.blocker.ui.setting.quick.Stir
+import spam.blocker.ui.setting.quick.StirSummary
 import spam.blocker.ui.setting.regex.PushAlertHeader
 import spam.blocker.ui.setting.regex.PushAlertList
+import spam.blocker.ui.setting.regex.PushAlertSummary
 import spam.blocker.ui.setting.regex.PushAlertViewModel
 import spam.blocker.ui.setting.regex.RegexHeader
 import spam.blocker.ui.setting.regex.RegexList
+import spam.blocker.ui.setting.regex.RegexSummary
 import spam.blocker.ui.setting.regex.RegexViewModel
 import spam.blocker.ui.setting.regex.SmsAlert
+import spam.blocker.ui.setting.regex.SmsAlertSummary
 import spam.blocker.ui.setting.regex.SmsBomb
-import spam.blocker.ui.theme.SkyBlue
-import spam.blocker.ui.theme.Teal200
+import spam.blocker.ui.setting.regex.SmsBombSummary
+import spam.blocker.ui.slightDiff
 import spam.blocker.ui.theme.White
 import spam.blocker.ui.widgets.AnimatedVisibleV
 import spam.blocker.ui.widgets.BalloonQuestionMark
 import spam.blocker.ui.widgets.Fab
 import spam.blocker.ui.widgets.FabWrapper
+import spam.blocker.ui.widgets.FlowRowSpaced
 import spam.blocker.ui.widgets.GreyIcon16
 import spam.blocker.ui.widgets.NormalColumnScrollbar
 import spam.blocker.ui.widgets.RowVCenter
@@ -80,10 +108,11 @@ const val SettingRowMinHeight = 40
 
 @Composable
 fun SettingScreen() {
+    val C = G.palette
     val ctx = LocalContext.current
 
     val testingTrigger = rememberSaveable { mutableStateOf(false) }
-    PopupTesting(testingTrigger)
+    TestDialog(testingTrigger)
 
     // Hide FAB when scrolled to the bottom
     val scrollState = rememberScrollState()
@@ -93,29 +122,71 @@ fun SettingScreen() {
         }
     }
 
+    val priorityConflicts = remember { mutableStateListOf<IChecker>() }
+
+    fun checkConflicts() {
+        priorityConflicts.apply {
+            clear()
+            if (!spf.Global(ctx).ignorePriorityConflict) {
+                addAll(detectConflictCheckers(ctx))
+            }
+        }
+    }
+    // Detect priority conflicts when recomposed (e.g. on tab switching)
+    LaunchedEffect(Unit) {
+        checkConflicts()
+    }
+
+    // Detect priority conflicts when this screen regains focus (e.g., after closing a popup)
+    val view = LocalView.current
+    DisposableEffect(view) {
+        val listener = ViewTreeObserver.OnWindowFocusChangeListener { hasFocus ->
+            if (hasFocus) {
+                checkConflicts()
+            }
+        }
+
+        val observer = view.viewTreeObserver
+        observer.addOnWindowFocusChangeListener(listener)
+
+        onDispose {
+            if (observer.isAlive) {
+                observer.removeOnWindowFocusChangeListener(listener)
+            }
+        }
+    }
+
+    // Detect conflicts when clicking the "Test" button, show a popup warning if there are conflicts.
+    val conflictTrigger = remember { mutableStateOf(false) }
+    PriorityConflictDialog(trigger = conflictTrigger, conflicts = priorityConflicts)
+
     // Show text "Testing" on the testing tube icon, and hide this text once it's clicked.
-    val spf = spf.Global(ctx)
-    var alsoShowText by remember {
+    val spfSections = spf.SettingSections(ctx)
+    val spfGlobal = spf.Global(ctx)
+
+    var alsoShowTestButtonLabel by remember {
         mutableStateOf(
-            isFreshInstall(ctx) && !spf.isTestIconClicked()
+            isFreshInstall(ctx) && !spfGlobal.isTestIconClicked
         )
     }
     FabWrapper(
         fabRow = { positionModifier ->
-            if (G.globallyEnabled.value) {
-                Fab(
-                    visible = !bottomReached,
-                    text = if (alsoShowText) ctx.getString(R.string.title_rule_testing) else null,
-                    iconId = R.drawable.ic_tube,
-                    iconColor = White,
-                    iconSize = 36,
-                    bgColor = Teal200,
-                    modifier = positionModifier
-                ) {
+            Fab(
+                visible = !bottomReached,
+                text = if (alsoShowTestButtonLabel) Str(R.string.title_rule_testing) else null,
+                iconId = R.drawable.ic_tube,
+                iconColor = White,
+                bgColor = if (priorityConflicts.isEmpty()) C.teal200 else C.warning,
+                modifier = positionModifier
+            ) {
+                checkConflicts()
+                if (priorityConflicts.isEmpty()) {
                     testingTrigger.value = true
 
-                    spf.setTestIconClicked(true)
-                    alsoShowText = false
+                    spfGlobal.isTestIconClicked = true
+                    alsoShowTestButtonLabel = false
+                } else {
+                    conflictTrigger.value = true
                 }
             }
         }
@@ -130,12 +201,15 @@ fun SettingScreen() {
                 // global
                 GloballyEnabled()
 
-                if (G.globallyEnabled.value) {
-                    // quick settings
-                    Section(
-                        title = Str(R.string.quick_settings),
-                        horizontalPadding = 8
-                    ) {
+                // quick settings
+                Section(
+                    title = Str(R.string.quick_settings),
+                    horizontalPadding = 8,
+                    isCollapsed = remember { mutableStateOf(spfSections.isQuickSettingsCollapsed) },
+                    onToggleCollapse = {
+                        spfSections.isQuickSettingsCollapsed = it
+                    },
+                    content = {
                         Column {
                             Contacts()
                             Stir()
@@ -143,19 +217,48 @@ fun SettingScreen() {
                             RepeatedCall()
                             Dialed()
                             Answered()
-                            RecentApps()
-                            MeetingMode()
                             OffTime()
                             EmergencySituation()
+                            RecentApps()
+                            MeetingMode()
+
+                            HorizontalDivider(thickness = 1.dp, color = G.palette.background.slightDiff())
+
                             BlockType()
                             Notification()
+                            CallerID()
+                        }
+                    },
+                    contentCollapsed = {
+                        FlowRowSpaced(4) {
+                            ContactsSummary()
+                            StirSummary()
+                            SpamDBSummary()
+                            RepeatedCallSummary()
+                            DialedSummary()
+                            AnsweredSummary()
+                            OffTimeSummary()
+                            EmergencySituationSummary()
+                            RecentAppsSummary()
+                            MeetingModeSummary()
+
+                            HorizontalDivider(modifier = M.padding(vertical = 3.dp), thickness = 1.dp, color = G.palette.background.slightDiff())
+
+                            BlockTypeSummary()
+                            NotificationSummary()
+                            CallerIDSummary()
                         }
                     }
+                )
 
-                    Section(
-                        title = Str(R.string.regex_settings),
-                        horizontalPadding = 8
-                    ) {
+                Section(
+                    title = Str(R.string.regex_settings),
+                    horizontalPadding = 8,
+                    isCollapsed = remember { mutableStateOf(spfSections.isRegexSettingsCollapsed) },
+                    onToggleCollapse = {
+                        spfSections.isRegexSettingsCollapsed = it
+                    },
+                    content = {
                         Column {
                             // NumberRule / ContentRule / QuickCopy
                             listOf<RegexViewModel>(
@@ -163,6 +266,7 @@ fun SettingScreen() {
                                 G.ContentRuleVM,
                                 G.QuickCopyRuleVM,
                             ).forEach { vm ->
+                                vm.reloadOptions(ctx)
                                 LaunchedEffect(true) { vm.reloadDbAndOptions(ctx) }
 
                                 RegexHeader(vm)
@@ -189,13 +293,28 @@ fun SettingScreen() {
                             // SMS Bomb
                             SmsBomb()
                         }
+                    },
+                    contentCollapsed = {
+                        FlowRowSpaced(4) {
+                            RegexSummary(G.NumberRuleVM)
+                            RegexSummary(G.ContentRuleVM)
+                            RegexSummary(G.QuickCopyRuleVM)
+                            PushAlertSummary(PushAlertViewModel)
+                            SmsAlertSummary()
+                            SmsBombSummary()
+                        }
                     }
+                )
 
-                    // Instant Query
-                    Section(
-                        title = Str(R.string.instant_query),
-                        horizontalPadding = 8
-                    ) {
+                // Instant Query
+                Section(
+                    title = Str(R.string.instant_query),
+                    horizontalPadding = 8,
+                    isCollapsed = remember { mutableStateOf(spfSections.isInstantQueryCollapsed) },
+                    onToggleCollapse = {
+                        spfSections.isInstantQueryCollapsed = it
+                    },
+                    content = {
                         Column(
                             verticalArrangement = Arrangement.spacedBy(0.dp),
                         ) {
@@ -206,13 +325,21 @@ fun SettingScreen() {
                                 ApiList(G.apiQueryVM)
                             }
                         }
+                    },
+                    contentCollapsed = {
+                        ApiSummary(G.apiQueryVM)
                     }
+                )
 
-                    // Report Number
-                    Section(
-                        title = Str(R.string.report_number),
-                        horizontalPadding = 8
-                    ) {
+                // Report Number
+                Section(
+                    title = Str(R.string.report_number),
+                    horizontalPadding = 8,
+                    isCollapsed = remember { mutableStateOf(spfSections.isReportNumberCollapsed) },
+                    onToggleCollapse = {
+                        spfSections.isReportNumberCollapsed = it
+                    },
+                    content = {
                         Column(
                             verticalArrangement = Arrangement.spacedBy(0.dp),
                         ) {
@@ -223,40 +350,64 @@ fun SettingScreen() {
                                 ApiList(G.apiReportVM)
                             }
                         }
+                    },
+                    contentCollapsed = {
+                        ApiSummary(G.apiReportVM)
                     }
-                }
+                )
 
                 // Automation
                 Section(
                     title = Str(R.string.automation),
-                    horizontalPadding = 8
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(0.dp),
-                    ) {
-                        // Bot list
-                        LaunchedEffect(true) { G.botVM.reload(ctx) }
-                        BotHeader(G.botVM)
-                        AnimatedVisibleV(!G.botVM.listCollapsed.value) {
-                            BotList()
+                    horizontalPadding = 8,
+                    isCollapsed = remember { mutableStateOf(spfSections.isAutomationCollapsed) },
+                    content = {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(0.dp),
+                        ) {
+                            // Bot list
+                            LaunchedEffect(true) { G.botVM.reload(ctx) }
+                            BotHeader(G.botVM)
+                            AnimatedVisibleV(!G.botVM.listCollapsed.value) {
+                                BotList()
+                            }
                         }
+                    },
+                    contentCollapsed = {
+                        BotSummary(G.botVM)
+                    },
+                    onToggleCollapse = {
+                        spfSections.isAutomationCollapsed = it
                     }
-                }
+                )
 
                 // Miscellaneous
                 Section(
                     title = Str(R.string.miscellaneous),
-                    horizontalPadding = 8
-                ) {
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(0.dp),
-                    ) {
-                        Theme()
-                        Language()
-                        BackupRestore()
-                        About()
+                    horizontalPadding = 8,
+                    isCollapsed = remember { mutableStateOf(spfSections.isMiscCollapsed) },
+                    onToggleCollapse = {
+                        spfSections.isMiscCollapsed = it
+                    },
+                    content = {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(0.dp),
+                        ) {
+                            Language()
+                            Theme()
+                            BackupRestore()
+                            SettingRow {
+                                RowVCenterSpaced(8) {
+                                    FAQ()
+                                    About()
+                                }
+                            }
+                        }
+                    },
+                    contentCollapsed = {
+                        VersionSummary()
                     }
-                }
+                )
             }
         }
     }
@@ -288,8 +439,8 @@ fun SettingLabel(
         modifier = modifier,
         maxLines = 1,
         fontSize = 16.sp,
-        fontWeight = FontWeight.SemiBold,
-        color = color ?: SkyBlue,
+        fontWeight = FontWeight.Medium,
+        color = color ?: G.palette.infoBlue,
     )
 }
 

@@ -34,14 +34,16 @@ import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
-import spam.blocker.ui.theme.LocalPalette
-import spam.blocker.ui.theme.SkyBlue
-import spam.blocker.ui.theme.SwissCoffee
+import spam.blocker.ui.slightDiff
+import spam.blocker.ui.widgets.Button
 import spam.blocker.ui.widgets.DrawableImage
 import spam.blocker.ui.widgets.GreyButton
 import spam.blocker.ui.widgets.GreyIcon16
+import spam.blocker.ui.widgets.GreyIcon18
+import spam.blocker.ui.widgets.GreyLabel
 import spam.blocker.ui.widgets.NumberInputBox
 import spam.blocker.ui.widgets.PopupDialog
+import spam.blocker.ui.widgets.PopupSize
 import spam.blocker.ui.widgets.ResImage
 import spam.blocker.ui.widgets.RowVCenterSpaced
 import spam.blocker.ui.widgets.Str
@@ -63,11 +65,12 @@ import spam.blocker.util.spf.RecentAppInfo
 fun AppChooserIcon(
     callback: Lambda1<Boolean>,
 ) {
+    val C = G.palette
     val ctx = LocalContext.current
 
     ResImage(
         resId = R.drawable.ic_right_arrow,
-        color = SkyBlue,
+        color = C.infoBlue,
         modifier = M
             .fillMaxHeight()
             .padding(start = 4.dp)
@@ -104,12 +107,14 @@ fun <T> PopupChooseApps(
 
     onCheckChange: Lambda2<String, Boolean>,
 ) {
+    val C = G.palette
     val ctx = LocalContext.current
 
     // popup for choosing apps
     PopupDialog(
         trigger = popupTrigger,
         scrollEnabled = false,
+        popupSize = PopupSize(maxWidthPercentage = 0.9f, minWidthDp = 320, maxWidthDp = 600),
         content = {
             var searchFilter by remember { mutableStateOf("") }
 
@@ -158,7 +163,7 @@ fun <T> PopupChooseApps(
                             Column(modifier = M.weight(1f)) {
                                 Text(
                                     appInfo.label,
-                                    color = SkyBlue,
+                                    color = C.infoBlue,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1,
                                     lineHeight = 14.sp,
@@ -166,7 +171,7 @@ fun <T> PopupChooseApps(
 
                                 Text(
                                     appInfo.pkgName,
-                                    color = LocalPalette.current.textGrey,
+                                    color = G.palette.textGrey,
                                     overflow = TextOverflow.Ellipsis,
                                     lineHeight = 12.sp,
                                     maxLines = 1,
@@ -185,7 +190,7 @@ fun <T> PopupChooseApps(
 
                         // divider
                         if (index < sortedApps.lastIndex) // don't show for the last item
-                            HorizontalDivider(thickness = 1.dp, color = SwissCoffee)
+                            HorizontalDivider(thickness = 1.dp, color = C.dialogBg.slightDiff())
                     }
                 }
             }
@@ -207,7 +212,7 @@ private fun PopupConfig(
                 onValueChange = { newValue, hasError ->
                     if (!hasError) {
                         inXMin.value = newValue
-                        spf.RecentApps(ctx).setInXMin(newValue!!)
+                        spf.RecentApps(ctx).inXMin = newValue!!
                     }
                 },
                 labelId = R.string.within_minutes,
@@ -221,7 +226,7 @@ fun RecentApps() {
     val ctx = LocalContext.current
     val spf = spf.RecentApps(ctx)
 
-    val defaultInXMin = remember { mutableStateOf<Int?>(spf.getInXMin()) }
+    val defaultInXMin = remember { mutableStateOf<Int?>(spf.inXMin) }
 
     val buttonPopupTrigger = rememberSaveable { mutableStateOf(false) }
     val appsPopupTrigger = rememberSaveable { mutableStateOf(false) }
@@ -344,7 +349,7 @@ fun RecentApps() {
                 }
             }
 
-            if (enabledAppInfos.isEmpty()) {
+            if (!Permission.usageStats.isGranted || enabledAppInfos.isEmpty()) {
                 AppChooserIcon { granted ->
                     Permission.usageStats.isGranted = granted
                     if (granted)
@@ -363,4 +368,50 @@ private fun clearUninstalledRecentApps(ctx: Context) {
         Util.isPackageInstalled(ctx, it.pkgName)
     }
     spf.setList(cleared)
+}
+
+@Composable
+fun RecentAppsSummary() {
+    val ctx = LocalContext.current
+    val spf = spf.RecentApps(ctx)
+
+    if (Permission.usageStats.isGranted) {
+        val defaultInXMin = remember { mutableStateOf<Int?>(spf.inXMin) }
+        val enabledAppInfos = remember {
+            mutableStateListOf<RecentAppInfo>()
+        }
+
+        SideEffect {
+            enabledAppInfos.clear()
+            enabledAppInfos.addAll(spf.getList())
+        }
+
+        if (enabledAppInfos.isNotEmpty()) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End,
+            ) {
+                Button(
+                    content = {
+                        RowVCenterSpaced(4) {
+                            GreyIcon18(R.drawable.ic_delay)
+
+                            GreyLabel("${defaultInXMin.value} ${Str(R.string.min)}")
+
+                            enabledAppInfos.forEach {
+                                DrawableImage(
+                                    AppInfo.fromPackage(ctx, it.pkgName).icon,
+                                    modifier = M
+                                        .size(22.dp)
+                                        .padding(horizontal = 2.dp)
+                                )
+                            }
+                        }
+                    },
+                    enabled = false,
+                )
+
+            }
+        }
+    }
 }

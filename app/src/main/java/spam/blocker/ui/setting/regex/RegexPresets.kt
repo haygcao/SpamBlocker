@@ -8,6 +8,7 @@ import spam.blocker.db.Notification
 import spam.blocker.db.RegexRule
 import spam.blocker.def.Def
 import spam.blocker.def.Def.ANDROID_12
+import spam.blocker.ui.setting.regex.RegexMode.ModeType
 import spam.blocker.util.Lambda
 import spam.blocker.util.Lambda1
 import spam.blocker.util.Permission
@@ -58,6 +59,35 @@ val RegexPresets = mapOf(
             )
         },
         RegexPreset(
+            label = { it.getString(R.string.local_number) },
+            tooltip = {
+                it.getString(R.string.help_regex_preset_local_number)
+            },
+            preCheck = { ctx, onSuccess, onFail ->
+                G.permissionChain.ask(
+                    ctx,
+                    listOf(
+                        PermissionWrapper(Permission.phoneState),
+                    )
+                ) { granted ->
+                    if (granted) {
+                        onSuccess()
+                    }
+                }
+            }
+        ) { ctx ->
+            listOf(
+                RegexRule(
+                    pattern = "(?!Milan$).*",
+                    description = ctx.getString(R.string.non_local_number),
+                    priority = 0,
+                    isBlacklist = true,
+                    flags = Def.FLAG_FOR_CALL or Def.FLAG_FOR_SMS,
+                    patternModeType = ModeType.Geolocation
+                )
+            )
+        },
+        RegexPreset(
             label = { it.getString(R.string.sim_2_contacts) },
             tooltip = {
                 it.getString(R.string.help_sim_2_contacts)
@@ -95,7 +125,7 @@ val RegexPresets = mapOf(
                     priority = 12,
                     isBlacklist = false,
                     simSlot = 1,
-                    patternFlags = Def.FLAG_REGEX_FOR_CONTACT,
+                    patternModeType = ModeType.ContactName,
                 ),
                 RegexRule(
                     pattern = ".*",
@@ -103,6 +133,54 @@ val RegexPresets = mapOf(
                     priority = 11,
                     simSlot = 1,
                     isBlacklist = true,
+                )
+            )
+        },
+        RegexPreset(
+            label = { it.getString(R.string.contact_prefix) },
+            tooltip = {
+                it.getString(R.string.help_regex_preset_contact_prefix)
+            },
+            preCheck = { ctx, onSuccess, onFail ->
+                G.permissionChain.ask(
+                    ctx,
+                    listOf(
+                        PermissionWrapper(Permission.contacts),
+                    )
+                ) { granted ->
+                    if (granted) {
+                        onSuccess()
+                    }
+                }
+            }
+        ) { ctx ->
+            listOf(
+                RegexRule(
+                    pattern = ".*..",
+                    description = "",
+                    priority = 1,
+                    isBlacklist = false,
+                    flags = Def.FLAG_FOR_CALL or Def.FLAG_FOR_SMS,
+                    patternFlags = Def.FLAG_REGEX_IGNORE_CC,
+                    patternModeType = ModeType.ContactPrefix
+                )
+            )
+        },
+        RegexPreset(
+            label = { it.getString(R.string.database_prefix) },
+            tooltip = {
+                it.getString(R.string.help_regex_preset_database_prefix)
+            }
+        ) { ctx ->
+            listOf(
+                RegexRule(
+                    pattern = ".{5,}..",
+                    description = "",
+                    priority = 0,
+                    isBlacklist = true,
+                    flags = Def.FLAG_FOR_CALL or Def.FLAG_FOR_SMS,
+                    patternFlags = Def.FLAG_REGEX_RAW_NUMBER,
+                    patternModeType = ModeType.DatabasePrefix
                 )
             )
         },
@@ -124,53 +202,24 @@ val RegexPresets = mapOf(
                 )
             )
         },
-        RegexPreset(
-            label = { it.getString(R.string.caller_name) },
-            tooltip = {
-                it.getString(R.string.help_regex_preset_caller_name)
-            },
-        ) { ctx ->
-            listOf(
-                RegexRule(
-                    pattern = ".+",
-                    description = ctx.getString(R.string.caller_name),
-                    priority = 1,
-                    isBlacklist = false,
-                    flags = Def.FLAG_FOR_CALL,
-                    patternFlags = Def.FLAG_REGEX_FOR_CNAP,
-                )
-            )
-        },
+//        RegexPreset(
+//            label = { it.getString(R.string.caller_name) },
+//            tooltip = {
+//                it.getString(R.string.help_regex_preset_caller_name)
+//            },
+//        ) { ctx ->
+//            listOf(
+//                RegexRule(
+//                    pattern = ".+",
+//                    description = ctx.getString(R.string.caller_name),
+//                    priority = 1,
+//                    isBlacklist = false,
+//                    flags = Def.FLAG_FOR_CALL,
+//                    patternModeType = ModeType.CallerName
+//                )
+//            )
+//        },
 
-        RegexPreset(
-            label = { it.getString(R.string.local_number) },
-            tooltip = {
-                it.getString(R.string.help_regex_preset_local_number)
-            },
-            preCheck = { ctx, onSuccess, onFail ->
-                G.permissionChain.ask(
-                    ctx,
-                    listOf(
-                        PermissionWrapper(Permission.phoneState),
-                    )
-                ) { granted ->
-                    if (granted) {
-                        onSuccess()
-                    }
-                }
-            }
-        ) { ctx ->
-            listOf(
-                RegexRule(
-                    pattern = "(?!___$).*",
-                    description = ctx.getString(R.string.non_local_number),
-                    priority = 0,
-                    isBlacklist = true,
-                    flags = Def.FLAG_FOR_CALL or Def.FLAG_FOR_SMS,
-                    patternFlags = Def.FLAG_REGEX_FOR_GEO_LOCATION,
-                )
-            )
-        },
     ),
 
     Def.ForSms to listOf(
@@ -204,6 +253,6 @@ val RegexPresets = mapOf(
                     flags = Def.FLAG_FOR_CONTENT or Def.FLAG_FOR_SMS or Def.FLAG_FOR_PASSED
                 )
             )
-        },
+        }
     )
 )

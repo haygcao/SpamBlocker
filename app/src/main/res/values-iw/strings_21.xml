@@ -1,23 +1,10 @@
 <resources>
     <string name="perm_write_settings">כתוב הגדרות</string>
-    <string name="set_to">הגדר ל-</string>
-    <string name="help_set_ringtone_to">
-    <![CDATA[
-        הגדר את הצלצול עבור תכונה מסוימת, או השתק אותו. <br>
-        <br>
-        לדוגמה, כדי להגדיר את הצלצול עבור כלל ביטוי רגולרי: <br><br>
-        <font color="#888888">
-        &emsp; { \"regex\": \"rule_desc\" }
-        </font>
-        <br><br>
-        שיחות המותרות על ידי כלל זה ינגנו את הצלצול שצוין.<br>
-    ]]>
-    </string>
     <string name="ringtone">צלצול</string>
     <string name="call_to_test_ringtone">בצע שיחה בפועל כדי לבדוק את הצלצול.</string>
     <string name="help_ringtone">
     <![CDATA[
-        התאם אישית את הצלצול עבור תכונה מסוימת, שיחות המותרות על ידי תכונה זו ינגנו את הצלצול שצוין.
+        הגדר צלצולים שונים לשיחות המותרות על ידי תכונות שונות.
     ]]>
     </string>
     <string name="help_target_rule_desc">
@@ -28,7 +15,7 @@
         הקלד <b>עבודה</b> בשדה זה.
     ]]>
     </string>
-    <string name="invalid_config">הגדרה לא חוקית</string>
+
     <string name="custom">מותאם אישית</string>
     <string name="quick_tile">אריח מהיר</string>
     <string name="help_quick_tile">
@@ -47,16 +34,15 @@
     ]]>
     </string>
     <string name="quick_tile_is_active">אריח מהיר מותאם אישית פעיל.</string>
-    <string name="http_status_code_template">קוד מצב Http: %d</string>
     <string name="help_preset_ringtone">
     <![CDATA[
         התאם אישית את הרינגטון עבור כלל ביטוי רגולרי, הרינגטון שצוין יתנגן כאשר השיחה
         מותרת על ידי כלל זה. <br>
         <br>
         <b>מקרה שימוש:<b> <br>
-        <font color="#888888">
-        &ensp; הגדר רינגטונים שונים עבור אנשים מסוימים, קבוצות אנשי קשר, או טווחי מספרי טלפון.
-        </font>
+        <sample>
+        &ensp; הגדר צלצולים שונים לאנשי קשר מסוימים, טווח מספרים או שיחות חוזרות.
+        </sample>
     ]]>
     </string>
     <string name="remote_setup">הגדרה מרחוק</string>
@@ -93,8 +79,8 @@
         <br>
         התהליך פועל יומיומית, הוא מוריד את ערכת הנתונים המלאה של 90 יום בריצה הראשונה, ולאחר מכן מבצע רק עדכונים מצטברים בריצות הבאות. <br>
         <br>
-        <font color="#ffa500"><b>הערה:</b></font> <br>
-        <font color="#888888">&ensp; ערכת הנתונים מתעדכנת בדרך כלל בכל יום חול סביב הצהריים זמן מזרחי. </font><br>
+        <warn><b>הערה:</b></warn> <br>
+        <sample>&ensp; ערכת הנתונים מתעדכנת בדרך כלל בכל יום חול סביב הצהריים זמן מזרחי. </sample><br>
         <br>
         לכן הוא מתוזמן ל‑18:00, מכיוון שצפוי שערכת הנתונים תהיה זמינה עד אז. <br>
     ]]>
@@ -102,9 +88,5 @@
     <string name="csv_missing_column">
         חסרה עמודה נדרשת %s. תוכל להשתמש בכותרת %s עבור עמודת מספרי הטלפון, או למפות כותרת קיימת
         ל- %s ב\"ניתוח CSV\".
-    </string>
-    <string name="enable_reporting_number">אפשר דיווח</string>
-    <string name="help_enable_reporting_number">
-        API זה תומך גם בדיווח על מספרי טלפון, הפעל זאת כדי ליצור גם את זרימת העבודה של הדיווח.
     </string>
 </resources>

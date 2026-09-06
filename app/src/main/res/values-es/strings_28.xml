@@ -1,0 +1,151 @@
+<resources>
+    <string name="perm_access_dir">Acceder a la carpeta</string>
+    <string name="dir_not_specified">Carpeta no especificada.</string>
+    <string name="no_access_to_dir">Sin acceso a la carpeta: %s.</string>
+    <string name="grant_access_to_dir">
+        <![CDATA[
+        Concede acceso a la carpeta: <br>
+        <highlight>%s</highlight>
+        ]]>
+    </string>
+    <string name="comment">Comentario</string>
+    <string name="database_prefix">Prefijo de la base de datos</string>
+    <string name="help_regex_mode_database_prefix">
+        <![CDATA[
+        <title><b>Prefijo de la base de datos</b></title>:<br>
+        &ensp; Bloqueo por rango para números de teléfono de la base de datos.<br>
+        <br>
+        <warn>Esta regex debe terminar con puntos</warn>, en este modo regex esos puntos finales representan los dígitos variables. <br>
+        <br>
+        <b>Por ejemplo:</b> <br>
+        &ensp; <sample><b>.{5,}..</b></sample> requiere que el prefijo tenga al menos 5 dígitos, permitiendo una variación de 2 dígitos al final.
+        ]]>
+    </string>
+    <string name="help_regex_preset_database_prefix">
+        <![CDATA[
+        Coincide con números de teléfono de la base de datos por prefijo; el prefijo debe tener al menos <minor><b>5</b></minor> dígitos, permitiendo una variación de <minor><b>2</b></minor> dígitos al final. <br>
+        <br>
+        <b>Por ejemplo</b>: <br>
+        &ensp; Si <sample>12345678</sample><error>00</error> existe en la base de datos, una llamada de <sample>12345678</sample><error>99</error> también se bloqueará.
+        ]]>
+    </string>
+    <string name="api_preset_remote_llm">LLM remoto</string>
+    <string name="help_api_preset_remote_llm">
+        <![CDATA[
+            Comprueba el contenido de los SMS con modelos de lenguaje grandes remotos. <br>
+            <br>
+            Esto se proporciona únicamente con <warn>fines de demostración</warn>.<br>
+            <br>
+            Toca para abrir la página wiki con instrucciones.
+        ]]>
+    </string>
+    <string name="found_existing_auth_token">Se encontró un token de autenticación existente</string>
+    <string name="use_this_token">Usar este token</string>
+    <string name="login_and_get_a_token">Regístrate e inicia sesión en el sitio web para obtener tu token.</string>
+    <string name="get_a_new_token">Obtener un token nuevo</string>
+    <string name="token">Token</string>
+    <string name="enter_token_manually_desc">Si ya tienes un token, ingrésalo manualmente.</string>
+    <string name="enter_token_manually">Ingresar token manualmente</string>
+    <string name="others">Otros</string>
+    <string name="api_settings">Configuración de API</string>
+    <string name="include_settings">Configuración de inclusión</string>
+    <string name="exclude_settings">Configuración de exclusión</string>
+    <string name="backup_missing_category">Esta configuración falta en el archivo de copia de seguridad y no se puede restaurar.</string>
+    <string name="warning_priority_conflict">
+        <![CDATA[
+        <highlight>Las reglas de lista blanca</highlight> y las de <error>lista negra</error> no deben tener la misma prioridad<br>
+        <br>
+        Reglas en conflicto:
+        ]]>
+    </string>
+    <string name="checking_template_new">%s Comprobando: %s</string>
+    <string name="textbox_limit">Límite del cuadro de texto</string>
+    <string name="help_rule_textbox_limit">
+        <![CDATA[
+        El máximo de caracteres permitidos en el cuadro de entrada. Superar este límite desactiva la edición,
+          ya que un texto excesivamente largo congelará la interfaz de usuario. <br>
+          <br>
+        Predeterminado: <b>10000</b> caracteres
+        ]]>
+    </string>
+    <string name="clear_history">Borrar historial</string>
+    <string name="tip_clear_history">Si la aplicación falla al iniciarse y no se abre, prueba a borrar los registros del historial con el botón de abajo.</string>
+    <string name="direct_verdict">Veredicto directo</string>
+    <string name="formula">Fórmula</string>
+    <string name="strategy">Estrategia</string>
+    <string name="help_api_result_strategy">
+        <![CDATA[
+        <title>Veredicto directo</title> <br>
+        El servidor devuelve una categoría de spam explícita, algo habitual en los servicios API. <br>
+        <br>
+        Por ejemplo, el servidor devuelve: <br>
+        &ensp; <sample><no_translate>{ …, \"type\": \"fraud\", … }</no_translate></sample> <br>
+        Hacer coincidir con la expresión regular: <br>
+        &ensp; <sample><no_translate>\"type\": \"(fraud|scam|political)\"</no_translate></sample> <br>
+        <br>
+        <title>Fórmula</title> <br>
+        Personaliza tu propia lógica de bloqueo basada en el recuento de valoraciones positivas/negativas devueltas por el servidor. <br>
+        <br>
+        Por ejemplo, bloquear cuando: <br>
+        &ensp; <sample><no_translate>(negative &gt; 5) &amp; (negative / positive &gt; 120%)</no_translate></sample> <br>
+        ]]>
+    </string>
+    <string name="hint_positive_identifier_strategy_formula">Ej.: (\\d+) positivo</string>
+    <string name="hint_negative_identifier_strategy_formula">Ej.: (\\d+) negativo</string>
+    <string name="help_positive_identifier_strategy_formula">
+        <![CDATA[
+        Esta regex sirve para extraer la cantidad de valoraciones positivas; se requiere un grupo de captura, es decir, debe contener
+         <sample>(</sample> y <sample>)</sample>, y el valor predeterminado es 0 si no se encuentra ninguna coincidencia. <br>
+        <br>
+        Por ejemplo: <br>
+        &ensp; <sample>(\\d+) positivo</sample>
+        ]]>
+    </string>
+    <string name="help_negative_identifier_strategy_formula">
+        <![CDATA[
+        Esta regex sirve para extraer la cantidad de valoraciones negativas; se requiere un grupo de captura, es decir, debe contener
+         <sample>(</sample> y <sample>)</sample>, y el valor predeterminado es 0 si no se encuentra ninguna coincidencia. <br>
+        <br>
+        Por ejemplo: <br>
+        &ensp; <sample>(\\d+) negativo</sample>
+        ]]>
+    </string>
+    <string name="positive_condition">Condición positiva</string>
+    <string name="negative_condition">Condición negativa</string>
+    <string name="help_positive_condition">
+        <![CDATA[
+        El número se <highlight>permitirá</highlight> si se cumple esta condición.
+        ]]>
+    </string>
+    <string name="help_negative_condition">
+        <![CDATA[
+        El número se <error>bloqueará</error> si se cumple esta condición.
+        ]]>
+    </string>
+    <string name="supported_formula_syntax" formatted="false">
+        <![CDATA[
+        <title>Sintaxis compatible</title> <br>
+        <minor>positive &ensp; p &ensp; negative &ensp; n</minor> <br>
+        &ensp; Marcadores que se reemplazarán por las cantidades reales de valoraciones. <br>
+        <minor>+ &ensp; - &ensp; * &ensp; /</minor> <br>
+        &ensp; Operaciones matemáticas básicas (N/0=N) <br>
+        <minor>%</minor> <br>
+        &ensp; Porcentaje <br>
+        <minor>&lt; &ensp; &gt; &ensp; &lt;= &ensp; &gt;=</minor> <br>
+        &ensp; Comparaciones <br>
+        <minor>& &ensp; |</minor> <br>
+        &ensp; AND/OR lógico <br>
+        <minor>( &ensp; )</minor> <br>
+        &ensp; Paréntesis <br>
+        <br>
+        <b>Ejemplos</b> <br>
+        &ensp; <sample>negative &gt; positive</sample> <br>
+        &ensp; <sample>P - N &gt; 5</sample> (no distingue mayúsculas y minúsculas) <br>
+        &ensp; <sample>p &gt; 3 & n &gt; 2 & (n / p &gt;= 120%)</sample> <br>
+        ]]>
+    </string>
+    <string name="missing_brackets">A la regex le falta un grupo de captura (), consulta la información emergente para más detalles.</string>
+    <string name="negative_identifier_matches">Coincidencias del identificador negativo</string>
+    <string name="positive_identifier_matches">Coincidencias del identificador positivo</string>
+    <string name="rating_count_template">Calificaciones positivas: %s, calificaciones negativas: %s</string>
+</resources>

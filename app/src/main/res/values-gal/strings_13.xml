@@ -10,7 +10,8 @@
     <string name="parsed_n_rules">Analizadas %s regras.</string>
     <string name="add_n_numbers_to_spam_db">Engadindo %s números á base de datos de spam.</string>
     <string name="nothing_to_import">A lista de números está baleira, nada que importar.</string>
-    <string name="importing_n_numbers">Importando %s números como regra regex.</string>
+    <string name="importing_n_numbers">Importando %s números.</string>
+    <string name="importing_n_rules">Importando %s regras.</string>
     <string name="create_rule_with_numbers">Creando regra con %s números.</string>
     <string name="replace_rule_with_desc">Substituíndo a regra coa descrición: %s.</string>
     <string name="rule_with_desc_not_found">Regra coa descrición %s non atopada.</string>
@@ -20,8 +21,8 @@
     <string name="find_rule_with_desc">Atopadas %s regras coa descrición %s.</string>
     <string name="modify_n_rules">Modificando %s regras.</string>
     <string name="fail_detect_cc">Fallou a detección do código de país.</string>
-    <string name="identified_as_spam">Identificado como número spam, categoría: %s.</string>
-    <string name="identified_as_valid">Identificado como número válido, categoría: %s.</string>
+    <string name="identified_as_spam">Identificado como número de teléfono spam, categoría: %s, comentario: %s.</string>
+    <string name="identified_as_valid">Identificado como número de teléfono válido, categoría: %s, comentario: %s.</string>
     <string name="unidentified_number">Número non identificado.</string>
     <string name="help_http_url">
         <![CDATA[
@@ -33,12 +34,15 @@
         ]]>
     </string>
     <string name="number_not_match_filter">O número %s non coincide co filtro %s, omitido.</string>
+    <string name="content_not_match_filter">O contido non coincide co filtro, omitido.</string>
     <string name="api_preset_phoneblock"><no_translate>PhoneBlock 🇩🇪 🌐</no_translate></string>
     <string name="help_api_preset_phoneblock">
         <![CDATA[
         Deseñado principalmente para a FRITZ!Box alemá, tamén funciona para números de teléfono doutros países.<br>
         <br>
-        Soporta consultas por hash en lugar do propio número, ofrecendo unha mellor privacidade.<br>
+        <b>Aspectos destacados</b>: <br>
+        - <highlight>Consultas por hash</highlight> en lugar do número de teléfono real, ofrecendo unha mellor privacidade. <br>
+        - Usa <highlight>detección baseada en rangos</highlight> cando non se atopa o número exacto, ignorando os dous últimos díxitos. <br>
         <br>
         Sitio web: <a href="https://phoneblock.net">https://phoneblock.net</a><br>
         <br>
@@ -52,85 +56,80 @@
         Xerar unha <translate>lista de números</translate> que conteña o número spam identificado no paso anterior, e listo para ser importado á base de datos.
         ]]>
     </string>
-    <string name="canceling_thread">Cancelando fío.</string>>
-    <string name="help_api_preset_phoneblock_authorization">
-        <![CDATA[
-        1. Rexístrate nunha conta en <a href="https://phoneblock.net/phoneblock/login">https://phoneblock.net/phoneblock/login</a><br>
-        <br>
-        2. Na páxina de configuración: <a href="https://phoneblock.net/phoneblock/settings">https://phoneblock.net/phoneblock/settings</a>,
-         preme o botón \"Xerar clave API\".<br>
-        <br>
-        3. Enche a clave API xerada a continuación.
-        ]]>
-    </string>
+    <string name="canceling_thread">Cancelando fío.</string>
     <string name="auto_detect_cc_permission">Necesítase o permiso READ_PHONE_STATE para detectar o código de país.</string>
     <string name="suggest_to_swipe">
         <![CDATA[
-        <font color="#03DAC5"><b>Desliza cara á esquerda</b></font> para eliminalo.<br>
+        <highlight><b>Desliza cara á esquerda</b></highlight> para eliminalo.<br>
         <br>
         A maioría dos elementos da IU tipo tarxeta nesta aplicación están asociados con xestos de deslizamento,
-        algúns dos cales tamén admiten <font color="#03DAC5"><b>deslizar cara á dereita</b></font>, por exemplo, os rexistros do historial.
+        algúns dos cales tamén admiten <highlight><b>deslizar cara á dereita</b></highlight>, por exemplo, os rexistros do historial.
         ]]>
     </string>
-    <string name="bug_number">Se este é un número válido, por favor, nóteo en github.</string>
+    <string name="bug_number">Se este é un número válido, por favor, nóteo en GitHub.</string>
     <string name="number_tags">
         <![CDATA[
-        - <font color="#00BFFF"><b><no_translate>{cc}</no_translate></b></font><br>
+        - <title><b><no_translate>{cc}</no_translate></b></title><br>
         &ensp; O código de país.<br>
-        - <font color="#00BFFF"><b><no_translate>{domestic}</no_translate></b></font><br>
+        - <title><b><no_translate>{domestic}</no_translate></b></title><br>
         &ensp; A parte doméstica.<br>
-        - <font color="#00BFFF"><b><no_translate>{number}</no_translate></b></font><br>
+        - <title><b><no_translate>{number}</no_translate></b></title><br>
         &ensp; O número completo, incluíndo tanto o código de país como a parte doméstica, sen + ou 0s iniciais.<br>
-        - <font color="#00BFFF"><b><no_translate>{origin_number}</no_translate></b></font><br>
+        - <title><b><no_translate>{raw_number}</no_translate></b></title><br>
         &ensp; O número orixinal que pode conter + ou 0s iniciais.<br>
         ]]>
     </string>
     <string name="time_tags">
         <![CDATA[
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {year}<br>
           {month}<br>
           {day}<br>
           {hour}<br>
           {minute}<br>
           {second}<br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; Os números dun só díxito encheranse cun cero inicial, por exemplo: <br>
-        &emsp; <font color="#888888"><no_translate>{year}-{month}-{day} {hour}:{minute}:{second}</no_translate></font> <br>
+        &emsp; <sample><no_translate>{year}-{month}-{day} {hour}:{minute}:{second}</no_translate></sample> <br>
         &emsp; convértese en <br>
-        &emsp; <font color="#888888">2020-01-22 03:44:05</font><br>
+        &emsp; <sample>2020-01-22 03:44:05</sample><br>
         <br>
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {month_index} <br>
           {day_index} <br>
           {hour_index} <br>
           {minute_index} <br>
           {second_index} <br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; Estes valores non se encherán, por exemplo: <br>
-        &emsp; <font color="#888888"><no_translate>{month_index}-{day_index}</no_translate></font> <br>
+        &emsp; <sample><no_translate>{month_index}-{day_index}</no_translate></sample> <br>
         &emsp; convértese en <br>
-        &emsp; <font color="#888888">1-2</font><br>
+        &emsp; <sample>1-2</sample><br>
         <br>
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {day_of_week} <br>
           {day_of_week_index} <br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; Estes pódense usar para simular unha programación de rotación, por exemplo: <br>
-        &emsp; <font color="#888888">Realizar copias de seguridade diarias e conservar só as sete máis recentes.</font> <br>
+        &emsp; <sample>Realizar copias de seguridade diarias e conservar só as sete máis recentes.</sample> <br>
         <br>
-        <font color="#ffa500"><b>Nota:</b></font><br>
+        <warn><b>Nota:</b></warn><br>
          Estas etiquetas de tempo admiten operacións aritméticas sinxelas, como
-          <font color="#00BFFF"><b><no_translate>{day-1}</no_translate></b></font>
+          <title><b><no_translate>{day-1}</no_translate></b></title>
          e
-          <font color="#00BFFF"><b><no_translate>{hour+2}</no_translate></b></font>.
+          <title><b><no_translate>{hour+2}</no_translate></b></title>.
         ]]>
     </string>
-    <string name="skip_alpha_empty_number">Saltar número alfa ou baleiro.</string>
     <string name="sms_tags">
         <![CDATA[
-        - <font color="#00BFFF"><b>{sms}</b></font><br>
+        - <title><b>{sms}</b></title><br>
         &ensp; O contido do SMS.<br>
+        ]]>
+    </string>
+    <string name="escape_tags">
+        <![CDATA[
+        - <title><b><no_translate>{escape(…)}</no_translate></b></title><br>
+        &ensp; Escape o contido nos corchetes, usado para contido dentro de comiñas. <br>
         ]]>
     </string>
 </resources>

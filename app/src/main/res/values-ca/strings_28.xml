@@ -1,0 +1,151 @@
+<resources>
+    <string name="perm_access_dir">Accedir a la carpeta</string>
+    <string name="dir_not_specified">Carpeta no especificada.</string>
+    <string name="no_access_to_dir">No hi ha accés a la carpeta: %s.</string>
+    <string name="grant_access_to_dir">
+        <![CDATA[
+        Concedeix accés a la carpeta: <br>
+        <highlight>%s</highlight>
+        ]]>
+    </string>
+    <string name="comment">Comentari</string>
+    <string name="database_prefix">Prefix de la base de dades</string>
+    <string name="help_regex_mode_database_prefix">
+        <![CDATA[
+        <title><b>Prefix de la base de dades</b></title>:<br>
+        &ensp; Bloqueig per rang dels números de telèfon de la base de dades.<br>
+        <br>
+        <warn>Aquesta regex ha d\'acabar amb punts</warn>, en aquest mode regex aquests punts finals representen els dígits variables. <br>
+        <br>
+        <b>Per exemple:</b> <br>
+        &ensp; <sample><b>.{5,}..</b></sample> requereix que el prefix tingui almenys 5 dígits, tot permetent una variació de 2 dígits al final.
+        ]]>
+    </string>
+    <string name="help_regex_preset_database_prefix">
+        <![CDATA[
+        Fa coincidir els números de telèfon de la base de dades pel prefix; el prefix ha de tenir almenys <minor><b>5</b></minor> dígits, tot permetent una variació de <minor><b>2</b></minor> dígits al final. <br>
+        <br>
+        <b>Per exemple</b>: <br>
+        &ensp; Si <sample>12345678</sample><error>00</error> existeix a la base de dades, una trucada de <sample>12345678</sample><error>99</error> també es bloquejarà.
+        ]]>
+    </string>
+    <string name="api_preset_remote_llm">LLM remot</string>
+    <string name="help_api_preset_remote_llm">
+        <![CDATA[
+            Comprova el contingut dels SMS amb models de llenguatge grans remots. <br>
+            <br>
+            Això es proporciona només amb <warn>finalitats de demostració</warn>.<br>
+            <br>
+            Toca per obrir la pàgina wiki amb les instruccions.
+        ]]>
+    </string>
+    <string name="found_existing_auth_token">S\'ha trobat un testimoni d\'autenticació existent</string>
+    <string name="use_this_token">Usa aquest testimoni</string>
+    <string name="login_and_get_a_token">Registra\'t i inicia sessió al lloc web per obtenir el teu testimoni.</string>
+    <string name="get_a_new_token">Obtén un testimoni nou</string>
+    <string name="token">Testimoni</string>
+    <string name="enter_token_manually_desc">Si ja teniu un testimoni, introduïu-lo manualment.</string>
+    <string name="enter_token_manually">Introdueix el testimoni manualment</string>
+    <string name="others">Altres</string>
+    <string name="api_settings">Configuració de l\'API</string>
+    <string name="include_settings">Configuració d\'inclusió</string>
+    <string name="exclude_settings">Configuració d\'exclusió</string>
+    <string name="backup_missing_category">Aquesta configuració falta al fitxer de còpia de seguretat i no es pot restaurar.</string>
+    <string name="warning_priority_conflict">
+        <![CDATA[
+        <highlight>Les regles de la llista blanca</highlight> i les <error>regles de la llista negra</error> no han de tenir la mateixa prioritat<br>
+        <br>
+        Regles en conflicte:
+        ]]>
+    </string>
+    <string name="checking_template_new">%s Comprovant: %s</string>
+    <string name="textbox_limit">Límit del quadre de text</string>
+    <string name="help_rule_textbox_limit">
+        <![CDATA[
+        El nombre màxim de caràcters permesos al quadre d\'entrada. Superar aquest límit desactiva l\'edició,
+          ja que un text excessivament llarg congelarà la interfície d\'usuari. <br>
+          <br>
+        Per defecte: <b>10000</b> caràcters
+        ]]>
+    </string>
+    <string name="clear_history">Esborra l\'historial</string>
+    <string name="tip_clear_history">Si l\'aplicació falla en iniciar-se i no s\'obre, prova d\'esborrar els registres de l\'historial amb el botó de sota.</string>
+    <string name="direct_verdict">Veredicte directe</string>
+    <string name="formula">Fórmula</string>
+    <string name="strategy">Estratègia</string>
+    <string name="help_api_result_strategy">
+        <![CDATA[
+        <title>Veredicte directe</title> <br>
+        El servidor retorna una categoria de spam explícita, habitual als serveis API. <br>
+        <br>
+        Per exemple, el servidor retorna: <br>
+        &ensp; <sample><no_translate>{ …, \"type\": \"fraud\", … }</no_translate></sample> <br>
+        Fes-lo coincidir amb regex: <br>
+        &ensp; <sample><no_translate>\"type\": \"(fraud|scam|political)\"</no_translate></sample> <br>
+        <br>
+        <title>Fórmula</title> <br>
+        Personalitza la teva pròpia lògica de bloqueig basant-te en el recompte de valoracions positives/negatives retornades pel servidor. <br>
+        <br>
+        Per exemple, bloqueja quan: <br>
+        &ensp; <sample><no_translate>(negative &gt; 5) &amp; (negative / positive &gt; 120%)</no_translate></sample> <br>
+        ]]>
+    </string>
+    <string name="hint_positive_identifier_strategy_formula">Ex.: (\\d+) positiu</string>
+    <string name="hint_negative_identifier_strategy_formula">Ex.: (\\d+) negatiu</string>
+    <string name="help_positive_identifier_strategy_formula">
+        <![CDATA[
+        Aquesta regex serveix per extreure el recompte de valoracions positives; cal un grup de captura, és a dir, ha de contenir
+         <sample>(</sample> i <sample>)</sample>, i el valor per defecte és 0 si no es troba cap coincidència. <br>
+        <br>
+        Per exemple: <br>
+        &ensp; <sample>(\\d+) positiu</sample>
+        ]]>
+    </string>
+    <string name="help_negative_identifier_strategy_formula">
+        <![CDATA[
+        Aquesta regex serveix per extreure el recompte de valoracions negatives; cal un grup de captura, és a dir, ha de contenir
+         <sample>(</sample> i <sample>)</sample>, i el valor per defecte és 0 si no es troba cap coincidència. <br>
+        <br>
+        Per exemple: <br>
+        &ensp; <sample>(\\d+) negatiu</sample>
+        ]]>
+    </string>
+    <string name="positive_condition">Condició positiva</string>
+    <string name="negative_condition">Condició negativa</string>
+    <string name="help_positive_condition">
+        <![CDATA[
+        El número serà <highlight>permès</highlight> si es compleix aquesta condició.
+        ]]>
+    </string>
+    <string name="help_negative_condition">
+        <![CDATA[
+        El número serà <error>bloquejat</error> si es compleix aquesta condició.
+        ]]>
+    </string>
+    <string name="supported_formula_syntax" formatted="false">
+        <![CDATA[
+        <title>Sintaxi admesa</title> <br>
+        <minor>positive &ensp; p &ensp; negative &ensp; n</minor> <br>
+        &ensp; Marcadors que se substituiran pels recomptes reals de valoracions. <br>
+        <minor>+ &ensp; - &ensp; * &ensp; /</minor> <br>
+        &ensp; Operacions matemàtiques bàsiques (N/0=N) <br>
+        <minor>%</minor> <br>
+        &ensp; Percentatge <br>
+        <minor>&lt; &ensp; &gt; &ensp; &lt;= &ensp; &gt;=</minor> <br>
+        &ensp; Comparacions <br>
+        <minor>& &ensp; |</minor> <br>
+        &ensp; AND/OR lògic <br>
+        <minor>( &ensp; )</minor> <br>
+        &ensp; Parèntesis <br>
+        <br>
+        <b>Exemples</b> <br>
+        &ensp; <sample>negative &gt; positive</sample> <br>
+        &ensp; <sample>P - N &gt; 5</sample> (no distingeix majúscules i minúscules) <br>
+        &ensp; <sample>p &gt; 3 & n &gt; 2 & (n / p &gt;= 120%)</sample> <br>
+        ]]>
+    </string>
+    <string name="missing_brackets">A la regex li falta un grup de captura (), consulta la informació emergent per a més detalls.</string>
+    <string name="negative_identifier_matches">Coincidències de l\'identificador negatiu</string>
+    <string name="positive_identifier_matches">Coincidències de l\'identificador positiu</string>
+    <string name="rating_count_template">Valoracions positives: %s, valoracions negatives: %s</string>
+</resources>

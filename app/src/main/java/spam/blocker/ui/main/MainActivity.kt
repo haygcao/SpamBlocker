@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -29,13 +28,15 @@ import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.def.Def
 import spam.blocker.ui.M
+import spam.blocker.ui.history.HistoryOptions.showHistoryBlocked
+import spam.blocker.ui.history.HistoryOptions.showHistoryPassed
 import spam.blocker.ui.history.HistoryScreen
+import spam.blocker.ui.isLight
 import spam.blocker.ui.setting.SettingScreen
 import spam.blocker.ui.theme.AppTheme
-import spam.blocker.ui.theme.DarkOrange
-import spam.blocker.ui.theme.MayaBlue
 import spam.blocker.ui.widgets.BottomBar
 import spam.blocker.ui.widgets.BottomBarViewModel
+import spam.blocker.ui.widgets.FileChooser
 import spam.blocker.ui.widgets.GreyText
 import spam.blocker.ui.widgets.LeftDeleteSwipeWrapper
 import spam.blocker.ui.widgets.PopupDialog
@@ -70,16 +71,22 @@ class MainActivity : ComponentActivity() {
         val spf = spf.Global(ctx)
 
         // language
-        Util.setLocale(ctx, spf.getLanguage())
+        Util.setLocale(ctx, spf.language)
 
-        val lastTab = spf.getActiveTab()
+        val lastTab = spf.activeTab
 
         G.bottomBarVM = BottomBarViewModel(
-            onTabSelected = { spf.setActiveTab(it) },
+            onTabSelected = { spf.activeTab = it },
             onTabReSelected = {
                 when (it) {
-                    Def.CALL_TAB_ROUTE -> Launcher.launchCallApp(this)
-                    Def.SMS_TAB_ROUTE -> Launcher.launchSMSApp(this)
+                    Def.CALL_TAB_ROUTE -> {Launcher.launchCallApp(this)}
+                    Def.SMS_TAB_ROUTE -> {Launcher.launchSMSApp(this)}
+                }
+            },
+            onTabLeave = {
+                when (it) {
+                    Def.CALL_TAB_ROUTE -> G.callVM.markAllAsRead(this)
+                    Def.SMS_TAB_ROUTE -> G.smsVM.markAllAsRead(this)
                 }
             },
             tabItems = listOf(
@@ -120,18 +127,16 @@ class MainActivity : ComponentActivity() {
         )
 
         setContent {
-            val isDarkTheme = when (G.themeType.intValue) {
-                1 -> false
-                2 -> true
-                else -> isSystemInDarkTheme()
-            }
-            AppTheme(darkTheme = isDarkTheme) {
+            AppTheme {
                 // fix white statusbar text when forced to white theme
                 WindowCompat.getInsetsController(window, LocalView.current)
-                    .isAppearanceLightStatusBars = !isDarkTheme
+                    .isAppearanceLightStatusBars = G.palette.background.isLight()
 
                 // Prepare for the permission launcher
                 G.permissionChain.Compose()
+
+                // Prepare for the FileChooser
+                FileChooser.Compose()
 
                 Main()
 
@@ -143,10 +148,11 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun Main() {
+        val C = G.palette
         val ctx = LocalContext.current
 
         // Load all records to show unread badge in the bottom bar.
-        LaunchedEffect(G.showHistoryPassed.value, G.showHistoryBlocked.value) {
+        LaunchedEffect(showHistoryPassed.value, showHistoryBlocked.value) {
             G.callVM.reload(ctx)
             G.smsVM.reload(ctx)
         }
@@ -170,9 +176,9 @@ class MainActivity : ComponentActivity() {
                         ) {
                             Snackbar(
                                 modifier = M.padding(horizontal = 10.dp),
-                                containerColor = MayaBlue,
-                                contentColor = Color.DarkGray,
-                                actionColor = Color.DarkGray,
+                                containerColor = C.infoBlue,
+                                contentColor = C.background,
+                                actionColor = C.background,
                                 snackbarData = it
                             )
                         }
@@ -200,8 +206,9 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("ComposableNaming")
     @Composable
     private fun checkWorkProfile() {
+        val C = G.palette
         val spf = spf.Global(this)
-        val alreadyShown by remember { mutableStateOf(spf.hasPromptedForRunningInWorkProfile()) }
+        val alreadyShown by remember { mutableStateOf(spf.hasPromptedForRunningInWorkProfile) }
         val runningInWorkProf by remember { mutableStateOf(Util.isRunningInWorkProfile(this)) }
 
         val trigger = remember {
@@ -217,10 +224,10 @@ class MainActivity : ComponentActivity() {
                 buttons = {
                     StrokeButton(
                         label = getString(R.string.dismiss),
-                        color = DarkOrange,
+                        color = C.warning,
                     ) {
                         trigger.value = false
-                        spf.setPromptedForRunningInWorkProfile()
+                        spf.hasPromptedForRunningInWorkProfile = true
                     }
                 }
             )

@@ -1,10 +1,10 @@
 <resources>
     <string name="dialed_number"><short>Dialed Number</short></string>
     <string name="find_apps">Find Apps</string>
-    <string name="confirm_delete_all_rule">Confirm to delete All Rules?</string>
+    <string name="confirm_delete_all_rule">Delete all rules?</string>
     <string name="notification">Notification</string>
     <string name="type">Type</string>
-    <string name="times">Times</string>
+
     <plurals name="days">
         <item quantity="one">%d Day</item>
         <item quantity="two">%d Days</item>
@@ -27,35 +27,42 @@
     <string name="block_type">Block Type</string>
     <string name="for_particular_number">For number</string>
     <string name="help_for_particular_number">When enabled, the rule only applies when both number and content match.</string>
-    <string name="help_hang_up_delay">The delay before the call is hung up(in seconds).</string>
+    <string name="help_hang_up_delay">The delay before the call is hung up (in seconds).</string>
+    <string name="time_range">Time Range</string>
+    <string name="all_time">All Time</string>
     <string name="help_dialed">
         <![CDATA[
         Allow calls from previously dialed numbers.<br>
         <br>
         <b>Options:</b><br>
         <br>
-        <h6><font color="#00BFFF">- Within Days</font></h6>
-        Calls that occurred before <font color="cyan">%s days</font> are ignored.<br>
+        <h6><title>- Time Range</title></h6>
+        &ensp; - <minor>All Time</minor> <br>
+        &emsp; Always allow dialed numbers.<br>
+        &ensp; - <minor>Within Days</minor> <br>
+        &emsp; Calls that occurred before X days are ignored.<br>
         <br>
-        <h6><font color="#00BFFF">- Include SMS</font></h6>
+        <h6><title>- Include SMS</title></h6>
         When enabled, texting that number also counts.<br>
         <br>
-        <font color="#ea86ff"><b>Priority: 10</b></font>
+        <priority><b>Priority: 10</b></priority>
         ]]>
     </string>
     <string name="help_recent_apps">
         <![CDATA[
         Any call would pass if any app in the list has been used recently.<br>
         <br>
-        A typical use case:<br>
-        &emsp; You just ordered a pizza in PizzaApp, soon they call you to refund because they are closing. That call would pass if PizzaApp is enabled here. <br>
+        Use case:<br>
+        <sample>
+          &ensp; A PizzaApp order triggers an immediate refund call due to the restaurant closing, this call passes if PizzaApp is enabled here. <br>
+        </sample>
         <br>
-        The default setting <font color="03DAC5"><b>5 Min</b></font> means any call would pass if any of the apps has been used within 5 minutes,
-        by `used` it means either being activated, deactivated, minimized, or killed. <br>
+        The default setting <highlight><b>5 Min</b></highlight> means all calls pass if any of the apps has been used within 5 minutes,
+        by \"<b>used</b>\" it means any of: <highlight>activated, deactivated, minimized, or killed</highlight>.<br>
         <br>
-        Only applies to calls, <b>not</b> to text messages. <br>
+        Applies only to calls, not to text messages. <br>
         <br>
-        <font color="#ea86ff"><b>Priority: 10</b></font>
+        <priority><b>Priority: 10</b></priority>
         ]]>
     </string>
     <string-array name="block_type_list">
@@ -65,21 +72,21 @@
     </string-array>
     <string name="help_block_type">
         <![CDATA[
-        - <font color="#00BFFF"><b>Reject</b></font>: <br>
+        - <title><b>Reject</b></title>: <br>
          Same as pressing the decline button. It works completely silently, lockscreen won\'t be turned on.<br>
         <br>
-        - <font color="#00BFFF"><b>Silence</b></font>: <br>
-         It will ring silently in the background, giving the impression to the caller that you were unavailable and missed the call. <br>
+        - <title><b>Silence</b></title>: <br>
+        The call is instantly rejected on your side but keeps ringing for the caller, giving the impression that you are unavailable. <br>
         <br>
-         It may also help if you are experiencing repeated spam calls, it will extend the call duration, making it less efficient for spammers, potentially discouraging them from calling you again.<br>
+         This can also help reduce repeated spam calls. It extends the call duration, making them less efficient and potentially discouraging them from calling you again.<br>
         <br>
-        - <font color="#00BFFF"><b>Hang Up</b></font>: <br>
+        - <title><b>Hang Up</b></title>: <br>
         Answer and hang up the call to prevent it from going to voicemail. <br>
         <br>
         When the spam call is received during an ongoing call, it will switch to \"Reject\"
          to avoid hanging up the ongoing call. <br>
         <br>
-        <font color="#FFA500">Note</font> The lockscreen can be turned on for a short while,
+        <warn>Note</warn> The lockscreen can be turned on for a short while,
         you might also hear a call end tone(some phones offer an option to mute this sound). <br>
         <br>
         - The <b>delay</b>: <br>

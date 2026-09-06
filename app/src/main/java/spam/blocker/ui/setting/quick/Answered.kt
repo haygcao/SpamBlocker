@@ -15,9 +15,9 @@ import androidx.compose.ui.unit.sp
 import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.ui.setting.LabeledRow
-import spam.blocker.ui.theme.DarkOrange
-import spam.blocker.ui.theme.Teal200
 import spam.blocker.ui.widgets.GreyButton
+import spam.blocker.ui.widgets.GreyIcon20
+import spam.blocker.ui.widgets.GreyText
 import spam.blocker.ui.widgets.NumberInputBox
 import spam.blocker.ui.widgets.PluralStr
 import spam.blocker.ui.widgets.PopupDialog
@@ -30,12 +30,13 @@ import spam.blocker.util.spf
 
 @Composable
 fun Answered() {
+    val C = G.palette
     val ctx = LocalContext.current
     val spf = spf.Answered(ctx)
 
-    var isEnabled by remember { mutableStateOf(spf.isEnabled() && Permission.callLog.isGranted) }
-    var minDuration by remember { mutableIntStateOf(spf.getMinDuration()) }
-    var inXDay by remember { mutableIntStateOf(spf.getDays()) }
+    var isEnabled by remember { mutableStateOf(spf.isEnabled && Permission.callLog.isGranted) }
+    var minDuration by remember { mutableIntStateOf(spf.minDuration) }
+    var inXDay by remember { mutableIntStateOf(spf.days) }
 
     // config popup
     val configTrigger = rememberSaveable { mutableStateOf(false) }
@@ -48,7 +49,7 @@ fun Answered() {
                 onValueChange = { newValue, hasError ->
                     if (!hasError) {
                         inXDay = newValue!!
-                        spf.setDays(newValue)
+                        spf.days = newValue
                     }
                 },
                 labelId = R.string.within_days,
@@ -59,7 +60,7 @@ fun Answered() {
                 onValueChange = { newValue, hasError ->
                     if (!hasError) {
                         minDuration = newValue!!
-                        spf.setMinDuration(newValue)
+                        spf.minDuration = newValue
                     }
                 },
                 labelId = R.string.minimal_duration,
@@ -79,7 +80,7 @@ fun Answered() {
             )
         ) { granted ->
             if (granted) {
-                spf.setEnabled(true)
+                spf.isEnabled = true
                 isEnabled = true
             }
         }
@@ -93,9 +94,9 @@ fun Answered() {
         buttons = {
             StrokeButton(
                 label = Str(R.string.acknowledged),
-                color = Teal200
+                color = C.teal200
             ) {
-                spf.setWarningAcknowledged(true)
+                spf.isWarningAcknowledged = true
                 warningTrigger.value = false
                 askForPermission()
             }
@@ -103,13 +104,13 @@ fun Answered() {
         title = {
             Text(
                 text = Str(R.string.warning),
-                color = DarkOrange,
+                color = C.warning,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold,
             )
         },
         content = {
-            Text(Str(R.string.answered_warning))
+            GreyText(Str(R.string.answered_warning))
         }
     )
 
@@ -138,17 +139,35 @@ fun Answered() {
             }
             SwitchBox(isEnabled) { isTurningOn ->
                 if (isTurningOn) {
-                    val acknowledged = spf.isWarningAcknowledged()
+                    val acknowledged = spf.isWarningAcknowledged
                     if (acknowledged) {
                         askForPermission()
                     } else {
                         warningTrigger.value = true
                     }
                 } else {
-                    spf.setEnabled(false)
+                    spf.isEnabled = false
                     isEnabled = false
                 }
             }
         }
     )
+}
+
+@Composable
+fun AnsweredSummary() {
+    val ctx = LocalContext.current
+    val spf = spf.Answered(ctx)
+
+    val isEnabled by remember { mutableStateOf(spf.isEnabled && Permission.callLog.isGranted) }
+    if (isEnabled) {
+        val inXDay by remember { mutableIntStateOf(spf.days) }
+
+        StrokeButton(
+            label = PluralStr(inXDay, R.plurals.days),
+            icon = { GreyIcon20(R.drawable.ic_call_in) },
+            color = G.palette.textGrey,
+            enabled = false,
+        )
+    }
 }

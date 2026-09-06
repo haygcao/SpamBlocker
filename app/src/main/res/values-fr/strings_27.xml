@@ -1,0 +1,134 @@
+<resources>
+    <string name="normal_text">Texte normal</string>
+    <string name="info_feature">Information / Fonctionnalité</string>
+    <string name="success_allow">Succès / Autoriser</string>
+    <string name="error_block">Erreur / Bloquer</string>
+    <string name="disable">Désactiver</string>
+    <string name="dialog_bg">Fond de la boîte de dialogue</string>
+    <string name="app_bg">Fond de l\'application</string>
+    <string name="should_import_as_instant_query">
+        <![CDATA[
+        Il semble s\'agir d\'un flux de travail « requête API », il devrait être importé dans la section ci‑dessus « Requête instantanée ».
+        ]]>
+    </string>
+    <string name="at_time">À l\'heure</string>
+    <string name="interval">Intervalle</string>
+    <string name="contact_prefix">Préfixe de contact</string>
+    <string name="help_regex_mode_contact_prefix">
+        <![CDATA[
+        <title><b>Préfixe de contact</b></title>:<br>
+        &ensp; Autoriser les appels selon la correspondance du préfixe du contact, idéal pour les organisations qui utilisent
+          des numéros séquentiels, comme les cliniques ou les cabinets juridiques. <br>
+        <br>
+        <warn>Cette expression régulière doit se terminer par des points</warn>, dans ce mode, ces points finaux représentent les chiffres variables. <br>
+        <br>
+        <b>Par exemple :</b> <br>
+        &ensp; <sample><b>.*..</b></sample> <br>
+        &ensp; Elle correspond à tout contact ayant le même préfixe, en autorisant une variation de 2 chiffres à la fin.<br>
+        &ensp; Si le numéro <sample>1111<b>22</b></sample> est enregistré comme contact, un appel entrant depuis <sample>1111<b>33</b></sample> sera aussi autorisé.<br>
+        <br>
+        <b>Un autre exemple :</b> <br>
+        &ensp; <sample><b>(?!(04|03))\d{5}..</b></sample> <br>
+        Décomposition : <br>
+        &ensp; - <b><sample>(?!(03|04))</sample></b> <br>
+        &emsp;   Exclure les numéros commençant par 03 ou 04 <br>
+        &ensp; - <b><sample>\d{5}</sample></b> <br>
+        &emsp;   Le numéro doit comporter 7 chiffres au total, y compris le suffixe variable à 2 chiffres <br>
+        &ensp; - <b><sample>..</sample></b> <br>
+        &emsp;   Suffixe variable à 2 chiffres <br>
+        ]]>
+    </string>
+    <string name="help_regex_preset_contact_prefix">
+        <![CDATA[
+        Correspond aux contacts par préfixe, en autorisant une variation sur les <minor><b>2</b></minor> derniers chiffres, idéal pour les organisations utilisant des numéros séquentiels, par exemple, des cliniques ou des cabinets d\'avocats. <br>
+        <br>
+        <b>Par exemple</b>: <br>
+        &ensp; Si le numéro <sample>111111</sample><highlight>22</highlight> est enregistré comme contact, un appel depuis <sample>111111</sample><highlight>33</highlight> sera aussi autorisé.
+        ]]>
+    </string>
+    <string name="caller_id">ID appelant</string>
+    <string name="help_caller_id">
+        <![CDATA[
+        Affiche l\'identification de l\'appelant dans une fenêtre flottante. <br>
+        <br>
+        Faites-la glisser pour la déplacer. <br>
+        <br>
+        <b>Remarque</b> <br>
+        Il se peut qu\'une alerte système apparaisse dans le panneau de notifications pendant que la fenêtre flottante est active,
+          indiquant que cette application affiche une fenêtre au-dessus des autres applications.
+        Cela s\'explique par le fait que les fenêtres flottantes ont historiquement été utilisées par des logiciels malveillants pour afficher de faux écrans de connexion. <br>
+        Ignorez simplement cette alerte, elle disparaîtra avec la fenêtre flottante.
+        ]]>
+    </string>
+    <string name="perm_show_overlay">Afficher la superposition</string>
+    <string name="preview">Aperçu</string>
+    <string name="content_template">Modèle de contenu</string>
+    <string name="help_caller_id_template">
+        <![CDATA[
+        Le contenu affiché dans la fenêtre d\'identification de l\'appelant, au format HTML. <br>
+        <br>
+        Un tiret (-) s\'affiche si la valeur est vide, par exemple lorsqu\'il n\'existe aucune information sur l\'opérateur pour le numéro.
+        <br>
+        <title>Balises prises en charge</title>: <br>
+        - <minor>{reason}</minor> <br>
+        &emsp; Pourquoi l\'appel a été autorisé, la même raison que celle affichée dans l\'historique des appels. <br>
+        - <minor>{geolocation}</minor> <br>
+        &emsp; La géolocalisation du numéro de téléphone. <br>
+        - <minor>{carrier}</minor> <br>
+        &emsp; Le nom de l\'opérateur du numéro de téléphone. <br>
+        <br>
+        <title>Balises HTML prises en charge</title>: <br>
+        Voir : <a href="%s">link</a>
+        ]]>
+    </string>
+    <string name="background_color">Couleur de fond</string>
+    <string name="wait">Attendre</string>
+    <string name="help_action_wait">
+        <![CDATA[
+        Retarde de N secondes. <br>
+        <br>
+        <b>Cas d\'usage</b>: <br>
+        <sample>
+        Pour la fonctionnalité <b>Alerte SMS</b>, les messages arrivent parfois en même temps qu\'un appel
+         ou quelques secondes après, et ajouter un délai de filtrage des appels de 2~3 secondes peut éviter ce type de problème.
+        </sample>
+        ]]>
+    </string>
+    <string name="comment_identifier">Identificateur de commentaire</string>
+    <string name="hint_comment_identifier">
+        Ex. : \"comment\":\"(.+?)\"
+    </string>
+    <string name="help_comment_identifier">
+        <![CDATA[
+        Extrayez le <title>commentaire</title> du résultat de la requête pour l\'afficher dans la notification et le journal d\'historique. (facultatif)<br>
+        <br>
+        Par exemple, pour ce résultat de requête : <br>
+        <sample>
+        { <br>
+          &ensp; \"type\": \"MARKETING\", <br>
+          &ensp; \"comment\": \"Better call Saul\", <br>
+          &ensp;  … <br>
+        } <br>
+        </sample>
+        <br>
+        Extrayez-le avec : <br>
+        &ensp; <sample>\"comment\": \"(.+?)\"</sample> <br>
+        ]]>
+    </string>
+    <string name="carrier">Opérateur</string>
+    <string name="carrier_rule">Règle de l\'opérateur</string>
+    <string name="help_regex_mode_carrier">
+        <![CDATA[
+        <title><b>Opérateur</b></title>:<br>
+        &ensp; L\'expression régulière correspondra au nom de l\'opérateur du numéro. <br>
+        <br>
+        <warn>Note</warn> <br>
+        &ensp; Les informations sur l\'opérateur sont basées sur l\'enregistrement initial
+        et peuvent être inexactes si le numéro a été porté vers un autre opérateur. <br>
+        <br>
+        Par exemple : <br>
+        &ensp; Bloquer les numéros de <no_translate><sample>Verizon Wireless</sample></no_translate>
+        avec l\'expression régulière <no_translate><error>verizon.*</error></no_translate> <br>
+        ]]>
+    </string>
+</resources>

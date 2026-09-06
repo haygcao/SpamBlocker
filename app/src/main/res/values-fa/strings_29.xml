@@ -1,0 +1,108 @@
+<resources>
+    <string name="call_screened">تماس غربال شده</string>
+    <string name="help_call_screened">
+        <![CDATA[
+        بعد از غربال شدن تماس فعال می‌شود.
+        ]]>
+    </string>
+    <string name="text_reply">پاسخ متنی</string>
+    <string name="text_to_reply">متن برای پاسخ</string>
+    <string name="cant_talk_in_meeting">در حال حاضر در جلسه هستم، بعداً با شما تماس می‌گیرم.</string>
+    <string name="busy_right_now">الان نمی‌توانم صحبت کنم، بعداً خبر می‌دهم.</string>
+    <string name="help_action_text_reply">
+        <![CDATA[
+        متن پاسخ خودکار را بر اساس نتیجه غربال تماس ایجاد می‌کند.
+        ]]>
+    </string>
+    <string name="send_sms">ارسال پیامک</string>
+    <string name="result">نتیجه</string>
+    <string name="contacts_only">فقط مخاطبان</string>
+    <string name="blocked_by">مسدود شده توسط</string>
+    <string name="sms_sent_successfully">پیامک با موفقیت ارسال شد</string>
+    <string name="failed_to_send_sms">خطا در ارسال پیامک: %s</string>
+    <string name="replying_text">متن پاسخ: %s</string>
+    <string name="help_action_send_sms">
+        <![CDATA[
+        ارسال یک پیامک. <br>
+        <br>
+        <title>شماره</title> <br>
+        چندین منبع را به ترتیب بررسی می‌کند و اولین مورد یافت شده را می‌پذیرد: <br>
+        &ensp; تگ <sample><no_translate>send_sms_to</no_translate></sample> (می‌تواند با استفاده از <b>تنظیم تگ</b> ایجاد شود) <br>
+        &ensp; شماره ورودی <br>
+        <br>
+        <title>محتوای پیامک</title> <br>
+        چندین منبع را به ترتیب بررسی می‌کند: <br>
+        &ensp; تگ <sample><no_translate>send_sms_content</no_translate></sample> <br>
+        &ensp; خروجی متنی مرحله قبلی <br>
+        ]]>
+    </string>
+    <string name="help_call_screening_number_filter">
+        <![CDATA[
+        از این عبارت منظم (regex) برای حذف شماره‌های خاص، مانند تلفن‌های ثابت یا شماره‌های بین‌المللی استفاده کنید. <br>
+        <br>
+        به عنوان مثال <br>
+        &ensp; <sample>\\d{10,11}</sample> <br>
+        &ensp; شماره‌های ۱۰ تا ۱۱ رقمی.
+        ]]>
+    </string>
+    <string name="sms_reply">پاسخ پیامکی</string>
+    <string name="help_bot_preset_sms_reply">
+        <![CDATA[
+        ارسال خودکار پیامک به مخاطبان هنگامی که تماس‌هایشان مسدود شده است. <br>
+        پیام‌های متفاوتی را می‌توان برای حالت جلسه و سایر ویژگی‌های مسدودسازی تنظیم کرد. <br>
+        <br>
+        <warn>نکته</warn> <br>
+        اولین باری که برنامه پیامکی ارسال می‌کند، یک پیام سیستمی درباره هزینه‌های احتمالی نمایش داده می‌شود.
+        برای جلوگیری از این هشدار در آینده، روی <sample>به خاطر بسپار</sample> ضربه بزنید.
+        ]]>
+    </string>
+    <string name="find_regex_rule_by_description">
+        <![CDATA[
+        توصیفی را وارد کنید تا با قانون رگکس مربوطه مطابقت داشته باشد.
+        ]]>
+    </string>
+    <string name="rules">قوانین</string>
+    <string name="rule_description">توضیحات قانون</string>
+    <string name="priority_in_order">اولویت بر اساس ترتیب این لیست تعیین می‌شود.</string>
+    <string name="help_ringtone_trigger">
+        <![CDATA[
+        دلیل مجاز بودن تماس. <br>
+        <br>
+        به عنوان مثال، <b>تماس مکرر</b> به این معنی است که وقتی تماس توسط <b>تماس مکرر</b> مجاز شود، زنگ تعیین شده پخش خواهد شد.
+        ]]>
+    </string>
+    <string name="copy_tag">کپی تگ</string>
+    <string name="tag_is_copied_from">تگ %s از %s کپی شد</string>
+    <string name="help_copy_tag">یک تگ جدید با همان مقدار اما نام متفاوت ایجاد کنید.</string>
+    <string name="from_tag">از تگ</string>
+    <string name="to_tag">به تگ</string>
+    <string name="allow_7726">اجازه به 7726</string>
+    <string name="help_bot_preset_7726">
+        <![CDATA[
+        فقط برای <warn>اهداف نمایشی</warn>.<br>
+        <br>
+        پیام‌های اسپم را به شماره <error>7726</error> (کد کوتاه جهانی برای <error>SPAM</error>) ارسال می‌کند،
+         قابلیتی که توسط بسیاری از اپراتورهای موبایل پشتیبانی می‌شود. <br>
+        <br>
+        <warn>هشدار</warn> <br>
+        این گزینه را تنها در صورتی فعال کنید که اپراتور شما از 7726 پشتیبانی کند. در غیر این صورت، ممکن است هزینه‌های استاندارد پیامک اعمال شود. <br>
+        <br>
+        این کار هم یک <minor>گردش کار</minor> و هم یک <minor>قانون عبارت منظم</minor> پیامک ایجاد می‌کند: <br>
+        <br>
+        - <minor>گردش کار</minor> <br>
+        &ensp; 1. ارسال متن اسپم به 7726. <br>
+        &ensp; 2. 10 ثانیه صبر کنید. <br>
+        &ensp; 3. ارسال شماره به 7726. <br>
+        <br>
+        - <minor>قانون عبارت منظم</minor> «اجازه به 7726» <br>
+        &ensp; اجازه دادن به پیام‌های دریافتی از 7726، مانند: <br>
+        &emsp; <sample>با تشکر از گزارش شما، لطفاً با شماره تلفن پاسخ دهید</sample>. <br>
+        <br>
+        تأخیر 10 ثانیه‌ای را بر اساس زمان پاسخگویی اپراتور خود تنظیم کنید، و اگر گزارش شماره توسط اپراتور شما پشتیبانی نمی‌شود، آن را حذف کنید.
+        ]]>
+    </string>
+    <string name="report_sms">گزارش پیامک</string>
+    <string name="regex_starts_with_plus">%s یک کاراکتر خاص در regex است (مثلاً %s)، آن را به صورت %s اسکیپ کنید</string>
+    <string name="sms_content_is_null">محتوای پیامک خالی است، آیا ثبت محتوای پیامک فعال است؟</string>
+    <string name="ignore">نادیده گرفتن</string>
+</resources>

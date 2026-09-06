@@ -13,7 +13,6 @@
         %s
         ]]>
     </string>
-    <string name="invalid_auth_credentials">Si us plau, introduïu informació d\'autorització vàlida.</string>
     <string name="delay">Retard</string>
     <string name="exclude_services">Exclou Serveis</string>
     <string name="help_exclude_bg_service">
@@ -29,29 +28,36 @@
         ]]>
     </string>
     <string name="running_services">Serveis en execució</string>
-    <string-array name="spam_categories">
-        <item>Número vàlid</item>
-        <item>Frau</item>
-        <item>Màrqueting</item>
-        <item>Enquesta</item>
-        <item>Polític</item>
-        <item>Altre Spam</item>
-    </string-array>
+    <string name="valid_number">Número vàlid</string>
+    <string name="valid_sms">SMS vàlid</string>
+    <string name="fraud">Frau</string>
+    <string name="promotional">Promocional</string>
+    <string name="survey">Enquesta</string>
+    <string name="reminder">Recordatori</string>
     <string name="action_category_config">Configuració de la categoria</string>
     <string name="help_action_category_config">
         <![CDATA[
-        Només s\'admeten les següents categories de spam, qualsevol altra categoria de l\'API s\'ha de assignar a una d\'elles.<br>
-        <br>
-         - <font color="#03DAC5"><b>{valid}</b></font><br>
-        &ensp; Informar com a número vàlid, no com a spam.<br>
-        <br>
-         - <font color="#fa7f71"><b>{fraud}</b></font><br>
-         - <font color="#fa7f71"><b>{marketing}</b></font><br>
-         - <font color="#fa7f71"><b>{survey}</b></font><br>
-         - <font color="#fa7f71"><b>{political}</b></font><br>
-        <br>
-         - <font color="#fa7f71"><b>{other}</b></font><br>
-        &ensp; El tipus de spam de reserva, que s\'utilitza quan no s\'aplica cap de les categories anteriors.<br>
+                Només s\'admeten les categories següents:<br>
+                <br>
+                 - <highlight><b>{valid}</b></highlight><br>
+                &ensp; Informeu-lo com a número de telèfon vàlid, no com a trucada brossa.<br>
+                <br>
+                 - <error><b>{fraud}</b></error><br>
+                 - <error><b>{promotional}</b></error><br>
+                 - <error><b>{survey}</b></error><br>
+                 - <error><b>{reminder}</b></error><br>
+                 - <error><b>{other}</b></error><br>
+                &ensp; El tipus de trucada brossa de reserva, utilitzat quan no s\'aplica cap de les categories anteriors.<br>
+                <br>
+                Genera l\'etiqueta <title>{category}</title>, que es pot utilitzar en les sol·licituds HTTP posteriors. <br>
+                <br>
+                Per exemple, cos de la sol·licitud POST: <br>
+                <sample>
+                { <br>
+                    &ensp; \"phone\": \"{number}\", <br>
+                    &ensp; \"rating\": \"{category}\" <br>
+                }
+                </sample>
         ]]>
     </string>
     <string name="missing_category">
@@ -76,20 +82,21 @@
         Alguns serveis us enviaran un missatge de text primer per informar-vos que una trucada és imminent, normalment en un minut.<br>
         <br>
         Per exemple, un missatge SMS com:<br>
-        &ensp; <font color="#888888">[algun servei] Us truquem per informar …, si us plau, no dubteu a respondre.</font><br>
+        &ensp; <sample>[algun servei] Us truquem per informar …, si us plau, no dubteu a respondre.</sample><br>
         <br>
         Una expressió regular per a aquest missatge seria: <br>
-        &ensp; <font color="#03DAC5"><b>.*please.*answer.*</b></font> <br>
+        &ensp; <highlight><b>.*please.*answer.*</b></highlight> <br>
         <br>
-        La configuració predeterminada <font color="#03DAC5"><b>120 Segons</b></font> significa que totes les trucades seran
+        La configuració predeterminada <highlight><b>120 Segons</b></highlight> significa que totes les trucades seran
         permès en els propers dos minuts després de rebre aquest missatge.<br>
         <br>
         Funciona tant per a SMS normals com per a SMS flash (SMS de classe 0).<br>
         <br>
-        <font color="#ea86ff"><b>Prioritat: 10</b></font>
+        Funciona sense que el filtratge global de SMS estigui activat.<br>
+        <br>
+        <priority><b>Prioritat: 10</b></priority>
         ]]>
     </string>
     <string name="waning_using_wildcard_as_regex">S\'utilitza el comodí `*` sense un punt anterior, vols dir `.*`?</string>
     <string name="import_as">Importa com a</string>
-    <string name="api_key">Clau API</string>
 </resources>

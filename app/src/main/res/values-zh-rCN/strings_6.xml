@@ -1,8 +1,10 @@
 <resources>
     <string name="crash_title">
-        抱歉，应用程序崩溃了。\n\n
-        请复制以下内容并将其提交到github上，
-        在报告之前请删除任何敏感信息。
+    <![CDATA[
+        抱歉，应用已崩溃。 <br>
+        <br>
+        请复制以下内容并在 GitHub 上提交问题，提交前请先删除任何敏感信息。
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>周日</item>
@@ -16,18 +18,16 @@
 
 
 
-    <string name="confirm_delete_all_records">确认要删除所有记录吗？</string>
+    <string name="confirm_delete_all_records">
+        <![CDATA[
+        确认要删除<error>所有</error>记录吗？
+        ]]>
+    </string>
     <string name="expiry">过期</string>
     <string name="days">天</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        启用后，短信内容也将记录在数据库中并显示在此列表中，禁用后将不会记录在数据库中。 <br>
-        <br>
-        - 启用时： <br>
-        &emsp; <b>点按</b>展开/折叠完整消息。 <br>
-        <br>
-        - 禁用时： <br>
-        &emsp; <b>点按</b>在默认应用程序中打开对话。
+        启用后，短信内容会记录到数据库并显示在此列表中；禁用后将不再记录。
         ]]>
     </string>
 
@@ -42,36 +42,55 @@
     <string name="repeated_call">重复呼叫</string>
     <string name="help_repeated_call">
         <![CDATA[
-        如果电话在短时间内重复呼入，则允许其通过，这很可能是一个重要的电话而非骚扰电话。 <br>
+        允许重复呼叫，因为它们比垃圾电话更有可能是紧急电话。 <br>
+        <br>
+        默认情况下，5 分钟内的第二次呼叫将被允许。 <br>
         <br>
         <b>选项：</b><br>
         <br>
-        <h6><font color="#00BFFF">- 频率</font></h6>
-        默认设置 <font color="#03DAC5"><b>1 次 / 5 分钟</b></font> 表示在 5 分钟内的第二次来电将被允许通过。 <br>
+        - <title><b>最大间隔</b></title> <br>
+        只有在此时间范围内的呼叫才被视为重复呼叫。 <br>
         <br>
-        <h6><font color="#00BFFF">- 包含短信</font></h6>
-        启用时，接收来自该电话号码的短信也将计入。<br>
+        - <title><b>最小间隔</b></title> <br>
+        如果某个号码在此时间之前再次呼叫，它将被忽略。垃圾电话机器人通常会立即重新拨号，在这种情况下，请增加此值。将拦截模式设置为\"静音\"也可以提供帮助，请查看其工具提示以了解详细信息。 <br>
         <br>
-        <font color="#ea86ff"><b>优先级：10</b></font>
+        - <title><b>重复次数</b></title> <br>
+        最小重复次数。 <br>
+        例如： <br>
+        <sample>
+        设置为 2 时，呼叫必须重复两次。总共需要三次呼叫： <br>
+         &ensp; - 忽略 <br>
+         &ensp; - 忽略 <br>
+         &ensp; - 允许 <br>
+        </sample>
+        <br>
+        - <title><b>包含短信</b></title> <br>
+        启用后，收到来自该号码的短信也将被计入。 <br>
+        <br>
+        <priority><b>优先级：10</b></priority>
         ]]>
     </string>
 
 
+    <string name="max_interval_min">最大间隔 (分)</string>
+    <string name="min_interval_sec">最小间隔 (秒)</string>
+    <string name="repeat_times">重复次数</string>
+    <string name="call_repeated_too_soon">距离该号码上次通话仅过去 %s 毫秒，所需最小值是 %s 毫秒，忽略。</string>
     <string name="about">关于</string>
     <string name="version">版本</string>
     <string name="source_code">源代码</string>
     <string name="dismiss">关闭</string>
     <string name="warning_running_in_work_profile">
-        此应用程序可能无法在工作配置文件中正常工作，请将其安装在主配置文件中。
+        本应用在工作配置文件中可能无法正常运行，请改为安装到主配置文件。
     </string>
     <string-array name="import_csv_type">
         <item>将 .csv 导入为单个规则</item>
         <item>将 .csv 导入为多个规则</item>
     </string-array>
     <string name="open_settings">打开设置</string>
-    <string name="remove_db_number">从垃圾电话数据库中删除号码</string>
+    <string name="remove_from_db">从数据库移除</string>
     <string name="copy_number">复制号码</string>
-    <string name="add_num_to_regex_rule">将号码添加到正则表达式规则</string>
-    <string name="add_num_to_db">将号码添加到垃圾电话数据库</string>
-    <string name="mark_all_as_read">标记全部为已读</string>
+    <string name="add_to_regex_rule">添加到正则规则</string>
+    <string name="edit_regex_rule">编辑正则规则</string>
+    <string name="add_to_db">添加到数据库</string>
 </resources>

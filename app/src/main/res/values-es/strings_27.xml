@@ -1,0 +1,134 @@
+<resources>
+    <string name="normal_text">Texto normal</string>
+    <string name="info_feature">Información / Función</string>
+    <string name="success_allow">Éxito / Permitir</string>
+    <string name="error_block">Error / Bloquear</string>
+    <string name="disable">Desactivar</string>
+    <string name="dialog_bg">Fondo del diálogo</string>
+    <string name="app_bg">Fondo de la aplicación</string>
+    <string name="should_import_as_instant_query">
+        <![CDATA[
+        Esto parece ser un flujo de trabajo de \"consulta API\", debería importarse a la sección anterior \"Consulta Instantánea\".
+        ]]>
+    </string>
+    <string name="at_time">A la hora</string>
+    <string name="interval">Intervalo</string>
+    <string name="contact_prefix">Prefijo de Contacto</string>
+    <string name="help_regex_mode_contact_prefix">
+        <![CDATA[
+        <title><b>Prefijo de Contacto</b></title>:<br>
+        &ensp; Permite llamadas según la coincidencia del prefijo del contacto, ideal para organizaciones que usan
+          números secuenciales, como clínicas o bufetes de abogados. <br>
+        <br>
+        <warn>Esta expresión regular debe terminar con puntos</warn>, en este modo de expresión regular, esos puntos finales representan los dígitos variables. <br>
+        <br>
+        <b>Por ejemplo:</b> <br>
+        &ensp; <sample><b>.*..</b></sample> <br>
+        &ensp; Coincide con cualquier contacto que tenga el mismo prefijo y permite una variación de 2 dígitos al final.<br>
+        &ensp; Si tienes <sample>1111<b>22</b></sample> guardado como contacto, también se permitirá una llamada entrante desde <sample>1111<b>33</b></sample>.<br>
+        <br>
+        <b>Otro ejemplo:</b> <br>
+        &ensp; <sample><b>(?!(04|03))\d{5}..</b></sample> <br>
+        Desglose: <br>
+        &ensp; - <b><sample>(?!(03|04))</sample></b> <br>
+        &emsp;   Excluir los números que empiezan por 03 o 04 <br>
+        &ensp; - <b><sample>\d{5}</sample></b> <br>
+        &emsp;   El número debe tener 7 dígitos en total, incluido el sufijo variable de 2 dígitos <br>
+        &ensp; - <b><sample>..</sample></b> <br>
+        &emsp;   Sufijo variable de 2 dígitos <br>
+        ]]>
+    </string>
+    <string name="help_regex_preset_contact_prefix">
+        <![CDATA[
+        Coincide con contactos por prefijo, permitiendo variación en los <minor><b>2</b></minor> últimos dígitos, ideal para organizaciones que utilizan números secuenciales, por ejemplo, clínicas o bufetes de abogados. <br>
+        <br>
+        <b>Por ejemplo</b>: <br>
+        &ensp; Si tienes <sample>111111</sample><highlight>22</highlight> guardado como contacto, también se permitirá una llamada desde <sample>111111</sample><highlight>33</highlight>.
+        ]]>
+    </string>
+    <string name="caller_id">ID llamada</string>
+    <string name="help_caller_id">
+        <![CDATA[
+        Muestra el identificador de llamadas en una ventana flotante. <br>
+        <br>
+        Arrástrelo para moverlo. <br>
+        <br>
+        <b>Nota</b> <br>
+        Puede que vea una alerta del sistema en el panel de notificaciones mientras la ventana flotante esté activa,
+          indicando que esta aplicación está mostrando una ventana sobre otras aplicaciones.
+        Esto se debe a que las ventanas flotantes han sido usadas históricamente por programas maliciosos para mostrar pantallas de inicio de sesión falsas. <br>
+        Simplemente ignore esta alerta; desaparecerá junto con la ventana flotante.
+        ]]>
+    </string>
+    <string name="perm_show_overlay">Mostrar superposición</string>
+    <string name="preview">Vista previa</string>
+    <string name="content_template">Plantilla de contenido</string>
+    <string name="help_caller_id_template">
+        <![CDATA[
+        El contenido mostrado en la ventana del identificador de llamadas, en formato HTML. <br>
+        <br>
+        Se muestra un guion (-) si el valor está vacío, por ejemplo, cuando no hay información del operador para el número.
+        <br>
+        <title>Etiquetas compatibles</title>: <br>
+        - <minor>{reason}</minor> <br>
+        &emsp; Por qué se permitió la llamada, la misma razón mostrada en el historial de llamadas. <br>
+        - <minor>{geolocation}</minor> <br>
+        &emsp; La ubicación geográfica del número de teléfono. <br>
+        - <minor>{carrier}</minor> <br>
+        &emsp; El nombre del operador del número de teléfono. <br>
+        <br>
+        <title>Etiquetas HTML compatibles</title>: <br>
+        Consulte: <a href="%s">link</a>
+        ]]>
+    </string>
+    <string name="background_color">Color de fondo</string>
+    <string name="wait">Esperar</string>
+    <string name="help_action_wait">
+        <![CDATA[
+        Retrasa N segundos. <br>
+        <br>
+        <b>Caso de uso</b>: <br>
+        <sample>
+        Para la función <b>Alerta SMS</b>, los mensajes a veces llegan al mismo tiempo que la llamada
+         o unos segundos después, y añadir un retraso de 2~3 segundos al filtrado de llamadas puede evitar estos problemas.
+        </sample>
+        ]]>
+    </string>
+    <string name="comment_identifier">Identificador de comentario</string>
+    <string name="hint_comment_identifier">
+        Ej.: \"comment\":\"(.+?)\"
+    </string>
+    <string name="help_comment_identifier">
+        <![CDATA[
+        Extrae el <title>comentario</title> del resultado de la consulta para mostrarlo en la notificación y el registro de historial. (opcional)<br>
+        <br>
+        Por ejemplo, para este resultado de consulta: <br>
+        <sample>
+        { <br>
+          &ensp; \"type\": \"MARKETING\", <br>
+          &ensp; \"comment\": \"Better call Saul\", <br>
+          &ensp;  … <br>
+        } <br>
+        </sample>
+        <br>
+        Extráelo con: <br>
+        &ensp; <sample>\"comment\": \"(.+?)\"</sample> <br>
+        ]]>
+    </string>
+    <string name="carrier">Operador</string>
+    <string name="carrier_rule">Regla del operador</string>
+    <string name="help_regex_mode_carrier">
+        <![CDATA[
+        <title><b>Operador</b></title>:<br>
+        &ensp; La expresión regular coincidirá con el nombre del operador del número. <br>
+        <br>
+        <warn>Nota</warn> <br>
+        &ensp; La información del operador se basa en el registro inicial y puede ser
+        inexacta si el número ha sido transferido a otro operador. <br>
+        <br>
+        Por ejemplo: <br>
+        &ensp; Bloquear números de <no_translate><sample>Verizon Wireless</sample></no_translate>
+        con la expresión regular <no_translate><error>verizon.*</error></no_translate> <br>
+        ]]>
+    </string>
+</resources>

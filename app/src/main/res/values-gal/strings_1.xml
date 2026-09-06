@@ -17,8 +17,6 @@
     <string name="clear">Limpar</string>
     <string name="test">Probar</string>
     <string name="save">Gardar</string>
-    <string name="whitelist">Lista branca</string>
-    <string name="blacklist">Lista negra</string>
     <string name="content">Contido</string>
     <string name="priority">Prioridade</string>
     <string name="deleted_filter">(regra eliminada)</string>
@@ -30,20 +28,23 @@
     <string name="yes">Si</string>
     <string name="no">Non</string>
     <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
     <string name="miscellaneous">Variados</string>
     <string name="quick_settings">Configuración rápida</string>
     <string name="regex_settings">Configuración de expresión regular</string>
     <string name="backup">Copia de seguridade</string>
     <string name="import_">Importar</string>
     <string name="export">Exportar</string>
-    <string name="config_text">Texto de configuración</string>
+    <string name="config_json">JSON de configuración</string>
     <string name="imported_successfully">Importado con éxito</string>
     <string name="import_fail">Fallo ao importar</string>
+    <string name="exported_successfully">Exportado con éxito</string>
+    <string name="export_fail">Erro ao exportar</string>
     <string name="prompt_go_to_permission_setting">
         <![CDATA[
         Esta función require permiso:<br>
         <br>
-        <font color="#00BFFF">%s</font><br>
+        <title>%s</title><br>
         <br>
         Ten que activarse manualmente na configuración do sistema.<br>
         Abrir esa páxina de configuración?
@@ -53,8 +54,9 @@
     <string name="label_number_rules">Regras de número</string>
     <string name="label_content_rules">Regras de mensaxe</string>
     <string name="recent_apps"><short>Aplicacións recentes</short></string>
-    <string name="allow_contact">Contactos</string>
+    <string name="contacts">Contactos</string>
 
     <string name="number_rule">Regra de Número</string>
     <string name="content_rule">Regra de Mensaxe</string>
+    <string name="non_contacts">Bloquear non contactos</string>
 </resources>

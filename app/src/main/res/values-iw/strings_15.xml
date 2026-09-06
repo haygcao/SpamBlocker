@@ -1,31 +1,4 @@
 <resources>
-    <string name="api_preset_groq">Groq</string>
-    <string name="help_api_preset_groq">
-        <![CDATA[
-        בדוק את תוכן ה-SMS באמצעות <b>Groq AI</b>, זה דורש רק חשבון דוא\"ל.
-        ]]>
-    </string>
-    <string name="help_api_preset_groq_authorization">
-        <![CDATA[
-        1. הירשם והתחבר: <br>
-         <a href="https://console.groq.com/login">https://console.groq.com/login</a><br>
-         <br>
-        2. פתח את עמוד ה-API:<br>
-         <a href="https://console.groq.com/keys">https://console.groq.com/keys</a><br>
-        <br>
-        3. לחץ על הכפתור <translate>\"צור מפתח API\"</translate>.<br>
-        <br>
-        4. העתק את המפתח, ואז מלא אותו למטה.
-        ]]>
-    </string>
-    <string name="spam_sms_prompt_template">
-        קטלג הודעת SMS זו כפוליטית, הונאה, סקר, או שיווק.
-        אם אף אחד לא מתאים, ענה \"תקין\", אחרת, ענה על הקטגוריה בלבד, אל תענה על שום דבר אחר.
-        הודעת ה-SMS היא:
-        {sms}
-    </string>
-    <string name="spam_sms_negative_category">(פוליטי|הונאה|סקר|שיווק)</string>
-    <string name="spam_sms_positive_category">תקין</string>
     <string name="last_log">יומן אחרון</string>
     <string name="executed_at">בוצע ב:</string>
     <string name="not_executed_yet">טרם בוצע</string>
@@ -36,9 +9,6 @@
         <br>
         במבט מהיר, תוכל לוודא בקלות אם רשומות ההיסטוריה מכוסות על ידי הכללים, כך שאין צורך לבדוק אותן בנפרד. <br>
         <br>
-        <font color="#ffa500">הערה:</font><br>
-        זה עלול להשפיע על הביצועים כאשר יש יותר מדי כללי ביטוי רגולרי. <br>
-        <br>
         <b>דוגמאות:</b> <br>
         <br>
         <img src=\'ic_history_indicator_1\'/> <br>
@@ -46,7 +16,7 @@
         &ensp; - אייקון ה-SMS האדום השני מציין שתוכן ה-SMS ייחסם על ידי כלל תוכן. <br>
         &ensp; - אייקון מסד הנתונים האדום השלישי מציין שמספר זה קיים במסד הנתונים של מספרי הספאם. <br>
         <br>
-        אייקונים אלו מסודרים לפי <font color="#ea86ff"><b>עדיפות</b></font>, האייקון ה<b>ראשון</b> מציין
+        אייקונים אלו מסודרים לפי <priority><b>עדיפות</b></priority>, האייקון ה<b>ראשון</b> מציין
         את התוצאה הכוללת. כלל המספרים הזה בעל עדיפות גבוהה יותר, הודעת ה-SMS בסופו של דבר תאושר על ידו.<br>
         <br>
         <img src=\'ic_history_indicator_2\'/> <br>
@@ -58,13 +28,18 @@
         <br>
         <img src=\'ic_history_indicator_3\'/> <br>
         אף כלל מספרים לא תואם אותו, רק כלל SMS ומסד נתונים. והוא ייחסם על ידי כלל SMS.<br>
+        <br>
+        <br>
+        <warn>הערה</warn> <br>
+        תמיד התאם כללים לפי האייקונים המובילים, ולא לפי צבע המספר (<img src=\'ic_history_indicator_4\'/>).
+        צבע המספר משקף רק את תוצאת הסינון של העבר ולעולם לא ישתנה.
         ]]>
     </string>
     <string name="help_enable_for_mms">
         <![CDATA[
         הודעות MMS הן בדרך כלל ספאם, אין צורך להפעיל אותן אלא אם כן אתה באמת משתמש בהן.<br>
         <br>
-        <font color="#ffa500">הערה:</font><br>
+        <warn>הערה:</warn><br>
         הודעות קבוצתיות הן MMS, לא SMS.<br>
         <br>
         MMS יטופל כ-SMS, רק תוכן טקסט יעובד,
@@ -73,8 +48,6 @@
         נדרשות שתי הרשאות: RECEIVE_MMS ו-READ_SMS
         ]]>
     </string>
-    <string name="unknown_error">שגיאה לא ידועה.</string>
-    <string name="checking_auth_credential">בדיקת אישורי הרשאה.</string>
     <string name="sms_bomb">פצצת SMS</string>
     <string name="help_sms_bomb">
         <![CDATA[
@@ -84,28 +57,28 @@
           מאימותי OTP (סיסמה חד-פעמית).<br>
         <br>
         לדוגמה, הודעות SMS כגון:<br>
-        &ensp; <font color="#888888">ה-OTP שלך הוא: 1234.</font><br>
-        &ensp; <font color="#888888">זהו קוד האימות שלך: 1234.</font><br>
-        &ensp; <font color="#888888">1234 הוא קוד האימות שלך.</font><br>
+        &ensp; <sample>ה-OTP שלך הוא: 1234.</sample><br>
+        &ensp; <sample>זהו קוד האימות שלך: 1234.</sample><br>
+        &ensp; <sample>1234 הוא קוד האימות שלך.</sample><br>
         <br>
-        <h5><font color="#00BFFF">- ביטוי רגולרי לתוכן</font></h5>
+        <h5><title>- ביטוי רגולרי לתוכן</title></h5>
         תכונה זו חלה רק על הודעות התואמות לביטוי רגולרי זה, ביטוי רגולרי אופייני יהיה: <br>
-        <font color="#fa7f71">.*(otp|code).*</font><br>
+        <error>.*(otp|code).*</error><br>
         <br>
-        <h5><font color="#00BFFF">- מרווח</font></h5>
+        <h5><title>- מרווח</title></h5>
         אם הודעת OTP עוקבת מגיעה בתוך מרווח זמן זה, היא נחשבת
           לחלק מהתקפת ההפצצה ותיחסם.<br>
         (ברירת מחדל: 30 שניות)<br>
         <br>
         פעולה זו תחסום את כל ההפצצות הבאות, למעט הראשונה.<br>
         <br>
-        <h5><font color="#00BFFF">- הגנת מסך נעילה</font></h5>
+        <h5><title>- הגנת מסך נעילה</title></h5>
         הפעל זאת כדי לחסום את כל ההפצצות במצב מסך נעילה, כולל הראשונה. <br>
         <br>
         בדרך כלל, המסך שלך אמור להיות לא נעול בזמן המתנה לקוד אימות.
         כאשר הודעות כאלה מגיעות בזמן שהמכשיר נמצא במצב מסך נעילה, סביר להניח שהן הפצצות.<br>
         <br>
-        <font color="#ea86ff"><b>עדיפות: 20</b></font>
+        <priority><b>עדיפות: 20</b></priority>
         ]]>
     </string>
     <string name="lockscreen_protection">הגנת מסך נעילה</string>
@@ -127,7 +100,8 @@
     </string>
     <string name="help_history_expiry">
         <![CDATA[
-            כאשר מופעל, רשומות ההיסטוריה יפוגו לאחר N ימים, רשומות שפג תוקפן יימחקו אוטומטית.
+                כאשר מופעל, רשומות ההיסטוריה יימחקו אוטומטית לאחר N ימים. <br>
+                משימת הניקוי פועלת מדי יום בשעה 00:00.
         ]]>
     </string>
 </resources>

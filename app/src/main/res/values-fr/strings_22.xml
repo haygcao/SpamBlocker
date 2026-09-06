@@ -1,12 +1,13 @@
 <resources>
     <string name="auto_report">Rapport automatique</string>
+    <string name="manual_report">Rapport manuel</string>
     <string name="help_auto_report_type">
     <![CDATA[
     Rapporter automatiquement le numéro s\'il est bloqué pour les raisons suivantes : <br>
     <br>
-    &ensp; - <font color="#fa7f71">Hors contacts</font> (Mode strict des contacts) <br>
-    &ensp; - <font color="#fa7f71">Attestation STIR/SHAKEN</font> <br>
-    &ensp; - <font color="#fa7f71">Regex de numéro</font> <br>
+    &ensp; - <error>Hors contacts</error>  <br>
+    &ensp; - <error>Attestation STIR/SHAKEN</error> <br>
+    &ensp; - <error>Regex de numéro</error> <br>
     <br>
     Cela n\'a pas d\'impact sur les rapports manuels.
     ]]>
@@ -16,23 +17,23 @@
         <![CDATA[
         Analyse les octets de données CSV pour en faire une liste de numéros. <br>
         <br>
-        La colonne contenant les numéros <b>doit</b> être nommée <font color="#00BFFF"><b><no_translate>pattern</no_translate></b></font>. <br>
+        La colonne contenant les numéros <b>doit</b> être nommée <title><b><no_translate>pattern</no_translate></b></title>. <br>
         <br>
         Pour les fichiers CSV tiers avec des noms d\'en-tête différents, mappez-les à
-        <font color="#00BFFF"><b><no_translate>pattern</no_translate></b></font> en utilisant le <b>Mappage de colonnes</b>. <br>
+        <title><b><no_translate>pattern</no_translate></b></title> en utilisant le <b>Mappage de colonnes</b>. <br>
         <br>
         Par exemple : <br>
         <no_translate>
-          &ensp; <font color="#888888">{ \"number_column_header\": \"pattern\" }</font>
+          &ensp; <sample>{ \"number_column_header\": \"pattern\" }</sample>
         </no_translate> <br>
         <br>
-        <font color="#ffa500"><b>Note</b></font> <br>
+        <warn><b>Note</b></warn> <br>
         Pour analyser des fichiers texte brut sans en-têtes de colonne, utilisez plutôt <b>Extraire Regex</b>.
         ]]>
     </string>
     <string name="help_action_parse_xml">
         <![CDATA[
-        Analyse les octets de données XML en utilisant <font color="#00BFFF">xpath</font> et génère une liste de numéros.
+        Analyse les octets de données XML en utilisant <title>xpath</title> et génère une liste de numéros.
         ]]>
     </string>
     <string name="action_parse_xml">Analyser XML</string>
@@ -44,13 +45,13 @@
         Ceci peut aussi être utilisé pour analyser des fichiers texte brut avec un numéro par ligne. <br>
         <br>
         Par exemple, analyser le texte : <br>
-          <font color="#888888">
+          <sample>
             &ensp; 111<br>
             &ensp; 222<br>
             &ensp; 333<br>
-          </font>
+          </sample>
         avec regex : <br>
-          &ensp; <font color="#888888">(\\d+)</font>
+          &ensp; <sample>(\\d+)</sample>
         ]]>
     </string>
     <string name="help_action_http_download">
@@ -70,28 +71,12 @@
     </string>
     <string name="help_action_read_file">
         <![CDATA[
-        Lit les octets de données depuis un fichier. <br>
-        <br>
-        Balises de <font color="#03DAC5">chemin</font> prises en charge : <br>
-        <br>
-        %s <br>
-        <br>
-        Balises de <font color="#03DAC5">nom de fichier</font> prises en charge : <br>
-        <br>
-        %s
+        Lit les octets de données depuis un fichier.
         ]]>
     </string>
     <string name="help_action_write_file">
         <![CDATA[
-        Écrit les octets de données dans un fichier. <br>
-        <br>
-        Balises de <font color="#03DAC5"><b>chemin</b></font> prises en charge : <br>
-        <br>
-        %s <br>
-        <br>
-        Balises de <font color="#03DAC5"><b>nom de fichier</b></font> prises en charge : <br>
-        <br>
-        %s
+        Écrit les octets de données dans un fichier.
         ]]>
     </string>
     <string name="action_find_rules">Trouver des Règles</string>
@@ -107,22 +92,22 @@
         Selon le type de déclencheur de flux de travail, les règles peuvent être modifiées de manière permanente ou temporaire. <br>
         <br>
         Attributs modifiables : <br>
-        - <font color="#888888"><no_translate>pattern</no_translate></font> <br>
+        - <sample><no_translate>pattern</no_translate></sample> <br>
         &ensp; La regex <br>
-        - <font color="#888888"><no_translate>description</no_translate></font> <br>
+        - <sample><no_translate>description</no_translate></sample> <br>
         &ensp; La description <br>
-        - <font color="#888888"><no_translate>priority</no_translate></font> <br>
+        - <sample><no_translate>priority</no_translate></sample> <br>
         &ensp; La priorité <br>
-        - <font color="#888888"><no_translate>isBlacklist</no_translate></font> <br>
+        - <sample><no_translate>isBlacklist</no_translate></sample> <br>
         &ensp; <no_translate>true</no_translate> : Bloquer, <no_translate>false</no_translate> : autoriser <br>
-        - <font color="#888888"><no_translate>flags</no_translate></font> <br>
+        - <sample><no_translate>flags</no_translate></sample> <br>
         &ensp; Appliquer à : <br>
         &ensp; 1 : appel, 2 : SMS, 3 : les deux, 0 : désactiver <br>
-        - <font color="#888888"><no_translate>channel</no_translate></font> <br>
+        - <sample><no_translate>channel</no_translate></sample> <br>
         &ensp; La chaîne d\'ID du canal de notification<br>
-        - <font color="#888888"><no_translate>blockType</no_translate></font> <br>
+        - <sample><no_translate>blockType</no_translate></sample> <br>
         &ensp; 0 : rejeter, 1 : couper le son, 2 : raccrocher <br>
-        - <font color="#888888"><no_translate>simSlot</no_translate></font> <br>
+        - <sample><no_translate>simSlot</no_translate></sample> <br>
         &ensp; 0, 1, 2… Ou <no_translate>null</no_translate> pour n\'importe quelle SIM.
         ]]>
     </string>
@@ -134,7 +119,20 @@
     </string>
     <string name="help_action_import_as_regex_rule">
         <![CDATA[
-        Générer une nouvelle règle regex à partir d\'une liste de numéros.
+        Générer une nouvelle règle regex. <br>
+        <br>
+        Par exemple : <br>
+        <sample>
+        &ensp; Après avoir analysé le CSV, combinez tous les numéros en une seule règle regex.
+        </sample>
+        ]]>
+    </string>
+    <string name="help_action_import_as_multiple_regex_rules">
+        <![CDATA[
+        Générer plusieurs règles regex. <br>
+        <br>
+        Par exemple : <br>
+        &ensp; Générez une règle regex distincte pour chaque ligne du fichier CSV.
         ]]>
     </string>
     <string name="help_action_replace_number">
@@ -142,21 +140,22 @@
         Normalise les motifs numériques de sources tierces au format regex. <br>
         <br>
         Par exemple, pour mapper <br>
-         &ensp; <font color="#fa7f71">+</font>12345<font color="#fa7f71">####</font> <br>
+         &ensp; <error>+</error>12345<error>####</error> <br>
         vers <br>
-         &ensp; 12345<font color="#03DAC5"><b>....</b></font><br>
+         &ensp; 12345<highlight><b>....</b></highlight><br>
         <br>
         Ajoutez deux actions <b>Remplacer le numéro</b> : <br>
-        &ensp; - Remplacez `<font color="#fa7f71">(\\+)</font>` par ``<br>
-        &ensp; - Remplacez `<font color="#fa7f71">(#)</font>` par `<font color="#03DAC5"><b>.</b></font>`<br>
+        &ensp; - Remplacez `<error>(\\+)</error>` par ``<br>
+        &ensp; - Remplacez `<error>(#)</error>` par `<highlight><b>.</b></highlight>`<br>
         ]]>
     </string>
     <string name="action_replace_number">Remplacer le numéro</string>
-    <string name="action_import_as_regex_rule">Importer en tant que règle Regex</string>
+    <string name="action_import_as_regex_rule">Importer comme une règle Regex</string>
+    <string name="action_import_as_multiple_regex_rules">Importer comme plusieurs règles Regex</string>
     <string name="duration_in_minutes">Durée (minutes)</string>
     <string name="help_trigger_manual">
         <![CDATA[
-        Appuyez sur le bouton <font color="cyan">Test</font> pour exécuter manuellement ce flux de travail.
+        Appuyez sur le bouton <highlight>Test</highlight> pour exécuter manuellement ce flux de travail.
         ]]>
     </string>
     <string name="help_trigger_schedule">
@@ -164,16 +163,16 @@
         Automatisez l\'exécution des tâches selon des plannings basés sur le temps. <br>
         <br>
         Cas d\'utilisation : <br>
-        &ensp; - <font color="#888888">Téléchargez quotidiennement les numéros de spam depuis le registre FTC-DNC.</font> <br>
+        &ensp; - <sample>Téléchargez quotidiennement les numéros de spam depuis le registre FTC-DNC.</sample> <br>
         <br>
-        &ensp; - <font color="#888888">Sauvegarde automatique quotidienne et ne conserve que les 7 dernières sauvegardes.</font> <br>
+        &ensp; - <sample>Sauvegarde automatique quotidienne et ne conserve que les 7 dernières sauvegardes.</sample> <br>
         ]]>
     </string>
     <string name="trigger">Déclencheur</string>
     <string name="delay_in_seconds">Délai (secondes)</string>
     <string name="help_ringtone_delay">
         <![CDATA[
-        Cette fonctionnalité modifie temporairement la sonnerie système par défaut avant que la sonnerie ne commence, puis la rétablit après <font color="cyan">%d secondes</font>, moment auquel la sonnerie est censée avoir débuté. <br>
+        Cette fonctionnalité modifie temporairement la sonnerie système par défaut avant que la sonnerie ne commence, puis la rétablit après <highlight>%d secondes</highlight>, moment auquel la sonnerie est censée avoir débuté. <br>
         <br>
         Certains téléphones offrent des fonctionnalités comme <b>Vibrer d\'abord, puis sonner</b> qui peuvent retarder la sonnerie de, par exemple, 6 secondes. Dans ce cas, augmentez ce délai en conséquence.
         ]]>

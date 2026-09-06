@@ -1,16 +1,14 @@
 <resources>
     <string name="start_time">زمان شروع</string>
     <string name="end_time">زمان پایان</string>
-    <string name="switch_mode">حالت سوئیچ</string>
+    <string name="regex_mode">حالت Regex</string>
     <string name="contact_group">گروه مخاطبین</string>
-    <string name="text_too_long">متن بیش از حد طولانی است، ویرایش غیرفعال است</string>
-    <string name="follow_system"><short>دنبال سیستم</short></string>
+    <string name="text_too_long">متن بیش از %s کاراکتر است و به دلیل مسائل عملکردی، ویرایش غیرفعال شده است. برای افزایش حد:</string>
+    <string name="increase_text_limit">فشار طولانی روی یک قانون -> تنظیمات -> حد جعبه متن</string>
+    <string name="system"><short>سیستم</short></string>
     <string name="theme">تم</string>
-    <string-array name="theme_list">
-        <item>روشن</item>
-        <item>تاریک</item>
-    </string-array>
     <string-array name="rule_dropdown_menu">
+        <item>خروجی</item>
         <item>جستجوی قانون</item>
         <item>کپی قانون</item>
         <item>حذف قانون</item>
@@ -26,26 +24,26 @@
     </string>
     <string name="help_regex_mode_phone_number">
         <![CDATA[
-        <font color="#00BFFF"><b>شماره تلفن</b></font>:<br>
+        <title><b>شماره تلفن</b></title>:<br>
         &ensp; حالت پیش‌فرض، regex با شماره تلفن مطابقت داده می‌شود.<br>
         ]]>
     </string>
     <string name="help_regex_mode_contact">
         <![CDATA[
-        <font color="#00BFFF"><b>مخاطبین</b></font>:<br>
+        <title><b>مخاطبین</b></title>:<br>
         &ensp; regex با نام مخاطب مرتبط با شماره ورودی مطابقت داده می‌شود.<br>
         &ensp;  - مورد استفاده:<br>
-        &emsp; <font color="#888888">مسدود کردن تمام تماس‌های غیرمخاطب در آخر هفته با regex `.*`. </font><br>
+        &emsp; <sample>مسدود کردن تمام تماس‌های غیرمخاطب در آخر هفته با regex `.*`. </sample><br>
         ]]>
     </string>
     <string name="help_regex_mode_contact_group">
         <![CDATA[
-        <font color="#00BFFF"><b>گروه مخاطبین</b></font>:<br>
+        <title><b>گروه مخاطبین</b></title>:<br>
         &ensp; regex با نام گروه مخاطبین مرتبط با شماره ورودی مطابقت داده می‌شود و بر تمام مخاطبین آن گروه تأثیر می‌گذارد،
                  بنابراین نیازی به افزودن آنها به صورت جداگانه نیست
                  و حتی با تغییرات پرسنلی نیز نیازی به به‌روزرسانی آن نیست.<br>
         &ensp;  - مورد استفاده:<br>
-        &emsp; <font color="#888888">مسدود کردن تمام همکاران در آخر هفته با مسدود کردن گروه مخاطبین \"کار\". </font> <br>
+        &emsp; <sample>مسدود کردن تمام همکاران در آخر هفته با مسدود کردن گروه مخاطبین \"کار\". </sample> <br>
         ]]>
     </string>
 </resources>

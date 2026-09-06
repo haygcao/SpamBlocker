@@ -17,8 +17,6 @@
     <string name="clear">クリア</string>
     <string name="test">テスト</string>
     <string name="save">保存</string>
-    <string name="whitelist">ホワイトリスト</string>
-    <string name="blacklist">ブラックリスト</string>
     <string name="content">コンテンツ</string>
     <string name="priority">優先順位</string>
     <string name="deleted_filter">(削除されたルール)</string>
@@ -30,20 +28,23 @@
     <string name="yes">はい</string>
     <string name="no">いいえ</string>
     <string name="ok">OK</string>
+    <string name="cancel">キャンセル</string>
     <string name="miscellaneous">その他</string>
     <string name="quick_settings">クイック設定</string>
     <string name="regex_settings">正規表現設定</string>
     <string name="backup">バックアップ</string>
-    <string name="import_">インポート</string>
-    <string name="export">エクスポート</string>
-    <string name="config_text">設定テキスト</string>
+    <string name="import_">取込</string>
+    <string name="export">書出</string>
+    <string name="config_json">設定 JSON</string>
     <string name="imported_successfully">インポートが正常に完了しました。</string>
     <string name="import_fail">インポートに失敗しました。</string>
+    <string name="exported_successfully">エクスポートに成功しました</string>
+    <string name="export_fail">エクスポートに失敗しました</string>
     <string name="prompt_go_to_permission_setting">
         <![CDATA[
         この機能には権限が必要です:<br>
         <br>
-        <font color="#00BFFF">%s</font><br>
+        <title>%s</title><br>
         <br>
         システム設定で手動で有効にする必要があります。<br>
         その設定ページを開きますか？
@@ -53,8 +54,9 @@
     <string name="label_number_rules">番号ルール</string>
     <string name="label_content_rules">メッセージルール</string>
     <string name="recent_apps"><short>最近のアプリ</short></string>
-    <string name="allow_contact">連絡先</string>
+    <string name="contacts">連絡先</string>
 
     <string name="number_rule">電話番号ルール</string>
     <string name="content_rule">メッセージルール</string>
+    <string name="non_contacts">非連絡先</string>
 </resources>

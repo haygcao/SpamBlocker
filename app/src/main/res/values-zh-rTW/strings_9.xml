@@ -1,21 +1,21 @@
 <resources>
     <string name="contact_rule">聯絡人規則</string>
-    <string name="directory">目錄</string>
+    <string name="directory_abbrev">目錄</string>
     <string name="filename">檔案名稱</string>
     <string name="url">網址</string>
     <string name="expiry_days">過期天數</string>
     <string name="column_mapping">欄位對應</string>
-    <string name="include_spam_db">包含騷擾號碼資料庫</string>
+
     <string name="no_config_needed">不需要設定</string>
     <string name="optional">（選用）</string>
 
     <string name="help_action_header">
         <![CDATA[
-        - <font color="#03DAC5"><b>測試</b></font><br>
+        - <highlight><b>測試</b></highlight><br>
         這些動作會立即執行，用於檢查是否已正確設定，
         或者您只是想手動執行此工作流程。<br>
         <br>
-        - <font color="#00BFFF"><b>新增</b></font><br>
+        - <title><b>新增</b></title><br>
             建立新動作，可以串連多個動作以完成複雜的任務。<br>
             各動作之間的綠色或紅色圓點表示它們是否可以串連。
         ]]>
@@ -26,27 +26,18 @@
         自動備份設定。<br>
         <br>
         它支援輪替排程，例如：<br>
-        &ensp; <font color="#888888">僅保留最近七次的每日備份。</font>
+        &ensp; <sample>僅保留最近七次的每日備份。</sample>
         ]]>
     </string>
     <string name="everyday">每天</string>
     <string name="daily">每日</string>
     <string name="weekly">每週</string>
     <string name="periodically">定期</string>
-    <string name="time">時間</string>
     <string name="workdays">工作日</string>
 
     <string name="help_backup">
         <![CDATA[
-        備份檔案格式為 gzip 壓縮的 JSON，您可以使用任何壓縮檔管理工具開啟和編輯。<br>
-        <br>
-        - <font color="#00BFFF"><b>包含騷擾號碼資料庫</b></font><br>
-        長按按鈕以匯出/匯入騷擾號碼資料庫。<br>
-        <br>
-        <font color="#ffa500">注意：</font><br>
-        &ensp; 在備份檔中包含騷擾號碼資料庫會大幅增加檔案大小，
-        由於資料庫會定期更新，這通常是不必要的，除非您想要複製到另一臺手機。<br>
-
+        備份檔案格式為 gzip 壓縮的 JSON，您可以使用任何壓縮檔管理工具開啟和編輯。
         ]]>
     </string>
     <string name="mode">模式</string>
@@ -57,18 +48,25 @@
     </string-array>
     <string name="help_regex_action_add_mode">
         <![CDATA[
-        - <font color="#00BFFF"><b>建立</b></font><br>
+        - <title><b>建立</b></title><br>
         &ensp; 永遠建立新的正規表示式規則。<br>
         <br>
-        - <font color="#00BFFF"><b>取代</b></font><br>
+        - <title><b>取代</b></title><br>
         &ensp; 會嘗試尋找具有相同<b>描述</b>的現有規則。<br>
         &ensp;&ensp; - 如果找到，將會覆寫。<br>
         &ensp;&ensp; - 如果找不到，將建立新規則，與<b>建立</b>模式相同。<br>
         <br>
-        - <font color="#00BFFF"><b>合併</b></font><br>
+        - <title><b>合併</b></title><br>
         &ensp;- 如果存在具有相同描述的規則，新號碼將會合併到該規則中，<br>
          重複的號碼將自動移除。<br>
         &ensp;- 如果不存在，將建立新規則，與<b>建立</b>模式相同。<br>
+        ]]>
+    </string>
+    <string name="help_regex_action_add_mode_multiple">
+        <![CDATA[
+        每條規則遵循以下邏輯：<br>
+        <br>
+        %s
         ]]>
     </string>
     <string name="action_enable_workflow">啟用工作流程</string>

@@ -10,7 +10,8 @@
     <string name="parsed_n_rules">נותחו %s כללים.</string>
     <string name="add_n_numbers_to_spam_db">מוסיף %s מספרים לבסיס נתוני ספאם.</string>
     <string name="nothing_to_import">רשימת המספרים ריקה, אין מה לייבא.</string>
-    <string name="importing_n_numbers">מייבא %s מספרים ככלל רגולרי.</string>
+    <string name="importing_n_numbers">מייבא %s מספרים.</string>
+    <string name="importing_n_rules">מייבא %s כללים.</string>
     <string name="create_rule_with_numbers">יוצר כלל עם %s מספרים.</string>
     <string name="replace_rule_with_desc">מחליף את הכלל עם התיאור: %s.</string>
     <string name="rule_with_desc_not_found">כלל עם התיאור %s לא נמצא.</string>
@@ -20,68 +21,69 @@
     <string name="find_rule_with_desc">נמצאו %s כללים עם התיאור %s.</string>
     <string name="modify_n_rules">משנה %s כללים.</string>
     <string name="number_not_match_filter">המספר %s אינו תואם את המסנן %s, מדלג.</string>
+    <string name="content_not_match_filter">התוכן אינו תואם למסנן, מדלג.</string>
     <string name="fail_detect_cc">נכשלה זיהוי קידומת מדינה.</string>
-    <string name="identified_as_spam">זוהה כמספר ספאם, קטגוריה: %s.</string>
-    <string name="identified_as_valid">זוהה כמספר חוקי, קטגוריה: %s.</string>
+    <string name="identified_as_spam">זוהה כמספר ספאם, קטגוריה: %s, הערה: %s.</string>
+    <string name="identified_as_valid">זוהה כמספר תקין, קטגוריה: %s, הערה: %s.</string>
     <string name="unidentified_number">מספר לא מזוהה.</string>
     <string name="auto_detect_cc_permission">ההרשאה READ_PHONE_STATE נדרשת לזיהוי קידומת מדינה.</string>
     <string name="number_tags">
         <![CDATA[
-        - <font color="#00BFFF"><b><no_translate>{cc}</no_translate></b></font><br>
+        - <title><b><no_translate>{cc}</no_translate></b></title><br>
         &ensp; קידומת המדינה.<br>
-        - <font color="#00BFFF"><b><no_translate>{domestic}</no_translate></b></font><br>
+        - <title><b><no_translate>{domestic}</no_translate></b></title><br>
         &ensp; החלק המקומי.<br>
-        - <font color="#00BFFF"><b><no_translate>{number}</no_translate></b></font><br>
+        - <title><b><no_translate>{number}</no_translate></b></title><br>
         &ensp; מספר הטלפון המלא, כולל קידומת המדינה והחלק המקומי, ללא סימן + או אפסים מובילים.<br>
-        - <font color="#00BFFF"><b><no_translate>{origin_number}</no_translate></b></font><br>
+        - <title><b><no_translate>{raw_number}</no_translate></b></title><br>
         &ensp; מספר הטלפון המקורי שיכול להכיל סימן + או אפסים מובילים.<br>
         ]]>
     </string>
     <string name="sms_tags">
         <![CDATA[
-        - <font color="#00BFFF"><b>{sms}</b></font><br>
+        - <title><b>{sms}</b></title><br>
         &ensp; תוכן ההודעה.<br>
         ]]>
     </string>
     <string name="time_tags">
         <![CDATA[
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {year}<br>
           {month}<br>
           {day}<br>
           {hour}<br>
           {minute}<br>
           {second}<br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; מספרים חד-ספרתיים ירופדו באפס מוביל, לדוגמה: <br>
-        &emsp; <font color="#888888"><no_translate>{year}-{month}-{day} {hour}:{minute}:{second}</no_translate></font> <br>
+        &emsp; <sample><no_translate>{year}-{month}-{day} {hour}:{minute}:{second}</no_translate></sample> <br>
         &emsp; הופך ל-<br>
-        &emsp; <font color="#888888">2020-01-22 03:44:05</font><br>
+        &emsp; <sample>2020-01-22 03:44:05</sample><br>
         <br>
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {month_index} <br>
           {day_index} <br>
           {hour_index} <br>
           {minute_index} <br>
           {second_index} <br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; ערכים אלה לא ירופדו, לדוגמה: <br>
-        &emsp; <font color="#888888"><no_translate>{month_index}-{day_index}</no_translate></font> <br>
+        &emsp; <sample><no_translate>{month_index}-{day_index}</no_translate></sample> <br>
         &emsp; הופך ל-<br>
-        &emsp; <font color="#888888">1-2</font><br>
+        &emsp; <sample>1-2</sample><br>
         <br>
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {day_of_week} <br>
           {day_of_week_index} <br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; אלה יכולים לשמש לדימוי לוח זמנים סיבובי, לדוגמה: <br>
-        &emsp; <font color="#888888">בצע גיבויים יומיים ושמור רק את שבעת הגיבויים האחרונים.</font> <br>
+        &emsp; <sample>בצע גיבויים יומיים ושמור רק את שבעת הגיבויים האחרונים.</sample> <br>
         <br>
-        <font color="#ffa500"><b>הערה:</b></font><br>
+        <warn><b>הערה:</b></warn><br>
          תגי זמן אלה תומכים בפעולות חשבון פשוטות, כגון
-          <font color="#00BFFF"><b><no_translate>{day-1}</no_translate></b></font>
+          <title><b><no_translate>{day-1}</no_translate></b></title>
          ו-
-          <font color="#00BFFF"><b><no_translate>{hour+2}</no_translate></b></font>.
+          <title><b><no_translate>{hour+2}</no_translate></b></title>.
         ]]>
     </string>
     <string name="help_http_url">
@@ -98,20 +100,13 @@
         <![CDATA[
         מיועד בעיקר עבור FRITZ!Box הגרמני, אך עובד גם עם מספרי טלפון מכל מדינה אחרת.<br>
         <br>
-        הוא תומך בשליפה לפי גיבוב במקום המספר עצמו, מה שמספק פרטיות טובה יותר.<br>
+        <b>נקודות עיקריות</b>: <br>
+        - <highlight>שאילתות לפי גיבוב</highlight> במקום מספר הטלפון בפועל, מה שמספק פרטיות טובה יותר. <br>
+        - משתמש ב<highlight>זיהוי מבוסס טווח</highlight> כאשר המספר המדויק לא נמצא, תוך התעלמות משתי הספרות האחרונות. <br>
         <br>
         אתר אינטרנט: <a href="https://phoneblock.net">https://phoneblock.net</a><br>
         <br>
         API: <a href="https://phoneblock.net/phoneblock/api/">https://phoneblock.net/phoneblock/api/</a>
-        ]]>
-    </string>
-    <string name="help_api_preset_phoneblock_authorization">
-        <![CDATA[
-        1. רשום חשבון ב- <a href="https://phoneblock.net/phoneblock/login">https://phoneblock.net/phoneblock/login</a><br>
-        <br>
-        2. בדף ההגדרות: <a href="https://phoneblock.net/phoneblock/settings">https://phoneblock.net/phoneblock/settings</a>, לחץ על הכפתור \"צור מפתח API\".<br>
-        <br>
-        3. מלא את מפתח ה-API שנוצר למטה.
         ]]>
     </string>
     <string name="not_enough_time_left">
@@ -127,12 +122,17 @@
     <string name="canceling_thread">מבטל תהליך.</string>
     <string name="suggest_to_swipe">
         <![CDATA[
-        <font color="#03DAC5"><b>החלק שמאלה</b></font> כדי למחוק.<br>
+        <highlight><b>החלק שמאלה</b></highlight> כדי למחוק.<br>
         <br>
         רוב רכיבי ממשק המשתמש דמויי כרטיס באפליקציה זו קשורים למחוות החלקה,
-        חלקם תומכים גם ב-<font color="#03DAC5"><b>החלקה ימינה</b></font>, לדוגמה, רשומות ההיסטוריה.
+        חלקם תומכים גם ב-<highlight><b>החלקה ימינה</b></highlight>, לדוגמה, רשומות ההיסטוריה.
         ]]>
     </string>
     <string name="bug_number">אם זהו מספר תקין, אנא דווחו על כך ב-GitHub.</string>
-    <string name="skip_alpha_empty_number">דלג על מספר אלפביתי או ריק.</string>
+    <string name="escape_tags">
+        <![CDATA[
+        - <title><b><no_translate>{escape(…)}</no_translate></b></title><br>
+        &ensp; הימנע מהתוכן בסוגריים, משמש לתוכן בתוך מרכאות. <br>
+        ]]>
+    </string>
 </resources>

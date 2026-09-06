@@ -1,23 +1,10 @@
 <resources>
     <string name="perm_write_settings">Einstellungen schreiben</string>
-    <string name="set_to">Festlegen auf</string>
-    <string name="help_set_ringtone_to">
-    <![CDATA[
-        Stellen Sie den Klingelton für eine bestimmte Funktion ein oder schalten Sie ihn stumm. <br>
-        <br>
-        Zum Beispiel, um den Klingelton für eine Regex-Regel einzustellen: <br><br>
-        <font color="#888888">
-        &emsp; { \"regex\": \"rule_desc\" }
-        </font>
-        <br><br>
-        Anrufe, die durch diese Regel zugelassen werden, spielen den angegebenen Klingelton ab.<br>
-    ]]>
-    </string>
     <string name="ringtone">Klingelton</string>
     <string name="call_to_test_ringtone">Führen Sie einen tatsächlichen Anruf durch, um den Klingelton zu testen.</string>
     <string name="help_ringtone">
     <![CDATA[
-        Passen Sie den Klingelton für eine bestimmte Funktion an. Anrufe, die durch diese Funktion zugelassen werden, spielen den angegebenen Klingelton ab.
+        Legen Sie unterschiedliche Klingeltöne für Anrufe fest, die durch verschiedene Funktionen zugelassen werden.
     ]]>
     </string>
     <string name="help_target_rule_desc">
@@ -28,7 +15,7 @@
         geben Sie <b>Arbeit</b> in dieses Feld ein.
     ]]>
     </string>
-    <string name="invalid_config">Ungültige Konfiguration</string>
+
     <string name="custom">Benutzerdefiniert</string>
     <string name="quick_tile">Schnelleinstellung</string>
     <string name="help_quick_tile">
@@ -47,16 +34,15 @@
     ]]>
     </string>
     <string name="quick_tile_is_active">Benutzerdefinierte Schnelleinstellung ist aktiv.</string>
-    <string name="http_status_code_template">HTTP-Statuscode: %d</string>
     <string name="help_preset_ringtone">
     <![CDATA[
         Passen Sie den Klingelton für eine Regex-Regel an; der angegebene Klingelton wird abgespielt, wenn der Anruf durch diese Regel
         erlaubt ist. <br>
         <br>
         <b>Anwendungsfall:<b> <br>
-        <font color="#888888">
-        &ensp; Legen Sie unterschiedliche Klingeltöne für bestimmte Personen, Kontaktgruppen oder Rufnummernbereiche fest.
-        </font>
+        <sample>
+        &ensp; Legen Sie unterschiedliche Klingeltöne für bestimmte Kontakte, Nummernbereiche oder wiederholte Anrufe fest.
+        </sample>
     ]]>
     </string>
     <string name="remote_setup">Remote-Einrichtung</string>
@@ -93,8 +79,8 @@
         <br>
         Der Arbeitsablauf läuft täglich, er lädt beim ersten Durchlauf den vollständigen 90‑Tage‑Datensatz herunter und führt bei nachfolgenden Durchläufen nur inkrementelle Updates durch. <br>
         <br>
-        <font color="#ffa500"><b>Hinweis:</b></font> <br>
-        <font color="#888888">&ensp; Der Datensatz wird in der Regel an jedem Werktag gegen Mittag Eastern Time aktualisiert. </font><br>
+        <warn><b>Hinweis:</b></warn> <br>
+        <sample>&ensp; Der Datensatz wird in der Regel an jedem Werktag gegen Mittag Eastern Time aktualisiert. </sample><br>
         <br>
         Daher ist es für 18:00 Uhr geplant, da der Datensatz bis dahin voraussichtlich verfügbar sein wird. <br>
     ]]>
@@ -102,9 +88,5 @@
     <string name="csv_missing_column">
         Erforderliche Spalte %s fehlt. Sie können den Header %s für die Rufnummernspalte verwenden oder einen vorhandenen
         Header in \"CSV analysieren\" auf %s abbilden.
-    </string>
-    <string name="enable_reporting_number">Meldung aktivieren</string>
-    <string name="help_enable_reporting_number">
-        Diese API unterstützt auch das Melden von Telefonnummern. Aktivieren Sie dies, um auch den Melde-Workflow zu generieren.
     </string>
 </resources>

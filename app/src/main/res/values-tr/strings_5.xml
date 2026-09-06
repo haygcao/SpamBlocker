@@ -6,7 +6,7 @@
 
     <string name="notification">Bildirim</string>
     <string name="type">Tür</string>
-    <string name="times">Defa</string>
+
     <plurals name="days">
         <item quantity="one">%d Gün</item>
         <item quantity="two">%d Gün</item>
@@ -31,32 +31,36 @@
     <string name="help_for_particular_number">Açık olduğunda, kural yalnızca hem numara hem de içerik eşleştiğinde uygulanır.</string>
     <string name="help_dialed">
         <![CDATA[
-        Daha önce aranan numaralardan gelen çağrılara izin ver.<br>
+        Daha önce aranan numaralardan gelen aramalara izin ver.<br>
         <br>
         <b>Seçenekler:</b><br>
         <br>
-        <h6><font color="#00BFFF">- Günler İçinde</font></h6>
-        <font color="cyan">%s günden</font> önce gerçekleşen çağrılar yok sayılır.<br>
+        <h6><title>- Zaman Aralığı</title></h6>
+        &ensp; - <minor>Tüm Zaman</minor> <br>
+        &emsp; Daima aranan numaralara izin ver.<br>
+        &ensp; - <minor>X Gün İçinde</minor> <br>
+        &emsp; X günden önce gerçekleşen aramalar dikkate alınmaz.<br>
         <br>
-        <h6><font color="#00BFFF">- SMS Dahil Et</font></h6>
-        Etkinleştirildiğinde, o numaraya SMS göndermek de sayılır.<br>
+        <h6><title>- SMS Dahil</title></h6>
+        Etkinleştirildiğinde, o numaraya yapılan mesajlaşmalar da sayılır.<br>
         <br>
-        <font color="#ea86ff"><b>Öncelik: 10</b></font>
+        <priority><b>Öncelik: 10</b></priority>
         ]]>
     </string>
     <string name="help_recent_apps">
         <![CDATA[
-        Listede yer alan herhangi bir uygulama son zamanlarda kullanıldıysa, herhangi bir arama geçecektir.<br>
+        Listede bulunan herhangi bir uygulama yakın zamanda kullanıldıysa, herhangi bir arama geçerli olur.<br>
         <br>
-        Tipik bir kullanım durumu:<br>
-        &emsp; PizzaApp\'tan bir pizza siparişi verdiniz, kısa süre sonra kapandıkları için sizi geri ödeme yapmak üzere arıyorlar. Eğer PizzaApp burada etkinse, o arama geçecektir. <br>
+        Kullanım durumu:<br>
+        <sample>
+          &ensp; Bir PizzaApp siparişi, restoran kapanışı nedeniyle anında geri ödeme aramasını tetikler, PizzaApp burada etkinleştirilmişse bu arama geçerli olur. <br>
+        </sample>
         <br>
-        Varsayılan ayar  <font color="03DAC5"><b>5 Dk.</b></font> Eğer son 5 dakika içinde uygulamalardan herhangi biri kullanıldıysa, herhangi bir aramanın geçeceği anlamına gelir.
-        \'Kullanıldı\' derken, uygulamanın etkinleştirilmesi, devre dışı bırakılması, küçültülmesi veya kapatılması anlamına gelir. <br>
+        Varsayılan ayar <highlight><b>5 Dak</b></highlight> tüm aramaların geçerli olmasını sağlar, eğer uygulamalardan herhangi biri 5 dakika içinde kullanıldıysa, \"<b>kullanıldı</b>\" ifadesi şunları kapsar: <highlight>etkinleştirildi, devre dışı bırakıldı, küçültüldü veya kapatıldı</highlight>.<br>
         <br>
-        Sadece aramalar için geçerlidir, metin mesajları için <b>değil</b>. <br>
+        Yalnızca aramalara uygulanır, mesajlara uygulanmaz. <br>
         <br>
-        <font color="#ea86ff"><b>Öncelik: 10</b></font>
+        <priority><b>Öncelik: 10</b></priority>
         ]]>
     </string>
     <string name="help_hang_up_delay">Arama kapatılmadan önceki gecikme.</string>
@@ -67,20 +71,20 @@
     </string-array>
     <string name="help_block_type">
         <![CDATA[
-        - <font color="#00BFFF"><b>Reddet</b></font>: <br>
+        - <title><b>Reddet</b></title>: <br>
          Reddetme düğmesine basmakla aynıdır. Tamamen sessiz çalışır, kilit ekranı açılmaz.<br>
         <br>
-        - <font color="#00BFFF"><b>Sessize Al</b></font>: <br>
-         Arka planda sessizce çalarak arayana ulaşılamadığınız ve aramayı kaçırdığınız izlenimini verir. <br>
+        - <title><b>Sessize Al</b></title>: <br>
+        Arama sizin tarafınızda anında reddedilir ancak arayan kişi için çalmaya devam eder, böylece müsait olmadığınız izlenimi oluşur. <br>
         <br>
-         Tekrarlayan spam aramalar yaşıyorsanız da yardımcı olabilir; arama süresini uzatarak spam gönderenler için daha az verimli hale getirir ve potansiyel olarak sizi tekrar aramamalarını sağlar.<br>
+        Bu, tekrarlanan spam aramalarını azaltmaya da yardımcı olabilir. Arama süresini uzatarak onları daha az verimli hale getirir ve potansiyel olarak sizi tekrar aramaktan vazgeçirebilir.<br>
         <br>
-        - <font color="#00BFFF"><b>Kapat</b></font>: <br>
+        - <title><b>Kapat</b></title>: <br>
         Aramanın sesli mesaja gitmesini önlemek için aramayı yanıtlar ve kapatır. <br>
         <br>
         Devam eden bir arama sırasında spam araması alındığında, devam eden aramayı kapatmamak için \"Reddet\" seçeneğine geçilir. <br>
         <br>
-        <font color="#FFA500">Not</font> Kilit ekranı kısa bir süre açılabilir,
+        <warn>Not</warn> Kilit ekranı kısa bir süre açılabilir,
         ayrıca bir arama bitiş tonu duyabilirsiniz (bazı telefonlar bu sesi kapatma seçeneği sunar). <br>
         <br>
         - <b>Gecikme</b>: <br>
@@ -88,4 +92,6 @@
         &emsp; Aramaları kaydetmek isterseniz, bir arama kayıt uygulaması yükleyin ve gecikmeyi buna göre artırın.
         ]]>
     </string>
+    <string name="time_range">Zaman Aralığı</string>
+    <string name="all_time">Tüm Zaman</string>
 </resources>

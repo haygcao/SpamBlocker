@@ -9,9 +9,10 @@ import spam.blocker.db.HistoryRecord
 import spam.blocker.db.HistoryTable
 import spam.blocker.db.SmsTable
 import spam.blocker.def.Def
+import spam.blocker.ui.history.HistoryOptions.showHistoryBlocked
+import spam.blocker.ui.history.HistoryOptions.showHistoryPassed
 import spam.blocker.util.Contacts
 import spam.blocker.util.regexMatches
-import spam.blocker.util.spf
 
 /*
   To simplify the code, this view model is used in GlobalVariables instead of viewModel<...>().
@@ -27,29 +28,53 @@ open class HistoryViewModel(
     fun reload(ctx: Context) {
         records.clear()
 
-        val spf = spf.HistoryOptions(ctx)
-        val showPassed = spf.getShowPassed()
-        val showBlocked = spf.getShowBlocked()
-
         // Fuzzy search
-        // `aaa bbb` -> `.*aaa.*bbb.*`
-        val filterRegex = filter.value.replace(" ", ".*").let { ".*$it.*" }
+        val filterRegex = fuzzifyFilter()
 
         records.addAll(table.listRecords(ctx).filter {
-            // 1. show or not
-            val show = (showPassed && it.isNotBlocked()) || (showBlocked && it.isBlocked())
-
-            // 2. fuzzy filter by keywords
-            val filtered = if(!searchEnabled.value) {
-                true
-            } else {
-                val contactName = Contacts.cache.findContactByRawNumber(ctx, it.peer)?.name ?: ""
-                val allText = it.peer + contactName + (it.extraInfo ?: "") + it.reason
-                filterRegex.regexMatches(allText, Def.DefaultRegexFlags)
-            }
-
-            show && filtered
+            isVisible(ctx, it, filterRegex)
         })
+    }
+
+    // `aaa bbb` -> `.*aaa.*bbb.*`
+    fun fuzzifyFilter() : String {
+        return filter.value.replace(" ", ".*").let { ".*$it.*" }
+    }
+    fun isVisible(
+        ctx: Context,
+        record: HistoryRecord,
+
+        // provide this param when calling this function repetitively (for better performance)
+        filterRegex: String = fuzzifyFilter()
+    ) : Boolean {
+        // 1. show or not
+        val show = (showHistoryPassed.value && record.isNotBlocked()) || (showHistoryBlocked.value && record.isBlocked())
+        if (!show)
+            return false
+
+        // 2. fuzzy filter by keywords
+        return if(!searchEnabled.value) { // not filtering
+            true
+        } else {
+            val contactName = Contacts.cache.findContactByRawNumber(ctx, record.peer)?.name ?: ""
+            val allText = record.peer + contactName + (record.extraInfo ?: "") + record.reason
+            filterRegex.regexMatches(allText, Def.DefaultRegexFlags)
+        }
+    }
+    fun updateRecord(recordId: Long, changes: HistoryRecord.() -> HistoryRecord) {
+        val index = records.indexOfFirst { it.id == recordId }
+        if (index != -1) {
+            records[index] = records[index].let(changes)
+        }
+    }
+
+    fun markAllAsRead(ctx: Context) {
+        val read = records.map { it.copy(read = true) }
+        records.apply {
+            clear()
+            addAll(read)
+        }
+        table.markAllAsRead(ctx)
     }
 }
 

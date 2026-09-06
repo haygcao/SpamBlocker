@@ -10,6 +10,7 @@ import androidx.core.net.toUri
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import spam.blocker.util.SaveableLogger
 import spam.blocker.util.logi
 import spam.blocker.util.pdu.pdu.NotificationInd
 import spam.blocker.util.pdu.pdu.PduParser
@@ -33,7 +34,7 @@ class WapPushReceiver : SmsReceiver() {
         logi("Received WapPush")
 
         val spf = spf.Global(ctx)
-        if (!spf.isGloballyEnabled() || !spf.isSmsEnabled() || !spf.isMmsEnabled()) {
+        if (!spf.isGloballyEnabled || !spf.isSmsEnabled || !spf.isMmsEnabled) {
             return
         }
 
@@ -91,7 +92,10 @@ class WapPushReceiver : SmsReceiver() {
                 val messageBody = map.getOrDefault(MimeTypes.TEXT_PLAIN, "")
                 val simSlot = getSimSlotFromSmsIntent(ctx, intent)
 
-                processSms(ctx, rawNumber, messageBody, simSlot, isTest = false)
+                processSms(
+                    ctx, rawNumber = rawNumber, messageBody = messageBody,
+                    simSlot = simSlot, isTest = false, logger = SaveableLogger()
+                )
 
                 break
             }

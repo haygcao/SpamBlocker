@@ -1,0 +1,108 @@
+<resources>
+    <string name="call_screened">Appel filtré</string>
+    <string name="help_call_screened">
+        <![CDATA[
+        Déclenché après le filtrage de l\'appel.
+        ]]>
+    </string>
+    <string name="text_reply">Réponse texte</string>
+    <string name="text_to_reply">Texte de réponse</string>
+    <string name="cant_talk_in_meeting">Je suis en réunion pour le moment, je vous recontacterai plus tard.</string>
+    <string name="busy_right_now">Je ne peux pas parler pour le moment, je vous recontacte plus tard.</string>
+    <string name="help_action_text_reply">
+        <![CDATA[
+        Génère le texte de réponse automatique en fonction du résultat du filtrage de l\'appel.
+        ]]>
+    </string>
+    <string name="send_sms">Envoyer SMS</string>
+    <string name="result">Résultat</string>
+    <string name="contacts_only">Contacts uniquement</string>
+    <string name="blocked_by">Bloqué par</string>
+    <string name="sms_sent_successfully">SMS envoyé avec succès</string>
+    <string name="failed_to_send_sms">Échec de l\'envoi du SMS : %s</string>
+    <string name="replying_text">Texte de réponse : %s</string>
+    <string name="help_action_send_sms">
+        <![CDATA[
+        Envoyer un message SMS. <br>
+        <br>
+        <title>Numéro</title> <br>
+        Vérifie plusieurs sources dans l\'ordre et adopte la première correspondance trouvée : <br>
+        &ensp; Balise <sample><no_translate>send_sms_to</no_translate></sample> (peut être créé en utilisant <b>Définir la balise</b>) <br>
+        &ensp; Le numéro entrant <br>
+        <br>
+        <title>Contenu du SMS</title> <br>
+        Vérifie plusieurs sources dans l\'ordre : <br>
+        &ensp; Balise <sample><no_translate>send_sms_content</no_translate></sample> <br>
+        &ensp; Sortie texte de l\'étape précédente <br>
+        ]]>
+    </string>
+    <string name="help_call_screening_number_filter">
+        <![CDATA[
+        Utilisez ce regex pour exclure des numéros spécifiques, tels que les lignes fixes ou les numéros internationaux. <br>
+        <br>
+        Par exemple <br>
+        &ensp; <sample>\\d{10,11}</sample> <br>
+        &ensp; numéros de 10 à 11 chiffres.
+        ]]>
+    </string>
+    <string name="sms_reply">Réponse SMS</string>
+    <string name="help_bot_preset_sms_reply">
+        <![CDATA[
+        Envoyez automatiquement un SMS aux contacts lorsque leurs appels sont bloqués. <br>
+        Des messages différents peuvent être définis pour le Mode Réunion et d\'autres fonctionnalités de blocage. <br>
+        <br>
+        <warn>Note</warn> <br>
+        La première fois que l\'application envoie un SMS, une fenêtre contextuelle du système vous avertira des frais potentiels.
+        Appuyez sur <sample>Mémoriser mon choix</sample> pour éviter cet avertissement à l\'avenir.
+        ]]>
+    </string>
+    <string name="find_regex_rule_by_description">
+        <![CDATA[
+        Saisissez une description pour faire correspondre la règle regex correspondante.
+        ]]>
+    </string>
+    <string name="rules">Règles</string>
+    <string name="rule_description">Description de la règle</string>
+    <string name="priority_in_order">La priorité est déterminée par la séquence de cette liste.</string>
+    <string name="help_ringtone_trigger">
+        <![CDATA[
+        La raison pour laquelle l\'appel est autorisé. <br>
+        <br>
+        Par exemple, <b>Appel répété</b> signifie que la sonnerie spécifiée retentira lorsque l\'appel sera autorisé par <b>Appel répété</b>.
+        ]]>
+    </string>
+    <string name="copy_tag">Copier la balise</string>
+    <string name="tag_is_copied_from">La balise %s est copiée depuis %s</string>
+    <string name="help_copy_tag">Créez une nouvelle balise avec la même valeur mais un nom différent.</string>
+    <string name="from_tag">Balise d\'origine</string>
+    <string name="to_tag">Balise de destination</string>
+    <string name="allow_7726">Autoriser 7726</string>
+    <string name="help_bot_preset_7726">
+        <![CDATA[
+        À des <warn>fins de démonstration</warn> uniquement.<br>
+        <br>
+        Transfère les SMS indésirables au <error>7726</error> (le code court universel pour <error>SPAM</error>),
+         une fonctionnalité prise en charge par de nombreux opérateurs mobiles. <br>
+        <br>
+        <warn>Avertissement</warn> <br>
+        N\'activez ceci que si votre opérateur prend en charge le 7726. Sinon, des frais de SMS standard peuvent s\'appliquer. <br>
+        <br>
+        Cela crée à la fois un <minor>flux de travail</minor> et une <minor>règle d\'expression régulière</minor> SMS : <br>
+        <br>
+        - Le <minor>flux de travail</minor> <br>
+        &ensp; 1. Envoyer le SMS indésirable au 7726. <br>
+        &ensp; 2. Attendre 10 secondes. <br>
+        &ensp; 3. Envoyer le numéro au 7726. <br>
+        <br>
+        - La <minor>règle d\'expression régulière</minor> \"Autoriser 7726\" <br>
+        &ensp; Autoriser les messages provenant du 7726, tels que : <br>
+        &emsp; <sample>Merci pour votre signalement, veuillez répondre avec le numéro de téléphone</sample>. <br>
+        <br>
+        Ajustez le délai de 10 secondes en fonction du temps de réponse de votre opérateur, supprimez le signalement de numéro s\'il n\'est pas pris en charge par votre opérateur.
+        ]]>
+    </string>
+    <string name="report_sms">Signaler un SMS</string>
+    <string name="regex_starts_with_plus">%s est un caractère spécial dans regex (par ex. %s), échappez-le comme %s</string>
+    <string name="sms_content_is_null">Le contenu du SMS est vide, la journalisation du contenu du SMS est-elle activée ?</string>
+    <string name="ignore">Ignorer</string>
+</resources>

@@ -1,0 +1,134 @@
+<resources>
+    <string name="normal_text">Normaler Text</string>
+    <string name="info_feature">Information / Funktion</string>
+    <string name="success_allow">Erfolg / Erlauben</string>
+    <string name="error_block">Fehler / Blockieren</string>
+    <string name="disable">Deaktivieren</string>
+    <string name="dialog_bg">Dialoghintergrund</string>
+    <string name="app_bg">App-Hintergrund</string>
+    <string name="should_import_as_instant_query">
+        <![CDATA[
+        Dies scheint ein \"API‑Abfrage\"-Workflow zu sein, er sollte in den oben genannten Abschnitt \"Sofortabfrage\" importiert werden.
+        ]]>
+    </string>
+    <string name="at_time">Zur Zeit</string>
+    <string name="interval">Intervall</string>
+    <string name="contact_prefix">Kontaktpräfix</string>
+    <string name="help_regex_mode_contact_prefix">
+        <![CDATA[
+        <title><b>Kontaktpräfix</b></title>:<br>
+        &ensp; Anrufe anhand passender Kontaktpräfixe zulassen, ideal für Organisationen mit
+          fortlaufenden Nummern, z. B. Kliniken oder Kanzleien. <br>
+        <br>
+        <warn>Dieser Regex muss mit Punkten enden</warn>, in diesem Regex-Modus stehen diese abschließenden Punkte für die variablen Ziffern. <br>
+        <br>
+        <b>Zum Beispiel:</b> <br>
+        &ensp; <sample><b>.*..</b></sample> <br>
+        &ensp; Er passt auf jeden Kontakt mit demselben Präfix und erlaubt am Ende eine 2-stellige Abweichung.<br>
+        &ensp; Wenn Sie <sample>1111<b>22</b></sample> als Kontakt gespeichert haben, wird auch ein eingehender Anruf von <sample>1111<b>33</b></sample> zugelassen.<br>
+        <br>
+        <b>Ein weiteres Beispiel:</b> <br>
+        &ensp; <sample><b>(?!(04|03))\d{5}..</b></sample> <br>
+        Aufschlüsselung: <br>
+        &ensp; - <b><sample>(?!(03|04))</sample></b> <br>
+        &emsp;   Nummern ausschließen, die mit 03 oder 04 beginnen <br>
+        &ensp; - <b><sample>\d{5}</sample></b> <br>
+        &emsp;   Die Nummer sollte insgesamt 7 Ziffern haben, einschließlich des variablen 2-stelligen Suffixes <br>
+        &ensp; - <b><sample>..</sample></b> <br>
+        &emsp;   Variables 2-stelliges Suffix <br>
+        ]]>
+    </string>
+    <string name="help_regex_preset_contact_prefix">
+        <![CDATA[
+        Kontakte nach Präfix abgleichen, wobei die letzten <minor><b>2</b></minor> Ziffern variieren dürfen, ideal für Organisationen, die fortlaufende Nummern verwenden, z. B. Kliniken oder Anwaltskanzleien. <br>
+        <br>
+        <b>Zum Beispiel</b>: <br>
+        &ensp; Wenn Sie <sample>111111</sample><highlight>22</highlight> als Kontakt gespeichert haben, wird auch ein Anruf von <sample>111111</sample><highlight>33</highlight> zugelassen.
+        ]]>
+    </string>
+    <string name="caller_id">Anrufer-ID</string>
+    <string name="help_caller_id">
+        <![CDATA[
+        Zeigt die Anruferkennung in einem schwebenden Fenster an. <br>
+        <br>
+        Zum Verschieben ziehen. <br>
+        <br>
+        <b>Hinweis</b> <br>
+        Möglicherweise erscheint im Benachrichtigungsbereich ein Systemhinweis, während das schwebende Fenster aktiv ist.
+          Dieser weist darauf hin, dass diese App ein Fenster über anderen Apps anzeigt.
+        Das liegt daran, dass schwebende Fenster in der Vergangenheit von Schadsoftware missbraucht wurden, um gefälschte Anmeldebildschirme anzuzeigen. <br>
+        Ignorieren Sie diesen Hinweis einfach, er verschwindet zusammen mit dem schwebenden Fenster.
+        ]]>
+    </string>
+    <string name="perm_show_overlay">Overlay anzeigen</string>
+    <string name="preview">Vorschau</string>
+    <string name="content_template">Inhaltsvorlage</string>
+    <string name="help_caller_id_template">
+        <![CDATA[
+        Der im Fenster der Anruferkennung angezeigte Inhalt im HTML-Format. <br>
+        <br>
+        Ein Bindestrich (-) wird angezeigt, wenn der Wert leer ist, zum Beispiel wenn keine Betreiberinformationen für die Nummer vorhanden sind.
+        <br>
+        <title>Unterstützte Tags</title>: <br>
+        - <minor>{reason}</minor> <br>
+        &emsp; Warum der Anruf zugelassen wurde, derselbe Grund wie im Anrufverlauf. <br>
+        - <minor>{geolocation}</minor> <br>
+        &emsp; Der geografische Standort der Telefonnummer. <br>
+        - <minor>{carrier}</minor> <br>
+        &emsp; Der Name des Netzbetreibers der Telefonnummer. <br>
+        <br>
+        <title>Unterstützte HTML-Tags</title>: <br>
+        Siehe: <a href="%s">link</a>
+        ]]>
+    </string>
+    <string name="background_color">Hintergrundfarbe</string>
+    <string name="wait">Warten</string>
+    <string name="help_action_wait">
+        <![CDATA[
+        Verzögert um N Sekunden. <br>
+        <br>
+        <b>Anwendungsfall</b>: <br>
+        <sample>
+        Bei der Funktion <b>SMS Alarm</b> treffen Nachrichten manchmal gleichzeitig mit einem Anruf
+         oder wenige Sekunden danach ein. Eine Verzögerung der Anrufprüfung um 2~3 Sekunden kann solche Probleme vermeiden.
+        </sample>
+        ]]>
+    </string>
+    <string name="comment_identifier">Kommentar-Identifier</string>
+    <string name="hint_comment_identifier">
+        Z.B.: \"comment\":\"(.+?)\"
+    </string>
+    <string name="help_comment_identifier">
+        <![CDATA[
+        Extrahieren Sie den <title>Kommentar</title> aus dem Abfrageergebnis, um ihn in der Benachrichtigung und dem Verlaufsprotokoll anzuzeigen. (optional)<br>
+        <br>
+        Zum Beispiel für dieses Abfrageergebnis: <br>
+        <sample>
+        { <br>
+          &ensp; \"type\": \"MARKETING\", <br>
+          &ensp; \"comment\": \"Better call Saul\", <br>
+          &ensp;  … <br>
+        } <br>
+        </sample>
+        <br>
+        Extrahieren Sie ihn mit: <br>
+        &ensp; <sample>\"comment\": \"(.+?)\"</sample> <br>
+        ]]>
+    </string>
+    <string name="carrier">Netzbetreiber</string>
+    <string name="carrier_rule">Regel für Netzbetreiber</string>
+    <string name="help_regex_mode_carrier">
+        <![CDATA[
+        <title><b>Netzbetreiber</b></title>:<br>
+        &ensp; Der reguläre Ausdruck stimmt mit dem Namen des Netzbetreibers der Telefonnummer überein. <br>
+        <br>
+        <warn>Hinweis</warn> <br>
+        &ensp; Die Angaben zum Netzbetreiber basieren auf der ursprünglichen Registrierung
+        und können ungenau sein, wenn die Nummer zu einem anderen Anbieter portiert wurde. <br>
+        <br>
+        Zum Beispiel: <br>
+        &ensp; Nummern von <no_translate><sample>Verizon Wireless</sample></no_translate>
+        mit dem regulären Ausdruck <no_translate><error>verizon.*</error></no_translate> blockieren <br>
+        ]]>
+    </string>
+</resources>

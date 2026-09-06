@@ -21,13 +21,13 @@ import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
-import spam.blocker.ui.theme.LocalPalette
 import spam.blocker.ui.widgets.AnimatedVisibleV
 import spam.blocker.ui.widgets.GreyIcon18
 import spam.blocker.ui.widgets.NumberInputBox
 import spam.blocker.ui.widgets.OutlineCard
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.RegexInputBox
+import spam.blocker.ui.widgets.ResIcon20
 import spam.blocker.ui.widgets.Str
 import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.ui.widgets.SwitchBox
@@ -39,14 +39,14 @@ import spam.blocker.util.spf
 @Composable
 fun SmsBomb() {
     val ctx = LocalContext.current
-    val C = LocalPalette.current
+    val C = G.palette
     val spf = spf.SmsBomb(ctx)
 
-    var isEnabled by remember { mutableStateOf(spf.isEnabled() && Permission.receiveSMS.isGranted) }
-    var duration by remember { mutableIntStateOf(spf.getInterval()) }
-    var regexStr by remember { mutableStateOf(spf.getRegexStr()) }
-    var regexFlags = remember { mutableIntStateOf(spf.getRegexFlags()) }
-    var isLockscreenProtection by remember { mutableStateOf(spf.isLockScreenProtectionEnabled()) }
+    var isEnabled by remember { mutableStateOf(spf.isEnabled && Permission.receiveSMS.isGranted) }
+    var duration by remember { mutableIntStateOf(spf.interval) }
+    var regexStr by remember { mutableStateOf(spf.regexStr) }
+    var regexFlags = remember { mutableIntStateOf(spf.regexFlags) }
+    var isLockscreenProtection by remember { mutableStateOf(spf.isLockScreenProtectionEnabled) }
 
     // Edit Duration Dialog
     val editTrigger = rememberSaveable { mutableStateOf(false) }
@@ -60,12 +60,12 @@ fun SmsBomb() {
             onRegexStrChange = { newVal, hasErr ->
                 if (!hasErr) {
                     regexStr = newVal
-                    spf.setRegexStr(regexStr)
+                    spf.regexStr = regexStr
                 }
             },
             onFlagsChange = {
                 regexFlags.intValue = it
-                spf.setRegexFlags(it)
+                spf.regexFlags = it
             },
             testable = true,
             leadingIcon = { GreyIcon18(R.drawable.ic_open_msg) }
@@ -76,27 +76,29 @@ fun SmsBomb() {
             onValueChange = { newVal, hasErr ->
                 if (newVal != null) {
                     duration = newVal
-                    spf.setInterval(duration)
+                    spf.interval = duration
                 }
             },
             leadingIconId = R.drawable.ic_duration,
         )
         LabeledRow(R.string.lockscreen_protection) {
             SwitchBox(isLockscreenProtection) { isTurningOn ->
-                spf.setLockScreenProtectionEnabled(isTurningOn)
+                spf.isLockScreenProtectionEnabled = isTurningOn
                 isLockscreenProtection = isTurningOn
             }
         }
     }
 
-    var collapsed by remember { mutableStateOf(spf.isCollapsed()) }
+    var collapsed by remember { mutableStateOf(spf.isCollapsed) }
 
     LabeledRow(
         labelId = R.string.sms_bomb,
-        isCollapsed = collapsed,
+        isCollapsed = if (!isEnabled) null else collapsed,
         toggleCollapse = {
-            collapsed = !collapsed
-            spf.setCollapsed(collapsed)
+            if (isEnabled) {
+                collapsed = !collapsed
+                spf.isCollapsed = collapsed
+            }
         },
         helpTooltip = Str(R.string.help_sms_bomb),
         content = {
@@ -117,12 +119,12 @@ fun SmsBomb() {
                         )
                     ) { granted ->
                         if (granted) {
-                            spf.setEnabled(true)
+                            spf.isEnabled = true
                             isEnabled = true
                         }
                     }
                 } else {
-                    spf.setEnabled(false)
+                    spf.isEnabled = false
                     isEnabled = false
                 }
             }
@@ -142,7 +144,7 @@ fun SmsBomb() {
                 // Regex
                 Text(
                     text = regexStr,
-                    color = C.block,
+                    color = C.error,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     modifier = M.padding(top = 2.dp),
@@ -151,5 +153,23 @@ fun SmsBomb() {
                 )
             }
         }
+    }
+}
+
+@Composable
+fun SmsBombSummary() {
+    val ctx = LocalContext.current
+    val spf = spf.SmsBomb(ctx)
+
+    val isEnabled = spf.isEnabled && Permission.receiveSMS.isGranted
+    if (isEnabled) {
+        val C = G.palette
+        StrokeButton(
+            color = C.textGrey,
+            enabled = false,
+            icon = {
+                ResIcon20(R.drawable.ic_sms_bomb, color = C.error)
+            }
+        )
     }
 }

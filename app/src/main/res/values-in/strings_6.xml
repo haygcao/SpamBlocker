@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        Maaf, aplikasi mengalami masalah.\n\n
-        Silakan salin isian di bawah ini dan laporkan masalah ini di github,
-        hapus informasi sensitif apa pun sebelum melaporkan.
+    <![CDATA[
+        Maaf, aplikasi telah mengalami crash. <br>
+        <br>
+        Silakan salin konten di bawah ini dan laporkan masalah ini di GitHub,
+        hapus informasi sensitif sebelum melaporkan.
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>Minggu</item>
@@ -16,25 +19,23 @@
 
 
 
-    <string name="confirm_delete_all_records">Konfirmasi untuk menghapus semua Rekaman?</string>
+    <string name="confirm_delete_all_records">
+        <![CDATA[
+        Konfirmasi untuk menghapus <error>semua</error> Rekaman?
+        ]]>
+    </string>
     <string name="expiry">Kadaluwarsa</string>
     <string name="days">Hari</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        Jika diaktifkan, isi SMS juga akan masuk ke dalam basis data dan ditampilkan dalam daftar ini, namun tidak akan masuk ke dalam basis data jika dinonaktifkan.<br>
-        <br>
-        - Jika diaktifkan:<br>
-        &emsp; <b>Ketuk</b> untuk memperluas/memperkecil pesan keseluruhan.<br>
-        <br>
-        - Jika dinonaktifkan:<br>
-        &emsp; <b>Ketuk</b> untuk membuka percakapan di aplikasi default.
+        Jika diaktifkan, isi SMS juga akan masuk ke dalam basis data dan ditampilkan dalam daftar ini, namun tidak akan masuk ke dalam basis data jika dinonaktifkan.
         ]]>
     </string>
     <string name="copy_number">Salin nomor</string>
-    <string name="add_num_to_regex_rule">Tambahkan nomor ke aturan regex</string>
-    <string name="add_num_to_db">Tambahkan nomor ke basis data spam</string>
-    <string name="mark_all_as_read">Tandai semua telah dibaca</string>
-    <string name="remove_db_number">Hapus nomor dari basis data spam</string>
+    <string name="add_to_regex_rule">Tambahkan ke aturan regex</string>
+    <string name="edit_regex_rule">Edit aturan regex</string>
+    <string name="add_to_db">Tambahkan ke basis data</string>
+    <string name="remove_from_db">Hapus dari basis data</string>
 
     <string name="language">Bahasa</string>
     <string name="help_language">
@@ -45,21 +46,40 @@
     <string name="repeated_call">Panggilan Berulang</string>
     <string name="help_repeated_call">
         <![CDATA[
-        Izinkan jika panggilan diulang dalam periode waktu tertentu, kemungkinan itu panggilan penting daripada panggilan spam. <br>
+        Izinkan panggilan berulang, karena kemungkinan besar lebih mendesak daripada spam. <br>
+        <br>
+        Secara default, panggilan kedua dalam waktu <highlight><b>5 menit</b></highlight> akan diizinkan. <br>
         <br>
         <b>Opsi:</b><br>
         <br>
-        <h6><font color="#00BFFF">- Frekuensi</h6>
-        Pengaturan default <font color="#03DAC5"><b>1 / 5 Menit</b></font> berarti panggilan kedua dalam 5 menit akan diizinkan. <br>
+        - <title><b>Interval Maks.</b></title> <br>
+        Hanya panggilan dalam jangka waktu ini yang dianggap sebagai pengulangan. <br>
         <br>
-        <h6><font color="#00BFFF">- Sertakan SMS</font></h6>
-        Ketika diaktifkan, menerima pesan SMS dari nomor tersebut juga dihitung.<br>
+        - <title><b>Interval Min.</b></title> <br>
+        Jika nomor memanggil kembali lebih cepat dari ini, panggilan akan diabaikan. Bot panggilan spam biasanya memanggil ulang secara instan, dalam hal ini, tingkatkan nilai ini. Mengatur mode pemblokiran ke \"Hening\" juga dapat membantu, periksa tooltip-nya untuk detail lebih lanjut. <br>
         <br>
-        <font color="#ea86ff"><b>Prioritas: 10</b></font>
+        - <title><b>Jumlah Pengulangan</b></title> <br>
+        Jumlah pengulangan minimum. <br>
+        Sebagai contoh: <br>
+        <sample>
+        Jika diatur ke 2, sebuah panggilan harus berulang dua kali. Totalnya, dibutuhkan tiga panggilan: <br>
+         &ensp; - abaikan <br>
+         &ensp; - abaikan <br>
+         &ensp; - izinkan <br>
+        </sample>
+        <br>
+        - <title><b>Sertakan SMS</b></title> <br>
+        Jika diaktifkan, menerima pesan SMS dari nomor tersebut juga akan dihitung. <br>
+        <br>
+        <priority><b>Prioritas: 10</b></priority>
         ]]>
     </string>
 
 
+    <string name="max_interval_min">Interval Maks (Menit)</string>
+    <string name="min_interval_sec">Interval Min (Detik)</string>
+    <string name="repeat_times">Jumlah Pengulangan</string>
+    <string name="call_repeated_too_soon">Baru %s milidetik sejak panggilan terakhir dari nomor ini, minimum yang diperlukan adalah %s milidetik, abaikan.</string>
     <string name="about">Tentang</string>
     <string name="version">Versi</string>
     <string name="source_code">Kode Sumber</string>

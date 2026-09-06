@@ -1,0 +1,83 @@
+<resources>
+    <string name="known_android_issue">
+    <![CDATA[
+        Ini adalah masalah Android yang diketahui, sudah dilaporkan ke tim Android, perbaikan masih ditunggu. <br>
+        <br>
+        Lihat penyebab dan solusi di sini: <br>
+         <a href=\"%s\">%s</a>
+    ]]>
+    </string>
+    <string name="import_numbers">Impor Nomor</string>
+    <string name="faq_import_numbers">
+    <![CDATA[
+        Impor nomor dari file lokal atau jarak jauh menggunakan alur kerja. <br>
+        <br>
+        <title><b>Pengaturan umum</b></title>: <br>
+        <br>
+        1. <minor><b>Baca File</b></minor> / <minor><b>Permintaan Http</b></minor> <br>
+          &ensp; Dapatkan konten file. <br>
+          <br>
+        2. <minor><b>Uraikan CSV</b></minor> / <minor><b>Uraikan XML</b></minor> / <minor><b>Ekstrak Regex</b></minor> <br>
+          &ensp; Uraikan dan dapatkan daftar nomor. <br>
+          <br>
+        3. <minor><b>Ganti Nomor</b></minor> (opsional) <br>
+          &ensp; Ubah format nomor <br>
+          &ensp; Kasus penggunaan: <br>
+        <sample>
+            &emsp; Saat memigrasi nomor dari aplikasi lain, konversi format seperti <b>123#####</b> ke regex <b>123.....</b> atau <b>123.*</b> <br>
+        </sample>
+          <br>
+        4. <minor><b>Impor ke Database Spam</b></minor> / <minor><b>Impor ke Aturan Regex</b></minor> <br>
+        <br>
+        <br>
+        <title><b>Contoh</b></title>: <br>
+          - Preset <no_translate><b>FTC-DNC</b></no_translate> <br>
+        <br>
+        Contoh online lainnya: <br>
+          - <a href=\"%s\">Teks biasa</a> <br>
+          - <a href=\"%s\">CSV</a> <br>
+          - <a href=\"%s\">XML</a> <br>
+          - <a href=\"%s\">JSON</a> - JsonPath belum didukung, gunakan <minor><b>Ekstrak Regex</b></minor> sebagai gantinya.
+    ]]>
+    </string>
+    <string name="faq_regex">
+    <![CDATA[
+        Tutorial regex untuk non-programmer. <br>
+        <br>
+        <title><b>Tingkat Dasar - Wildcard</b></title> <br>
+        &ensp; Setiap kali Anda ingin menggunakan wildcard <sample><b>*</b></sample>, letakkan titik <sample><b>.</b></sample> sebelumnya, seperti <sample><b>.*</b></sample>, ini seharusnya mencakup sebagian besar kasus penggunaan. <br>
+        <br>
+        <title><b>Lanjutan - Menggunakan AI</b></title> <br>
+        &ensp; Misalnya, untuk mendapatkan regex berikut untuk verifikasi SMS: <br>
+        &ensp; <sample>.*(verification|validation).*code.*\\d{5,6}.*</sample> <br>
+        <br>
+        Tanya AI: <br>
+        <sample>
+        %s
+        </sample>
+        <br>
+        <br>
+        <highlight><b>Coba online</b></highlight> <br>
+          &ensp; 1. <a href=\"copy\"><big>Salin prompt di atas</big></a> <br>
+          &ensp; 2. <a href=\"try_it\"><big>Luncurkan AI online</big></a> <br>
+    ]]>
+    </string>
+    <string name="ai_regex_prompt">
+    <![CDATA[
+        Berikan regex full-match sederhana untuk Kotlin untuk menangkap kode verifikasi SMS. <br>
+        <br>
+        Persyaratan: <br>
+        - Harus mengandung kata \"verification\" atau \"validation\", diikuti oleh \"code\", lalu angka 5 atau 6 digit. <br>
+        - Gunakan .* untuk menangani teks yang bervariasi sebelum, di antara, atau setelah elemen-elemen ini agar cocok dengan seluruh pesan. <br>
+        - Tidak perlu memperhatikan besar/kecil huruf, line break, maupun anchor ^ atau $. <br>
+        - Hindari fitur regex lanjutan. <br>
+        - Bungkus regex akhir dengan backtick (``) dan keluarkan hanya regex-nya. <br>
+        <br>
+        Harus cocok dengan: <br>
+        - "Your verification code is 123456, expires after 5 minutes." <br>
+        - "Your validation code: [12345]"
+    ]]>
+    </string>
+    <string name="copied_to_clipboard">Disalin ke papan klip</string>
+    <string name="api_query_timeout">Batas waktu kueri API</string>
+</resources>

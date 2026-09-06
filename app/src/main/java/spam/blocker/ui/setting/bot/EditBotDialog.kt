@@ -28,9 +28,6 @@ import spam.blocker.service.bot.rememberSaveableActionList
 import spam.blocker.service.bot.rememberSaveableTriggerState
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
-import spam.blocker.ui.theme.LocalPalette
-import spam.blocker.ui.theme.SkyBlue
-import spam.blocker.ui.theme.Teal200
 import spam.blocker.ui.widgets.LabelItem
 import spam.blocker.ui.widgets.MenuButton
 import spam.blocker.ui.widgets.PopupDialog
@@ -47,14 +44,18 @@ import spam.blocker.util.Lambda1
 fun EditBotDialog(
     popupTrigger: MutableState<Boolean>,
     onSave: Lambda1<Bot>,
+
+    // Reload bot list after this dialog is closed, changes seem to persist when modified
+    //  but not saved, don't know why. An ugly workaround.
     onDismiss: Lambda,
+
     initialBot: Bot,
 ) {
     if (!popupTrigger.value) {
         return
     }
 
-    val C = LocalPalette.current
+    val C = G.palette
     val ctx = LocalContext.current
 
     var description by rememberSaveable { mutableStateOf(initialBot.desc) }
@@ -67,12 +68,12 @@ fun EditBotDialog(
 
     PopupDialog(
         trigger = popupTrigger,
-        popupSize = PopupSize(percentage = 0.9f, minWidth = 340, maxWidth = 600),
+        popupSize = PopupSize(maxWidthPercentage = 0.9f, minWidthDp = 340, maxWidthDp = 600),
         onDismiss = onDismiss,
         buttons = {
             StrokeButton(
                 label = Str(R.string.save),
-                color = if (anyError) C.disabled else Teal200,
+                color = if (anyError) C.disabled else C.teal200,
                 enabled = !anyError,
                 onClick = {
                     // Gather all required permissions for the workflow
@@ -132,7 +133,7 @@ fun EditBotDialog(
                             }
                             MenuButton(
                                 label = Str(R.string.choose),
-                                color = SkyBlue,
+                                color = C.infoBlue,
                                 items = triggerItems,
                             )
                         }
@@ -144,7 +145,7 @@ fun EditBotDialog(
                         }
                         ActionCard(
                             action = trigger.value,
-                            modifier = M.clickable {
+                            cardModifier = M.clickable {
                                 editTrigger.value = true
                             },
                             showDragIndicator = false

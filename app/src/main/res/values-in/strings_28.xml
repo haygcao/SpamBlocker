@@ -1,0 +1,151 @@
+<resources>
+    <string name="perm_access_dir">Akses Folder</string>
+    <string name="dir_not_specified">Folder tidak ditentukan.</string>
+    <string name="no_access_to_dir">Tidak ada akses ke folder: %s.</string>
+    <string name="grant_access_to_dir">
+        <![CDATA[
+        Berikan akses ke folder: <br>
+        <highlight>%s</highlight>
+        ]]>
+    </string>
+    <string name="comment">Komentar</string>
+    <string name="database_prefix">Prefiks Basis Data</string>
+    <string name="help_regex_mode_database_prefix">
+        <![CDATA[
+        <title><b>Prefiks Basis Data</b></title>:<br>
+        &ensp; Pemblokiran rentang untuk nomor telepon dalam basis data.<br>
+        <br>
+        <warn>Regex ini harus diakhiri dengan titik</warn>, dalam mode regex ini, titik-titik akhir tersebut mewakili digit yang berubah. <br>
+        <br>
+        <b>Contoh:</b> <br>
+        &ensp; <sample><b>.{5,}..</b></sample> mengharuskan prefiks minimal 5 digit, sambil mengizinkan variasi 2 digit di akhir.
+        ]]>
+    </string>
+    <string name="help_regex_preset_database_prefix">
+        <![CDATA[
+        Mencocokkan nomor telepon dalam basis data berdasarkan prefiks; prefiks harus minimal <minor><b>5</b></minor> digit, sambil mengizinkan variasi <minor><b>2</b></minor> digit di akhir. <br>
+        <br>
+        <b>Contoh</b>: <br>
+        &ensp; Jika <sample>12345678</sample><error>00</error> ada dalam basis data, panggilan dari <sample>12345678</sample><error>99</error> juga akan diblokir.
+        ]]>
+    </string>
+    <string name="api_preset_remote_llm">LLM jarak jauh</string>
+    <string name="help_api_preset_remote_llm">
+        <![CDATA[
+            Periksa konten SMS menggunakan model bahasa besar jarak jauh. <br>
+            <br>
+            Ini disediakan hanya untuk <warn>tujuan demonstrasi</warn>.<br>
+            <br>
+            Ketuk untuk membuka halaman wiki berisi instruksi.
+        ]]>
+    </string>
+    <string name="found_existing_auth_token">Token autentikasi yang ada ditemukan</string>
+    <string name="use_this_token">Gunakan token ini</string>
+    <string name="login_and_get_a_token">Daftar dan masuk ke situs web untuk mendapatkan token Anda.</string>
+    <string name="get_a_new_token">Dapatkan token baru</string>
+    <string name="token">Token</string>
+    <string name="enter_token_manually_desc">Jika Anda sudah memiliki token, masukkan secara manual.</string>
+    <string name="enter_token_manually">Masukkan token secara manual</string>
+    <string name="others">Lainnya</string>
+    <string name="api_settings">Pengaturan API</string>
+    <string name="include_settings">Pengaturan Penyertaan</string>
+    <string name="exclude_settings">Pengaturan Pengecualian</string>
+    <string name="backup_missing_category">Pengaturan ini tidak ada dalam file cadangan dan tidak dapat dipulihkan.</string>
+    <string name="warning_priority_conflict">
+        <![CDATA[
+        <highlight>Aturan whitelist</highlight> dan <error>aturan blacklist</error> tidak boleh memiliki prioritas yang sama<br>
+        <br>
+        Aturan yang bertentangan:
+        ]]>
+    </string>
+    <string name="checking_template_new">%s Memeriksa: %s</string>
+    <string name="textbox_limit">Batas Kotak Teks</string>
+    <string name="help_rule_textbox_limit">
+        <![CDATA[
+        Jumlah maksimum karakter yang diizinkan di kotak input. Melebihi batas ini akan menonaktifkan pengeditan,
+          karena teks yang terlalu panjang akan membekukan UI. <br>
+          <br>
+        Default: <b>10000</b> karakter
+        ]]>
+    </string>
+    <string name="clear_history">Hapus Riwayat</string>
+    <string name="tip_clear_history">Jika aplikasi crash saat startup dan tidak bisa dibuka, coba hapus log riwayat dengan tombol di bawah.</string>
+    <string name="direct_verdict">Putusan langsung</string>
+    <string name="formula">Rumus</string>
+    <string name="strategy">Strategi</string>
+    <string name="help_api_result_strategy">
+        <![CDATA[
+        <title>Putusan langsung</title> <br>
+        Server mengembalikan kategori spam yang eksplisit, umum pada layanan API. <br>
+        <br>
+        Contohnya, server mengembalikan: <br>
+        &ensp; <sample><no_translate>{ …, \"type\": \"fraud\", … }</no_translate></sample> <br>
+        Cocokkan dengan regex: <br>
+        &ensp; <sample><no_translate>\"type\": \"(fraud|scam|political)\"</no_translate></sample> <br>
+        <br>
+        <title>Rumus</title> <br>
+        Sesuaikan logika pemblokiran Anda sendiri berdasarkan jumlah penilaian positif/negatif yang dikembalikan oleh server. <br>
+        <br>
+        Contohnya, blokir saat: <br>
+        &ensp; <sample><no_translate>(negative &gt; 5) &amp; (negative / positive &gt; 120%)</no_translate></sample> <br>
+        ]]>
+    </string>
+    <string name="hint_positive_identifier_strategy_formula">Contoh: (\\d+) positif</string>
+    <string name="hint_negative_identifier_strategy_formula">Contoh: (\\d+) negatif</string>
+    <string name="help_positive_identifier_strategy_formula">
+        <![CDATA[
+        Regex ini digunakan untuk mengekstrak jumlah penilaian positif; grup tangkapan diperlukan, artinya harus berisi
+         <sample>(</sample> dan <sample>)</sample>, default ke 0 jika tidak ada kecocokan yang ditemukan. <br>
+        <br>
+        Contohnya: <br>
+        &ensp; <sample>(\\d+) positif</sample>
+        ]]>
+    </string>
+    <string name="help_negative_identifier_strategy_formula">
+        <![CDATA[
+        Regex ini digunakan untuk mengekstrak jumlah penilaian negatif; grup tangkapan diperlukan, artinya harus berisi
+         <sample>(</sample> dan <sample>)</sample>, default ke 0 jika tidak ada kecocokan yang ditemukan. <br>
+        <br>
+        Contohnya: <br>
+        &ensp; <sample>(\\d+) negatif</sample>
+        ]]>
+    </string>
+    <string name="positive_condition">Kondisi positif</string>
+    <string name="negative_condition">Kondisi negatif</string>
+    <string name="help_positive_condition">
+        <![CDATA[
+        Nomor akan <highlight>diizinkan</highlight> jika kondisi ini terpenuhi.
+        ]]>
+    </string>
+    <string name="help_negative_condition">
+        <![CDATA[
+        Nomor akan <error>diblokir</error> jika kondisi ini terpenuhi.
+        ]]>
+    </string>
+    <string name="supported_formula_syntax" formatted="false">
+        <![CDATA[
+        <title>Sintaks yang didukung</title> <br>
+        <minor>positive &ensp; p &ensp; negative &ensp; n</minor> <br>
+        &ensp; Placeholder yang akan diganti dengan jumlah penilaian sebenarnya. <br>
+        <minor>+ &ensp; - &ensp; * &ensp; /</minor> <br>
+        &ensp; Dasar matematika (N/0=N) <br>
+        <minor>%</minor> <br>
+        &ensp; Persentase <br>
+        <minor>&lt; &ensp; &gt; &ensp; &lt;= &ensp; &gt;=</minor> <br>
+        &ensp; Perbandingan <br>
+        <minor>& &ensp; |</minor> <br>
+        &ensp; AND/OR logis <br>
+        <minor>( &ensp; )</minor> <br>
+        &ensp; Tanda kurung <br>
+        <br>
+        <b>Contoh</b> <br>
+        &ensp; <sample>negative &gt; positive</sample> <br>
+        &ensp; <sample>P - N &gt; 5</sample> (tidak peka huruf besar/kecil) <br>
+        &ensp; <sample>p &gt; 3 & n &gt; 2 & (n / p &gt;= 120%)</sample> <br>
+        ]]>
+    </string>
+    <string name="missing_brackets">Regex tidak memiliki grup tangkapan (), lihat tooltip untuk detailnya.</string>
+    <string name="negative_identifier_matches">Kecocokan pengenal negatif</string>
+    <string name="positive_identifier_matches">Kecocokan pengenal positif</string>
+    <string name="rating_count_template">Penilaian positif: %s, penilaian negatif: %s</string>
+</resources>

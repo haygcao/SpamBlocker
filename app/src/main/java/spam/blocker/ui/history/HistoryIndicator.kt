@@ -15,26 +15,34 @@ import spam.blocker.db.ContentRegexTable
 import spam.blocker.db.NumberRegexTable
 import spam.blocker.db.SpamTable
 import spam.blocker.def.Def
+import spam.blocker.def.Def.RESULT_ALLOWED_BY_CARRIER_REGEX
 import spam.blocker.def.Def.RESULT_ALLOWED_BY_CNAP_REGEX
 import spam.blocker.def.Def.RESULT_ALLOWED_BY_CONTACT_GROUP_REGEX
+import spam.blocker.def.Def.RESULT_ALLOWED_BY_CONTACT_PREFIX_REGEX
 import spam.blocker.def.Def.RESULT_ALLOWED_BY_CONTACT_REGEX
-import spam.blocker.def.Def.RESULT_ALLOWED_BY_CONTENT_RULE
+import spam.blocker.def.Def.RESULT_ALLOWED_BY_CONTENT_REGEX
+import spam.blocker.def.Def.RESULT_ALLOWED_BY_DATABASE_PREFIX_REGEX
 import spam.blocker.def.Def.RESULT_ALLOWED_BY_GEO_LOCATION_REGEX
 import spam.blocker.def.Def.RESULT_ALLOWED_BY_NUMBER_REGEX
+import spam.blocker.def.Def.RESULT_BLOCKED_BY_CARRIER_REGEX
 import spam.blocker.def.Def.RESULT_BLOCKED_BY_CNAP_REGEX
 import spam.blocker.def.Def.RESULT_BLOCKED_BY_CONTACT_GROUP_REGEX
+import spam.blocker.def.Def.RESULT_BLOCKED_BY_CONTACT_PREFIX_REGEX
 import spam.blocker.def.Def.RESULT_BLOCKED_BY_CONTACT_REGEX
-import spam.blocker.def.Def.RESULT_BLOCKED_BY_CONTENT_RULE
+import spam.blocker.def.Def.RESULT_BLOCKED_BY_CONTENT_REGEX
+import spam.blocker.def.Def.RESULT_BLOCKED_BY_DATABASE_PREFIX_REGEX
 import spam.blocker.def.Def.RESULT_BLOCKED_BY_GEO_LOCATION_REGEX
 import spam.blocker.def.Def.RESULT_BLOCKED_BY_NUMBER_REGEX
 import spam.blocker.def.Def.RESULT_BLOCKED_BY_SPAM_DB
 import spam.blocker.def.Def.isBlocked
 import spam.blocker.service.checker.ByRegexRule
 import spam.blocker.service.checker.Checker
+import spam.blocker.service.checker.Checker.PassedByDefault
 import spam.blocker.service.checker.IChecker
-import spam.blocker.service.checker.toChecker
+import spam.blocker.service.checker.numberRuleToChecker
 import spam.blocker.ui.M
-import spam.blocker.ui.theme.LocalPalette
+import spam.blocker.ui.history.HistoryOptions.showHistoryIndicator
+import spam.blocker.ui.setting.regex.RegexMode
 import spam.blocker.ui.widgets.ResIcon
 import spam.blocker.ui.widgets.RowVCenterSpaced
 import spam.blocker.util.spf
@@ -47,38 +55,46 @@ typealias Indicators = List<Indicator>
 
 @Composable
 fun IndicatorIcons(indicators: Indicators) {
-    val C = LocalPalette.current
+    val C = G.palette
 
     RowVCenterSpaced(2) {
         // Db existence indicator
         indicators.sortedByDescending { it.priority }.forEach {
             when (it.type) {
                 RESULT_BLOCKED_BY_SPAM_DB -> {
-                    ResIcon(R.drawable.ic_db_delete, modifier = M.size(16.dp), color = C.block)
+                    ResIcon(R.drawable.ic_db_delete, modifier = M.size(16.dp), color = C.error)
                 }
 
                 RESULT_ALLOWED_BY_NUMBER_REGEX, RESULT_BLOCKED_BY_NUMBER_REGEX -> {
-                    ResIcon(R.drawable.ic_number_sign, modifier = M.size(16.dp), color = if(isBlocked(it.type)) C.block else C.pass)
+                    RegexMode.PhoneNumber().Icon(color = if(isBlocked(it.type)) C.error else C.success)
                 }
                 RESULT_ALLOWED_BY_CONTACT_REGEX, RESULT_BLOCKED_BY_CONTACT_REGEX -> {
-                    ResIcon(R.drawable.ic_contact_square, modifier = M.size(16.dp), color = if(isBlocked(it.type)) C.block else C.pass)
+                    RegexMode.ContactName().Icon(color = if(isBlocked(it.type)) C.error else C.success)
                 }
                 RESULT_ALLOWED_BY_CONTACT_GROUP_REGEX, RESULT_BLOCKED_BY_CONTACT_GROUP_REGEX -> {
-                    ResIcon(R.drawable.ic_contact_group, modifier = M.size(16.dp), color = if(isBlocked(it.type)) C.block else C.pass)
+                    RegexMode.ContactGroup().Icon(color = if(isBlocked(it.type)) C.error else C.success)
+                }
+                RESULT_ALLOWED_BY_CONTACT_PREFIX_REGEX, RESULT_BLOCKED_BY_CONTACT_PREFIX_REGEX -> {
+                    RegexMode.ContactPrefix().Icon(color = if(isBlocked(it.type)) C.error else C.success)
                 }
                 RESULT_ALLOWED_BY_CNAP_REGEX, RESULT_BLOCKED_BY_CNAP_REGEX -> {
-                    ResIcon(R.drawable.ic_id_card, modifier = M.size(16.dp), color = if(isBlocked(it.type)) C.block else C.pass)
+                    RegexMode.CallerName().Icon(color = if(isBlocked(it.type)) C.error else C.success)
                 }
                 RESULT_ALLOWED_BY_GEO_LOCATION_REGEX, RESULT_BLOCKED_BY_GEO_LOCATION_REGEX -> {
-                    ResIcon(R.drawable.ic_location, modifier = M.size(16.dp), color = if(isBlocked(it.type)) C.block else C.pass)
+                    RegexMode.Geolocation().Icon(color = if(isBlocked(it.type)) C.error else C.success)
+                }
+                RESULT_ALLOWED_BY_CARRIER_REGEX, RESULT_BLOCKED_BY_CARRIER_REGEX -> {
+                    RegexMode.Carrier().Icon(color = if(isBlocked(it.type)) C.error else C.success)
+                }
+                RESULT_ALLOWED_BY_DATABASE_PREFIX_REGEX, RESULT_BLOCKED_BY_DATABASE_PREFIX_REGEX -> {
+                    RegexMode.DatabasePrefix().Icon(color = if(isBlocked(it.type)) C.error else C.success)
                 }
 
-                RESULT_ALLOWED_BY_CONTENT_RULE -> {
-                    ResIcon(R.drawable.ic_sms_pass, modifier = M.size(14.dp), color = C.pass)
+                RESULT_ALLOWED_BY_CONTENT_REGEX -> {
+                    ResIcon(R.drawable.ic_sms_pass, modifier = M.size(14.dp), color = C.success)
                 }
-
-                RESULT_BLOCKED_BY_CONTENT_RULE -> {
-                    ResIcon(R.drawable.ic_sms_blocked, modifier = M.size(14.dp), color = C.block)
+                RESULT_BLOCKED_BY_CONTENT_REGEX -> {
+                    ResIcon(R.drawable.ic_sms_blocked, modifier = M.size(14.dp), color = C.error)
                 }
             }
         }
@@ -100,32 +116,35 @@ fun IndicatorsWrapper(
 ) {
     val ctx = LocalContext.current
 
-    // Just a short alias, that G.xxx it too long
-    var showIndicator by remember(G.showHistoryIndicator.value) {
-        mutableStateOf(G.showHistoryIndicator.value)
-    }
-
     var onRefresh by remember { mutableStateOf(false) }
 
     // load from tables and generate ICheckers
     fun loadNumberCheckers(): List<IChecker> {
-        return if (showIndicator) {
+        val ret = if (showHistoryIndicator.value) {
             NumberRegexTable().listAll(ctx).map {
-                it.toChecker(ctx)
+                it.numberRuleToChecker(ctx)
             }
         } else listOf()
+
+        return ret + PassedByDefault(ctx)
     }
 
     fun loadContentCheckers(): List<IChecker> {
-        return if (showIndicator && vm.forType == Def.ForSms) {
+        val ret = if (showHistoryIndicator.value && vm.forType == Def.ForSms) {
             ContentRegexTable().listAll(ctx).map {
                 Checker.Content(ctx, it)
             }
         } else listOf()
+        return ret + PassedByDefault(ctx)
     }
 
-    var numberCheckers = remember(showIndicator) { loadNumberCheckers() }
-    var contentCheckers = remember(showIndicator) { loadContentCheckers() }
+    var numberCheckers by remember(showHistoryIndicator.value) {
+        mutableStateOf(loadNumberCheckers())
+    }
+    var contentCheckers by remember(showHistoryIndicator.value) {
+        mutableStateOf(loadContentCheckers())
+    }
+
 
     // Refresh the list on regex change or spam db change
     Events.regexRuleUpdated.Listen {
@@ -143,7 +162,7 @@ fun IndicatorsWrapper(
             run {
                 if (SpamTable.findByNumber(ctx, number) != null) {
                     add(
-                        Indicator(type = RESULT_BLOCKED_BY_SPAM_DB, priority = spf.SpamDB(ctx).getPriority())
+                        Indicator(type = RESULT_BLOCKED_BY_SPAM_DB, priority = spf.SpamDB(ctx).priority)
                     )
                 }
             }
@@ -151,7 +170,8 @@ fun IndicatorsWrapper(
             if (vm.forType == Def.ForNumber) { // in Call Tab
                 // 2. Check if the call number matches any Number Rule?
                 run {
-                    val checkResult = Checker.checkCall(
+
+                    val (checkResult, _, _) = Checker.checkCall(
                         ctx = ctx,
                         logger = null,
                         rawNumber = number,
@@ -159,15 +179,19 @@ fun IndicatorsWrapper(
                         checkers = numberCheckers,
                         simSlot = simSlot
                     )
-                    val resultType = checkResult.type
+                    val resultType = checkResult.byType
 
                     when (resultType) {
                         RESULT_ALLOWED_BY_NUMBER_REGEX, RESULT_BLOCKED_BY_NUMBER_REGEX,
                         RESULT_ALLOWED_BY_CONTACT_REGEX, RESULT_BLOCKED_BY_CONTACT_REGEX,
                         RESULT_ALLOWED_BY_CONTACT_GROUP_REGEX, RESULT_BLOCKED_BY_CONTACT_GROUP_REGEX,
+                        RESULT_ALLOWED_BY_CONTACT_PREFIX_REGEX, RESULT_BLOCKED_BY_CONTACT_PREFIX_REGEX,
                         RESULT_ALLOWED_BY_CNAP_REGEX, RESULT_BLOCKED_BY_CNAP_REGEX,
-                        RESULT_ALLOWED_BY_GEO_LOCATION_REGEX, RESULT_BLOCKED_BY_GEO_LOCATION_REGEX
-                             -> {
+                        RESULT_ALLOWED_BY_GEO_LOCATION_REGEX, RESULT_BLOCKED_BY_GEO_LOCATION_REGEX,
+                        RESULT_ALLOWED_BY_CARRIER_REGEX, RESULT_BLOCKED_BY_CARRIER_REGEX,
+                        RESULT_ALLOWED_BY_DATABASE_PREFIX_REGEX, RESULT_BLOCKED_BY_DATABASE_PREFIX_REGEX
+
+                            -> {
                                 add(
                                     Indicator(
                                         type = resultType,
@@ -182,7 +206,7 @@ fun IndicatorsWrapper(
 
                 // 2. Check if the sms number matches any Number Rule?
                 run {
-                    val checkResult = Checker.checkSms(
+                    val (checkResult, _, _) = Checker.checkSms(
                         ctx = ctx,
                         logger = null,
                         rawNumber = number,
@@ -190,14 +214,18 @@ fun IndicatorsWrapper(
                         simSlot = simSlot,
                         checkers = numberCheckers,
                     )
-                    val resultType = checkResult.type
+                    val resultType = checkResult.byType
 
                     when (resultType) {
                         RESULT_ALLOWED_BY_NUMBER_REGEX, RESULT_BLOCKED_BY_NUMBER_REGEX,
                         RESULT_ALLOWED_BY_CONTACT_REGEX, RESULT_BLOCKED_BY_CONTACT_REGEX,
                         RESULT_ALLOWED_BY_CONTACT_GROUP_REGEX, RESULT_BLOCKED_BY_CONTACT_GROUP_REGEX,
+                        RESULT_ALLOWED_BY_CONTACT_PREFIX_REGEX, RESULT_BLOCKED_BY_CONTACT_PREFIX_REGEX,
                         RESULT_ALLOWED_BY_CNAP_REGEX, RESULT_BLOCKED_BY_CNAP_REGEX,
-                        RESULT_ALLOWED_BY_GEO_LOCATION_REGEX, RESULT_BLOCKED_BY_GEO_LOCATION_REGEX
+                        RESULT_ALLOWED_BY_GEO_LOCATION_REGEX, RESULT_BLOCKED_BY_GEO_LOCATION_REGEX,
+                        RESULT_ALLOWED_BY_CARRIER_REGEX, RESULT_BLOCKED_BY_CARRIER_REGEX,
+                        RESULT_ALLOWED_BY_DATABASE_PREFIX_REGEX, RESULT_BLOCKED_BY_DATABASE_PREFIX_REGEX
+
                             -> {
                                 add(
                                     Indicator(
@@ -211,7 +239,7 @@ fun IndicatorsWrapper(
                 }
                 // 3. Check if the SMS matches any Content Rule?
                 run {
-                    val checkResult = Checker.checkSms(
+                    val (checkResult, _, _) = Checker.checkSms(
                         ctx = ctx,
                         logger = null,
                         rawNumber = number,
@@ -219,10 +247,10 @@ fun IndicatorsWrapper(
                         simSlot = simSlot,
                         checkers = contentCheckers,
                     )
-                    val resultType = checkResult.type
+                    val resultType = checkResult.byType
 
-                    when (checkResult.type) {
-                        RESULT_ALLOWED_BY_CONTENT_RULE, RESULT_BLOCKED_BY_CONTENT_RULE -> {
+                    when (checkResult.byType) {
+                        RESULT_ALLOWED_BY_CONTENT_REGEX, RESULT_BLOCKED_BY_CONTENT_REGEX -> {
                             add(
                                 Indicator(
                                     type = resultType,

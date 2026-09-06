@@ -21,9 +21,9 @@
         - אחרת, זרימת העבודה תופסק.<br>
         <br>
         מקרה שימוש: <br>
-        <font color="#888888">
+        <sample>
         &ensp; הפעל/השבת כללים מסוימים לאחר קבלת SMS של כוננות או יציאה מכוננות. <br>
-        </font>
+        </sample>
         ]]>
     </string>
     <string name="sms_event_triggered">אירוע ה-SMS %s הופעל.</string>
@@ -31,8 +31,6 @@
     <string name="missing_permissions">ההרשאות הבאות ניתנו בעבר אך חסרות כעת:</string>
     <string name="grant_permissions">הענק הרשאות</string>
     <string name="perm_call_screening">סינון שיחות</string>
-    <string name="perm_file_read">קריאת קובץ</string>
-    <string name="perm_file_write">כתיבת קובץ</string>
     <string name="perm_contacts">אנשי קשר</string>
     <string name="perm_receive_sms">קבלת SMS</string>
     <string name="perm_receive_mms">קבלת MMS</string>
@@ -51,18 +49,18 @@
         <![CDATA[
         אפשר שיחות ממספרים שענית עליהם בעבר.<br>
         <br>
-        <h6><font color="#ffa500">אזהרה</font></h6>
+        <h6><warn>אזהרה</warn></h6>
         %s<br>
         <br>
         <b>אפשרויות:</b><br>
         <br>
-        <h6><font color="#00BFFF">- בתוך ימים</font></h6>
-        שיחות שהתרחשו לפני <font color="cyan">%d ימים</font> מתעלמים מהן.<br>
+        <h6><title>- בתוך ימים</title></h6>
+        שיחות שהתרחשו לפני <highlight>%d ימים</highlight> מתעלמים מהן.<br>
         <br>
-        <h6><font color="#00BFFF">- משך מינימלי</font></h6>
-        שיחות שנמשכו פחות מ-<font color="cyan">%d שניות</font> מתעלמים מהן.<br>
+        <h6><title>- משך מינימלי</title></h6>
+        שיחות שנמשכו פחות מ-<highlight>%d שניות</highlight> מתעלמים מהן.<br>
         <br>
-        <font color="#ea86ff"><b>עדיפות: 10</b></font>
+        <priority><b>עדיפות: 10</b></priority>
         ]]>
     </string>
     <string name="answered_warning">אין להפעיל תכונה זו עבור קשישים או כל מי שפחות מסוגל לזהות שיחות הונאה, מכיוון שזה עלול לחשוף אותם לשיחות הונאה חוזרות ונשנות.</string>
@@ -75,9 +73,9 @@
         שנה זמנית כללי regex בהתבסס על אירועי יומן. <br>
         <br>
         <b>תרחיש שימוש</b>:<br>
-        &ensp; <font color="#888888">עובד משמרות עובד משמרת יום במשך יומיים,
+        &ensp; <sample>עובד משמרות עובד משמרת יום במשך יומיים,
           ואז משמרת לילה בשני הימים הבאים.<br>
-        &ensp; יש צורך להשבית או להפעיל כללים מסוימים במהלך שעות העבודה המשתנות.</font><br>
+        &ensp; יש צורך להשבית או להפעיל כללים מסוימים במהלך שעות העבודה המשתנות.</sample><br>
         <br>
         פעולה זו תיצור גם כלל regex וגם זרימת עבודה, הכלל יופעל באופן מיידי במהלך אירוע היומן הספציפי. <br>
         ]]>

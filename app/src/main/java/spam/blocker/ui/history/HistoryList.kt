@@ -1,5 +1,6 @@
 package spam.blocker.ui.history
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,10 +17,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.def.Def
 import spam.blocker.ui.M
+import spam.blocker.ui.history.HistoryOptions.historyTimeColors
+import spam.blocker.ui.history.HistoryOptions.showHistoryIndicator
+import spam.blocker.ui.history.HistoryOptions.showHistoryTimeColor
 import spam.blocker.ui.widgets.BgLaunchApp
 import spam.blocker.ui.widgets.LazyScrollbar
 import spam.blocker.ui.widgets.LeftDeleteSwipeWrapper
@@ -29,6 +32,7 @@ import spam.blocker.util.Launcher
 import spam.blocker.util.SimUtils
 
 
+@SuppressLint("LocalContextGetResourceValueCall")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HistoryList(
@@ -36,6 +40,7 @@ fun HistoryList(
     vm: HistoryViewModel,
 ) {
     val ctx = LocalContext.current
+//    val spf = spf.HistoryOptions(ctx)
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -44,8 +49,8 @@ fun HistoryList(
     }
 
     // Just a short alias, that G.xxx it too long
-    var showIndicator by remember(G.showHistoryIndicator.value) {
-        mutableStateOf(G.showHistoryIndicator.value)
+    var showIndicator by remember(showHistoryIndicator.value) {
+        mutableStateOf(showHistoryIndicator.value)
     }
 
     LazyScrollbar(state = lazyState) {
@@ -59,19 +64,23 @@ fun HistoryList(
 
                     LaunchedEffect(record.id, showIndicator, forceRefreshIndicators) {
                         indicators.value = if (showIndicator)
-                            indicatorChecker(record.peer, record.cnap, record.extraInfo, record.simSlot)
+                            indicatorChecker(
+                                record.peer,
+                                record.cnap,
+                                record.extraInfo,
+                                record.simSlot
+                            )
                         else
                             listOf()
                     }
-
-                    HistoryContextMenuWrapper(vm, index) { contextMenuExpanded ->
+                    HistoryContextMenuWrapper(vm, record) { contextMenuExpanded ->
                         // Swipe <---->
                         LeftDeleteSwipeWrapper(
                             right = SwipeInfo(
                                 veto = true,
                                 background = { BgLaunchApp(StartToEnd) },
                                 onSwipe = {
-                                    val index = vm.records.indexOfFirst { it.id == record.id  }
+                                    val index = vm.records.indexOfFirst { it.id == record.id }
                                     val record = vm.records[index]
 
                                     // Navigate to the default app, open the conversation to this number.
@@ -82,18 +91,22 @@ fun HistoryList(
                                         vm.records[index] = vm.records[index].copy(read = true)
                                     }
                                     when (vm.forType) {
-                                        Def.ForNumber -> Launcher.openCallConversation(ctx, record.peer)
+                                        Def.ForNumber -> Launcher.openCallConversation(
+                                            ctx,
+                                            record.peer
+                                        )
+
                                         Def.ForSms -> Launcher.openSMSConversation(ctx, record.peer)
                                     }
                                 }
                             ),
                             left = SwipeInfo(
                                 onSwipe = {
-                                    val index = vm.records.indexOfFirst { it.id == record.id  }
+                                    val index = vm.records.indexOfFirst { it.id == record.id }
                                     val rec = vm.records[index]
 
                                     // 1. delete from db
-                                    vm.table.delById(ctx, rec.id)
+                                    vm.table.deleteById(ctx, rec.id)
 
                                     // 2. remove from ArrayList
                                     vm.records.removeAt(index)
@@ -104,7 +117,7 @@ fun HistoryList(
                                         rec.peer,
                                         ctx.getString(R.string.undelete),
                                     ) {
-                                        vm.table.addRecordWithId(ctx, rec)
+                                        vm.table.addWithId(ctx, rec)
                                         vm.records.add(index, rec)
                                     }
                                 },
@@ -115,6 +128,7 @@ fun HistoryList(
                                 record = record,
                                 indicators = indicators.value,
                                 simCount = simCount,
+                                timeColors = if (showHistoryTimeColor.value) historyTimeColors else null,
                                 modifier = M.combinedClickable(
                                     onClick = {
                                         if (!record.read) {

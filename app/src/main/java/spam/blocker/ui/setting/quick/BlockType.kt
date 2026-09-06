@@ -14,9 +14,11 @@ import spam.blocker.R
 import spam.blocker.def.Def
 import spam.blocker.def.Def.DEFAULT_HANG_UP_DELAY
 import spam.blocker.ui.setting.LabeledRow
-import spam.blocker.ui.theme.LocalPalette
+import spam.blocker.ui.widgets.Button
 import spam.blocker.ui.widgets.ComboBox
+import spam.blocker.ui.widgets.GreyIcon18
 import spam.blocker.ui.widgets.GreyIcon20
+import spam.blocker.ui.widgets.GreyLabel
 import spam.blocker.ui.widgets.LabelItem
 import spam.blocker.ui.widgets.NumberInputBox
 import spam.blocker.ui.widgets.PopupDialog
@@ -55,24 +57,23 @@ fun BlockType() {
     val spf = spf.BlockType(ctx)
 
     val selected = remember {
-        mutableIntStateOf(spf.getType())
+        mutableIntStateOf(spf.type)
     }
 
     val options = remember {
-        val icons = listOf<@Composable () -> Unit>(
-            // list.map{} doesn't support returning @Composable...
-            { GreyIcon20(iconId = R.drawable.ic_call_blocked) },
-            { GreyIcon20(iconId = R.drawable.ic_call_miss) },
-            { GreyIcon20(iconId = R.drawable.ic_hang) },
+        val icons = listOf(
+            R.drawable.ic_call_blocked,
+            R.drawable.ic_call_miss,
+            R.drawable.ic_hang,
         )
         ctx.resources.getStringArray(R.array.block_type_list).mapIndexed { index, label ->
             LabelItem(
                 label = label,
-                leadingIcon = icons[index],
+                leadingIcon = { GreyIcon20(icons[index]) },
                 onClick = {
                     when (index) {
                         0, 1 -> { // Reject, Silence
-                            spf.setType(index)
+                            spf.type = index
                             selected.intValue = index
                         }
 
@@ -87,10 +88,10 @@ fun BlockType() {
                                 )
                             ) { granted ->
                                 if (granted) {
-                                    spf.setType(index)
+                                    spf.type = index
                                     selected.intValue = index
                                 } else {
-                                    selected.intValue = spf.getType()
+                                    selected.intValue = spf.type
                                 }
                             }
                         }
@@ -106,15 +107,15 @@ fun BlockType() {
         R.string.block_type,
         helpTooltip = Str(R.string.help_block_type),
         content = {
-            val C = LocalPalette.current
+            val C = G.palette
             RowVCenterSpaced(4) {
 
                 if (selected.intValue == Def.BLOCK_TYPE_ANSWER_AND_HANGUP) {
                     val delay = remember {
-                        mutableIntStateOf(spf.getDelay().toIntOrNull() ?: DEFAULT_HANG_UP_DELAY)
+                        mutableIntStateOf(spf.delay.toIntOrNull() ?: DEFAULT_HANG_UP_DELAY)
                     }
                     LaunchedEffect(delay.intValue) {
-                        spf.setDelay(delay.intValue.toString())
+                        spf.delay = delay.intValue.toString()
                     }
 
                     val popupTrigger = rememberSaveable { mutableStateOf(false) }
@@ -135,4 +136,47 @@ fun BlockType() {
             }
         }
     )
+}
+
+@Composable
+fun BlockTypeSummary() {
+    val ctx = LocalContext.current
+    val spf = spf.BlockType(ctx)
+    val C = G.palette
+
+    val selected = remember {
+        spf.type
+    }
+
+    val icons = remember {
+        listOf(
+            R.drawable.ic_call_blocked,
+            R.drawable.ic_call_miss,
+            R.drawable.ic_hang,
+        )
+    }
+    val labels = remember {
+        ctx.resources.getStringArray(R.array.block_type_list)
+    }
+
+    RowVCenterSpaced(4) {
+        Button(
+            enabled = false,
+            content = {
+                RowVCenterSpaced(4) {
+                    GreyIcon18(icons[selected])
+
+                    GreyLabel(labels[selected])
+
+                    if (selected == Def.BLOCK_TYPE_ANSWER_AND_HANGUP) {
+                        val delay = remember {
+                            spf.delay.toIntOrNull() ?: DEFAULT_HANG_UP_DELAY
+                        }
+
+                        GreyLabel("$delay ${Str(R.string.seconds_short)}")
+                    }
+                }
+            }
+        )
+    }
 }

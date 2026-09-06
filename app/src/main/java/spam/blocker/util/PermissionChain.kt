@@ -11,15 +11,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import spam.blocker.G
+import spam.blocker.R
 import spam.blocker.ui.M
-import spam.blocker.ui.theme.LocalPalette
-import spam.blocker.ui.theme.Teal200
 import spam.blocker.ui.widgets.GreyButton
 import spam.blocker.ui.widgets.HtmlText
 import spam.blocker.ui.widgets.PopupDialog
+import spam.blocker.ui.widgets.Str
 import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.util.PermissionLauncher.launcherProtected
 import spam.blocker.util.PermissionLauncher.launcherRegular
+import spam.blocker.util.PermissionLauncher.launcherSAF
 import spam.blocker.util.Util.doOnce
 
 
@@ -50,6 +52,7 @@ class PermissionChain() {
     // Prepare UI elements, initialized once in MainActivity
     @Composable
     fun Compose() {
+        val C = G.palette
         val ctx = LocalContext.current
 
         popupTrigger = remember { mutableStateOf(false) }
@@ -57,16 +60,16 @@ class PermissionChain() {
             PopupDialog(
                 trigger = popupTrigger,
                 content = {
-                    HtmlText(curr.prompt!!, color = LocalPalette.current.textGrey)
+                    HtmlText(curr.prompt!!, color = G.palette.textGrey)
                 },
                 buttons = {
-                    GreyButton("cancel") {
+                    GreyButton(Str(R.string.cancel)) {
                         popupTrigger.value = false
                         onResult(false)
                     }
                     Spacer(modifier = M.width(10.dp))
 
-                    StrokeButton("ok", Teal200) {
+                    StrokeButton(Str(R.string.ok), C.teal200) {
                         popupTrigger.value = false
                         handle(ctx)
                     }
@@ -77,7 +80,7 @@ class PermissionChain() {
         launcherRegular = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.RequestPermission()
         ) { isGranted ->
-            // Update the global permission
+            // Update the permission object
             curr.perm.onResult(ctx, isGranted)
 
             if (isGranted || curr.isOptional) {
@@ -103,6 +106,21 @@ class PermissionChain() {
 
             // Call the result callback
             curr.perm.onResult(ctx, isGranted)
+
+            if (isGranted || curr.isOptional) {
+                checkNext(ctx)
+            } else {
+                onResult(false)
+            }
+        }
+
+        launcherSAF = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.OpenDocumentTree()
+        ) { uri ->
+            val isGranted = uri != null
+
+            // Update the permission object
+            curr.perm.onResult(ctx, isGranted, uri)
 
             if (isGranted || curr.isOptional) {
                 checkNext(ctx)

@@ -1,0 +1,151 @@
+<resources>
+    <string name="perm_access_dir">Klasöre Erişim</string>
+    <string name="dir_not_specified">Klasör belirtilmedi.</string>
+    <string name="no_access_to_dir">Klasöre erişim yok: %s.</string>
+    <string name="grant_access_to_dir">
+        <![CDATA[
+        Klasöre erişim ver: <br>
+        <highlight>%s</highlight>
+        ]]>
+    </string>
+    <string name="comment">Yorum</string>
+    <string name="database_prefix">Veritabanı Öneki</string>
+    <string name="help_regex_mode_database_prefix">
+        <![CDATA[
+        <title><b>Veritabanı Öneki</b></title>:<br>
+        &ensp; Veritabanındaki telefon numaraları için aralık engelleme.<br>
+        <br>
+        <warn>Bu regex nokta ile bitmelidir</warn>, bu regex modunda sondaki bu noktalar değişken rakamları temsil eder. <br>
+        <br>
+        <b>Örneğin:</b> <br>
+        &ensp; <sample><b>.{5,}..</b></sample> önekin en az 5 basamak uzunluğunda olmasını gerektirir ve sonda 2 basamaklık değişime izin verir.
+        ]]>
+    </string>
+    <string name="help_regex_preset_database_prefix">
+        <![CDATA[
+        Veritabanındaki telefon numaralarını öneke göre eşleştirir; önek en az <minor><b>5</b></minor> basamak uzunluğunda olmalıdır ve sonda <minor><b>2</b></minor> basamaklık değişime izin verir. <br>
+        <br>
+        <b>Örneğin</b>: <br>
+        &ensp; Veritabanında <sample>12345678</sample><error>00</error> varsa, <sample>12345678</sample><error>99</error> numarasından gelen arama da engellenir.
+        ]]>
+    </string>
+    <string name="api_preset_remote_llm">Uzak LLM</string>
+    <string name="help_api_preset_remote_llm">
+        <![CDATA[
+            SMS içeriğini uzak büyük dil modelleriyle denetler. <br>
+            <br>
+            Bu yalnızca <warn>gösterim amaçları</warn> için sağlanır.<br>
+            <br>
+            Talimatlar için wiki sayfasını açmak üzere dokunun.
+        ]]>
+    </string>
+    <string name="found_existing_auth_token">Mevcut kimlik doğrulama belirteci bulundu</string>
+    <string name="use_this_token">Bu belirteci kullan</string>
+    <string name="login_and_get_a_token">Web sitesine kaydolup giriş yaparak belirtecinizi alın.</string>
+    <string name="get_a_new_token">Yeni belirteç al</string>
+    <string name="token">Belirteç</string>
+    <string name="enter_token_manually_desc">Zaten bir belirteciniz varsa, manuel olarak girin.</string>
+    <string name="enter_token_manually">Belirteci manuel olarak girin</string>
+    <string name="others">Diğerleri</string>
+    <string name="api_settings">API Ayarları</string>
+    <string name="include_settings">Dahil Etme Ayarları</string>
+    <string name="exclude_settings">Hariç Tutma Ayarları</string>
+    <string name="backup_missing_category">Bu ayar yedekleme dosyasında eksik ve geri yüklenemez.</string>
+    <string name="warning_priority_conflict">
+        <![CDATA[
+        <highlight>Whitelist</highlight> ve <error>blacklist</error> kuralları aynı önceliğe sahip olmamalıdır<br>
+        <br>
+        Çakışan kurallar:
+        ]]>
+    </string>
+    <string name="checking_template_new">%s Kontrol ediliyor: %s</string>
+    <string name="textbox_limit">Metin kutusu sınırı</string>
+    <string name="help_rule_textbox_limit">
+        <![CDATA[
+        Giriş kutusunda izin verilen en fazla karakter sayısı. Bu sınırın aşılması düzenlemeyi devre dışı bırakır,
+          çünkü aşırı uzun metin kullanıcı arayüzünü dondurur. <br>
+          <br>
+        Varsayılan: <b>10000</b> karakter
+        ]]>
+    </string>
+    <string name="clear_history">Geçmişi temizle</string>
+    <string name="tip_clear_history">Uygulama başlangıçta çöküyor ve açılmıyorsa, aşağıdaki düğmeyi kullanarak geçmiş kayıtlarını temizlemeyi deneyin.</string>
+    <string name="direct_verdict">Doğrudan karar</string>
+    <string name="formula">Formül</string>
+    <string name="strategy">Strateji</string>
+    <string name="help_api_result_strategy">
+        <![CDATA[
+        <title>Doğrudan karar</title> <br>
+        Sunucu açık bir spam kategorisi döndürür; bu, API hizmetlerinde yaygındır. <br>
+        <br>
+        Örneğin, sunucu şunu döndürür: <br>
+        &ensp; <sample><no_translate>{ …, \"type\": \"fraud\", … }</no_translate></sample> <br>
+        Bunu regex ile eşleştirin: <br>
+        &ensp; <sample><no_translate>\"type\": \"(fraud|scam|political)\"</no_translate></sample> <br>
+        <br>
+        <title>Formül</title> <br>
+        Sunucu tarafından döndürülen pozitif/negatif değerlendirme sayılarına göre kendi engelleme mantığınızı özelleştirin. <br>
+        <br>
+        Örneğin, şu durumlarda engelleyin: <br>
+        &ensp; <sample><no_translate>(negative &gt; 5) &amp; (negative / positive &gt; 120%)</no_translate></sample> <br>
+        ]]>
+    </string>
+    <string name="hint_positive_identifier_strategy_formula">Örn.: (\\d+) pozitif</string>
+    <string name="hint_negative_identifier_strategy_formula">Örn.: (\\d+) negatif</string>
+    <string name="help_positive_identifier_strategy_formula">
+        <![CDATA[
+        Bu regex, pozitif değerlendirme sayısını çıkarmak içindir; bir yakalama grubu gerekir, yani şunu içermelidir:
+         <sample>(</sample> ve <sample>)</sample>, eşleşme bulunamazsa varsayılan değer 0 olur. <br>
+        <br>
+        Örneğin: <br>
+        &ensp; <sample>(\\d+) pozitif</sample>
+        ]]>
+    </string>
+    <string name="help_negative_identifier_strategy_formula">
+        <![CDATA[
+        Bu regex, negatif değerlendirme sayısını çıkarmak içindir; bir yakalama grubu gerekir, yani şunu içermelidir:
+         <sample>(</sample> ve <sample>)</sample>, eşleşme bulunamazsa varsayılan değer 0 olur. <br>
+        <br>
+        Örneğin: <br>
+        &ensp; <sample>(\\d+) negatif</sample>
+        ]]>
+    </string>
+    <string name="positive_condition">Pozitif koşul</string>
+    <string name="negative_condition">Negatif koşul</string>
+    <string name="help_positive_condition">
+        <![CDATA[
+        Bu koşul karşılanırsa numaraya <highlight>izin verilir</highlight>.
+        ]]>
+    </string>
+    <string name="help_negative_condition">
+        <![CDATA[
+        Bu koşul karşılanırsa numara <error>engellenir</error>.
+        ]]>
+    </string>
+    <string name="supported_formula_syntax" formatted="false">
+        <![CDATA[
+        <title>Desteklenen sözdizimi</title> <br>
+        <minor>positive &ensp; p &ensp; negative &ensp; n</minor> <br>
+        &ensp; Gerçek değerlendirme sayılarıyla değiştirilecek yer tutucular. <br>
+        <minor>+ &ensp; - &ensp; * &ensp; /</minor> <br>
+        &ensp; Temel matematik işlemleri (N/0=N) <br>
+        <minor>%</minor> <br>
+        &ensp; Yüzde <br>
+        <minor>&lt; &ensp; &gt; &ensp; &lt;= &ensp; &gt;=</minor> <br>
+        &ensp; Karşılaştırmalar <br>
+        <minor>& &ensp; |</minor> <br>
+        &ensp; Mantıksal AND/OR <br>
+        <minor>( &ensp; )</minor> <br>
+        &ensp; Parantezler <br>
+        <br>
+        <b>Örnekler</b> <br>
+        &ensp; <sample>negative &gt; positive</sample> <br>
+        &ensp; <sample>P - N &gt; 5</sample> (büyük/küçük harfe duyarsız) <br>
+        &ensp; <sample>p &gt; 3 & n &gt; 2 & (n / p &gt;= 120%)</sample> <br>
+        ]]>
+    </string>
+    <string name="missing_brackets">Regex\'te yakalama grubu () eksik, ayrıntılar için araç ipucuna bakın.</string>
+    <string name="negative_identifier_matches">Negatif tanımlayıcı eşleşmeleri</string>
+    <string name="positive_identifier_matches">Pozitif tanımlayıcı eşleşmeleri</string>
+    <string name="rating_count_template">Pozitif değerlendirmeler: %s, negatif değerlendirmeler: %s</string>
+</resources>

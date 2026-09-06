@@ -1,7 +1,7 @@
 <resources>
     <string name="warning_double_sms">
         <![CDATA[
-        Asegúrate de <font color="#fa7f71"><b>desactivar las notificaciones de la aplicación de SMS</b></font> en la configuración del sistema
+        Asegúrate de <error><b>desactivar las notificaciones de la aplicación de SMS</b></error> en la configuración del sistema
          para evitar notificaciones duplicadas. <br>
         <br>
         Si la aplicación de SMS exige el permiso de notificación, puedes mantenerlo concedido
@@ -18,23 +18,15 @@
     </string>
     <string name="help_regex_mode_caller_name">
         <![CDATA[
-        <font color="#00BFFF"><b>Nombre de quien llama</b></font>:<br>
+        <title><b>Nombre de quien llama</b></title>:<br>
         &ensp; La expresión regular coincidirá con el nombre de visualización del llamante (CNAP). <br>
         <br>
         En el registro del historial de llamadas, el nombre de quien llama aparecerá después del número de teléfono entre paréntesis si existe, como: <br>
-        &ensp; <font color="#888888">12345 (Nombre de visualización)</font> <br>
+        &ensp; <sample>12345 (Nombre de visualización)</sample> <br>
         ]]>
     </string>
     <string name="caller_name">Nombre de quien llama</string>
     <string name="caller_name_rule">Regla del nombre de quien llama</string>
-    <string name="help_regex_preset_caller_name">
-        <![CDATA[
-        Permitir llamadas que tienen información de <b>CNAP (Presentación del Nombre del Llamante)</b>, que es una característica de telecomunicaciones que
-         muestra el nombre registrado del llamante (junto con el número de teléfono) en la pantalla del teléfono del destinatario durante una llamada entrante. <br>
-        <br>
-        Para los países que aplican el CNAP verificado por KYC, las llamadas que tienen un nombre de quien llama son probablemente válidas.
-        ]]>
-    </string>
     <string name="forwarded_call">Llamada Desviada</string>
     <string name="help_regex_preset_forwarded_call">
         <![CDATA[
@@ -46,13 +38,13 @@
     <string name="explanation_forwarded_call">
         <![CDATA[
         Esto es <b>específico del operador</b>; algunos operadores formatean las llamadas desviadas como dos números concatenados con un \"&\",
-         como <font color="#888888">222&111</font>. <br>
+         como <sample>222&111</sample>. <br>
         <br>
         En este formato: <br>
-        &ensp; - La primera parte (<font color="#888888">222</font>) es típicamente el número de desvío. <br>
-        &ensp; - La segunda parte (<font color="#888888">111</font>) es el número original. <br>
+        &ensp; - La primera parte (<sample>222</sample>) es típicamente el número de desvío. <br>
+        &ensp; - La segunda parte (<sample>111</sample>) es el número original. <br>
         <br>
-        También podría haber <font color="#888888">333&111</font> y <font color="#888888">444&111</font>,
+        También podría haber <sample>333&111</sample> y <sample>444&111</sample>,
          donde el número de origen permanece igual y el número de desvío cambia.
         ]]>
     </string>
@@ -67,32 +59,30 @@
         <br>
         <b>Opciones</b>: <br>
         <br>
-        <font color="#00BFFF"><b>Bruto</b></font> <br>
-        Consultar/informar el número bruto (<font color="#888888">222&111</font>), si la API soporta este formato. <br>
+        <title><b>Bruto</b></title> <br>
+        Consultar/informar el número bruto (<sample>222&111</sample>), si la API soporta este formato. <br>
         <br>
-        <font color="#00BFFF"><b>Original</b></font> <br>
-        Consultar/informar el número original (<font color="#888888">111</font>), esto es una solución temporal para APIs que no soportan el formato bruto. <br>
+        <title><b>Original</b></title> <br>
+        Consultar/informar el número original (<sample>111</sample>), esto es una solución temporal para APIs que no soportan el formato bruto. <br>
         <br>
-        <font color="#00BFFF"><b>Desvío</b></font> <br>
-        Consultar/informar el número de desvío (<font color="#888888">222</font>). <br>
+        <title><b>Desvío</b></title> <br>
+        Consultar/informar el número de desvío (<sample>222</sample>). <br>
         ]]>
     </string>
     <string name="forwarded_number_modified_to">Este número desviado ha sido modificado a %s.</string>
     <string name="filter">Filtro</string>
-    <string name="geo_location">Ubicación geográfica</string>
-    <string name="geo_location_rule">Regla de ubicación geográfica</string>
-    <string name="help_regex_mode_geo_location">
+    <string name="geolocation">Ubicación geográfica</string>
+    <string name="geolocation_rule">Regla de ubicación geográfica</string>
+    <string name="help_regex_mode_geolocation">
         <![CDATA[
-        <font color="#00BFFF"><b>Ubicación geográfica</b></font>:<br>
+        <title><b>Ubicación geográfica</b></title>:<br>
         &ensp; La expresión regular coincidirá con la ubicación geográfica del número. <br>
         <br>
         &ensp; Esto se basa en la biblioteca de Google <a href="https://github.com/google/libphonenumber">libphonenumber</a>,
-         una biblioteca offline que brinda información geográfica para números de teléfono. <br>
+         una base de datos offline que brinda información geográfica para números de teléfono. <br>
         <br>
-        &ensp; Si observas algún problema con la precisión de la base de datos, puedes
-        <a href="https://groups.google.com/g/libphonenumber-discuss">abrir una discusión</a>
-        o
-        <a href="https://issuetracker.google.com/issues/new?component=192347">informar un problema</a>. <br>
+        Por ejemplo: <br>
+        &ensp; Bloquea números de <no_translate><sample>San Francisco, CA</sample></no_translate> con la regex <no_translate><error>san fr.*</error></no_translate> <br>
         ]]>
     </string>
     <string name="label_value_pair">%s: %s</string>
@@ -105,10 +95,10 @@
         <![CDATA[
         Permitir llamadas locales de la misma región y bloquear las demás. <br>
         <br>
-        Reemplaza el marcador ___ con tu región real. <br>
+        Reemplaza <sample>Milan</sample> con tu región real. <br>
         <br>
-        La sintaxis <font color="#fa7f71">(?!___$).*</font> significa: <br>
-        &ensp; Coincidir cualquier texto que no sea <font color="#fa7f71">___</font>.
+        La sintaxis <error>(?!Milan$).*</error> significa: <br>
+        &ensp; Coincidir cualquier texto que no sea <error>Milan</error>.
         ]]>
     </string>
 </resources>

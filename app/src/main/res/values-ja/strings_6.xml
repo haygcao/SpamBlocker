@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        申し訳ありませんが、アプリがクラッシュしました。\n\n
-        以下の内容をコピーしてgithubでこの問題を報告してください。\n
-        報告する前に、機密情報を取り除いてください。
+    <![CDATA[
+        申し訳ありませんが、アプリがクラッシュしました。 <br>
+        <br>
+        以下の内容をコピーして、GitHubでこの問題を報告してください。
+        報告する前に機密情報を削除してください。
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item><short>日</short></item>
@@ -16,19 +19,16 @@
 
 
 
-    <string name="confirm_delete_all_records">すべてのレコードを削除してもよろしいですか？</string>
+    <string name="confirm_delete_all_records">
+        <![CDATA[
+        <error>すべての</error>レコードを削除してもよろしいですか？
+        ]]>
+    </string>
     <string name="expiry">有効期限</string>
     <string name="days">日</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        有効にした場合、SMSの内容もデータベースに記録され、このリストに表示されます。\n
-        無効にした場合はデータベースに記録されません。<br>
-        <br>
-        - 有効になっている場合:<br>
-        &emsp; <b>タップ</b>してメッセージ全体を展開/折りたたみます。<br>
-        <br>
-        - 無効になっている場合:<br>
-        &emsp; <b>タップ</b>してデフォルトのアプリで会話を開きます。
+        有効にした場合、SMSの内容もデータベースに記録され、このリストに表示されます。
         ]]>
     </string>
 
@@ -43,21 +43,40 @@
     <string name="repeated_call">繰り返し通話</string>
     <string name="help_repeated_call">
         <![CDATA[
-        一定期間内に通話が繰り返された場合、迷惑電話ではなく重要な通話である可能性が高いので許可します。 <br>
+        リピートコールを許可します。これらはスパム電話よりも緊急である可能性が高いためです。 <br>
+        <br>
+        デフォルトでは、<highlight><b>5分</b></highlight>以内の2回目の電話が許可されます。 <br>
         <br>
         <b>オプション:</b><br>
         <br>
-        <h6><font color="#00BFFF">- 頻度</h6>
-        デフォルト設定の<font color="#03DAC5"><b>1 / 5分</b></font>は、5分以内に2回目の通話が許可されることを意味します。 <br>
+        - <title><b>最大間隔</b></title> <br>
+        この時間枠内の電話のみがリピートとみなされます。 <br>
         <br>
-        <h6><font color="#00BFFF">- SMSを含める</font></h6>
-        有効にすると、その電話番号からのSMSメッセージの受信もカウントされます。<br>
+        - <title><b>最小間隔</b></title> <br>
+        この時間より早くに同じ番号から電話があった場合、それは無視されます。スパム電話ボットは通常すぐに掛け直すため、その場合はこの値を増やしてください。ブロックモードを\"サイレント\"に設定することも有効です。詳細はツールチップを確認してください。 <br>
         <br>
-        <font color="#ea86ff"><b>優先度: 10</b></font>
+        - <title><b>リピート回数</b></title> <br>
+        最小リピート回数です。 <br>
+        例: <br>
+        <sample>
+        2に設定した場合、電話が2回繰り返される必要があります。合計で3回の電話が必要です: <br>
+         &ensp; - 無視 <br>
+         &ensp; - 無視 <br>
+         &ensp; - 許可 <br>
+        </sample>
+        <br>
+        - <title><b>SMSを含める</b></title> <br>
+        有効にすると、その番号からのSMS受信もカウントされます。 <br>
+        <br>
+        <priority><b>優先度: 10</b></priority>
         ]]>
     </string>
 
 
+    <string name="max_interval_min">最大間隔 (分)</string>
+    <string name="min_interval_sec">最小間隔 (秒)</string>
+    <string name="repeat_times">繰り返し回数</string>
+    <string name="call_repeated_too_soon">この番号からの前回の電話からわずか %s ミリ秒しか経過しておらず、最小必要時間は %s ミリ秒であるため、無視します。</string>
     <string name="about">このアプリについて</string>
     <string name="version">バージョン</string>
     <string name="source_code">ソースコード</string>
@@ -71,9 +90,9 @@
         <item>.csvを複数のルールとしてインポート</item>
     </string-array>
     <string name="open_settings">設定を開く</string>
-    <string name="remove_db_number">迷惑電話データベースから番号を削除</string>
+    <string name="remove_from_db">DBから削除</string>
     <string name="copy_number">番号をコピー</string>
-    <string name="add_num_to_regex_rule">正規表現ルールに番号を追加</string>
-    <string name="add_num_to_db">迷惑電話データベースに番号を追加</string>
-    <string name="mark_all_as_read">すべて既読にする</string>
+    <string name="add_to_regex_rule">Regexルールに追加</string>
+    <string name="edit_regex_rule">Regexルールを編集</string>
+    <string name="add_to_db">DBに追加</string>
 </resources>

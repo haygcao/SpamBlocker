@@ -17,8 +17,6 @@
     <string name="clear">Löschen</string>
     <string name="test">Testen</string>
     <string name="save">Speichern</string>
-    <string name="whitelist">Whitelist</string>
-    <string name="blacklist">Blacklist</string>
     <string name="content">Inhalt</string>
     <string name="priority">Priorität</string>
     <string name="deleted_filter">(gelöschte Regel)</string>
@@ -30,20 +28,23 @@
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="ok">OK</string>
+    <string name="cancel">Abbrechen</string>
     <string name="miscellaneous">Sonstiges</string>
     <string name="quick_settings">Schnelleinstellungen</string>
     <string name="regex_settings">Regex-Einstellungen</string>
     <string name="backup">Sichern</string>
     <string name="import_">Importieren</string>
     <string name="export">Exportieren</string>
-    <string name="config_text">Konfigurationstext</string>
+    <string name="config_json">Konfigurations-JSON</string>
     <string name="imported_successfully">Erfolgreich importiert</string>
     <string name="import_fail">Import fehlgeschlagen</string>
+    <string name="exported_successfully">Erfolgreich exportiert</string>
+    <string name="export_fail">Export fehlgeschlagen</string>
     <string name="prompt_go_to_permission_setting">
         <![CDATA[
         Für diese Funktion ist eine Berechtigung erforderlich:<br>
         <br>
-        <font color="#00BFFF">%s</font><br>
+        <title>%s</title><br>
         <br>
         Sie muss manuell in den Systemeinstellungen aktiviert werden.<br>
         Einstellungen öffnen?
@@ -53,8 +54,9 @@
     <string name="label_number_rules">Telefonnummern-Regeln</string>
     <string name="label_content_rules">Nachrichten-Regeln</string>
     <string name="recent_apps"><short>Letzte Apps</short></string>
-    <string name="allow_contact">Kontakte</string>
+    <string name="contacts">Kontakte</string>
 
     <string name="number_rule">Rufnummernregel</string>
     <string name="content_rule">Nachrichtenregel</string>
+    <string name="non_contacts">Nichtkontakte</string>
 </resources>

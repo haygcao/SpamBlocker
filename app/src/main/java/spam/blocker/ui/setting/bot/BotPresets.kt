@@ -1,17 +1,19 @@
 package spam.blocker.ui.setting.bot
 
 import android.content.Context
+import android.os.Build
 import spam.blocker.BuildConfig
 import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.db.Bot
-import spam.blocker.db.IApi
 import spam.blocker.db.ImportDbReason
 import spam.blocker.db.NumberRegexTable
 import spam.blocker.db.RegexRule
+import spam.blocker.def.Def.ANDROID_12
 import spam.blocker.service.bot.BackupExport
 import spam.blocker.service.bot.BackupImport
 import spam.blocker.service.bot.CalendarEvent
+import spam.blocker.service.bot.CallScreened
 import spam.blocker.service.bot.CallThrottling
 import spam.blocker.service.bot.Daily
 import spam.blocker.service.bot.FindRules
@@ -24,79 +26,85 @@ import spam.blocker.service.bot.ParseCSV
 import spam.blocker.service.bot.ParseXML
 import spam.blocker.service.bot.Periodically
 import spam.blocker.service.bot.QuickTile
+import spam.blocker.service.bot.ReplyRuleType
 import spam.blocker.service.bot.Ringtone
+import spam.blocker.service.bot.RingtoneRule
+import spam.blocker.service.bot.RingtoneRuleType
 import spam.blocker.service.bot.SaveBotTag
 import spam.blocker.service.bot.Schedule
+import spam.blocker.service.bot.SendSms
 import spam.blocker.service.bot.SetTag
 import spam.blocker.service.bot.SmsThrottling
+import spam.blocker.service.bot.TextReply
+import spam.blocker.service.bot.TextReplyRule
 import spam.blocker.service.bot.Time
 import spam.blocker.service.bot.Weekly
 import spam.blocker.service.bot.WriteFile
-import spam.blocker.ui.setting.api.ApiReportPreset_PhoneBlock
-import spam.blocker.ui.setting.api.AuthConfig
-import spam.blocker.ui.setting.api.authConfig_PhoneBlock
+import spam.blocker.ui.setting.api.ApiSetupDialog
+import spam.blocker.ui.setting.api.OAuthSetupDialog
+import spam.blocker.ui.setting.api.PhoneBlock
 import spam.blocker.util.Lambda1
 import spam.blocker.util.Permission
 import spam.blocker.util.PermissionWrapper
 import java.time.DayOfWeek.MONDAY
 
 class BotPreset(
+    val descId: Int,
     val tooltip: (Context)->String,
-    val newInstance: (Context) -> Bot,
-    val afterCreated: Lambda1<Context>? = null,
-    // APIs like PhoneBlock support both query/report.
-    // When creating the query API, also create the report API to avoid asking for API key twice.
-    val newReportApi: ((Context) -> IApi)? = null,
-    // Show a dialog for inputting authorization information(API_TOKEN/Username/Password).
-    val newAuthConfig: (() -> AuthConfig)? = null,
-    val requiredPermissions: List<PermissionWrapper> = listOf()
+
+    // While `actions.requiredPermissions()` is the ideal way for checking permissions, this approach is easier to implement.
+    val requiredPermissions: List<PermissionWrapper> = listOf(),
+
+    // Either of these must exist
+    val setupDialog: ApiSetupDialog? = null,
+    val doAdd: Lambda1<Context>? = null,
 )
 
 
 val BotPresets = listOf(
     // PhoneBlock offline numbers
     BotPreset(
+        descId = R.string.bot_preset_phoneblock,
         tooltip = {
             it.getString(R.string.help_bot_preset_phoneblock).format(
                 "<a href=\"https://phoneblock.net\">https://phoneblock.net</a>"
             )
         },
-        requiredPermissions = listOf(
-            PermissionWrapper(Permission.phoneState)
-        ),
-        newInstance = { ctx ->
-            Bot(
-                desc = ctx.getString(R.string.bot_preset_phoneblock),
-                trigger = Schedule(
-                    schedule = Periodically(Time(hour = 23, min = 50)),
-                ),
-                actions = listOf(
-                    LoadBotTag(tagName = "version", defaultValue = "0"),
-                    HttpRequest(
-                        url = if (BuildConfig.DEBUG)
-                            "https://phoneblock.net/pb-test/api/blocklist?format=xml&since={version}"
-                        else
-                            "https://phoneblock.net/phoneblock/api/blocklist?format=xml&since={version}",
-                        header = "{bearer_auth({api_key})}",
+        setupDialog = OAuthSetupDialog(
+            spfTokenKey = PhoneBlock.spfTokenKey,
+            oauthUrl = if (BuildConfig.DEBUG) PhoneBlock.oauthUrl_Debug else PhoneBlock.oauthUrl,
+            doAdd = { ctx ->
+                val newBot = Bot(
+                    desc = ctx.getString(R.string.bot_preset_phoneblock),
+                    trigger = Schedule(
+                        schedule = Periodically(Time(hour = 23, min = 50)),
                     ),
-                    GenerateTag(
-                        tagName = "version",
-                        parseType = 1, // 1 == xpath
-                        xpath = "/blocklist/@version",
-                    ),
-                    ParseXML(xpath = "//phone-info[@votes > 4]/@phone"),
-                    ImportToSpamDB(importReason = ImportDbReason.ByAPI),
-                    SaveBotTag(tagName = "version"),
+                    actions = listOf(
+                        LoadBotTag(tagName = "version", defaultValue = "0"),
+                        HttpRequest(
+                            url = if (BuildConfig.DEBUG)
+                                "https://phoneblock.net/pb-test/api/blocklist?format=xml&since={version}"
+                            else
+                                "https://phoneblock.net/phoneblock/api/blocklist?format=xml&since={version}",
+                            header = "{bearer_auth({shared_pref(${PhoneBlock.spfTokenKey})})}",
+                        ),
+                        GenerateTag(
+                            tagName = "version",
+                            parseType = 1, // 1 == xpath
+                            xpath = "/blocklist/@version",
+                        ),
+                        ParseXML(xpath = "//phone-info[@votes > 4]/@phone"),
+                        ImportToSpamDB(importReason = ImportDbReason.ByAPI),
+                        SaveBotTag(tagName = "version"),
+                    )
                 )
-            )
-        },
-        newAuthConfig = { authConfig_PhoneBlock.copy() },
-        newReportApi = { ctx ->
-            ApiReportPreset_PhoneBlock.newInstance(ctx)
-        }
+                addBotToDB(ctx, newBot)
+            }
+        ),
     ),
     // FTC Do Not Call
     BotPreset(
+        descId = R.string.bot_preset_dnc,
         tooltip = {
             it.getString(R.string.help_bot_preset_dnc)
                 .format(
@@ -104,11 +112,8 @@ val BotPresets = listOf(
                     "<a href=\"https://www.ftc.gov/policy-notices/open-government/data-sets/do-not-call-data\">FTC - Do Not Call</a>"
                 )
         },
-        requiredPermissions = listOf(
-            PermissionWrapper(Permission.phoneState)
-        ),
-        newInstance = { ctx ->
-            Bot(
+        doAdd = { ctx ->
+            val newBot = Bot(
                 desc = ctx.getString(R.string.bot_preset_dnc),
                 trigger = Schedule(schedule = Daily(Time(hour = 18))),
                 actions = listOf(
@@ -121,25 +126,72 @@ val BotPresets = listOf(
                     SaveBotTag(tagName = "csv_name"),
                 )
             )
+            addBotToDB(ctx, newBot)
+        }
+    ),
+
+    // Auto SMS Reply
+    BotPreset(
+        descId = R.string.sms_reply,
+        tooltip = { it.getString(R.string.help_bot_preset_sms_reply) },
+        requiredPermissions = buildList {
+            add(PermissionWrapper(Permission.contacts))
+            add(PermissionWrapper(Permission.sendSMS))
+            if (Build.VERSION.SDK_INT < ANDROID_12) {
+                add(PermissionWrapper((Permission.phoneState)))
+            }
+        },
+        doAdd = { ctx ->
+            val newBot = Bot(
+                desc = ctx.getString(R.string.sms_reply),
+                trigger = CallScreened(),
+                actions = listOf(
+                    TextReply(rules = listOf(
+                        TextReplyRule(
+                            replyText = ctx.getString(R.string.cant_talk_in_meeting),
+                            type = ReplyRuleType.MeetingMode
+                        ),
+                        TextReplyRule(
+                            replyText = ctx.getString(R.string.busy_right_now),
+                        )
+                    )),
+                    SendSms()
+                )
+            )
+            addBotToDB(ctx, newBot)
         }
     ),
 
     // Ringtone <-> Regex Rule
     BotPreset(
+        descId = R.string.ringtone,
         tooltip = { it.getString(R.string.help_preset_ringtone) },
-        newInstance = { ctx ->
-            Bot(
+        requiredPermissions = listOf(PermissionWrapper(Permission.writeSettings)),
+        doAdd = { ctx ->
+            val newBot = Bot(
                 desc = ctx.getString(R.string.ringtone),
-                trigger = Ringtone(bindTo = "{ \"regex\": \"${ctx.getString(R.string.replace_this)}\" }"),
+                trigger = Ringtone(
+                    rules = listOf(
+                        RingtoneRule(
+                            type = RingtoneRuleType.NumberRule,
+                            extraRegex = ctx.getString(R.string.replace_this)
+                        ),
+                        RingtoneRule(
+                            type = RingtoneRuleType.RepeatedCall,
+                        ),
+                    )
+                ),
             )
+            addBotToDB(ctx, newBot)
         }
     ),
 
     // Tile Switch
     BotPreset(
+        descId = R.string.custom_tile,
         tooltip = { it.getString(R.string.help_custom_tile) },
-        newInstance = { ctx ->
-            Bot(
+        doAdd = { ctx ->
+            val newBot = Bot(
                 desc = ctx.getString(R.string.custom_tile),
                 trigger = QuickTile(),
                 actions = listOf(
@@ -147,10 +199,10 @@ val BotPresets = listOf(
                     ModifyRules(config = "{\"flags\": 3}"),
                 )
             )
-        },
-        afterCreated = { ctx ->
+            addBotToDB(ctx, newBot)
+
             // Add a regex rule
-            NumberRegexTable().addNewRule(ctx, RegexRule(
+            NumberRegexTable().addNew(ctx, RegexRule(
                 pattern = ".*",
                 description = ctx.getString(R.string.toggled_by_tile),
                 flags = 0, // disabled for call/sms
@@ -162,10 +214,12 @@ val BotPresets = listOf(
 
     // Calendar Event
     BotPreset(
+        descId = R.string.calendar_event,
         tooltip = { it.getString(R.string.help_calendar_event_template) },
-        newInstance = { ctx ->
+        requiredPermissions = listOf(PermissionWrapper(Permission.calendar)),
+        doAdd = { ctx ->
             val ruleDesc = ctx.getString(R.string.calendar_event)
-            Bot(
+            val newBot = Bot(
                 desc = ctx.getString(R.string.calendar_event),
                 trigger = CalendarEvent(eventTitle = ctx.getString(R.string.working)),
                 actions = listOf(
@@ -173,11 +227,10 @@ val BotPresets = listOf(
                     ModifyRules(config = "{\"flags\": 3}"),
                 )
             )
-        },
-        afterCreated = { ctx ->
+            addBotToDB(ctx, newBot)
+
             // Add a regex rule
-            val ruleDesc = ctx.getString(R.string.calendar_event)
-            NumberRegexTable().addNewRule(ctx, RegexRule(
+            NumberRegexTable().addNew(ctx, RegexRule(
                 pattern = ".*",
                 description = ruleDesc,
                 flags = 0, // disabled for call/sms
@@ -188,10 +241,12 @@ val BotPresets = listOf(
 
     // Call Throttling
     BotPreset(
+        descId = R.string.throttled_call,
         tooltip = { it.getString(R.string.help_call_throttling_template) },
-        newInstance = { ctx ->
+        requiredPermissions = listOf(PermissionWrapper(Permission.callLog)),
+        doAdd = { ctx ->
             val ruleDesc = ctx.getString(R.string.throttled_call)
-            Bot(
+            val newBot = Bot(
                 desc = ctx.getString(R.string.call_throttling),
                 trigger = CallThrottling(
                     includingBlocked = true,
@@ -202,11 +257,10 @@ val BotPresets = listOf(
                     ModifyRules(config = "{\"flags\": 1}"),
                 )
             )
-        },
-        afterCreated = { ctx ->
+            addBotToDB(ctx, newBot)
+
             // Add a regex rule
-            val ruleDesc = ctx.getString(R.string.throttled_call)
-            NumberRegexTable().addNewRule(ctx, RegexRule(
+            NumberRegexTable().addNew(ctx, RegexRule(
                 pattern = ".*",
                 description = ruleDesc,
                 flags = 0,
@@ -217,10 +271,12 @@ val BotPresets = listOf(
 
     // SMS Throttling
     BotPreset(
+        descId = R.string.throttled_sms,
         tooltip = { it.getString(R.string.help_sms_throttling_template) },
-        newInstance = { ctx ->
+        requiredPermissions = listOf(PermissionWrapper(Permission.readSMS)),
+        doAdd = { ctx ->
             val ruleDesc = ctx.getString(R.string.throttled_sms)
-            Bot(
+            val newBot = Bot(
                 desc = ctx.getString(R.string.sms_throttling),
                 trigger = SmsThrottling(targetRuleDesc = ruleDesc),
                 actions = listOf(
@@ -228,11 +284,10 @@ val BotPresets = listOf(
                     ModifyRules(config = "{\"flags\": 2}"),
                 )
             )
-        },
-        afterCreated = { ctx ->
+            addBotToDB(ctx, newBot)
+
             // Add a regex rule
-            val ruleDesc = ctx.getString(R.string.throttled_sms)
-            NumberRegexTable().addNewRule(ctx, RegexRule(
+            NumberRegexTable().addNew(ctx, RegexRule(
                 pattern = ".*",
                 description = ruleDesc,
                 flags = 0,
@@ -243,9 +298,10 @@ val BotPresets = listOf(
 
     // Remote Setup
     BotPreset(
+        descId = R.string.remote_setup,
         tooltip = { it.getString(R.string.help_remote_setup) },
-        newInstance = { ctx ->
-            Bot(
+        doAdd = { ctx ->
+            val newBot = Bot(
                 desc = ctx.getString(R.string.remote_setup),
                 trigger = Schedule(
                     enabled = true,
@@ -258,14 +314,16 @@ val BotPresets = listOf(
                     BackupImport(),
                 )
             )
+            addBotToDB(ctx, newBot)
         }
     ),
 
     // Auto Backup on Monday midnight
     BotPreset(
+        descId = R.string.bot_preset_auto_backup,
         tooltip = { it.getString(R.string.help_bot_preset_auto_backup) },
-        newInstance = { ctx ->
-            Bot(
+        doAdd = { ctx ->
+            val newBot = Bot(
                 desc = ctx.getString(R.string.bot_preset_auto_backup),
                 trigger = Schedule(
                     enabled = true,
@@ -279,6 +337,7 @@ val BotPresets = listOf(
                     WriteFile(filename = "SpamBlocker.auto.gz")
                 )
             )
+            addBotToDB(ctx, newBot)
         }
     )
 )

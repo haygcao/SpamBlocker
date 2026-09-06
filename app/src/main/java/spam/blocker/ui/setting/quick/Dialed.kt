@@ -12,10 +12,15 @@ import androidx.compose.ui.platform.LocalContext
 import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.ui.setting.LabeledRow
+import spam.blocker.ui.widgets.DurationButton
 import spam.blocker.ui.widgets.GreyButton
-import spam.blocker.ui.widgets.NumberInputBox
+import spam.blocker.ui.widgets.GreyIcon16
+import spam.blocker.ui.widgets.GreyIcon18
+import spam.blocker.ui.widgets.GreyIcon20
 import spam.blocker.ui.widgets.PluralStr
 import spam.blocker.ui.widgets.PopupDialog
+import spam.blocker.ui.widgets.Str
+import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.ui.widgets.SwitchBox
 import spam.blocker.util.Permission
 import spam.blocker.util.PermissionWrapper
@@ -26,9 +31,10 @@ fun Dialed() {
     val ctx = LocalContext.current
     val spf = spf.Dialed(ctx)
 
-    var isEnabled by remember { mutableStateOf(spf.isEnabled() && Permission.callLog.isGranted) }
-    var smsEnabled by remember(Permission.readSMS.isGranted) { mutableStateOf(spf.isSmsEnabled() && Permission.readSMS.isGranted) }
-    var inXDay by remember { mutableIntStateOf(spf.getDays()) }
+    var isEnabled by remember { mutableStateOf(spf.isEnabled && Permission.callLog.isGranted) }
+    var smsEnabled by remember(Permission.readSMS.isGranted) { mutableStateOf(spf.isSmsEnabled && Permission.readSMS.isGranted) }
+    var always by remember { mutableStateOf(spf.always) }
+    var inXDay by remember { mutableIntStateOf(spf.days) }
 
     // popup
     val popupTrigger = rememberSaveable { mutableStateOf(false) }
@@ -36,17 +42,26 @@ fun Dialed() {
     PopupDialog(
         trigger = popupTrigger,
         content = {
-            NumberInputBox(
-                intValue = inXDay,
-                onValueChange = { newValue, hasError ->
-                    if (!hasError) {
-                        inXDay = newValue!!
-                        spf.setDays(newValue)
-                    }
-                },
-                labelId = R.string.within_days,
-                leadingIconId = R.drawable.ic_duration,
-            )
+            // Duration
+            LabeledRow(R.string.time_range) {
+                DurationButton(
+                    alwaysEnabled = always,
+                    alwaysLabelId = R.string.all_time,
+                    onEnableChange = { isOn ->
+                        spf.always = isOn
+                        always = isOn
+                    },
+                    duration = inXDay,
+                    onDurationChange = { newValue, hasError ->
+                        if (!hasError) {
+                            inXDay = newValue!!
+                            spf.days = newValue
+                        }
+                    },
+                    durationLabelId = R.string.within_days,
+                )
+            }
+
             LabeledRow(
                 R.string.include_sms,
                 content = {
@@ -57,12 +72,12 @@ fun Dialed() {
                                 listOf(PermissionWrapper(Permission.readSMS))
                             ) { granted ->
                                 if (granted) {
-                                    spf.setSmsEnabled(true)
+                                    spf.isSmsEnabled = true
                                     smsEnabled = true
                                 }
                             }
                         } else {
-                            spf.setSmsEnabled(false)
+                            spf.isSmsEnabled = false
                             smsEnabled = false
                         }
                     }
@@ -84,7 +99,11 @@ fun Dialed() {
         content = {
             if (isEnabled && Permission.callLog.isGranted) {
                 GreyButton(
-                    label = PluralStr(inXDay!!, R.plurals.days),
+                    label = if (!always) {
+                        PluralStr(inXDay, R.plurals.days)
+                    } else {
+                        Str(R.string.all_time)
+                    }
                 ) {
                     popupTrigger.value = true
                 }
@@ -96,20 +115,43 @@ fun Dialed() {
                         listOf(
                             PermissionWrapper(Permission.callLog),
                             // For matching different SIM country codes when using multiple SIM cards,
-                            //  for frequent international travellers.
+                            //  for frequent international travelers.
                             PermissionWrapper(Permission.phoneState, isOptional =  true),
                         )
                     ) { granted ->
                         if (granted) {
-                            spf.setEnabled(true)
+                            spf.isEnabled = true
                             isEnabled = true
                         }
                     }
                 } else {
-                    spf.setEnabled(false)
+                    spf.isEnabled = false
                     isEnabled = false
                 }
             }
         }
     )
+}
+
+@Composable
+fun DialedSummary() {
+    val ctx = LocalContext.current
+    val spf = spf.Dialed(ctx)
+
+    val isEnabled by remember { mutableStateOf(spf.isEnabled && Permission.callLog.isGranted) }
+    if (isEnabled) {
+        val always by remember { mutableStateOf(spf.always) }
+        val inXDay by remember { mutableIntStateOf(spf.days) }
+
+        StrokeButton(
+            label = if (!always) {
+                PluralStr(inXDay, R.plurals.days)
+            } else {
+                Str(R.string.all_time)
+            },
+            color = G.palette.textGrey,
+            icon = { GreyIcon20(R.drawable.ic_call_out) },
+            enabled = false,
+        )
+    }
 }

@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        מצטערים, האפליקציה קרסה.\n\n
-        אנא העתק את התוכן למטה ודווח על בעיה זו ב-GitHub,
-        הסר כל מידע רגיש לפני הדיווח.
+    <![CDATA[
+        מצטערים, האפליקציה קרסה. <br>
+        <br>
+        אנא העתקו את התוכן למטה ודווחו על הבעיה ב‑GitHub,
+        הסירו כל מידע רגיש לפני הדיווח.
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>א׳</item>
@@ -16,25 +19,23 @@
 
 
 
-    <string name="confirm_delete_all_records">האם לאשר מחיקת כל הרשומות?</string>
+    <string name="confirm_delete_all_records">
+        <![CDATA[
+        האם לאשר מחיקת <error>כל</error> הרשומות?
+        ]]>
+    </string>
     <string name="expiry">תפוגה</string>
     <string name="days">ימים</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        כאשר מופעל, תוכן ההודעות יירשם גם במסד הנתונים ויוצג ברשימה זו, הוא לא יירשם במסד הנתונים כאשר מושבת.<br>
-        <br>
-        - כאשר מופעל:<br>
-        &emsp; <b>הקש</b> כדי להרחיב/לכווץ את ההודעה המלאה.<br>
-        <br>
-        - כאשר מושבת:<br>
-        &emsp; <b>הקש</b> כדי לפתוח את השיחה באפליקציית ברירת המחדל.
+        כאשר מופעל, תוכן ההודעות יירשם גם במסד הנתונים ויוצג ברשימה זו, הוא לא יירשם במסד הנתונים כאשר מושבת.
         ]]>
     </string>
     <string name="copy_number">העתק מספר</string>
-    <string name="add_num_to_regex_rule">הוסף מספר לחוק Regex</string>
-    <string name="add_num_to_db">הוסף מספר למאגר נתוני ספאם</string>
-    <string name="mark_all_as_read">סמן הכל כנקרא</string>
-    <string name="remove_db_number">מחק מספר ממאגר נתוני ספאם</string>
+    <string name="add_to_regex_rule">הוסף לחוק Regex</string>
+    <string name="edit_regex_rule">ערוך כלל Regex</string>
+    <string name="add_to_db">הוסף למסד הנתונים</string>
+    <string name="remove_from_db">הסר ממסד הנתונים</string>
 
     <string name="language">שפה</string>
     <string name="help_language">
@@ -45,21 +46,40 @@
     <string name="repeated_call">שיחה חוזרת</string>
     <string name="help_repeated_call">
         <![CDATA[
-        אפשר אם השיחה חוזרת בתוך פרק זמן מסוים, סביר להניח שהיא חשובה ולא שיחת ספאם. <br>
+        אפשר שיחות חוזרות, סביר יותר שהן דחופות מאשר ספאם. <br>
+        <br>
+        כברירת מחדל, שיחה שנייה בתוך <highlight><b>5 דקות</b></highlight> תאושר. <br>
         <br>
         <b>אפשרויות:</b><br>
         <br>
-        <h6><font color="#00BFFF">- תדירות</h6>
-        ההגדרה ברירת המחדל <font color="#03DAC5"><b>1 / 5 דקות</b></font> פירושה שהשיחה השנייה בתוך 5 דקות תאושר. <br>
+        - <title><b>מרווח מקסימלי</b></title> <br>
+        רק שיחות בטווח זמן זה נחשבות לחזרות. <br>
         <br>
-        <h6><font color="#00BFFF">- כלול SMS</font></h6>
-        כאשר מופעל, קבלת הודעות SMS מאותו מספר נספרת גם כן.<br>
+        - <title><b>מרווח מינימלי</b></title> <br>
+        אם מספר מתקשר שוב לפני זמן זה, הוא יתעלם. בוטים של שיחות ספאם בדרך כלל מחייגים שוב באופן מיידי, במקרה זה הגדל את הערך הזה. הגדרת מצב החסימה ל\"שקט\" (Silence) יכולה גם לעזור, בדוק את הטיפ עבור פרטים נוספים. <br>
         <br>
-        <font color="#ea86ff"><b>עדיפות: 10</b></font>
+        - <title><b>מספר חזרות</b></title> <br>
+        מספר החזרות המינימלי. <br>
+        לדוגמה: <br>
+        <sample>
+        כאשר מוגדר ל-2, שיחה חייבת לחזור פעמיים. בסך הכל, נדרשות שלוש שיחות: <br>
+         &ensp; - התעלם <br>
+         &ensp; - התעלם <br>
+         &ensp; - אפשר <br>
+        </sample>
+        <br>
+        - <title><b>כולל SMS</b></title> <br>
+        כאשר מופעל, קבלת הודעות SMS מאותו מספר נספרת גם היא. <br>
+        <br>
+        <priority><b>עדיפות: 10</b></priority>
         ]]>
     </string>
 
 
+    <string name="max_interval_min">מרווח מקסימלי (דקות)</string>
+    <string name="min_interval_sec">מרווח מינימלי (שניות)</string>
+    <string name="repeat_times">מספר חזרות</string>
+    <string name="call_repeated_too_soon">רק %s מילישניות מאז השיחה האחרונה ממספר זה, המינימום הנדרש הוא %s מילישניות, התעלם.</string>
     <string name="about">אודות</string>
     <string name="version">גרסה</string>
     <string name="source_code">קוד מקור</string>

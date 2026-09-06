@@ -4,12 +4,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -30,12 +30,13 @@ import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
 import spam.blocker.ui.setting.bot.ActionHeader
 import spam.blocker.ui.setting.bot.ActionList
-import spam.blocker.ui.theme.LocalPalette
-import spam.blocker.ui.theme.Teal200
 import spam.blocker.ui.widgets.AnimatedVisibleV
 import spam.blocker.ui.widgets.Button
+import spam.blocker.ui.widgets.GreyIcon18
+import spam.blocker.ui.widgets.Placeholder
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.PopupSize
+import spam.blocker.ui.widgets.RegexInputBox
 import spam.blocker.ui.widgets.ResImage
 import spam.blocker.ui.widgets.RowVCenterSpaced
 import spam.blocker.ui.widgets.Section
@@ -43,6 +44,7 @@ import spam.blocker.ui.widgets.Str
 import spam.blocker.ui.widgets.StrInputBox
 import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.ui.widgets.SwitchBox
+import spam.blocker.util.Lambda
 import spam.blocker.util.Lambda1
 import spam.blocker.util.hasFlag
 import spam.blocker.util.setFlag
@@ -50,7 +52,7 @@ import spam.blocker.util.setFlag
 private val autoReportFlags = listOf(
     AutoReportTypes.NonContact,
     AutoReportTypes.STIR,
-    AutoReportTypes.NumberRegex
+    AutoReportTypes.Regex
 )
 private val autoReportIcons = listOf(
     R.drawable.ic_contact_square,
@@ -58,7 +60,7 @@ private val autoReportIcons = listOf(
     R.drawable.ic_regex
 )
 private val autoReportLabelIds = listOf(
-    R.string.non_contacts,
+    R.string.non_contact,
     R.string.stir_attestation,
     R.string.regex_pattern
 )
@@ -66,7 +68,8 @@ private val autoReportLabelIds = listOf(
 @Composable
 fun PopupEditAutoReport(
     trigger: MutableState<Boolean>,
-    flags: MutableState<Int?>
+    flags: MutableState<Int?>,
+    regexDescFilter: MutableState<String?>,
 ) {
     PopupDialog(trigger) {
         Column {
@@ -82,6 +85,23 @@ fun PopupEditAutoReport(
                     )
                 }
             }
+            val isRegexEnabled = flags.value!!.hasFlag(AutoReportTypes.Regex)
+            AnimatedVisibleV(isRegexEnabled) {
+                RegexInputBox(
+                    regexStr = regexDescFilter.value ?: ".*",
+                    label = { Text(Str(R.string.description_filter)) },
+                    helpTooltipId = R.string.help_auto_report_filter_by_rule_description,
+                    onRegexStrChange = { newVal, hasErr ->
+                        if (!hasErr)
+                            regexDescFilter.value = newVal
+                    },
+                    leadingIcon = { GreyIcon18(R.drawable.ic_filter) },
+                    placeholder = { Placeholder(".*") },
+                    regexFlags = remember { mutableIntStateOf(0) },
+                    showFlagsIcon = false,
+                    onFlagsChange = {}
+                )
+            }
         }
     }
 }
@@ -90,14 +110,14 @@ fun PopupEditAutoReport(
 fun AutoReportIcons(
     autoReportTypes: Int
 ) {
-    val C = LocalPalette.current
+    val C = G.palette
 
-    RowVCenterSpaced(4, modifier = M.padding(start = 12.dp)) {
+    RowVCenterSpaced(4) {
         for (i in 0..2) {
             val hasFlag = autoReportTypes.hasFlag(autoReportFlags[i]) == true
             ResImage(
                 autoReportIcons[i],
-                if(hasFlag) C.enabled else C.disabled,
+                if(hasFlag) C.error else C.disabled,
                 M.size(18.dp)
             )
         }
@@ -105,10 +125,11 @@ fun AutoReportIcons(
 }
 @Composable
 fun AutoReportTypesButton(
-    autoReportTypes: MutableState<Int?>
+    autoReportTypes: MutableState<Int?>,
+    regexDescFilter: MutableState<String?>,
 ) {
     val editTrigger = remember { mutableStateOf(false) }
-    PopupEditAutoReport(editTrigger, autoReportTypes)
+    PopupEditAutoReport(editTrigger, autoReportTypes, regexDescFilter)
 
     Button(
         content = {
@@ -123,13 +144,18 @@ fun AutoReportTypesButton(
 fun EditApiDialog(
     trigger: MutableState<Boolean>,
     onSave: Lambda1<IApi>,
+
+    // Reload api list after this dialog is closed, changes seem to persist when modified
+    //  but not saved, don't know why. An ugly workaround.
+    onDismiss: Lambda,
+
     initial: IApi,
 ) {
     if (!trigger.value) {
         return
     }
 
-    val C = LocalPalette.current
+    val C = G.palette
     val ctx = LocalContext.current
 
     val isReportApi = rememberSaveable { initial is ReportApi}
@@ -142,6 +168,11 @@ fun EditApiDialog(
             if (isReportApi) (initial as ReportApi).autoReportTypes else null
         )
     }
+    val regexFilter = rememberSaveable {
+        mutableStateOf<String?>(
+            if (isReportApi) (initial as ReportApi).autoReportRegexFilter else null
+        )
+    }
 
 
     // if any error, disable the Save button
@@ -149,15 +180,16 @@ fun EditApiDialog(
 
     PopupDialog(
         trigger = trigger,
-        popupSize = PopupSize(percentage = 0.9f, minWidth = 340, maxWidth = 600),
+        popupSize = PopupSize(maxWidthPercentage = 0.9f, minWidthDp = 340, maxWidthDp = 600),
+        onDismiss = onDismiss,
         buttons = {
             StrokeButton(
                 label = Str(R.string.save),
-                color = if (anyError) C.disabled else Teal200,
+                color = if (anyError) C.disabled else C.teal200,
                 enabled = !anyError,
                 onClick = {
                     // Gather all required permissions for all actions
-                    val requiredPermissions = actions.map { it.requiredPermissions(ctx) }.flatten()
+                    val requiredPermissions = actions.flatMap { it.requiredPermissions(ctx) }
 
                     G.permissionChain.ask(ctx, requiredPermissions) { isGranted ->
                         if (isGranted) {
@@ -174,7 +206,8 @@ fun EditApiDialog(
                                     desc = description,
                                     enabled = enabled,
                                     actions = actions,
-                                    autoReportTypes = autoReportTypes.value!!
+                                    autoReportTypes = autoReportTypes.value!!,
+                                    autoReportRegexFilter = regexFilter.value
                                 )
                             }
 
@@ -209,7 +242,7 @@ fun EditApiDialog(
                         labelId = R.string.auto_report,
                         helpTooltip = Str(R.string.help_auto_report_type)
                     ) {
-                        AutoReportTypesButton(autoReportTypes!!)
+                        AutoReportTypesButton(autoReportTypes!!, regexFilter)
                     }
                 }
 

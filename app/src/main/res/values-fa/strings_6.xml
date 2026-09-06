@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        متاسفیم، برنامه دچار خطا شده است.\n\n
-        لطفاً محتوای زیر را کپی کرده و این مشکل را در گیت‌هاب گزارش دهید،
-        قبل از گزارش، هرگونه اطلاعات حساس را حذف کنید.
+    <![CDATA[
+        متأسفانه، برنامه خراب شده است. <br>
+        <br>
+        لطفاً محتوای زیر را کپی کنید و این مشکل را در گیت‌هاب گزارش دهید،
+        قبل از گزارش‌دادن هر اطلاعات حساسی را حذف کنید.
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>یکشنبه</item>
@@ -16,18 +19,16 @@
 
 
 
-    <string name="confirm_delete_all_records">آیا از حذف همه سوابق مطمئن هستید؟</string>
+    <string name="confirm_delete_all_records">
+        <![CDATA[
+        آیا از حذف <error>همه</error> سوابق مطمئن هستید؟
+        ]]>
+    </string>
     <string name="expiry">انقضا</string>
     <string name="days">روز</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        در صورت فعال بودن، محتوای پیامک نیز در پایگاه داده ثبت و در این لیست نمایش داده می‌شود، در غیر این صورت در پایگاه داده ثبت نمی‌شود.<br>
-        <br>
-        - در صورت فعال بودن:<br>
-        &emsp; <b>ضربه بزنید</b> برای گسترش/جمع کردن پیام کامل.<br>
-        <br>
-        - در صورت غیرفعال بودن:<br>
-        &emsp; <b>ضربه بزنید</b> برای باز کردن مکالمه در برنامه پیش‌فرض.
+        در صورت فعال بودن، محتوای پیامک نیز در پایگاه داده ثبت و در این لیست نمایش داده می‌شود، در غیر این صورت در پایگاه داده ثبت نمی‌شود.
         ]]>
     </string>
 
@@ -42,21 +43,40 @@
     <string name="repeated_call">تماس مکرر</string>
     <string name="help_repeated_call">
         <![CDATA[
-        اگر تماس در یک دوره زمانی تکرار شود، اجازه داده شود؛ به احتمال زیاد مهم است نه تماس اسپم. <br>
+        اجازه دادن به تماس‌های تکراری، زیرا احتمالاً بیشتر از اسپم ضروری هستند. <br>
+        <br>
+        به طور پیش‌فرض، تماس دوم در بازه زمانی <highlight><b>5 دقیقه</b></highlight> مجاز خواهد بود. <br>
         <br>
         <b>گزینه‌ها:</b><br>
         <br>
-        <h6><font color="#00BFFF">- فرکانس</h6>
-        تنظیم پیش‌فرض <font color="#03DAC5"><b>1 / 5 دقیقه</b></font> به این معنی است که تماس دوم در عرض 5 دقیقه مجاز خواهد بود. <br>
+        - <title><b>حداکثر فاصله</b></title> <br>
+        فقط تماس‌هایی که در این بازه زمانی باشند به عنوان تکرار در نظر گرفته می‌شوند. <br>
         <br>
-        <h6><font color="#00BFFF">- شامل پیامک</font></h6>
-        در صورت فعال بودن، دریافت پیامک از آن شماره نیز محاسبه می‌شود.<br>
+        - <title><b>حداقل فاصله</b></title> <br>
+        اگر شماره‌ای زودتر از این زمان دوباره تماس بگیرد، نادیده گرفته می‌شود. بات‌های تماس اسپم معمولاً فوراً تماس می‌گیرند، در این صورت این مقدار را افزایش دهید. تنظیم حالت مسدودسازی روی \"بی‌صدا\" (Silence) نیز می‌تواند کمک کند، برای جزئیات راهنمای آن را بررسی کنید. <br>
         <br>
-        <font color="#ea86ff"><b>اولویت: 10</b></font>
+        - <title><b>تعداد تکرار</b></title> <br>
+        حداقل تعداد تکرارها. <br>
+        برای مثال: <br>
+        <sample>
+        وقتی روی 2 تنظیم شود، یک تماس باید دو بار تکرار شود. در مجموع، سه تماس لازم است: <br>
+         &ensp; - نادیده گرفتن <br>
+         &ensp; - نادیده گرفتن <br>
+         &ensp; - اجازه دادن <br>
+        </sample>
+        <br>
+        - <title><b>شامل پیامک‌ها</b></title> <br>
+        در صورت فعال بودن، دریافت پیامک از آن شماره نیز شمارش می‌شود. <br>
+        <br>
+        <priority><b>اولویت: 10</b></priority>
         ]]>
     </string>
 
 
+    <string name="max_interval_min">حداکثر فاصله (دقیقه)</string>
+    <string name="min_interval_sec">حداقل فاصله (ثانیه)</string>
+    <string name="repeat_times">تعداد تکرار</string>
+    <string name="call_repeated_too_soon">تنها %s میلی‌ثانیه از آخرین تماس این شماره گذشته است، حداقل زمان مورد نیاز %s میلی‌ثانیه است، نادیده گرفته شود.</string>
     <string name="about">درباره</string>
     <string name="version">نسخه</string>
     <string name="source_code">کد منبع</string>
@@ -69,9 +89,9 @@
         <item>وارد کردن .csv به عنوان قوانین چندگانه</item>
     </string-array>
     <string name="open_settings">باز کردن تنظیمات</string>
-    <string name="remove_db_number">حذف شماره از پایگاه داده اسپم</string>
+    <string name="remove_from_db">حذف از پایگاه داده</string>
     <string name="copy_number">کپی شماره</string>
-    <string name="add_num_to_regex_rule">افزودن شماره به قانون Regex</string>
-    <string name="add_num_to_db">افزودن شماره به پایگاه داده اسپم</string>
-    <string name="mark_all_as_read">علامت‌گذاری همه به عنوان خوانده شده</string>
+    <string name="add_to_regex_rule">افزودن به قانون Regex</string>
+    <string name="edit_regex_rule">ویرایش قانون Regex</string>
+    <string name="add_to_db">افزودن به پایگاه داده</string>
 </resources>

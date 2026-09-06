@@ -1,31 +1,4 @@
 <resources>
-    <string name="api_preset_groq">Groq</string>
-    <string name="help_api_preset_groq">
-        <![CDATA[
-        Überprüfe den SMS-Inhalt mit <b>Groq AI</b>, es benötigt nur ein E-Mail-Konto.
-        ]]>
-    </string>
-    <string name="help_api_preset_groq_authorization">
-        <![CDATA[
-        1. Registrieren und anmelden: <br>
-         <a href="https://console.groq.com/login">https://console.groq.com/login</a><br>
-         <br>
-        2. Öffne die API-Seite:<br>
-         <a href="https://console.groq.com/keys">https://console.groq.com/keys</a><br>
-        <br>
-        3. Drücke den <translate>„API-Schlüssel erstellen“</translate> Button.<br>
-        <br>
-        4. Kopiere den Schlüssel und fülle ihn unten aus.
-        ]]>
-    </string>
-    <string name="spam_sms_prompt_template">
-        Kategorisieren Sie diese SMS-Nachricht als Politisch, Betrug, Umfrage oder Marketing.
-        Wenn nichts zutrifft, antworten Sie mit \"Gültig\", andernfalls antworten Sie nur mit der Kategorie, antworten Sie sonst nichts.
-        Die SMS-Nachricht lautet:
-        {sms}
-    </string>
-    <string name="spam_sms_negative_category"><translate>(Politisch|Betrug|Umfrage|Marketing)</translate></string>
-    <string name="spam_sms_positive_category">Gültig</string>
     <string name="last_log">Letztes Protokoll</string>
     <string name="executed_at">Ausgeführt am:</string>
     <string name="not_executed_yet">Noch nicht ausgeführt</string>
@@ -35,10 +8,6 @@
         <br>
         Auf einen Blick können Sie mühelos überprüfen, ob die Verlaufsaufzeichnungen von den Regeln abgedeckt sind, sodass Sie sie nicht einzeln testen müssen. <br>
         <br>
-
-        <font color="#ffa500">Hinweis:</font><br>
-        Dies kann die Leistung beeinträchtigen, wenn es zu viele Regex-Regeln gibt. <br>
-        <br>
         <b>Beispiele:</b> <br>
         <br>
         <img src=\'ic_history_indicator_1\'/> <br>
@@ -46,7 +15,7 @@
         &ensp; - Das zweite rote SMS-Symbol zeigt an, dass dieser SMS-Inhalt durch eine Inhaltsregel blockiert wird. <br>
         &ensp; - Das dritte rote Datenbank-Symbol zeigt an, dass diese Telefonnummer in der Spam-Telefonnummern-Datenbank vorhanden ist. <br>
         <br>
-        Diese Symbole sind nach <font color="#ea86ff"><b>Priorität</b></font> angeordnet, das <b>erste</b> Symbol zeigt
+        Diese Symbole sind nach <priority><b>Priorität</b></priority> angeordnet, das <b>erste</b> Symbol zeigt
         das Gesamtergebnis an. Diese Telefonnummern-Regel hat eine höhere Priorität, die SMS-Nachricht wird letztendlich dadurch zugelassen.<br>
         <br>
         <img src=\'ic_history_indicator_2\'/> <br>
@@ -58,6 +27,11 @@
         <br>
         <img src=\'ic_history_indicator_3\'/> <br>
         Keine Telefonnummern-Regel passt, nur SMS-Regel und Datenbank. Und sie wird durch eine SMS-Regel blockiert.<br>
+        <br>
+        <br>
+        <warn>Hinweis</warn> <br>
+        Passen Sie Regeln immer anhand der vorangestellten Symbole an, nicht anhand der Telefonnummernfarbe (<img src=\'ic_history_indicator_4\'/>).
+        Die Telefonnummernfarbe spiegelt nur das vergangene Filterergebnis wider und ändert sich nie.
         ]]>
     </string>
     <string name="rule_indicator">Regelindikator</string>
@@ -65,7 +39,7 @@
         <![CDATA[
         MMS-Nachrichten sind normalerweise Spam. Es ist unnötig, sie zu aktivieren, es sei denn, Sie verwenden sie tatsächlich.<br>
         <br>
-        <font color="#ffa500">Hinweis:</font><br>
+        <warn>Hinweis:</warn><br>
         Gruppennachrichten sind MMS, keine SMS.<br>
         <br>
         MMS wird wie SMS behandelt, nur Textinhalte werden verarbeitet,
@@ -74,8 +48,6 @@
         Zwei Berechtigungen sind erforderlich: RECEIVE_MMS und READ_SMS
         ]]>
     </string>
-    <string name="unknown_error">Unbekannter Fehler.</string>
-    <string name="checking_auth_credential">Überprüfe Autorisierungsdaten.</string>
     <string name="sms_bomb"><short>SMS-Bombe</short></string>
     <string name="help_sms_bomb">
         <![CDATA[
@@ -85,28 +57,28 @@
           OTP-Verifizierungen (One-Time Password) bestehen.<br>
         <br>
         Zum Beispiel SMS-Nachrichten wie:<br>
-        &ensp; <font color="#888888">Dein OTP ist: 1234.</font><br>
-        &ensp; <font color="#888888">Dies ist dein Verifizierungscode: 1234.</font><br>
-        &ensp; <font color="#888888">1234 ist dein Validierungscode.</font><br>
+        &ensp; <sample>Dein OTP ist: 1234.</sample><br>
+        &ensp; <sample>Dies ist dein Verifizierungscode: 1234.</sample><br>
+        &ensp; <sample>1234 ist dein Validierungscode.</sample><br>
         <br>
-        <h5><font color="#00BFFF">- Inhalts-Regex</font></h5>
+        <h5><title>- Inhalts-Regex</title></h5>
         Diese Funktion gilt nur für Nachrichten, die mit dieser Regex übereinstimmen. Eine typische Regex wäre: <br>
-        <font color="#fa7f71">.*(otp|code).*</font><br>
+        <error>.*(otp|code).*</error><br>
         <br>
-        <h5><font color="#00BFFF">- Intervall</font></h5>
+        <h5><title>- Intervall</title></h5>
         Wenn eine nachfolgende OTP-Nachricht innerhalb dieses Zeitintervalls eintrifft, wird dies als
           Teil des Bombardements betrachtet und wird blockiert.<br>
         (Standard: 30 Sekunden)<br>
         <br>
         Dies blockiert alle folgenden Bomben, mit Ausnahme der ersten.<br>
         <br>
-        <h5><font color="#00BFFF">- Sperrbildschirmschutz</font></h5>
+        <h5><title>- Sperrbildschirmschutz</title></h5>
         Aktiviere dies, um alle Bomben im Sperrbildschirmmodus zu blockieren, einschließlich der ersten. <br>
         <br>
         Normalerweise sollte dein Bildschirm entsperrt sein, während du auf einen Verifizierungscode wartest.
         Wenn solche Nachrichten eintreffen, während sich das Gerät im Sperrbildschirmmodus befindet, handelt es sich wahrscheinlich um Bomben.<br>
         <br>
-        <font color="#ea86ff"><b>Priorität: 20</b></font>
+        <priority><b>Priorität: 20</b></priority>
         ]]>
     </string>
     <string name="lockscreen_protection"><short>Sperrbildschirm</short></string>
@@ -128,7 +100,8 @@
     </string>
     <string name="help_history_expiry">
         <![CDATA[
-            Wenn aktiviert, verfallen Verlaufseinträge nach N Tagen, abgelaufene Einträge werden automatisch gelöscht.
+                Wenn aktiviert, werden Verlaufseinträge nach N Tagen automatisch gelöscht. <br>
+                Die Bereinigungsaufgabe läuft täglich um 00:00 Uhr.
         ]]>
     </string>
 </resources>

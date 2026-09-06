@@ -15,7 +15,7 @@
         <br>
         Hem aramalar hem de SMS mesajları için geçerlidir.<br>
         <br>
-        <font color="#ea86ff"><b>Varsayılan Öncelik: 0</b></font>
+        <priority><b>Varsayılan Öncelik: 0</b></priority>
         ]]>
     </string>
     <string name="help_spam_db_ttl">
@@ -34,6 +34,9 @@
         İş akışları görevleri otomatik olarak çalıştırmak için kullanılabilir, zamanlamaya veya olaylara göre tetiklenebilir. <br>
         <br>
         Hızlı kurulum için hazır ayarlar mevcuttur, ayrıca sıfırdan oluşturabilir veya diğer kullanıcılar tarafından paylaşılan bir JSON\'dan içe aktarabilirsiniz.<br>
+        <br>
+        İpucu:<br>
+        Bir iş akışının bağlam menüsünü görüntülemek için üzerine <b>uzun basın</b>. Zaman tabanlı iş akışları ayrıca son yürütme günlüğünü ve sonraki çalışma zamanını gösterir.
         ]]>
     </string>
     <string name="manual">Kılavuz</string>

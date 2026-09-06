@@ -1,40 +1,38 @@
 <resources>
     <string name="start_time">Start Time</string>
     <string name="end_time">End Time</string>
-    <string name="switch_mode">Switch Mode</string>
+    <string name="regex_mode">RegEx Mode</string>
     <string name="contact_group">Contact Group</string>
     <string name="help_regex_mode_phone_number">
         <![CDATA[
-        <font color="#00BFFF"><b>Phone Number</b></font>:<br>
-        &ensp; The default mode, the regex will match against the phone number.<br>
+        <title><b>Phone Number</b></title>:<br>
+        &ensp; The default mode, the regex matches against the phone number.<br>
         ]]>
     </string>
     <string name="help_regex_mode_contact">
         <![CDATA[
-        <font color="#00BFFF"><b>Contacts</b></font>:<br>
-        &ensp; The regex will match against the contact name associated with the incoming number.<br>
+        <title><b>Contacts</b></title>:<br>
+        &ensp; The regex matches against the contact name associated with the incoming number.<br>
         &ensp;  - Use case:<br>
-        &emsp; <font color="#888888">Block all non-contacts at weekend with regex `.*`. </font><br>
+        &emsp; <sample>Block all non-contacts at weekend with regex `.*`. </sample><br>
         ]]>
     </string>
     <string name="help_regex_mode_contact_group">
         <![CDATA[
-        <font color="#00BFFF"><b>Contact Group</b></font>:<br>
-        &ensp; The regex will match against the contact group name associated with the incoming number,
+        <title><b>Contact Group</b></title>:<br>
+        &ensp; The regex matches against the contact group name associated with the incoming number,
                  impacting all contacts in that group, so you don\'t need to add them individually,
                  and no need to update it even when there are personnel changes.<br>
         &ensp;  - Use case:<br>
-        &emsp; <font color="#888888">Block all coworkers at weekend by blocking the contact group \"work\". </font> <br>
+        &emsp; <sample>Block all coworkers at weekend by blocking the contact group \"work\". </sample> <br>
         ]]>
     </string>
-    <string name="text_too_long">Text too long, editing is disabled</string>
-    <string name="follow_system"><short>Follow System</short></string>
+    <string name="text_too_long">Text exceeds %s characters, editing is disabled for performance reasons. To increase the limit:</string>
+    <string name="increase_text_limit">Long-press a rule -> Settings -> Text Box Limit</string>
+    <string name="system"><short>System</short></string>
     <string name="theme">Theme</string>
-    <string-array name="theme_list">
-        <item>Light</item>
-        <item>Dark</item>
-    </string-array>
     <string-array name="rule_dropdown_menu">
+        <item>Export</item>
         <item>Search Rule</item>
         <item>Clone Rule</item>
         <item>Delete Rule</item>

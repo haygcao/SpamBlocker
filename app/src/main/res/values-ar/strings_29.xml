@@ -1,0 +1,108 @@
+<resources>
+    <string name="call_screened">تم فحص المكالمة</string>
+    <string name="help_call_screened">
+        <![CDATA[
+        يتم تفعيله بعد فحص المكالمة.
+        ]]>
+    </string>
+    <string name="text_reply">الرد النصي</string>
+    <string name="text_to_reply">النص للرد</string>
+    <string name="cant_talk_in_meeting">أنا في اجتماع الآن، سأتواصل معك لاحقًا.</string>
+    <string name="busy_right_now">لا يمكنني التحدث الآن، سأتصل بك لاحقًا.</string>
+    <string name="help_action_text_reply">
+        <![CDATA[
+        ينشئ نص الرد التلقائي بناءً على نتيجة فحص المكالمة.
+        ]]>
+    </string>
+    <string name="send_sms">إرسال رسالة SMS</string>
+    <string name="result">النتيجة</string>
+    <string name="contacts_only">جهات الاتصال فقط</string>
+    <string name="blocked_by">محظور بواسطة</string>
+    <string name="sms_sent_successfully">تم إرسال رسالة SMS بنجاح</string>
+    <string name="failed_to_send_sms">فشل إرسال رسالة SMS: %s</string>
+    <string name="replying_text">نص الرد: %s</string>
+    <string name="help_action_send_sms">
+        <![CDATA[
+        إرسال رسالة SMS. <br>
+        <br>
+        <title>الرقم</title> <br>
+        يتحقق من عدة مصادر بالترتيب، ويعتمد أول تطابق يتم العثور عليه: <br>
+        &ensp; علامة <sample><no_translate>send_sms_to</no_translate></sample> (يمكن إنشاؤه باستخدام <b>تعيين علامة</b>) <br>
+        &ensp; الرقم الوارد <br>
+        <br>
+        <title>محتوى SMS</title> <br>
+        يتحقق من عدة مصادر بالترتيب: <br>
+        &ensp; علامة <sample><no_translate>send_sms_content</no_translate></sample> <br>
+        &ensp; مخرجات النص من الخطوة السابقة <br>
+        ]]>
+    </string>
+    <string name="help_call_screening_number_filter">
+        <![CDATA[
+        استخدم هذا التعبير النمطي لاستبعاد أرقام معينة، مثل الخطوط الأرضية أو الأرقام الدولية. <br>
+        <br>
+        على سبيل المثال <br>
+        &ensp; <sample>\\d{10,11}</sample> <br>
+        &ensp; أرقام مكونة من 10 إلى 11 رقمًا.
+        ]]>
+    </string>
+    <string name="sms_reply">رد SMS</string>
+    <string name="help_bot_preset_sms_reply">
+        <![CDATA[
+        إرسال رسالة SMS تلقائيًا إلى جهات الاتصال عند حظر مكالماتهم. <br>
+        يمكن تعيين رسائل مختلفة لوضع الاجتماع وميزات الحظر الأخرى. <br>
+        <br>
+        <warn>ملاحظة</warn> <br>
+        في المرة الأولى التي يرسل فيها التطبيق رسالة SMS، سيقوم نظام التشغيل بتحذيرك من الرسوم المحتملة.
+        اضغط على <sample>تذكر خياري</sample> لتجنب هذا التحذير في المستقبل.
+        ]]>
+    </string>
+    <string name="find_regex_rule_by_description">
+        <![CDATA[
+        أدخل وصفاً لمطابقة قاعدة التعبير النمطي المقابلة.
+        ]]>
+    </string>
+    <string name="rules">قواعد</string>
+    <string name="rule_description">وصف القاعدة</string>
+    <string name="priority_in_order">الأولوية يتم تحديدها حسب تسلسل هذه القائمة.</string>
+    <string name="help_ringtone_trigger">
+        <![CDATA[
+        السبب الذي يجعل المكالمة مسموحاً بها. <br>
+        <br>
+        على سبيل المثال، تعني <b>مكالمة متكررة</b> أن نغمة الرنين المحددة ستعمل عندما تكون المكالمة مسموحاً بها من خلال <b>مكالمة متكررة</b>.
+        ]]>
+    </string>
+    <string name="copy_tag">نسخ العلامة</string>
+    <string name="tag_is_copied_from">تم نسخ العلامة %s من %s</string>
+    <string name="help_copy_tag">أنشئ علامة جديدة بنفس القيمة ولكن باسم مختلف.</string>
+    <string name="from_tag">من العلامة</string>
+    <string name="to_tag">إلى العلامة</string>
+    <string name="allow_7726">السماح لـ 7726</string>
+    <string name="help_bot_preset_7726">
+        <![CDATA[
+        أغراض <warn>العرض التوضيحي</warn> فقط.<br>
+        <br>
+        يعيد توجيه الرسائل المزعجة إلى <error>7726</error> (رمز الاختصار العالمي لـ <error>SPAM</error>)،
+         وهي ميزة مدعومة من قبل العديد من شركات الاتصالات. <br>
+        <br>
+        <warn>تحذير</warn> <br>
+        قم بتفعيل هذا الخيار فقط إذا كانت شركة الاتصالات لديك تدعم 7726. وإلا فقد يتم تطبيق رسوم SMS القياسية. <br>
+        <br>
+        ينشئ كل من <minor>سير عمل</minor> و<minor>قاعدة تعبير عادي</minor> لـ SMS: <br>
+        <br>
+        - <minor>سير العمل</minor> <br>
+        &ensp; 1. إرسال النص المزعج إلى 7726. <br>
+        &ensp; 2. الانتظار لمدة 10 ثوانٍ. <br>
+        &ensp; 3. إرسال الرقم إلى 7726. <br>
+        <br>
+        - <minor>قاعدة التعبير العادي</minor> \"السماح لـ 7726\" <br>
+        &ensp; السماح بالرسائل القادمة من 7726، مثل: <br>
+        &emsp; <sample>شكراً على الإبلاغ، يرجى الرد برقم الهاتف</sample>. <br>
+        <br>
+        قم بضبط التأخير لمدة 10 ثوانٍ وفقًا لوقت استجابة شركة الاتصالات، وقم بإزالة الإبلاغ عن الرقم إذا كان غير مدعوم من قبل شركة الاتصالات.
+        ]]>
+    </string>
+    <string name="report_sms">تقرير الرسائل النصية</string>
+    <string name="regex_starts_with_plus">%s هو رمز خاص في التعبيرات النمطية (على سبيل المثال %s)، استخدم رمز الهروب مثل %s</string>
+    <string name="sms_content_is_null">محتوى الرسالة القصيرة فارغ، هل تسجيل محتوى الرسائل القصيرة مفعل؟</string>
+    <string name="ignore">تجاهل</string>
+</resources>

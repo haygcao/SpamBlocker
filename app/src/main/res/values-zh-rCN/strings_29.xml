@@ -1,0 +1,107 @@
+<resources>
+    <string name="call_screened">电话已筛选</string>
+    <string name="help_call_screened">
+        <![CDATA[
+        在电话筛选后触发。
+        ]]>
+    </string>
+    <string name="text_reply">文本回复</string>
+    <string name="text_to_reply">回复文本</string>
+    <string name="cant_talk_in_meeting">现在在开会，稍后联系。 </string>
+    <string name="busy_right_now">现在不方便接电话，稍后联系。</string>
+    <string name="help_action_text_reply">
+        <![CDATA[
+        根据电话筛选结果生成自动回复文本。
+        ]]>
+    </string>
+    <string name="send_sms">发送短信</string>
+    <string name="result">结果</string>
+    <string name="contacts_only">仅联系人</string>
+    <string name="blocked_by">被拦截者</string>
+    <string name="sms_sent_successfully">短信发送成功</string>
+    <string name="failed_to_send_sms">短信发送失败: %s</string>
+    <string name="replying_text">正在回复的文本: %s</string>
+    <string name="help_action_send_sms">
+        <![CDATA[
+        发送一条短信。<br>
+        <br>
+        <title>号码</title><br>
+        按顺序检查多个来源，采用找到的第一个匹配项：<br>
+        &ensp; 标签 <sample><no_translate>send_sms_to</no_translate></sample> (可以使用 <b>设置标签</b> 创建)<br>
+        &ensp; 来电号码<br>
+        <br>
+        <title>短信内容</title><br>
+        按顺序检查多个来源：<br>
+        &ensp; 标签 <sample><no_translate>send_sms_content</no_translate></sample><br>
+        &ensp; 上一步的文本输出<br>
+        ]]>
+    </string>
+    <string name="help_call_screening_number_filter">
+        <![CDATA[
+        使用此正则表达式排除特定号码，例如座机或国际号码。<br>
+        <br>
+        例如<br>
+        &ensp; <sample>\\d{10,11}</sample><br>
+        &ensp; 10 到 11 位数字。
+        ]]>
+    </string>
+    <string name="sms_reply">短信回复</string>
+    <string name="help_bot_preset_sms_reply">
+        <![CDATA[
+        当联系人的通话被拦截时，自动向其发送短信。<br>
+        可以为会议模式和其他拦截功能设置不同的消息。<br>
+        <br>
+        <warn>注意</warn> <br>
+        应用首次发送短信时，系统弹窗会提醒您可能会产生费用。<br>
+        点击<sample>记住我的选择</sample>以在今后避免此提醒。
+        ]]>
+    </string>
+    <string name="find_regex_rule_by_description">
+        <![CDATA[
+        输入描述以匹配相应的正则表达式规则。
+        ]]>
+    </string>
+    <string name="rules">规则</string>
+    <string name="rule_description">规则描述</string>
+    <string name="priority_in_order">优先级由该列表的顺序决定。</string>
+    <string name="help_ringtone_trigger">
+        <![CDATA[
+        通话被允许的原因。<br>
+        <br>
+        例如，“重复来电”表示当通话被“重复来电”允许时，将播放指定的铃声。
+        ]]>
+    </string>
+    <string name="copy_tag">复制标签</string>
+    <string name="tag_is_copied_from">标签 %s 已从 %s 复制</string>
+    <string name="help_copy_tag">创建具有相同值但不同名称的新标签。</string>
+    <string name="from_tag">来源标签</string>
+    <string name="to_tag">目标标签</string>
+    <string name="allow_7726">允许 7726</string>
+    <string name="help_bot_preset_7726">
+        <![CDATA[
+        仅用于<warn>演示目的</warn>。<br>
+        <br>
+        将垃圾短信转发到 <error>7726</error>（<error>SPAM</error> 的通用短代码），这是许多移动运营商支持的功能。<br>
+        <br>
+        <warn>警告</warn> <br>
+        仅在您的运营商支持 7726 时才启用此功能。否则，可能会产生标准短信费用。<br>
+        <br>
+        它会同时创建一个<minor>工作流</minor>和一个短信<minor>正则规则</minor>：<br>
+        <br>
+        - <minor>工作流</minor> <br>
+        &ensp; 1. 将垃圾短信发送至 7726。<br>
+        &ensp; 2. 等待 10 秒。<br>
+        &ensp; 3. 将号码发送至 7726。<br>
+        <br>
+        - <minor>正则规则</minor> “允许 7726” <br>
+        &ensp; 允许来自 7726 的消息，例如：<br>
+        &emsp; <sample>感谢您的举报，请回复电话号码</sample>。<br>
+        <br>
+        根据运营商的响应时间调整 10 秒延迟；如果您的运营商不支持号码举报，请删除该步骤。
+        ]]>
+    </string>
+    <string name="report_sms">报告短信</string>
+    <string name="regex_starts_with_plus">%s 是正则表达式中的特殊字符（例如 %s），请像 %s 这样对其进行转义</string>
+    <string name="sms_content_is_null">SMS 内容为空，是否启用了 SMS 内容日志记录？</string>
+    <string name="ignore">忽略</string>
+</resources>

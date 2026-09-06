@@ -45,7 +45,7 @@ class MyWorker(
     private fun setLocale() {
         val spf = spf.Global(ctx)
         // language
-        Util.setLocale(ctx, spf.getLanguage())
+        Util.setLocale(ctx, spf.language)
     }
 
     private fun runActions() {
@@ -67,7 +67,7 @@ class MyWorker(
         actions.executeAll(ctx, aCtx)
 
         if (bot != null) {
-            BotTable.setLastLog(ctx, bot.id, logger.serialize())
+            BotTable.setLastLog(ctx, bot.id, logger.output.serialize())
         }
     }
 
@@ -116,7 +116,7 @@ object MyWorkManager {
 
         val infos = workManager.getWorkInfosByTag(tag).get()
             .filter {
-                // Cancelled/Succeeded tasks have this value
+                // Canceled/Succeeded tasks have this value
                 it.nextScheduleTimeMillis != 0x7fffffffffffffff
             }
             .sortedBy {

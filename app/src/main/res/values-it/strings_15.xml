@@ -1,31 +1,4 @@
 <resources>
-    <string name="api_preset_groq">Groq</string>
-    <string name="help_api_preset_groq">
-        <![CDATA[
-        Verifica il contenuto degli SMS utilizzando <b>Groq AI</b>, richiede solo un account email.
-        ]]>
-    </string>
-    <string name="help_api_preset_groq_authorization">
-        <![CDATA[
-        1. Registrati e accedi: <br>
-         <a href="https://console.groq.com/login">https://console.groq.com/login</a><br>
-         <br>
-        2. Apri la pagina API:<br>
-         <a href="https://console.groq.com/keys">https://console.groq.com/keys</a><br>
-        <br>
-        3. Premi il pulsante <translate>\"Crea chiave API\"</translate>.<br>
-        <br>
-        4. Copia la chiave, quindi compila il campo sottostante.
-        ]]>
-    </string>
-    <string name="spam_sms_prompt_template">
-        Categorizza questo messaggio SMS come Politico, Frode, Sondaggio o Marketing.
-        Se nessuna categoria si applica, rispondi \"Valido\", altrimenti, rispondi solo con la categoria, non aggiungere altro.
-        Il messaggio SMS è:
-        {sms}
-    </string>
-    <string name="spam_sms_negative_category"><translate>(Politico|Frode|Sondaggio|Marketing)</translate></string>
-    <string name="spam_sms_positive_category">Valido</string>
     <string name="last_log">Ultimo Log</string>
     <string name="executed_at">Eseguito il:</string>
     <string name="not_executed_yet">Non ancora eseguito</string>
@@ -35,9 +8,6 @@
         <br>
         A colpo d\'occhio, puoi verificare facilmente se i record della cronologia sono coperti dalle regole, quindi non hai bisogno di testarli individualmente. <br>
         <br>
-        <font color="#ffa500">Nota:</font><br>
-        Questo può influire sulle prestazioni quando ci sono troppe regole regex. <br>
-        <br>
         <b>Esempi:</b> <br>
         <br>
         <img src=\'ic_history_indicator_1\'/> <br>
@@ -45,7 +15,7 @@
         &ensp; - La seconda icona rossa SMS indica che questo contenuto SMS sarà bloccato da una regola di contenuto. <br>
         &ensp; - La terza icona rossa del database indica che questo numero esiste nel database dei numeri spam. <br>
         <br>
-        Queste icone sono disposte per <font color="#ea86ff"><b>priorità</b></font>, la <b>prima</b> icona indica
+        Queste icone sono disposte per <priority><b>priorità</b></priority>, la <b>prima</b> icona indica
         il risultato complessivo. Quella regola numerica ha una priorità più alta, il messaggio SMS sarà infine consentito da essa.<br>
         <br>
         <img src=\'ic_history_indicator_2\'/> <br>
@@ -57,6 +27,11 @@
         <br>
         <img src=\'ic_history_indicator_3\'/> <br>
         Nessuna regola numerica lo corrisponde, solo regola SMS e database. E sarà bloccato da una regola SMS.<br>
+        <br>
+        <br>
+        <warn>Nota</warn> <br>
+        Regola sempre le regole in base alle icone iniziali, non al colore del numero (<img src=\'ic_history_indicator_4\'/>).
+        Il colore del numero riflette solo il risultato del filtraggio passato e non cambierà mai.
         ]]>
     </string>
     <string name="rule_indicator">Indicatore regola</string>
@@ -64,7 +39,7 @@
         <![CDATA[
         I messaggi MMS sono solitamente spam, non è necessario abilitarli a meno che tu non li utilizzi effettivamente.<br>
         <br>
-        <font color="#ffa500">Nota:</font><br>
+        <warn>Nota:</warn><br>
         I messaggi di gruppo sono MMS, non SMS.<br>
         <br>
         Gli MMS saranno trattati come SMS, verrà elaborato solo il contenuto di testo,
@@ -73,8 +48,6 @@
         Sono necessari due permessi: RECEIVE_MMS e READ_SMS
         ]]>
     </string>
-    <string name="unknown_error">Errore sconosciuto.</string>
-    <string name="checking_auth_credential">Verifica delle credenziali di autorizzazione.</string>
     <string name="sms_bomb"><short>SMS Bomb</short></string>
     <string name="help_sms_bomb">
         <![CDATA[
@@ -84,28 +57,28 @@
           da verifiche OTP (One-Time Password).<br>
         <br>
         Ad esempio, messaggi SMS come:<br>
-        &ensp; <font color="#888888">Il tuo OTP è: 1234.</font><br>
-        &ensp; <font color="#888888">Questo è il tuo codice di verifica: 1234.</font><br>
-        &ensp; <font color="#888888">1234 è il tuo codice di validazione.</font><br>
+        &ensp; <sample>Il tuo OTP è: 1234.</sample><br>
+        &ensp; <sample>Questo è il tuo codice di verifica: 1234.</sample><br>
+        &ensp; <sample>1234 è il tuo codice di validazione.</sample><br>
         <br>
-        <h5><font color="#00BFFF">- Regex del contenuto</font></h5>
+        <h5><title>- Regex del contenuto</title></h5>
         Questa funzione si applica solo ai messaggi che corrispondono a questa regex, una regex tipica sarebbe: <br>
-        <font color="#fa7f71">.*(otp|code).*</font><br>
+        <error>.*(otp|code).*</error><br>
         <br>
-        <h5><font color="#00BFFF">- Intervallo</font></h5>
+        <h5><title>- Intervallo</title></h5>
         Se un successivo messaggio OTP arriva entro questo intervallo di tempo, è considerato
           parte dell\'attacco di bombing e sarà bloccato.<br>
         (predefinito: 30 secondi)<br>
         <br>
         Questo bloccherà tutte le bombe successive, tranne la prima.<br>
         <br>
-        <h5><font color="#00BFFF">- Protezione Lockscreen</font></h5>
+        <h5><title>- Protezione Lockscreen</title></h5>
         Abilita questo per bloccare tutte le bombe in modalità lockscreen, inclusa la prima. <br>
         <br>
         Solitamente, il tuo schermo dovrebbe essere stato sbloccato mentre aspetti un codice di verifica.
         Quando tali messaggi arrivano mentre il dispositivo è in modalità lockscreen, è probabile che siano bombe.<br>
         <br>
-        <font color="#ea86ff"><b>Priorità: 20</b></font>
+        <priority><b>Priorità: 20</b></priority>
         ]]>
     </string>
     <string name="lockscreen_protection">Protezione schermo blocco</string>
@@ -127,7 +100,8 @@
     </string>
     <string name="help_history_expiry">
         <![CDATA[
-            Quando abilitato, i record della cronologia scadranno dopo N giorni, i record scaduti verranno eliminati automaticamente.
+                Quando abilitato, i record della cronologia verranno eliminati automaticamente dopo N giorni. <br>
+                L\'attività di pulizia viene eseguita ogni giorno alle 00:00.
         ]]>
     </string>
 </resources>

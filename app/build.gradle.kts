@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     kotlin("plugin.serialization") version "1.9.24"
 }
@@ -26,16 +25,27 @@ android {
         }
     }
     namespace = "spam.blocker"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
-        applicationId = "spam.blocker"
         minSdk = 29
-        targetSdk = 35
-        versionCode = 502
-        versionName = "5.2"
+        targetSdk = 36
+        versionCode = 515
+        versionName = "5.15"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    flavorDimensions += "market"
+    productFlavors {
+        create("fdroid") {
+            dimension = "market"
+            applicationId = "spam.blocker"
+        }
+        create("googleplay") {
+            dimension = "market"
+            applicationId = "spam.blocker.googleplay"
+        }
     }
 
     buildTypes {
@@ -51,13 +61,16 @@ android {
 
             signingConfig = signingConfigs.getByName("release")
         }
+        create("releaseNoR8") {
+            initWith(getByName("release"))
+            isMinifyEnabled = false
+            isShrinkResources = false
+            matchingFallbacks += listOf("release")
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -66,7 +79,7 @@ android {
     }
 
     testOptions {
-        packagingOptions {
+        packaging {
             resources.excludes.add("META-INF/LICENSE.md")
             resources.excludes.add("META-INF/LICENSE-notice.md")
             jniLibs {
@@ -74,10 +87,17 @@ android {
             }
         }
     }
-    buildToolsVersion = "35.0.0"
+}
+
+tasks.configureEach {
+    if (name.contains("ReleaseNoR8") && name.contains("lintVital", ignoreCase = true)) {
+        enabled = false
+    }
 }
 
 dependencies {
+    implementation(libs.androidx.browser)
+    implementation(libs.androidx.runtime)
     // third-party
     implementation(libs.lazycolumnscrollbar) // for scroll bar
     implementation(libs.reorderable) // for reordering Action items with drag & drop
@@ -85,7 +105,7 @@ dependencies {
     // google
     implementation(libs.libphonenumber) // for checking whether 33123 and +33123 are the same number
     implementation(libs.geocoder) // geo database from libphonenumber
-//    implementation(libs.carrier) // carrier database from libphonenumber
+    implementation(libs.carrier) // carrier database from libphonenumber
 
     // jetbrains kotlinx
     implementation(libs.serialization.json) // for backup/restore json serialization

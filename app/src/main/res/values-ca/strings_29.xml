@@ -1,0 +1,108 @@
+<resources>
+    <string name="call_screened">Trucada filtrada</string>
+    <string name="help_call_screened">
+        <![CDATA[
+        S\'activar després de filtrar la trucada.
+        ]]>
+    </string>
+    <string name="text_reply">Resposta de text</string>
+    <string name="text_to_reply">Text per respondre</string>
+    <string name="cant_talk_in_meeting">Sóc en una reunió ara mateix, ja et contactaré més tard.</string>
+    <string name="busy_right_now">No puc parlar ara, ja et trucaré més tard.</string>
+    <string name="help_action_text_reply">
+        <![CDATA[
+        Genera el text de la resposta automàtica basant-se en el resultat del filtratge de la trucada.
+        ]]>
+    </string>
+    <string name="send_sms">Enviar SMS</string>
+    <string name="result">Resultat</string>
+    <string name="contacts_only">Només contactes</string>
+    <string name="blocked_by">Blocat per</string>
+    <string name="sms_sent_successfully">SMS enviat correctament</string>
+    <string name="failed_to_send_sms">Error en l\'enviament de l\'SMS: %s</string>
+    <string name="replying_text">Text de resposta: %s</string>
+    <string name="help_action_send_sms">
+        <![CDATA[
+        Enviar un missatge SMS. <br>
+        <br>
+        <title>Número</title> <br>
+        Comprova diverses fonts per ordre i adopta la primera coincidència trobada: <br>
+        &ensp; Etiqueta <sample><no_translate>send_sms_to</no_translate></sample> (es pot crear utilitzant <b>Establir etiqueta</b>) <br>
+        &ensp; El número entrant <br>
+        <br>
+        <title>Contingut del SMS</title> <br>
+        Comprova diverses fonts per ordre: <br>
+        &ensp; Etiqueta <sample><no_translate>send_sms_content</no_translate></sample> <br>
+        &ensp; Sortida de text del pas anterior <br>
+        ]]>
+    </string>
+    <string name="help_call_screening_number_filter">
+        <![CDATA[
+        Utilitza aquest regex per excloure números específics, com ara telèfons fixos o números internacionals. <br>
+        <br>
+        Per exemple <br>
+        &ensp; <sample>\\d{10,11}</sample> <br>
+        &ensp; números de 10 a 11 dígits.
+        ]]>
+    </string>
+    <string name="sms_reply">Resposta SMS</string>
+    <string name="help_bot_preset_sms_reply">
+        <![CDATA[
+        Envia automàticament un SMS als contactes quan les seves trucades siguin bloquejades. <br>
+        Es poden configurar missatges diferents per al Mode Reunió i altres funcions de bloqueig. <br>
+        <br>
+        <warn>Nota</warn> <br>
+        La primera vegada que l\'aplicació enviï un SMS, apareixerà un avis del sistema sobre els possibles costos.
+        Toca <sample>Recorda la meva elecció</sample> per evitar aquest avis en el futur.
+        ]]>
+    </string>
+    <string name="find_regex_rule_by_description">
+        <![CDATA[
+        Introduïu una descripció per fer coincidir la regla d\'expressió regular corresponent.
+        ]]>
+    </string>
+    <string name="rules">Regles</string>
+    <string name="rule_description">Descripció de la regla</string>
+    <string name="priority_in_order">La prioritat es determina per la seqüència d\'aquesta llista.</string>
+    <string name="help_ringtone_trigger">
+        <![CDATA[
+        El motiu pel qual es permet la trucada. <br>
+        <br>
+        Per exemple, <b>Trucada repetida</b> significa que sonarà el ton especificat quan la trucada sigui permesa per <b>Trucada repetida</b>.
+        ]]>
+    </string>
+    <string name="copy_tag">Copiar etiqueta</string>
+    <string name="tag_is_copied_from">L\'etiqueta %s s\'ha copiat de %s</string>
+    <string name="help_copy_tag">Crea una nova etiqueta amb el mateix valor però un nom diferent.</string>
+    <string name="from_tag">D\'etiqueta</string>
+    <string name="to_tag">A etiqueta</string>
+    <string name="allow_7726">Permetre 7726</string>
+    <string name="help_bot_preset_7726">
+        <![CDATA[
+        Només per a <warn>fins de demostració</warn>.<br>
+        <br>
+        Reenvia els textos de spam al <error>7726</error> (el codi curt universal per a <error>SPAM</error>),
+         una funció compatible amb molts operadors mòbils. <br>
+        <br>
+        <warn>Advertència</warn> <br>
+        Activa això només si el teu operador admet el 7726. En cas contrari, es poden aplicar càrrecs estàndard de SMS. <br>
+        <br>
+        Crea tant un <minor>flux de treball</minor> com una <minor>regla d\'expressió regular</minor> d\'SMS: <br>
+        <br>
+        - El <minor>flux de treball</minor> <br>
+        &ensp; 1. Envia el text de spam al 7726. <br>
+        &ensp; 2. Espera 10 segons. <br>
+        &ensp; 3. Envia el número al 7726. <br>
+        <br>
+        - La <minor>regla d\'expressió regular</minor> \"Permetre 7726\" <br>
+        &ensp; Permetre missatges del 7726, com ara: <br>
+        &emsp; <sample>Gràcies per informar, si us plau respongueu amb el número de telèfon</sample>. <br>
+        <br>
+        Ajusta el retard de 10 segons segons el temps de resposta del teu operador i elimina l\'informe del número si el teu operador no ho admet.
+        ]]>
+    </string>
+    <string name="report_sms">Informar SMS</string>
+    <string name="regex_starts_with_plus">%s és un caràcter especial en regex (per exemple, %s), escapa\'l com %s</string>
+    <string name="sms_content_is_null">El contingut del SMS està buit, està habilitat el registre del contingut del SMS?</string>
+    <string name="ignore">Ignora</string>
+</resources>

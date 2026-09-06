@@ -1,38 +1,47 @@
 package spam.blocker.ui.setting.regex
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import spam.blocker.Events
+import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.db.RegexRule
 import spam.blocker.db.defaultRegexRuleByType
 import spam.blocker.def.Def
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
-import spam.blocker.ui.theme.Salmon
-import spam.blocker.ui.theme.SkyBlue
+import spam.blocker.ui.widgets.ConfigImportDialog
 import spam.blocker.ui.widgets.DividerItem
 import spam.blocker.ui.widgets.GreyIcon
+import spam.blocker.ui.widgets.GreyIcon16
+import spam.blocker.ui.widgets.GreyIcon18
 import spam.blocker.ui.widgets.HtmlText
 import spam.blocker.ui.widgets.LabelItem
 import spam.blocker.ui.widgets.MenuButton
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.ResIcon
+import spam.blocker.ui.widgets.RowVCenterSpaced
 import spam.blocker.ui.widgets.Str
-import spam.blocker.ui.widgets.rememberFileReadChooser
+import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.util.Lambda
 import spam.blocker.util.Lambda1
+import spam.blocker.util.PermissiveJson
 
+@SuppressLint("LocalContextGetResourceValueCall")
 @Composable
 fun RegexHeader(
     vm: RegexViewModel,
 ) {
+    val C = G.palette
     val ctx = LocalContext.current
     val forType = vm.forType
 
@@ -55,7 +64,7 @@ fun RegexHeader(
             forType = forType,
             onSave = { newRule ->
                 // 1. add to db
-                vm.table.addNewRule(ctx, newRule)
+                vm.table.addNew(ctx, newRule)
 
                 // 2. reload from db
                 vm.reloadDb(ctx)
@@ -68,8 +77,22 @@ fun RegexHeader(
     PopupDialog(errTrigger) {
         Text(
             text = errStr,
-            color = Salmon
+            color = C.error
         )
+    }
+
+    val importTrigger = remember { mutableStateOf(false) }
+    if (importTrigger.value) {
+        ConfigImportDialog(
+            trigger = importTrigger,
+        ) { configJson ->
+            val newRule = PermissiveJson.decodeFromString<RegexRule>(configJson).copy(id = 0)
+
+            // 1. add to db
+            vm.table.addNew(ctx, newRule)
+            // 2. reload UI
+            vm.reloadDb(ctx)
+        }
     }
 
     val shortClickItems = remember {
@@ -80,6 +103,12 @@ fun RegexHeader(
             ) {
                 initRule = null
                 addRuleTrigger.value = true
+            },
+            LabelItem(
+                label = ctx.getString(R.string.import_),
+                leadingIcon = { GreyIcon(R.drawable.ic_import) }
+            ) {
+                importTrigger.value = true
             },
             DividerItem(),
         )
@@ -92,7 +121,7 @@ fun RegexHeader(
                     val newRules = preset.newInstance(ctx)
                     // 1. add to db
                     newRules.forEach {
-                        vm.table.addNewRule(ctx, it)
+                        vm.table.addNew(ctx, it)
                     }
                     // 2. reload from db
                     vm.reloadDb(ctx)
@@ -107,8 +136,6 @@ fun RegexHeader(
         ret
     }
 
-    val fileReader = rememberFileReadChooser()
-    fileReader.Compose()
     val warningTrigger = rememberSaveable { mutableStateOf(false) }
     if (warningTrigger.value) {
         PopupDialog(
@@ -116,11 +143,11 @@ fun RegexHeader(
             content = {
                 HtmlText(html = ctx.getString(R.string.failed_to_import_from_csv))
             },
-            icon = { ResIcon(R.drawable.ic_fail_red, color = Salmon) },
+            icon = { ResIcon(R.drawable.ic_fail_red, color = C.error) },
         )
     }
     val longClickItems = remember {
-        importCsvItems(ctx, vm, fileReader, warningTrigger)
+        importCsvItems(ctx, vm, warningTrigger)
     }
 
     val helpTooltip = remember {
@@ -141,15 +168,58 @@ fun RegexHeader(
         if (forType == Def.ForNumber || forType == Def.ForSms) {
             MenuButton(
                 label = Str(R.string.new_),
-                color = SkyBlue,
+                color = C.infoBlue,
                 items = shortClickItems,
                 longTapItems = longClickItems,
             )
         } else {
             MenuButton(
                 label = Str(R.string.new_),
-                color = SkyBlue,
+                color = C.infoBlue,
                 items = shortClickItems,
+            )
+        }
+    }
+}
+
+@Composable
+fun RegexSummary(vm: RegexViewModel) {
+    val ctx = LocalContext.current
+    val C = G.palette
+
+    LaunchedEffect(Unit) {
+        vm.reloadDb(ctx)
+    }
+
+    // Refresh UI on global events, such as workflow action AddToRegexRule
+    Events.regexRuleUpdated.Listen {
+        vm.reloadDb(ctx)
+    }
+    if (vm.rules.isNotEmpty()) {
+        if (vm.forType == Def.ForQuickCopy) {
+                StrokeButton(
+                    color = C.textGrey,
+                    enabled = false,
+                    icon = {
+                        RowVCenterSpaced(4) {
+                            GreyIcon18(R.drawable.ic_copy)
+                            Text(text = "${vm.rules.size}", color = C.textGrey)
+                        }
+                    }
+                )
+        } else {
+            val allowCount = vm.rules.count { !it.isBlacklist }
+            val blockCount = vm.rules.count { it.isBlacklist }
+            StrokeButton(
+                color = C.textGrey,
+                enabled = false,
+                icon = {
+                    RowVCenterSpaced(4) {
+                        GreyIcon16(if (vm.forType == Def.ForNumber) R.drawable.ic_number_sign else R.drawable.ic_open_msg)
+                        Text(text = "$allowCount", color = C.success)
+                        Text(text = "$blockCount", color = C.error)
+                    }
+                }
             )
         }
     }

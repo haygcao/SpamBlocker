@@ -15,7 +15,7 @@
         <br>
         Aplícase tanto a chamadas como a mensaxes SMS.<br>
         <br>
-        <font color="#ea86ff"><b>Prioridade predeterminada: 0</b></font>
+        <priority><b>Prioridade predeterminada: 0</b></priority>
         ]]>
     </string>
     <string name="help_spam_db_ttl">
@@ -34,6 +34,9 @@
         Os fluxos de traballo pódense usar para executar tarefas automaticamente, pódense activar por programación ou eventos. <br>
         <br>
         Hai predefinicións para unha configuración rápida, tamén podes crealos desde cero ou importalos dun json compartido por outros usuarios.<br>
+        <br>
+        Consello:<br>
+        <b>Preme longamente</b> nun fluxo de traballo para ver o menú contextual. Os fluxos de traballo baseados no tempo tamén mostrarán o rexistro da última execución e a seguinte hora de execución.
         ]]>
     </string>
     <string name="manual">Manual</string>

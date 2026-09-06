@@ -3,22 +3,21 @@ package spam.blocker.ui.widgets
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import spam.blocker.ui.theme.LocalPalette
+import spam.blocker.G
+import spam.blocker.ui.slightDiff
 
 @Composable
 fun OutlineCard(
     modifier: Modifier = Modifier,
-    borderColor: Color = LocalPalette.current.cardBorder,
-    containerBg: Color = MaterialTheme.colorScheme.background,
+    containerBg: Color = G.palette.background,
+    borderColor: Color = containerBg.slightDiff(),
     content: @Composable () -> Unit,
 ) {
-    val C = LocalPalette.current
 
     OutlinedCard(
         modifier = modifier,

@@ -10,7 +10,8 @@
     <string name="parsed_n_rules">%s Aturan diuraikan.</string>
     <string name="add_n_numbers_to_spam_db">Menambahkan %s nomor ke db spam.</string>
     <string name="nothing_to_import">Daftar nomor kosong, tidak ada yang perlu diimpor.</string>
-    <string name="importing_n_numbers">Mengimpor %s nomor sebagai aturan regex.</string>
+    <string name="importing_n_numbers">Mengimpor %s nomor.</string>
+    <string name="importing_n_rules">Mengimpor %s aturan.</string>
     <string name="create_rule_with_numbers">Membuat aturan dengan %s nomor.</string>
     <string name="replace_rule_with_desc">Mengganti aturan dengan deskripsi: %s.</string>
     <string name="rule_with_desc_not_found">Aturan dengan deskripsi %s tidak ditemukan.</string>
@@ -20,68 +21,69 @@
     <string name="find_rule_with_desc">Ditemukan %s aturan dengan deskripsi %s.</string>
     <string name="modify_n_rules">Memodifikasi %s aturan.</string>
     <string name="number_not_match_filter">Nomor %s tidak cocok dengan filter %s, lewati.</string>
+    <string name="content_not_match_filter">Konten tidak cocok dengan filter, lewati.</string>
     <string name="fail_detect_cc">Gagal mendeteksi kode negara.</string>
-    <string name="identified_as_spam">Diidentifikasi sebagai nomor spam, kategori: %s.</string>
-    <string name="identified_as_valid">Diidentifikasi sebagai nomor yang sah, kategori: %s.</string>
+    <string name="identified_as_spam">Diidentifikasi sebagai nomor spam, kategori: %s, komentar: %s.</string>
+    <string name="identified_as_valid">Diidentifikasi sebagai nomor yang sah, kategori: %s, komentar: %s.</string>
     <string name="unidentified_number">Nomor tidak dikenal.</string>
     <string name="auto_detect_cc_permission">Izin READ_PHONE_STATE diperlukan untuk mendeteksi kode negara.</string>
     <string name="number_tags">
         <![CDATA[
-        - <font color="#00BFFF"><b><no_translate>{cc}</no_translate></b></font><br>
+        - <title><b><no_translate>{cc}</no_translate></b></title><br>
         &ensp; Kode negara.<br>
-        - <font color="#00BFFF"><b><no_translate>{domestic}</no_translate></b></font><br>
+        - <title><b><no_translate>{domestic}</no_translate></b></title><br>
         &ensp; Bagian domestik.<br>
-        - <font color="#00BFFF"><b><no_translate>{number}</no_translate></b></font><br>
+        - <title><b><no_translate>{number}</no_translate></b></title><br>
         &ensp; Nomor telepon lengkap, termasuk kode negara dan bagian domestik, tanpa awalan + atau 0.<br>
-        - <font color="#00BFFF"><b><no_translate>{origin_number}</no_translate></b></font><br>
+        - <title><b><no_translate>{raw_number}</no_translate></b></title><br>
         &ensp; Nomor telepon asli yang dapat berisi awalan + atau 0.<br>
         ]]>
     </string>
     <string name="sms_tags">
         <![CDATA[
-        - <font color="#00BFFF"><b>{sms}</b></font><br>
+        - <title><b>{sms}</b></title><br>
         &ensp; Isi SMS.<br>
         ]]>
     </string>
     <string name="time_tags">
         <![CDATA[
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {year}<br>
           {month}<br>
           {day}<br>
           {hour}<br>
           {minute}<br>
           {second}<br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; Angka satu digit akan diberi awalan nol, contoh: <br>
-        &emsp; <font color="#888888"><no_translate>{year}-{month}-{day} {hour}:{minute}:{second}</no_translate></font> <br>
+        &emsp; <sample><no_translate>{year}-{month}-{day} {hour}:{minute}:{second}</no_translate></sample> <br>
         &emsp; menjadi <br>
-        &emsp; <font color="#888888">2020-01-22 03:44:05</font><br>
+        &emsp; <sample>2020-01-22 03:44:05</sample><br>
         <br>
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {month_index} <br>
           {day_index} <br>
           {hour_index} <br>
           {minute_index} <br>
           {second_index} <br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; Nilai-nilai ini tidak akan diberi awalan, contoh: <br>
-        &emsp; <font color="#888888"><no_translate>{month_index}-{day_index}</no_translate></font> <br>
+        &emsp; <sample><no_translate>{month_index}-{day_index}</no_translate></sample> <br>
         &emsp; menjadi <br>
-        &emsp; <font color="#888888">1-2</font><br>
+        &emsp; <sample>1-2</sample><br>
         <br>
-        <font color="#00BFFF"><b><no_translate>
+        <title><b><no_translate>
           {day_of_week} <br>
           {day_of_week_index} <br>
-        </no_translate></b></font>
+        </no_translate></b></title>
         &ensp; Ini dapat digunakan untuk mensimulasikan jadwal rotasi, misalnya: <br>
-        &emsp; <font color="#888888">Lakukan pencadangan harian dan hanya simpan tujuh pencadangan terbaru.</font> <br>
+        &emsp; <sample>Lakukan pencadangan harian dan hanya simpan tujuh pencadangan terbaru.</sample> <br>
         <br>
-        <font color="#ffa500"><b>Catatan:</b></font><br>
+        <warn><b>Catatan:</b></warn><br>
          Tag waktu ini mendukung operasi aritmatika sederhana, seperti
-          <font color="#00BFFF"><b><no_translate>{day-1}</no_translate></b></font>
+          <title><b><no_translate>{day-1}</no_translate></b></title>
          dan
-          <font color="#00BFFF"><b><no_translate>{hour+2}</no_translate></b></font>.
+          <title><b><no_translate>{hour+2}</no_translate></b></title>.
         ]]>
     </string>
     <string name="help_http_url">
@@ -98,21 +100,13 @@
         <![CDATA[
         Dirancang terutama untuk FRITZ!Box Jerman, ini juga dapat digunakan dengan nomor telepon dari negara lain.<br>
         <br>
-        Mendukung permintaan dengan hash dan bukan nomor itu sendiri, memberikan privasi yang lebih baik.<br>
+        <b>Fitur utama</b>: <br>
+        - <highlight>Kueri dengan hash</highlight>, bukan nomor telepon sebenarnya, sehingga memberikan privasi yang lebih baik. <br>
+        - Menggunakan <highlight>deteksi berbasis rentang</highlight> saat nomor persis tidak ditemukan, dengan mengabaikan dua digit terakhir. <br>
         <br>
         Situs web: <a href="https://phoneblock.net">https://phoneblock.net</a><br>
         <br>
         API: <a href="https://phoneblock.net/phoneblock/api/">https://phoneblock.net/phoneblock/api/</a>
-        ]]>
-    </string>
-    <string name="help_api_preset_phoneblock_authorization">
-        <![CDATA[
-        1. Daftar akun di <a href="https://phoneblock.net/phoneblock/login">https://phoneblock.net/phoneblock/login</a><br>
-        <br>
-        2. Pada halaman pengaturan: <a href="https://phoneblock.net/phoneblock/settings">https://phoneblock.net/phoneblock/settings</a>,
-         tekan tombol \"Hasilkan kunci API\".<br>
-        <br>
-        3. Isi kunci API yang dihasilkan di bawah ini.
         ]]>
     </string>
     <string name="not_enough_time_left">
@@ -126,15 +120,20 @@
         Hasilkan <u>daftar nomor</u> berisi nomor spam yang diidentifikasi dari langkah sebelumnya, dan siap untuk diimpor ke basis data.
         ]]>
     </string>
-    <string name="canceling_thread">Membatalkan thread.</string>>
+    <string name="canceling_thread">Membatalkan thread.</string>
     <string name="suggest_to_swipe">
         <![CDATA[
-        <font color="#03DAC5"><b>Geser ke kiri</b></font> untuk menghapusnya.<br>
+        <highlight><b>Geser ke kiri</b></highlight> untuk menghapusnya.<br>
         <br>
         Sebagian besar elemen UI seperti kartu dalam aplikasi ini dikaitkan dengan gerakan mengusap,
-        beberapa di antaranya juga mendukung <font color="#03DAC5"><b>menggesek ke kanan</b></font>, sebagai contoh catatan riwayat.
+        beberapa di antaranya juga mendukung <highlight><b>menggesek ke kanan</b></highlight>, sebagai contoh catatan riwayat.
         ]]>
-    </string>>
-    <string name="bug_number">Jika ini adalah nomor yang sah, silakan laporkan di github.</string>>
-    <string name="skip_alpha_empty_number">Lewati alfa atau nomor kosong.</string>>
+    </string>
+    <string name="bug_number">Jika ini adalah nomor yang sah, silakan laporkan di GitHub.</string>
+    <string name="escape_tags">
+        <![CDATA[
+        - <title><b><no_translate>{escape(…)}</no_translate></b></title><br>
+        &ensp; Escape konten dalam tanda kurung, digunakan untuk konten di dalam tanda kutip. <br>
+        ]]>
+    </string>
 </resources>

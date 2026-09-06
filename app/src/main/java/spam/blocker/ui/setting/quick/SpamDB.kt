@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import spam.blocker.Events
+import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.db.SpamNumber
 import spam.blocker.db.SpamTable
@@ -34,19 +35,18 @@ import spam.blocker.service.bot.PruneDatabase
 import spam.blocker.service.bot.serialize
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
-import spam.blocker.ui.theme.LocalPalette
-import spam.blocker.ui.theme.Salmon
 import spam.blocker.ui.widgets.Button
 import spam.blocker.ui.widgets.GreyButton
 import spam.blocker.ui.widgets.GreyIcon18
 import spam.blocker.ui.widgets.GreyLabel
-import spam.blocker.ui.widgets.GreyText
+import spam.blocker.ui.widgets.HtmlText
 import spam.blocker.ui.widgets.LeftDeleteSwipeWrapper
 import spam.blocker.ui.widgets.NumberInputBox
 import spam.blocker.ui.widgets.OutlineCard
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.PriorityBox
 import spam.blocker.ui.widgets.PriorityLabel
+import spam.blocker.ui.widgets.ResIcon18
 import spam.blocker.ui.widgets.RowVCenter
 import spam.blocker.ui.widgets.RowVCenterSpaced
 import spam.blocker.ui.widgets.Str
@@ -54,7 +54,7 @@ import spam.blocker.ui.widgets.StrInputBox
 import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.ui.widgets.SwipeInfo
 import spam.blocker.ui.widgets.SwitchBox
-import spam.blocker.util.Util
+import spam.blocker.util.TimeUtils.formatTime
 import spam.blocker.util.spf
 import java.text.NumberFormat
 
@@ -68,9 +68,9 @@ fun reScheduleSpamDBCleanup(ctx: Context) {
 
     val spf = spf.SpamDB(ctx)
 
-    val isEnabled = spf.isEnabled()
-    val expiryEnabled = spf.isExpiryEnabled()
-    val ttl = spf.getTTL()
+    val isEnabled = spf.isEnabled
+    val expiryEnabled = spf.isExpiryEnabled
+    val ttl = spf.ttl
 
     if (isEnabled && expiryEnabled && ttl >= 0) {
         MyWorkManager.schedule(
@@ -87,7 +87,7 @@ fun SpamNumCard(
     num: SpamNumber,
     modifier: Modifier = Modifier,
 ) {
-    val C = LocalPalette.current
+    val C = G.palette
     val ctx = LocalContext.current
 
     OutlineCard(
@@ -105,7 +105,7 @@ fun SpamNumCard(
 
             // time
             Text(
-                text = Util.formatTime(ctx, num.time),
+                text = formatTime(ctx, num.time),
                 fontSize = 14.sp,
                 modifier = M
                     .padding(end = 8.dp),
@@ -119,13 +119,14 @@ fun SpamNumCard(
 
 @Composable
 fun SpamDB() {
+    val C = G.palette
     val ctx = LocalContext.current
     val spf = spf.SpamDB(ctx)
 
-    var isEnabled by remember { mutableStateOf(spf.isEnabled()) }
-    var expiryEnabled by remember { mutableStateOf(spf.isExpiryEnabled()) }
-    var ttl by remember { mutableIntStateOf(spf.getTTL()) }
-    var priority by remember { mutableIntStateOf(spf.getPriority()) }
+    var isEnabled by remember { mutableStateOf(spf.isEnabled) }
+    var expiryEnabled by remember { mutableStateOf(spf.isExpiryEnabled) }
+    var ttl by remember { mutableIntStateOf(spf.ttl) }
+    var priority by remember { mutableIntStateOf(spf.priority) }
 
     val popupTrigger = rememberSaveable { mutableStateOf(false) }
     var total by remember { mutableIntStateOf(SpamTable.count(ctx)) }
@@ -140,22 +141,22 @@ fun SpamDB() {
     PopupDialog(
         trigger = deleteConfirm,
         buttons = {
-            StrokeButton(label = Str(R.string.clear), color = Salmon) {
+            StrokeButton(label = Str(R.string.clear), color = C.error) {
                 deleteConfirm.value = false
                 SpamTable.clearAll(ctx)
                 total = SpamTable.count(ctx)
             }
         }
     ) {
-        GreyText(Str(R.string.confirm_delete_all_records))
+        HtmlText(Str(R.string.confirm_delete_all_records))
     }
 
     // Configuration Dialog
     PopupDialog(
         trigger = popupTrigger,
         onDismiss = {
-            spf.setExpiryEnabled(expiryEnabled)
-            spf.setTTL(ttl)
+            spf.isExpiryEnabled = expiryEnabled
+            spf.ttl = ttl
             reScheduleSpamDBCleanup(ctx)
         }
     ) {
@@ -166,7 +167,7 @@ fun SpamDB() {
             LabeledRow(labelId = R.string.total) {
                 GreyLabel(text = NumberFormat.getInstance().format(total))
                 Spacer(modifier = M.width(16.dp))
-                StrokeButton(label = Str(R.string.clear), color = Salmon) {
+                StrokeButton(label = Str(R.string.clear), color = C.error) {
                     deleteConfirm.value = true
                 }
             }
@@ -206,7 +207,7 @@ fun SpamDB() {
             PriorityBox(priority) { newValue, hasError ->
                 if (!hasError) {
                     priority = newValue!!
-                    spf.setPriority(newValue)
+                    spf.priority = newValue
                 }
             }
 
@@ -263,23 +264,53 @@ fun SpamDB() {
                 Button(
                     content = {
                         RowVCenterSpaced(4) {
-                            Text(NumberFormat.getInstance().format(total), color = Salmon)
+                            Text(NumberFormat.getInstance().format(total), color = C.error)
 
                             if (priority != 0) {
                                 PriorityLabel(priority)
                             }
                         }
                     },
-//                    borderColor = Salmon,
                     onClick = {
                         popupTrigger.value = true
                     }
                 )
             }
             SwitchBox(isEnabled) { isTurningOn ->
-                spf.setEnabled(isTurningOn)
+                spf.isEnabled = isTurningOn
                 isEnabled = isTurningOn
             }
         }
     )
+}
+
+@Composable
+fun SpamDBSummary() {
+    val ctx = LocalContext.current
+    val C = G.palette
+    val spf = spf.SpamDB(ctx)
+
+    val isEnabled by remember { mutableStateOf(spf.isEnabled) }
+    if (isEnabled) {
+        var total by remember { mutableIntStateOf(SpamTable.count(ctx)) }
+        val priority by remember { mutableIntStateOf(spf.priority) }
+
+        Events.spamDbUpdated.Listen {
+            total = SpamTable.count(ctx)
+        }
+
+        Button(
+            enabled = false,
+            content = {
+                RowVCenterSpaced(4) {
+                    ResIcon18(R.drawable.ic_db, color = C.error)
+                    Text(NumberFormat.getInstance().format(total), color = C.error)
+
+                    if (priority != 0) {
+                        PriorityLabel(priority)
+                    }
+                }
+            }
+        )
+    }
 }

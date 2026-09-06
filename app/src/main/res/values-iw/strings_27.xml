@@ -1,0 +1,134 @@
+<resources>
+    <string name="normal_text">טקסט רגיל</string>
+    <string name="info_feature">מידע / תכונה</string>
+    <string name="success_allow">הצלחה / לאפשר</string>
+    <string name="error_block">שגיאה / לחסום</string>
+    <string name="disable">השבת</string>
+    <string name="dialog_bg">רקע תיבת דו-שיח</string>
+    <string name="app_bg">רקע האפליקציה</string>
+    <string name="should_import_as_instant_query">
+        <![CDATA[
+        נראה שזהו זרימת עבודה של \"שאילתת API\", יש לייבא אותה אל הסעיף למעלה \"שאילתת מיידית\".
+        ]]>
+    </string>
+    <string name="at_time">בשעה</string>
+    <string name="interval">מרווח</string>
+    <string name="contact_prefix">קידומת איש קשר</string>
+    <string name="help_regex_mode_contact_prefix">
+        <![CDATA[
+        <title><b>קידומת איש קשר</b></title>:<br>
+        &ensp; אפשר שיחות לפי התאמת קידומת איש הקשר, אידיאלי לארגונים שמשתמשים
+          במספרים עוקבים, כמו מרפאות או משרדי עורכי דין. <br>
+        <br>
+        <warn>הביטוי הרגולרי הזה חייב להסתיים בנקודות</warn>, במצב זה הנקודות שבסוף מייצגות את הספרות המשתנות. <br>
+        <br>
+        <b>לדוגמה:</b> <br>
+        &ensp; <sample><b>.*..</b></sample> <br>
+        &ensp; הוא יתאים לכל איש קשר עם אותה קידומת, ויאפשר הבדל של 2 ספרות בסוף.<br>
+        &ensp; אם שמרת את <sample>1111<b>22</b></sample> כאיש קשר, גם שיחה נכנסת מ-<sample>1111<b>33</b></sample> תאושר.<br>
+        <br>
+        <b>דוגמה נוספת:</b> <br>
+        &ensp; <sample><b>(?!(04|03))\d{5}..</b></sample> <br>
+        פירוט: <br>
+        &ensp; - <b><sample>(?!(03|04))</sample></b> <br>
+        &emsp;   החרג מספרים שמתחילים ב-03 או ב-04 <br>
+        &ensp; - <b><sample>\d{5}</sample></b> <br>
+        &emsp;   המספר צריך להיות באורך כולל של 7 ספרות, כולל הסיומת המשתנה בת 2 הספרות <br>
+        &ensp; - <b><sample>..</sample></b> <br>
+        &emsp;   סיומת משתנה בת 2 ספרות <br>
+        ]]>
+    </string>
+    <string name="help_regex_preset_contact_prefix">
+        <![CDATA[
+        התאם אנשי קשר לפי קידומת, עם אפשרות לשינוי ב-<minor><b>2</b></minor> הספרות האחרונות, אידיאלי עבור ארגונים המשתמשים במספרים רציפים, למשל, מרפאות או משרדי עורכי דין. <br>
+        <br>
+        <b>לדוגמה</b>: <br>
+        &ensp; אם שמרת את <sample>111111</sample><highlight>22</highlight> כאיש קשר, גם שיחה מ-<sample>111111</sample><highlight>33</highlight> תאושר.
+        ]]>
+    </string>
+    <string name="caller_id">זיהוי מתקשר</string>
+    <string name="help_caller_id">
+        <![CDATA[
+        הצג זיהוי מתקשר בחלון צף. <br>
+        <br>
+        גרור כדי להזיז אותו. <br>
+        <br>
+        <b>הערה</b> <br>
+        ייתכן שתופיע התראת מערכת בלוח ההתראות בזמן שהחלון הצף פעיל,
+          שמציינת שהאפליקציה מציגה חלון מעל אפליקציות אחרות.
+        הסיבה לכך היא שחלונות צפים נוצלו בעבר על ידי נוזקות כדי להציג מסכי התחברות מזויפים. <br>
+        פשוט התעלם מההתראה הזו, והיא תיעלם יחד עם החלון הצף.
+        ]]>
+    </string>
+    <string name="perm_show_overlay">הצג שכבת-על</string>
+    <string name="preview">תצוגה מקדימה</string>
+    <string name="content_template">תבנית תוכן</string>
+    <string name="help_caller_id_template">
+        <![CDATA[
+        התוכן שמוצג בחלון זיהוי המתקשר, בפורמט HTML. <br>
+        <br>
+        מקף (-) מוצג אם הערך ריק, למשל כאשר אין מידע על המפעיל עבור המספר.
+        <br>
+        <title>תגיות נתמכות</title>: <br>
+        - <minor>{reason}</minor> <br>
+        &emsp; למה השיחה הותרה, אותה סיבה שמוצגת בהיסטוריית השיחות. <br>
+        - <minor>{geolocation}</minor> <br>
+        &emsp; המיקום הגיאוגרפי של מספר הטלפון. <br>
+        - <minor>{carrier}</minor> <br>
+        &emsp; שם המפעיל של מספר הטלפון. <br>
+        <br>
+        <title>תגיות HTML נתמכות</title>: <br>
+        ראו: <a href="%s">link</a>
+        ]]>
+    </string>
+    <string name="background_color">צבע רקע</string>
+    <string name="wait">המתן</string>
+    <string name="help_action_wait">
+        <![CDATA[
+        ממתין N שניות. <br>
+        <br>
+        <b>מקרה שימוש</b>: <br>
+        <sample>
+        עבור התכונה <b>התראת סמס</b>, הודעות לפעמים מגיעות בו-זמנית עם השיחה
+         או כמה שניות אחריה, והוספת עיכוב של 2~3 שניות לסינון שיחות יכולה למנוע בעיות כאלה.
+        </sample>
+        ]]>
+    </string>
+    <string name="comment_identifier">מזהה הערה</string>
+    <string name="hint_comment_identifier">
+        לדוגמה: \"comment\":\"(.+?)\"
+    </string>
+    <string name="help_comment_identifier">
+        <![CDATA[
+        חלץ את ה<title>הערה</title> מתוצאת השאילתה כדי להציג אותה בהתראה ובלוג ההיסטוריה. (אופציונלי)<br>
+        <br>
+        לדוגמה, עבור תוצאת שאילתה זו: <br>
+        <sample>
+        { <br>
+          &ensp; \"type\": \"MARKETING\", <br>
+          &ensp; \"comment\": \"Better call Saul\", <br>
+          &ensp;  … <br>
+        } <br>
+        </sample>
+        <br>
+        חלץ אותה באמצעות: <br>
+        &ensp; <sample>\"comment\": \"(.+?)\"</sample> <br>
+        ]]>
+    </string>
+    <string name="carrier">מפעיל</string>
+    <string name="carrier_rule">כלל מפעיל</string>
+    <string name="help_regex_mode_carrier">
+        <![CDATA[
+        <title><b>מפעיל</b></title>:<br>
+        &ensp; הביטוי הרגולרי יתאים לשם המפעיל של מספר הטלפון. <br>
+        <br>
+        <warn>הערה</warn> <br>
+        &ensp; פרטי המפעיל מבוססים על הרישום הראשוני ועשויים להיות לא מדויקים אם
+        מספר הטלפון נויד למפעיל אחר. <br>
+        <br>
+        לדוגמה: <br>
+        &ensp; חסימת מספרים של <no_translate><sample>Verizon Wireless</sample></no_translate>
+        באמצעות regex <no_translate><error>verizon.*</error></no_translate> <br>
+        ]]>
+    </string>
+</resources>

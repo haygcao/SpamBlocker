@@ -6,7 +6,7 @@
 
     <string name="notification">Notifica</string>
     <string name="type">Tipo</string>
-    <string name="times">Volte</string>
+
     <plurals name="days">
         <item quantity="one">%d Giorno</item>
         <item quantity="two">%d Giorni</item>
@@ -21,7 +21,7 @@
     <string name="phone_number_abbrev">Numero</string>
     <string name="sms_content">Contenuto SMS</string>
     <string name="regex_flags">Flags Regex</string>
-    <string name="off_time"><short>tempo di pausa</short></string>
+    <string name="off_time"><short>Tempo di pausa</short></string>
     <string name="schedule">Programmazione</string>
     <string name="workday">Giorno lavorativo</string>
     <string name="weekend">Weekend</string>
@@ -31,32 +31,37 @@
     <string name="help_for_particular_number">Se abilitato, la regola si applica solo quando corrispondono sia il numero che il contenuto.</string>
     <string name="help_dialed">
         <![CDATA[
-        Consenti chiamate da numeri precedentemente composti.<br>
+        Consente le chiamate dai numeri precedentemente chiamati.<br>
         <br>
         <b>Opzioni:</b><br>
         <br>
-        <h6><font color="#00BFFF">- Entro Giorni</font></h6>
-        Le chiamate avvenute prima di <font color="cyan">%s giorni</font> vengono ignorate.<br>
+        <h6><title>- Intervallo di tempo</title></h6>
+        &ensp; - <minor>Tutto il tempo</minor> <br>
+        &emsp; Consente sempre i numeri chiamati.<br>
+        &ensp; - <minor>Entro X giorni</minor> <br>
+        &emsp; Le chiamate effettuate prima di X giorni vengono ignorate.<br>
         <br>
-        <h6><font color="#00BFFF">- Includi SMS</font></h6>
-        Se abilitato, anche l\'invio di SMS a quel numero conta.<br>
+        <h6><title>- Includi SMS</title></h6>
+        Se abilitato, inviare un SMS a quel numero viene considerato valido.<br>
         <br>
-        <font color="#ea86ff"><b>Priorità: 10</b></font>
+        <priority><b>Priorità: 10</b></priority>
         ]]>
     </string>
     <string name="help_recent_apps">
         <![CDATA[
-        Qualsiasi chiamata verrebbe accettata se qualsiasi app nell\'elenco è stata utilizzata di recente.<br>
+        Qualsiasi chiamata verrà accettata se un\'app nell\'elenco è stata usata di recente.<br>
         <br>
-        Un caso d\'uso tipico:<br>
-        &emsp; Hai appena ordinato una pizza in PizzaApp, presto ti chiamano per un rimborso perché stanno chiudendo. Quella chiamata verrebbe accettata se PizzaApp è abilitata qui. <br>
+        Caso d\'uso:<br>
+        <sample>
+          &ensp; Un ordine su PizzaApp genera una chiamata di rimborso immediata a causa della chiusura del ristorante; questa chiamata verrà accettata se PizzaApp è abilitata qui. <br>
+        </sample>
         <br>
-        L\'impostazione predefinita <font color="03DAC5"><b>5 Min</b></font> significa che qualsiasi chiamata verrebbe accettata se una delle app è stata utilizzata entro 5 minuti,
-        per `utilizzata` si intende attivata, disattivata, minimizzata o chiusa. <br>
+        L\'impostazione predefinita <highlight><b>5 Min</b></highlight> significa che tutte le chiamate verranno accettate se una delle app è stata usata entro 5 minuti,
+        per \"<b>usata</b>\" si intende una delle seguenti: <highlight>attivata, disattivata, minimizzata o terminata</highlight>.<br>
         <br>
-        Si applica solo alle chiamate, <b>non</b> ai messaggi di testo. <br>
+        Si applica solo alle chiamate, non ai messaggi di testo. <br>
         <br>
-        <font color="#ea86ff"><b>Priorità: 10</b></font>
+        <priority><b>Priorità: 10</b></priority>
         ]]>
     </string>
     <string name="help_hang_up_delay">Il ritardo prima che la chiamata venga riagganciata.</string>
@@ -67,21 +72,21 @@
     </string-array>
     <string name="help_block_type">
         <![CDATA[
-        - <font color="#00BFFF"><b>Rifiuta</b></font>: <br>
+        - <title><b>Rifiuta</b></title>: <br>
          Come premere il tasto di rifiuto. Funziona in modo completamente silenzioso, la schermata di blocco non si attiverà.<br>
         <br>
-        - <font color="#00BFFF"><b>Silenzia</b></font>: <br>
-         Squillerà silenziosamente in sottofondo, dando l\'impressione al chiamante che eri non disponibile e hai perso la chiamata. <br>
+        - <title><b>Silenzia</b></title>: <br>
+        La chiamata viene rifiutata istantaneamente dal tuo lato, ma continua a squillare per chi chiama, dando l\'impressione che tu non sia disponibile. <br>
         <br>
-         Potrebbe anche essere utile se stai ricevendo ripetute chiamate spam; prolungherà la durata della chiamata, rendendola meno efficiente per gli spammer, scoraggiandoli potenzialmente dal richiamarti.<br>
+        Questo può anche aiutare a ridurre le chiamate spam ripetute. Prolunga la durata della chiamata, rendendole meno efficienti e potenzialmente scoraggiando gli spammer dal chiamarti di nuovo.<br>
         <br>
-        - <font color="#00BFFF"><b>Riaggancia</b></font>: <br>
+        - <title><b>Riaggancia</b></title>: <br>
         Rispondi e riaggancia la chiamata per evitare che vada alla segreteria telefonica. <br>
         <br>
         Quando la chiamata spam viene ricevuta durante una chiamata in corso, passerà a \"Rifiuta\"
          per evitare di riagganciare la chiamata in corso. <br>
         <br>
-        <font color="#FFA500">Nota</font> La schermata di blocco potrebbe attivarsi per un breve periodo,
+        <warn>Nota</warn> La schermata di blocco potrebbe attivarsi per un breve periodo,
         potresti anche sentire un tono di fine chiamata (alcuni telefoni offrono un\'opzione per silenziare questo suono). <br>
         <br>
         - Il <b>ritardo</b>: <br>
@@ -90,4 +95,6 @@
         &emsp; Se desideri registrare le chiamate, installa un\'app di registrazione chiamate e aumenta il ritardo di conseguenza.
         ]]>
     </string>
+    <string name="time_range">Intervallo di tempo</string>
+    <string name="all_time">Tutto il tempo</string>
 </resources>

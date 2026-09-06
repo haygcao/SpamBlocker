@@ -1,7 +1,7 @@
 <resources>
     <string name="warning_double_sms">
         <![CDATA[
-        Çift bildirimleri önlemek için sistem ayarlarında <font color="#fa7f71"><b>SMS uygulamasının bildirimini kapattığınızdan</b></font> emin olun. <br>
+        Çift bildirimleri önlemek için sistem ayarlarında <error><b>SMS uygulamasının bildirimini kapattığınızdan</b></error> emin olun. <br>
         <br>
         SMS uygulaması bildirim izni zorluyorsa, izni açık bırakabilir ve bunun yerine tüm <b>bildirim kanallarını</b> kapatabilirsiniz.
         ]]>
@@ -15,22 +15,15 @@
     </string>
     <string name="help_regex_mode_caller_name">
         <![CDATA[
-        <font color="#00BFFF"><b>Arayan Adı</b></font>:<br>
+        <title><b>Arayan Adı</b></title>:<br>
         &ensp; Regex, arayanın görünen adıyla (CNAP) eşleşecektir. <br>
         <br>
         Çağrı geçmişi kaydında, arayan adı varsa telefon numarasından sonra parantez içinde görünecektir, örneğin: <br>
-        &ensp; <font color="#888888">12345 (Görünen Ad)</font> <br>
+        &ensp; <sample>12345 (Görünen Ad)</sample> <br>
         ]]>
     </string>
     <string name="caller_name">Arayan Adı</string>
     <string name="caller_name_rule">Arayan Adı Kuralı</string>
-    <string name="help_regex_preset_caller_name">
-        <![CDATA[
-        Gelen bir arama sırasında arayanın kayıtlı adını (telefon numarasıyla birlikte) alıcının telefon ekranında gösteren bir telekom özelliği olan <b>CNAP (Arayan Adı Gösterimi)</b> bilgisine sahip aramalara izin verin. <br>
-        <br>
-        KYC-doğrulamalı CNAP uygulayan ülkeler için, arayan adı olan aramalar muhtemelen geçerlidir.
-        ]]>
-    </string>
     <string name="forwarded_call">Yönlendirilen Çağrı</string>
     <string name="help_regex_preset_forwarded_call">
         <![CDATA[
@@ -41,13 +34,13 @@
     </string>
     <string name="explanation_forwarded_call">
         <![CDATA[
-        Bu <b>operatöre özeldir</b>, bazı operatörler yönlendirilen çağrıları <font color="#888888">222&111</font> gibi \"&\" ile birleştirilmiş iki numara olarak biçimlendirir. <br>
+        Bu <b>operatöre özeldir</b>, bazı operatörler yönlendirilen çağrıları <sample>222&111</sample> gibi \"&\" ile birleştirilmiş iki numara olarak biçimlendirir. <br>
         <br>
         Bu biçimde: <br>
-        &ensp; - İlk kısım (<font color="#888888">222</font>) genellikle yönlendiren numaradır. <br>
-        &ensp; - İkinci kısım (<font color="#888888">111</font>) orijinal numaradır. <br>
+        &ensp; - İlk kısım (<sample>222</sample>) genellikle yönlendiren numaradır. <br>
+        &ensp; - İkinci kısım (<sample>111</sample>) orijinal numaradır. <br>
         <br>
-        Ayrıca <font color="#888888">333&111</font> ve <font color="#888888">444&111</font> de olabilir, burada orijinal numara aynı kalır ve yönlendiren numara değişir.
+        Ayrıca <sample>333&111</sample> ve <sample>444&111</sample> de olabilir, burada orijinal numara aynı kalır ve yönlendiren numara değişir.
         ]]>
     </string>
     <string name="raw">Ham</string>
@@ -61,32 +54,30 @@
         <br>
         <b>Seçenekler</b>: <br>
         <br>
-        <font color="#00BFFF"><b>Ham</b></font> <br>
-        API bu biçimi destekliyorsa ham numarayı (<font color="#888888">222&111</font>) sorgulayın/bildirin. <br>
+        <title><b>Ham</b></title> <br>
+        API bu biçimi destekliyorsa ham numarayı (<sample>222&111</sample>) sorgulayın/bildirin. <br>
         <br>
-        <font color="#00BFFF"><b>Orijinal</b></font> <br>
-        Orijinal numarayı (<font color="#888888">111</font>) sorgulayın/bildirin, bu, ham biçimi desteklemeyen API\'ler için bir çözümdür. <br>
+        <title><b>Orijinal</b></title> <br>
+        Orijinal numarayı (<sample>111</sample>) sorgulayın/bildirin, bu, ham biçimi desteklemeyen API\'ler için bir çözümdür. <br>
         <br>
-        <font color="#00BFFF"><b>Yönlendirme</b></font> <br>
-        Yönlendirme numarasını (<font color="#888888">222</font>) sorgulayın/bildirin. <br>
+        <title><b>Yönlendirme</b></title> <br>
+        Yönlendirme numarasını (<sample>222</sample>) sorgulayın/bildirin. <br>
         ]]>
     </string>
     <string name="forwarded_number_modified_to">Bu yönlendirilen numara %s olarak değiştirildi.</string>
     <string name="filter">Filtre</string>
-    <string name="geo_location">Coğrafi Konum</string>
-    <string name="geo_location_rule">Coğrafi Konum Kuralı</string>
-    <string name="help_regex_mode_geo_location">
+    <string name="geolocation">Coğrafi Konum</string>
+    <string name="geolocation_rule">Coğrafi Konum Kuralı</string>
+    <string name="help_regex_mode_geolocation">
         <![CDATA[
-        <font color="#00BFFF"><b>Coğrafi Konum</b></font>:<br>
+        <title><b>Coğrafi Konum</b></title>:<br>
         &ensp; Regex, numaranın coğrafi konumuyla eşleşecektir. <br>
         <br>
         &ensp; Bu, Google\'ın <a href="https://github.com/google/libphonenumber">libphonenumber</a> kütüphanesine dayanır,
-         telefon numaraları için coğrafi bilgi sağlayan çevrim dışı bir kütüphane. <br>
+         telefon numaraları için coğrafi bilgi sağlayan çevrim dışı bir veritabanı. <br>
         <br>
-        &ensp; Veritabanı doğruluğunda herhangi bir sorun fark ederseniz,
-        <a href="https://groups.google.com/g/libphonenumber-discuss">bir tartışma açabilir</a>
-        ya da
-        <a href="https://issuetracker.google.com/issues/new?component=192347">bir sorun bildirebilirsiniz</a>. <br>
+        Örneğin: <br>
+        &ensp; <no_translate><sample>San Francisco, CA</sample></no_translate> bölgesinden gelen numaraları <no_translate><error>san fr.*</error></no_translate> regex\'i ile engelleyin <br>
         ]]>
     </string>
     <string name="label_value_pair">%s: %s</string>
@@ -99,10 +90,10 @@
         <![CDATA[
         Aynı bölgeden gelen yerel aramaları izin ver ve diğerlerini engelle. <br>
         <br>
-        ___ yer tutucusunu gerçek bölgenizle değiştirin. <br>
+        <sample>Milan</sample>\'ı gerçek bölgenizle değiştirin. <br>
         <br>
-        Sözdizimi <font color="#fa7f71">(?!___$).*</font> şu anlama gelir: <br>
-        &ensp; <font color="#fa7f71">___</font> olmayan herhangi bir metni eşleştir.
+        Sözdizimi <error>(?!Milan$).*</error> şu anlama gelir: <br>
+        &ensp; <error>Milan</error> olmayan herhangi bir metni eşleştir.
         ]]>
     </string>
 </resources>

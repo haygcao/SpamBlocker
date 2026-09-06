@@ -1,16 +1,14 @@
 <resources>
     <string name="start_time">وقت البدء</string>
     <string name="end_time">وقت الانتهاء</string>
-    <string name="switch_mode">تبديل الوضع</string>
+    <string name="regex_mode">وضع Regex</string>
     <string name="contact_group">مجموعة جهات الاتصال</string>
-    <string name="text_too_long">النص طويل جدًا، التحرير معطل</string>
-    <string name="follow_system"><short>متابعة النظام</short></string>
+    <string name="text_too_long">يتجاوز النص %s حرفًا، التحرير معطل لأسباب تتعلق بالأداء. لزيادة الحد:</string>
+    <string name="increase_text_limit">اضغط مطولاً على قاعدة -> الإعدادات -> حد مربع النص</string>
+    <string name="system"><short>نظام</short></string>
     <string name="theme">المظهر</string>
-    <string-array name="theme_list">
-        <item>فاتح</item>
-        <item>داكن</item>
-    </string-array>
     <string-array name="rule_dropdown_menu">
+        <item>تصدير</item>
         <item>بحث عن قاعدة</item>
         <item>استنساخ قاعدة</item>
         <item>حذف قاعدة</item>
@@ -26,24 +24,24 @@
     </string>
     <string name="help_regex_mode_phone_number">
         <![CDATA[
-        <font color="#00BFFF"><b>رقم الهاتف</b></font>:<br>
+        <title><b>رقم الهاتف</b></title>:<br>
         &ensp; الوضع الافتراضي، ستتم مطابقة التعبير النمطي مع رقم الهاتف.<br>
         ]]>
     </string>
     <string name="help_regex_mode_contact">
         <![CDATA[
-        <font color="#00BFFF"><b>جهات الاتصال</b></font>:<br>
+        <title><b>جهات الاتصال</b></title>:<br>
         &ensp; ستتم مطابقة التعبير النمطي مع اسم جهة الاتصال المرتبطة بالرقم الوارد.<br>
         &ensp;  - حالة الاستخدام:<br>
-        &emsp; <font color="#888888">حظر جميع الأرقام غير الموجودة في جهات الاتصال في عطلة نهاية الأسبوع باستخدام التعبير النمطي `.*`. </font><br>
+        &emsp; <sample>حظر جميع الأرقام غير الموجودة في جهات الاتصال في عطلة نهاية الأسبوع باستخدام التعبير النمطي `.*`. </sample><br>
         ]]>
     </string>
     <string name="help_regex_mode_contact_group">
         <![CDATA[
-        <font color="#00BFFF"><b>مجموعة جهات الاتصال</b></font>:<br>
+        <title><b>مجموعة جهات الاتصال</b></title>:<br>
         &ensp; ستتم مطابقة التعبير النمطي مع اسم مجموعة جهات الاتصال المرتبطة بالرقم الوارد، مما يؤثر على جميع جهات الاتصال في تلك المجموعة، لذا لا تحتاج إلى إضافتها بشكل فردي، ولا داعي لتحديثها حتى عند وجود تغييرات في الموظفين.<br>
         &ensp;  - حالة الاستخدام:<br>
-        &emsp; <font color="#888888">حظر جميع زملاء العمل في عطلة نهاية الأسبوع عن طريق حظر مجموعة جهات الاتصال \"العمل\". </font> <br>
+        &emsp; <sample>حظر جميع زملاء العمل في عطلة نهاية الأسبوع عن طريق حظر مجموعة جهات الاتصال \"العمل\". </sample> <br>
         ]]>
     </string>
 </resources>

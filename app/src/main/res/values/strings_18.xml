@@ -11,9 +11,9 @@
         Temporarily modify regex rules based on calendar events. <br>
         <br>
         <b>Use case</b>:<br>
-        &ensp; <font color="#888888">A shift worker works the day shift for two days,
+        &ensp; <sample>A shift worker works the day shift for two days,
           then the night shift for the next two.<br>
-        &ensp; Some rules need to be disabled or enabled during the varying working hours.</font><br>
+        &ensp; Some rules need to be disabled or enabled during the varying working hours.</sample><br>
         <br>
         This will create both a regex rule and a workflow, the rule will be enabled on the fly during the specific calendar event. <br>
         ]]>
@@ -37,18 +37,16 @@
         - Otherwise, the workflow will terminate.<br>
         <br>
         Use case: <br>
-        <font color="#888888">
+        <sample>
         &ensp; Toggle some rules after receiving on-call or off-call SMS. <br>
-        </font>
+        </sample>
         ]]>
     </string>
     <string name="sms_event_triggered">SMS event %s is triggered.</string>
-    <string name="use_global_testing_instead">Use the global testing instead.</string>
-    <string name="missing_permissions">Following permissions were previously granted but are currently missing:</string>
+    <string name="use_global_testing_instead">Use global testing instead.</string>
+    <string name="missing_permissions">The following permissions were previously granted but are currently missing:</string>
     <string name="grant_permissions">Grant Permissions</string>
     <string name="perm_call_screening">Call Screening</string>
-    <string name="perm_file_read">File Read</string>
-    <string name="perm_file_write">File Write</string>
     <string name="perm_contacts">Contacts</string>
     <string name="perm_receive_sms">Receive SMS</string>
     <string name="perm_receive_mms">Receive MMS</string>
@@ -61,24 +59,24 @@
     <string name="perm_usage_stats">Usage Stats</string>
     <string name="perm_battery_unrestricted">Battery Unrestricted</string>
     <string name="include_sms">Include SMS</string>
-    <string name="minimal_duration">Minimal Duration</string>
+    <string name="minimal_duration">Minimum Duration</string>
     <string name="answered_number"><short>Answered Number</short></string>
     <string name="help_answered">
         <![CDATA[
         Allow calls from previously answered numbers.<br>
         <br>
-        <h6><font color="#ffa500">Warning</font></h6>
+        <h6><warn>Warning</warn></h6>
         %s<br>
         <br>
         <b>Options:</b><br>
         <br>
-        <h6><font color="#00BFFF">- Within Days</font></h6>
-        Calls that occurred before <font color="cyan">%d days</font> are ignored.<br>
+        <h6><title>- Within Days</title></h6>
+        Calls that occurred before <highlight>%d days</highlight> are ignored.<br>
         <br>
-        <h6><font color="#00BFFF">- Minimal Duration</font></h6>
-        Calls lasted less than <font color="cyan">%d seconds</font> are ignored.<br>
+        <h6><title>- Minimal Duration</title></h6>
+        Calls lasted less than <highlight>%d seconds</highlight> are ignored.<br>
         <br>
-        <font color="#ea86ff"><b>Priority: 10</b></font>
+        <priority><b>Priority: 10</b></priority>
         ]]>
     </string>
     <string name="answered_warning">Do not enable this feature for seniors or anyone less capable of identifying fraudulent calls, as this could expose them to repeated fraudulent calls.</string>

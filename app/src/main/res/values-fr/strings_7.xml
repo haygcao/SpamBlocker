@@ -1,16 +1,14 @@
 <resources>
     <string name="start_time">Heure de début</string>
     <string name="end_time">Heure de fin</string>
-    <string name="switch_mode">Changer de mode</string>
+    <string name="regex_mode">Mode regex</string>
     <string name="contact_group">Groupe de contact</string>
-    <string name="text_too_long">Texte trop long, l\'édition est désactivée</string>
-    <string name="follow_system"><short>Suivre le système</short></string>
+    <string name="text_too_long">Le texte dépasse %s caractères, l\'édition est désactivée pour des raisons de performance. Pour augmenter la limite :</string>
+    <string name="increase_text_limit">Appui long sur une règle -> Paramètres -> Limite de la zone de texte</string>
+    <string name="system"><short>Système</short></string>
     <string name="theme">Thème</string>
-    <string-array name="theme_list">
-        <item>Clair</item>
-        <item>Sombre</item>
-    </string-array>
     <string-array name="rule_dropdown_menu">
+        <item>Exporter</item>
         <item>Rechercher une règle</item>
         <item>Cloner la règle</item>
         <item>Supprimer la règle</item>
@@ -26,26 +24,26 @@
     </string>
     <string name="help_regex_mode_phone_number">
         <![CDATA[
-        <font color="#00BFFF"><b>Numéro de téléphone</b></font>:<br>
+        <title><b>Numéro de téléphone</b></title>:<br>
         &ensp; Le mode par défaut, l\'expression régulière correspondra au numéro de téléphone.<br>
         ]]>
     </string>
     <string name="help_regex_mode_contact">
         <![CDATA[
-        <font color="#00BFFF"><b>Contacts</b></font>:<br>
+        <title><b>Contacts</b></title>:<br>
         &ensp; L\'expression régulière correspondra au nom du contact associé au numéro entrant.<br>
         &ensp;  - Cas d\'utilisation :<br>
-        &emsp; <font color="#888888">Bloquer tous les non-contacts le week-end avec l\'expression régulière `.*`. </font><br>
+        &emsp; <sample>Bloquer tous les non-contacts le week-end avec l\'expression régulière `.*`. </sample><br>
         ]]>
     </string>
     <string name="help_regex_mode_contact_group">
         <![CDATA[
-        <font color="#00BFFF"><b>Groupe de contacts</b></font>:<br>
+        <title><b>Groupe de contacts</b></title>:<br>
         &ensp; L\'expression régulière correspondra au nom du groupe de contacts associé au numéro entrant,
                  affectant tous les contacts de ce groupe, vous n\'avez donc pas besoin de les ajouter individuellement,
                  et pas besoin de le mettre à jour même en cas de changements de personnel.<br>
         &ensp;  - Cas d\'utilisation :<br>
-        &emsp; <font color="#888888">Bloquer tous les collègues le week-end en bloquant le groupe de contacts \"travail\". </font> <br>
+        &emsp; <sample>Bloquer tous les collègues le week-end en bloquant le groupe de contacts \"travail\". </sample> <br>
         ]]>
     </string>
 </resources>

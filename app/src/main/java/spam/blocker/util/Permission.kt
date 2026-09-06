@@ -3,6 +3,7 @@ package spam.blocker.util
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlarmManager
 import android.app.AppOpsManager
 import android.app.NotificationManager
 import android.app.role.RoleManager
@@ -14,7 +15,6 @@ import android.content.ServiceConnection
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.os.IBinder
 import android.os.PowerManager
 import android.os.Process
@@ -29,10 +29,9 @@ import androidx.core.net.toUri
 import spam.blocker.R
 import spam.blocker.def.Def
 import spam.blocker.service.NotificationListenerService
-import spam.blocker.util.Permission.fileRead
-import spam.blocker.util.Permission.fileWrite
 import spam.blocker.util.PermissionLauncher.launcherProtected
 import spam.blocker.util.PermissionLauncher.launcherRegular
+import spam.blocker.util.PermissionLauncher.launcherSAF
 import spam.blocker.util.PermissionType.AnswerCalls
 import spam.blocker.util.PermissionType.Basic
 import spam.blocker.util.PermissionType.BatteryUnRestricted
@@ -40,15 +39,17 @@ import spam.blocker.util.PermissionType.Calendar
 import spam.blocker.util.PermissionType.CallLog
 import spam.blocker.util.PermissionType.CallScreening
 import spam.blocker.util.PermissionType.Contacts
-import spam.blocker.util.PermissionType.FileRead
-import spam.blocker.util.PermissionType.FileWrite
 import spam.blocker.util.PermissionType.NotificationAccess
 import spam.blocker.util.PermissionType.PhoneState
 import spam.blocker.util.PermissionType.ReadSMS
 import spam.blocker.util.PermissionType.ReceiveMMS
 import spam.blocker.util.PermissionType.ReceiveSMS
+import spam.blocker.util.PermissionType.ScheduleAlarm
+import spam.blocker.util.PermissionType.SendSMS
+import spam.blocker.util.PermissionType.ShowOverlay
 import spam.blocker.util.PermissionType.UsageStats
 import spam.blocker.util.PermissionType.WriteSettings
+
 
 object PermissionType {
     abstract class Basic {
@@ -56,13 +57,14 @@ object PermissionType {
 
         // "Read File", "Call Screening", ...
         abstract var descId: Int
-        fun desc(ctx: Context): String { return ctx.getString(descId) }
+        open fun desc(ctx: Context): String { return ctx.getString(descId) }
         // Check if this permission has been granted.
         abstract fun check(ctx: Context) : Boolean
         // Show a system dialog asking for this permission, or go to corresponding system settings.
         abstract fun ask(ctx: Context)
         // After a permission is granted or revoked, this callback function will be called.
-        abstract fun onResult(ctx: Context, isGranted: Boolean)
+        //  `extraData` is for SAF permissions to retrieve the selected Uri
+        abstract fun onResult(ctx: Context, isGranted: Boolean, extraData: Any? = null)
     }
 
     // Regular permissions like file_read/contacts/receive_sms
@@ -74,7 +76,7 @@ object PermissionType {
             return ContextCompat.checkSelfPermission(ctx, name) == PERMISSION_GRANTED
         }
         override fun ask(ctx: Context) { launcherRegular.launch(name) }
-        override fun onResult(ctx: Context, granted: Boolean) { isGranted = granted }
+        override fun onResult(ctx: Context, granted: Boolean, extraData: Any?) { isGranted = granted }
     }
 
     // ---------------------------------------
@@ -85,6 +87,7 @@ object PermissionType {
     // All Regular permissions
     class Contacts: Regular(Manifest.permission.READ_CONTACTS, R.string.perm_contacts)
     class ReceiveSMS: Regular(Manifest.permission.RECEIVE_SMS, R.string.perm_receive_sms)
+    class SendSMS: Regular(Manifest.permission.SEND_SMS, R.string.send_sms)
     class ReceiveMMS: Regular(Manifest.permission.RECEIVE_MMS, R.string.perm_receive_mms)
     class AnswerCalls: Regular(Manifest.permission.ANSWER_PHONE_CALLS, R.string.perm_answer_calls)
     class CallLog: Regular(Manifest.permission.READ_CALL_LOG, R.string.perm_call_logs)
@@ -93,41 +96,41 @@ object PermissionType {
     class Calendar: Regular(Manifest.permission.READ_CALENDAR, R.string.perm_read_calendar)
 
 
-    open class FileAccess(name: String, descId: Int): Regular(name, descId) {
-        override fun check(ctx: Context): Boolean {
-            return if (Build.VERSION.SDK_INT == Def.ANDROID_10) {
-                super.check(ctx)
-            } else {
-                Environment.isExternalStorageManager()
-            }
-        }
-        override fun ask(ctx: Context) {
-            if (Build.VERSION.SDK_INT == Def.ANDROID_10) {
-                super.ask(ctx)
-            } else {
-                launcherProtected.launch(
-                    Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
-                        .apply {
-                            data = Uri.fromParts("package", ctx.packageName, null)
-                        }
+    // Storage Access Framework (SAF) directory chooser
+    class SafDirAccess(
+        override var descId: Int = R.string.perm_access_dir,
+        var uri: Uri? = null, // in / out
+    ): Basic() {
+
+        override fun desc(ctx: Context): String { return ctx.getString(descId) + ": " + uri?.toFolderDisplayName()}
+        override fun ask(ctx: Context) { launcherSAF.launch(uri) }
+        override fun onResult(ctx: Context, granted: Boolean, extraData: Any?) {
+            isGranted = granted
+            if (isGranted) {
+                uri = extraData as Uri
+
+                ctx.contentResolver.takePersistableUriPermission(
+                    uri!!,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 )
             }
         }
+        override fun check(ctx: Context): Boolean {
+            if (uri == null) return false
 
-        override fun onResult(ctx: Context, granted: Boolean) {
-            super.onResult(ctx, granted)
-            // On android 11+, read/write share same permission: ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
-            // if any is granted, grant the other as well.
-            if (Build.VERSION.SDK_INT > Def.ANDROID_10) {
-                fileWrite.isGranted = granted
-                fileRead.isGranted = granted
+            // Get all the URIs the app currently has persisted access to
+            val persistedPermissions = ctx.contentResolver.persistedUriPermissions
+
+            return persistedPermissions.any { permission ->
+                permission.uri == uri &&
+                        permission.isReadPermission && // Read
+                        permission.isWritePermission   // Write
             }
         }
     }
-    class FileRead(): FileAccess(Manifest.permission.READ_EXTERNAL_STORAGE, R.string.perm_file_read)
-    class FileWrite(): FileAccess(Manifest.permission.WRITE_EXTERNAL_STORAGE, R.string.perm_file_write)
 
-    // It will launch an Intent when asking for the permission.
+
+    // It launches an Intent when asking for the permission.
     abstract class LaunchByIntent() : Basic() {
         abstract fun launcherIntent(ctx: Context): Intent
         override fun check(ctx: Context): Boolean {
@@ -137,7 +140,7 @@ object PermissionType {
         override fun ask(ctx: Context) { launcherProtected.launch(launcherIntent(ctx)) }
         // The param only indicates whether this Intent was displayed correctly, call the `check()`
         //  to get if this permission is granted or not.
-        override fun onResult(ctx: Context, granted: Boolean) {
+        override fun onResult(ctx: Context, granted: Boolean, extraData: Any?) {
             isGranted = granted
         }
     }
@@ -188,6 +191,22 @@ object PermissionType {
             )
         }
     }
+
+    class ShowOverlay(
+        override var descId: Int = R.string.perm_show_overlay
+    ): LaunchByIntent() {
+        override fun launcherIntent(ctx: Context): Intent {
+            return Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                "package:${ctx.packageName}".toUri()
+            )
+        }
+
+        override fun check(ctx: Context): Boolean {
+            return Settings.canDrawOverlays(ctx)
+        }
+    }
+
     class WriteSettings(
         override var descId: Int = R.string.perm_write_settings
     ): LaunchByIntent() {
@@ -200,42 +219,7 @@ object PermissionType {
             return Settings.System.canWrite(ctx)
         }
     }
-//    class ExactAlarm: LaunchByIntent() {
-//        override fun launcherIntent(ctx: Context): Intent {
-//            return if (Build.VERSION.SDK_INT >= Def.ANDROID_12) {
-//                Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
-//            } else {
-//                return Intent()
-//            }
-//        }
-//
-//        override fun check(ctx: Context): Boolean {
-//            val alarmManager = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//
-//            // Check if the app can schedule exact alarms (Android 12+)
-//            return if (Build.VERSION.SDK_INT >= Def.ANDROID_12) {
-//                alarmManager.canScheduleExactAlarms()
-//            } else {
-//                true // Permission not required on Android 11 or below
-//            }
-//        }
-//    }
-//    class Accessibility: LaunchByIntent() {
-//        override fun launcherIntent(ctx: Context): Intent {
-//            return Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-//        }
-//        override fun check(ctx: Context): Boolean {
-//            return try {
-//                val enabled = Secure.getInt(
-//                    ctx.contentResolver,
-//                    Secure.ACCESSIBILITY_ENABLED
-//                )
-//                enabled != 0
-//            } catch (_: SettingNotFoundException) {
-//                false
-//            }
-//        }
-//    }
+
     // This permission should always be optional because "Optimized" also works, not necessarily to be "Unrestricted".
     class BatteryUnRestricted(
         override var descId: Int = R.string.perm_battery_unrestricted
@@ -262,6 +246,32 @@ object PermissionType {
         }
     }
 
+    class ScheduleAlarm(
+        override var descId: Int = R.string.schedule_alarm
+    ): LaunchByIntent() {
+        override fun launcherIntent(ctx: Context): Intent {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                    data = "package:${ctx.packageName}".toUri()
+                }
+            } else {
+                // Fallback to general App Details Settings for older Android versions
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = "package:${ctx.packageName}".toUri()
+                }
+            }
+        }
+
+        override fun check(ctx: Context): Boolean {
+            return if (Build.VERSION.SDK_INT >= Def.ANDROID_12) {
+                val alarmManager = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                alarmManager.canScheduleExactAlarms()
+            } else {
+                true
+            }
+        }
+    }
+
     class CallScreening(
         override var descId: Int = R.string.perm_call_screening
     ): LaunchByIntent() {
@@ -275,8 +285,8 @@ object PermissionType {
             return roleManager.isRoleHeld(RoleManager.ROLE_CALL_SCREENING)
         }
 
-        override fun onResult(ctx: Context, granted: Boolean) {
-            super.onResult(ctx, granted)
+        override fun onResult(ctx: Context, granted: Boolean, extraData: Any?) {
+            super.onResult(ctx, granted, extraData)
             if (granted)
                 bindCallScreeningService(ctx)
         }
@@ -303,14 +313,16 @@ object PermissionLauncher {
 
     // for protected permissions, e.g.: USAGE_STATS
     lateinit var launcherProtected: ManagedActivityResultLauncher<Intent, ActivityResult>
+
+    // for file permissions, e.g.: FileRead, FileWrite
+    lateinit var launcherSAF: ManagedActivityResultLauncher<Uri?, Uri?>
 }
 
 object Permission {
     val callScreening = CallScreening()
-    val fileRead = FileRead()
-    val fileWrite = FileWrite()
     val contacts = Contacts()
     val receiveSMS = ReceiveSMS()
+    val sendSMS = SendSMS()
     val receiveMMS = ReceiveMMS()
     val answerCalls = AnswerCalls()
     val callLog = CallLog()
@@ -319,16 +331,17 @@ object Permission {
     val calendar = Calendar()
     val writeSettings = WriteSettings()
     val notificationAccess = NotificationAccess()
+    val showOverlay = ShowOverlay()
     val usageStats = UsageStats()
     val batteryUnRestricted = BatteryUnRestricted()
+    val scheduleAlarm = ScheduleAlarm()
 
     fun all(): List<Basic> {
         return listOf(
             callScreening,
-            fileRead,
-            fileWrite,
             contacts,
             receiveSMS,
+            sendSMS,
             receiveMMS,
             answerCalls,
             callLog,
@@ -337,8 +350,10 @@ object Permission {
             calendar,
             writeSettings,
             notificationAccess,
+            showOverlay,
             usageStats,
             batteryUnRestricted,
+            scheduleAlarm
         )
     }
 

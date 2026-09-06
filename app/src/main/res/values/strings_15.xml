@@ -1,43 +1,13 @@
 <resources>
-    <string name="api_preset_groq">Groq</string>
-    <string name="help_api_preset_groq">
-        <![CDATA[
-        Check the SMS content using <b>Groq AI</b>, it only requires an email account.
-        ]]>
-    </string>
-    <string name="help_api_preset_groq_authorization">
-        <![CDATA[
-        1. Register and login: <br>
-         <a href="https://console.groq.com/login">https://console.groq.com/login</a><br>
-         <br>
-        2. Open the API page:<br>
-         <a href="https://console.groq.com/keys">https://console.groq.com/keys</a><br>
-        <br>
-        3. Press the <translate>\"Create API key\"</translate> button.<br>
-        <br>
-        4. Copy the key, then fill it in below.
-        ]]>
-    </string>
-    <string name="spam_sms_prompt_template">
-        Categorize this SMS message as Political, Fraud, Survey, or Marketing.
-        If none applies, answer \"Valid\", otherwise, answer the category only, don\'t answer anything else.
-        The SMS message is:
-        {sms}
-    </string>
-    <string name="spam_sms_negative_category"><translate>(Political|Fraud|Survey|Marketing)</translate></string>
-    <string name="spam_sms_positive_category">Valid</string>
     <string name="last_log">Last Log</string>
     <string name="executed_at">Executed at:</string>
     <string name="not_executed_yet">Not executed yet</string>
     <string name="rule_indicator">Rule Indicator</string>
     <string name="help_show_rule_indicator">
         <![CDATA[
-        Show icons before the number to indicate whether it exists in the spam database or is there any regex rule that matches it. <br>
+        Show icons before the number to indicate whether it exists in the spam database or matches any regex rule. <br>
         <br>
         At a quick glance, you can effortlessly verify if the history records are covered by the rules, so you don\'t need to test them individually. <br>
-        <br>
-        <font color="#ffa500">Note:</font><br>
-        This can impact the performance when there are too many regex rules. <br>
         <br>
         <b>Examples:</b> <br>
         <br>
@@ -46,25 +16,30 @@
         &ensp; - The second red SMS icon indicates this SMS content will be blocked by a content rule. <br>
         &ensp; - The third red database icon indicates this number exists in the spam number database. <br>
         <br>
-        These icons are arranged by <font color="#ea86ff"><b>priority</b></font>, the <b>first</b> icon indicates
+        These icons are arranged by <priority><b>priority</b></priority>, the <b>first</b> icon indicates
         the overall result. That number rule has a higher priority, the SMS message will eventually be allowed by it.<br>
         <br>
         <img src=\'ic_history_indicator_2\'/> <br>
         &ensp; - It will be allowed by a content rule. <br>
         &ensp; - It will be blocked by a number rule. <br>
-        &ensp; - it exists in the spam number database. <br>
+        &ensp; - It exists in the spam number database. <br>
         <br>
         The <b>first</b> icon indicates the message will eventually be allowed by the content rule.<br>
         <br>
         <img src=\'ic_history_indicator_3\'/> <br>
-        No number rule matches it, only SMS rule and database. And it will be blocked by an SMS rule.<br>
+        No number rule matches it, only an SMS rule and the database match. It will be blocked by an SMS rule.<br>
+        <br>
+        <br>
+        <warn>Note</warn> <br>
+        Always adjust rules based on the leading icons, not the number color (<img src=\'ic_history_indicator_4\'/>).
+         The number color only reflects the past screening result and will never change.
         ]]>
     </string>
     <string name="help_enable_for_mms">
         <![CDATA[
-        MMS messages are usually spam, it\'s unnecessary to be enabled unless you actually use them.<br>
+        MMS messages are usually spam, so this does not need to be enabled unless you actually use MMS.<br>
         <br>
-        <font color="#ffa500">Note:</font><br>
+        <warn>Note:</warn><br>
         Group messages are MMS, not SMS.<br>
         <br>
         MMS will be treated as SMS, only text content will be processed,
@@ -73,8 +48,6 @@
         Two permissions are required: RECEIVE_MMS and READ_SMS
         ]]>
     </string>
-    <string name="unknown_error">Unknown error.</string>
-    <string name="checking_auth_credential">Checking authorization credentials.</string>
     <string name="sms_bomb"><short>SMS Bomb</short></string>
     <string name="help_sms_bomb">
         <![CDATA[
@@ -84,28 +57,28 @@
           of OTP (One-Time Password) verifications.<br>
         <br>
         For example, SMS messages like:<br>
-        &ensp; <font color="#888888">Your OTP is: 1234.</font><br>
-        &ensp; <font color="#888888">This is your verification code: 1234.</font><br>
-        &ensp; <font color="#888888">1234 is your validation code.</font><br>
+        &ensp; <sample>Your OTP is: 1234.</sample><br>
+        &ensp; <sample>This is your verification code: 1234.</sample><br>
+        &ensp; <sample>1234 is your validation code.</sample><br>
         <br>
-        <h5><font color="#00BFFF">- Content regex</font></h5>
+        <h5><title>- Content regex</title></h5>
         This feature applies only to messages that match this regex, a typical regex would be: <br>
-        <font color="#fa7f71">.*(otp|code).*</font><br>
+        <error>.*(otp|code).*</error><br>
         <br>
-        <h5><font color="#00BFFF">- Interval</font></h5>
+        <h5><title>- Interval</title></h5>
         If a subsequent OTP message arrives within this time interval, it is considered
           part of the bombing attack and will be blocked.<br>
         (default: 30 seconds)<br>
         <br>
         This will block all following bombs, except for the first one.<br>
         <br>
-        <h5><font color="#00BFFF">- Lockscreen protection</font></h5>
+        <h5><title>- Lockscreen protection</title></h5>
         Enable this to block all bombs in lockscreen mode, including the first one. <br>
         <br>
         Usually, your screen should have been unlocked while waiting for a verification code.
         When such messages arrive while the device is in lockscreen mode, they are likely to be bombs.<br>
         <br>
-        <font color="#ea86ff"><b>Priority: 20</b></font>
+        <priority><b>Priority: 20</b></priority>
         ]]>
     </string>
     <string name="lockscreen_protection"><short>Lockscreen protection</short></string>
@@ -116,7 +89,8 @@
     </string>
     <string name="help_history_expiry">
         <![CDATA[
-            When enabled, history records will expire after N days, expired records will be deleted automatically.
+            When enabled, history records will be automatically deleted after N days. <br>
+            The cleanup task runs daily at 00:00.
         ]]>
     </string>
     <string name="never_expire"><short>Never Expire</short></string>

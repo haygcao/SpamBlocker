@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import androidx.core.database.getStringOrNull
 import spam.blocker.db.Notification.CHANNEL_HIGH
 import spam.blocker.db.Notification.CHANNEL_LOW
 import spam.blocker.db.Notification.CHANNEL_MEDIUM
@@ -12,13 +13,18 @@ import spam.blocker.def.Def
 import spam.blocker.service.bot.CalendarEvent
 import spam.blocker.service.bot.CallEvent
 import spam.blocker.service.bot.CallThrottling
+import spam.blocker.service.bot.CategoryConfig
 import spam.blocker.service.bot.Manual
 import spam.blocker.service.bot.QuickTile
 import spam.blocker.service.bot.Ringtone
 import spam.blocker.service.bot.Schedule
 import spam.blocker.service.bot.SmsEvent
 import spam.blocker.service.bot.SmsThrottling
+import spam.blocker.service.bot.parseActions
 import spam.blocker.service.bot.serialize
+import spam.blocker.ui.history.tagOther
+import spam.blocker.ui.history.tagPromotional
+import spam.blocker.ui.history.tagReminder
 import spam.blocker.util.Notification.deleteAllChannels
 import spam.blocker.util.Notification.ensureBuiltInChannels
 import spam.blocker.util.Notification.isChannelDisabled
@@ -31,7 +37,7 @@ class Db private constructor(
 ) : SQLiteOpenHelper(ctx, DB_NAME, null, DB_VERSION) {
 
     companion object {
-        const val DB_VERSION = 47
+        const val DB_VERSION = 53
         const val DB_NAME = "spam_blocker.db"
 
         // ---- regex rule table ----
@@ -44,6 +50,8 @@ class Db private constructor(
         const val COLUMN_PATTERN_EXTRA = "pattern_extra"
         const val COLUMN_PATTERN_FLAGS = "pattern_flag"
         const val COLUMN_PATTERN_EXTRA_FLAGS = "pattern_extra_flag"
+        const val COLUMN_PATTERN_MODE_TYPE = "pattern_mode_type"
+        const val COLUMN_PATTERN_EXTRA_MODE_TYPE = "pattern_extra_mode_type"
         const val COLUMN_DESC = "description"
         const val COLUMN_FLAGS = "flag_call_sms" // the column name should be just "flags", but android<12 doesn't support renaming column
         const val COLUMN_PRIORITY = "priority"
@@ -65,6 +73,8 @@ class Db private constructor(
         const val COLUMN_SOUND = "sound"
         const val COLUMN_LED = "led"
         const val COLUMN_LED_COLOR = "led_color"
+        const val COLUMN_REPEAT = "repeat"
+        const val COLUMN_REPEAT_INTERVAL = "repeat_interval"
 
         // ---- spam table ----
         const val TABLE_SPAM = "spam"
@@ -91,6 +101,7 @@ class Db private constructor(
         const val TABLE_API_QUERY = "api_query"
         const val TABLE_API_REPORT = "api_report"
         const val COLUMN_AUTO_REPORT_TYPES = "auto_report_types"
+        const val COLUMN_AUTO_REPORT_REGEX_FILTER = "auto_report_regex_filter"
 
         // ---- call table ----
         const val TABLE_CALL = "call"
@@ -107,6 +118,10 @@ class Db private constructor(
         const val COLUMN_IS_TEST = "is_test" // Boolean
         const val COLUMN_EXTRA_INFO = "extra_info" // text
         const val COLUMN_EXPANDED = "expanded" // Boolean
+        const val COLUMN_FULL_SCREENING_LOG = "full_screening_log" // text
+        const val COLUMN_AUTO_REPORTING_LOG = "auto_reporting_log" // text
+        const val COLUMN_ANYTHING_WRONG_SCREENING = "anything_wrong" // Boolean
+        const val COLUMN_ANYTHING_WRONG_REPORTING = "anything_wrong_reporting" // Boolean
 
         @Volatile
         private var instance: Db? = null
@@ -128,6 +143,8 @@ class Db private constructor(
                         "$COLUMN_PATTERN_EXTRA TEXT, " +
                         "$COLUMN_PATTERN_FLAGS INTEGER DEFAULT 0, " +
                         "$COLUMN_PATTERN_EXTRA_FLAGS INTEGER DEFAULT 0, " +
+                        "$COLUMN_PATTERN_MODE_TYPE INTEGER DEFAULT 0, " +
+                        "$COLUMN_PATTERN_EXTRA_MODE_TYPE INTEGER DEFAULT 0, " +
                         "$COLUMN_DESC TEXT, " +
                         "$COLUMN_PRIORITY INTEGER, " +
                         "$COLUMN_IS_BLACK INTEGER, " +
@@ -156,6 +173,8 @@ class Db private constructor(
                     "$COLUMN_ICON_COLOR INTEGER, " +
                     "$COLUMN_LED INTEGER, " +
                     "$COLUMN_LED_COLOR INTEGER, " +
+                    "$COLUMN_REPEAT INTEGER, " +
+                    "$COLUMN_REPEAT_INTERVAL INTEGER, " +
                     "$COLUMN_GROUP TEXT " +
                     ")"
         )
@@ -206,7 +225,8 @@ class Db private constructor(
                     "$COLUMN_DESC TEXT, " +
                     "$COLUMN_ACTIONS TEXT, " +
                     "$COLUMN_ENABLED INTEGER, " +
-                    "$COLUMN_AUTO_REPORT_TYPES INTEGER" +
+                    "$COLUMN_AUTO_REPORT_TYPES INTEGER, " +
+                    "$COLUMN_AUTO_REPORT_REGEX_FILTER TEXT " +
                     ")"
         )
         // bot
@@ -214,7 +234,7 @@ class Db private constructor(
             "CREATE TABLE IF NOT EXISTS $TABLE_BOT (" +
                     "$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "$COLUMN_DESC TEXT, " +
-                    "$COLUMN_TRIGGER TEXT, " +
+                    "[$COLUMN_TRIGGER] TEXT, " + // "trigger" is a keyword
                     "$COLUMN_ACTIONS TEXT, " +
                     "$COLUMN_CUSTOM_TAGS TEXT, " +
                     "$COLUMN_ENABLED INTEGER, " +
@@ -237,7 +257,11 @@ class Db private constructor(
                         "$COLUMN_READ INTEGER, " +
                         "$COLUMN_IS_TEST INTEGER, " +
                         "$COLUMN_EXTRA_INFO TEXT, " +
-                        "$COLUMN_EXPANDED INTEGER " +
+                        "$COLUMN_EXPANDED INTEGER, " +
+                        "$COLUMN_FULL_SCREENING_LOG TEXT, " +
+                        "$COLUMN_AUTO_REPORTING_LOG TEXT, " +
+                        "$COLUMN_ANYTHING_WRONG_SCREENING INTEGER, " +
+                        "$COLUMN_ANYTHING_WRONG_REPORTING INTEGER " +
                         ")"
             )
         }
@@ -369,10 +393,10 @@ class Db private constructor(
             // 0. Set the default Call/SMS channel to `None` if the previous channels
             //   are disabled in system settings
             if(isChannelDisabled(ctx, "Default spam call")) {
-                spf.Notification(ctx).setSpamCallChannelId(CHANNEL_NONE)
+                spf.Notification(ctx).spamCallChannelId = CHANNEL_NONE
             }
             if(isChannelDisabled(ctx, "Default spam SMS")) {
-                spf.Notification(ctx).setSpamSmsChannelId(CHANNEL_NONE)
+                spf.Notification(ctx).spamSmsChannelId = CHANNEL_NONE
             }
 
             // 1. delete all previous channels
@@ -505,6 +529,118 @@ class Db private constructor(
         // v5.3 added Bot.customTags
         if ((newVersion >= 47) && (oldVersion < 47)) {
             addColumnIfNotExist(db, TABLE_BOT, COLUMN_CUSTOM_TAGS, "TEXT")
+        }
+        // v5.5 added History.fullScreeningLog and anythingWrong
+        if ((newVersion >= 48) && (oldVersion < 48)) {
+            addColumnIfNotExist(db, TABLE_CALL, COLUMN_FULL_SCREENING_LOG, "TEXT")
+            addColumnIfNotExist(db, TABLE_CALL, COLUMN_ANYTHING_WRONG_SCREENING, "INTEGER")
+            addColumnIfNotExist(db, TABLE_SMS, COLUMN_FULL_SCREENING_LOG, "TEXT")
+            addColumnIfNotExist(db, TABLE_SMS, COLUMN_ANYTHING_WRONG_SCREENING, "INTEGER")
+        }
+
+        // v5.9 refactored RegexMode, previously `regexFlags` contains both mode/flag
+        if ((newVersion >= 49) && (oldVersion < 49)) {
+            db.execSQL("ALTER TABLE $TABLE_NUMBER_RULE ADD COLUMN $COLUMN_PATTERN_MODE_TYPE INTEGER DEFAULT 0")
+            db.execSQL("ALTER TABLE $TABLE_NUMBER_RULE ADD COLUMN $COLUMN_PATTERN_EXTRA_MODE_TYPE INTEGER DEFAULT 0")
+            db.execSQL("ALTER TABLE $TABLE_CONTENT_RULE ADD COLUMN $COLUMN_PATTERN_MODE_TYPE INTEGER DEFAULT 0")
+            db.execSQL("ALTER TABLE $TABLE_CONTENT_RULE ADD COLUMN $COLUMN_PATTERN_EXTRA_MODE_TYPE INTEGER DEFAULT 0")
+            db.execSQL("ALTER TABLE $TABLE_QUICK_COPY_RULE ADD COLUMN $COLUMN_PATTERN_MODE_TYPE INTEGER DEFAULT 0")
+            db.execSQL("ALTER TABLE $TABLE_QUICK_COPY_RULE ADD COLUMN $COLUMN_PATTERN_EXTRA_MODE_TYPE INTEGER DEFAULT 0")
+
+
+            val FLAG_CONTACT_GROUP = 0x800       // 1 shl 11
+            val FLAG_CONTACT_NAME = 0x1000       // 1 shl 12
+            val FLAG_CALLER_NAME = 0x4000        // 1 shl 14
+            val FLAG_GEOLOCATION = 0x8000        // 1 shl 15
+            val FLAG_CONTACT_PREFIX = 0x10000    // 1 shl 16
+            val FLAG_CARRIER = 0x20000           // 1 shl 17
+
+            // Migrate from `patternFlags` to `patternModeType`
+            // Migrate from `patternExtraFlags` to `patternExtraModeType`
+            fun updateTable(tableName: String) {
+                db.execSQL("""
+                    UPDATE $tableName 
+                    SET 
+                        $COLUMN_PATTERN_MODE_TYPE = CASE 
+                            WHEN ($COLUMN_PATTERN_FLAGS & $FLAG_CONTACT_GROUP) != 0 THEN 4
+                            WHEN ($COLUMN_PATTERN_FLAGS & $FLAG_CONTACT_NAME) != 0 THEN 3
+                            WHEN ($COLUMN_PATTERN_FLAGS & $FLAG_CALLER_NAME) != 0 THEN 8
+                            WHEN ($COLUMN_PATTERN_FLAGS & $FLAG_GEOLOCATION) != 0 THEN 6
+                            WHEN ($COLUMN_PATTERN_FLAGS & $FLAG_CONTACT_PREFIX) != 0 THEN 5
+                            WHEN ($COLUMN_PATTERN_FLAGS & $FLAG_CARRIER) != 0 THEN 7
+                            ELSE 0 
+                        END,
+                        
+                        $COLUMN_PATTERN_EXTRA_MODE_TYPE = CASE 
+                            WHEN ($COLUMN_PATTERN_EXTRA_FLAGS & $FLAG_CONTACT_GROUP) != 0 THEN 4
+                            WHEN ($COLUMN_PATTERN_EXTRA_FLAGS & $FLAG_CONTACT_NAME) != 0 THEN 3
+                            WHEN ($COLUMN_PATTERN_EXTRA_FLAGS & $FLAG_CALLER_NAME) != 0 THEN 8
+                            WHEN ($COLUMN_PATTERN_EXTRA_FLAGS & $FLAG_GEOLOCATION) != 0 THEN 6
+                            WHEN ($COLUMN_PATTERN_EXTRA_FLAGS & $FLAG_CONTACT_PREFIX) != 0 THEN 5
+                            WHEN ($COLUMN_PATTERN_EXTRA_FLAGS & $FLAG_CARRIER) != 0 THEN 7
+                            ELSE 0 
+                        END
+                """.trimIndent())
+            }
+            updateTable(TABLE_NUMBER_RULE)
+            updateTable(TABLE_CONTENT_RULE)
+            updateTable(TABLE_QUICK_COPY_RULE)
+        }
+
+        // v5.13 added History.autoReportingLog and anythingWrongReporting
+        if ((newVersion >= 50) && (oldVersion < 50)) {
+            addColumnIfNotExist(db, TABLE_CALL, COLUMN_AUTO_REPORTING_LOG, "TEXT")
+            addColumnIfNotExist(db, TABLE_CALL, COLUMN_ANYTHING_WRONG_REPORTING, "INTEGER")
+            addColumnIfNotExist(db, TABLE_SMS, COLUMN_AUTO_REPORTING_LOG, "TEXT")
+            addColumnIfNotExist(db, TABLE_SMS, COLUMN_ANYTHING_WRONG_REPORTING, "INTEGER")
+        }
+        // v5.14 added Notification.repeat
+        if ((newVersion >= 51) && (oldVersion < 51)) {
+            addColumnIfNotExist(db, TABLE_NOTIFICATION_CHANNEL, COLUMN_REPEAT, "INTEGER")
+            addColumnIfNotExist(db, TABLE_NOTIFICATION_CHANNEL, COLUMN_REPEAT_INTERVAL, "INTEGER")
+        }
+
+        // v5.16 added auto-report regex filter
+        if ((newVersion >= 52) && (oldVersion < 52)) {
+            addColumnIfNotExist(db, TABLE_API_REPORT, COLUMN_AUTO_REPORT_REGEX_FILTER, "TEXT")
+        }
+        // Update all existing CategoryConfig
+        //  1. add key {promotional} with same value as {marketing}
+        //  2. add key {reminder} with same value as {other}
+        //  3. delete {marketing} and {political}
+        if ((newVersion >= 53) && (oldVersion < 53)) {
+            val cursor = db.query(TABLE_API_REPORT, arrayOf(COLUMN_ID, COLUMN_ACTIONS), null, null, null, null, null)
+
+            cursor.use {
+                while (it.moveToNext()) {
+                    val id = it.getLong(it.getColumnIndexOrThrow(COLUMN_ID))
+                    val originalActionsStr = it.getStringOrNull(it.getColumnIndex(COLUMN_ACTIONS)) ?: continue
+                    val actions = originalActionsStr.parseActions()
+                    actions.forEach { act ->
+                        if (act is CategoryConfig) {
+                            val marketingVal = act.map["{marketing}"]
+                            if (marketingVal != null) { // old {marketing} and {political}
+                                val newEntries = listOfNotNull(
+                                    tagPromotional to marketingVal,
+                                    act.map[tagOther]?.let { otherVal -> tagReminder to otherVal }
+                                )
+
+                                act.map = act.map + newEntries - "{marketing}" - "{political}"
+                            }
+                        }
+                    }
+
+                    val updatedActions = actions.serialize()
+
+                    // Only write if something actually changed
+                    if (updatedActions != originalActionsStr) {
+                        val values = ContentValues().apply {
+                            put(COLUMN_ACTIONS, updatedActions)
+                        }
+                        db.update(TABLE_API_REPORT, values, "$COLUMN_ID = ?", arrayOf(id.toString()))
+                    }
+                }
+            }
         }
     }
 }

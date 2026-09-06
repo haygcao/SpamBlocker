@@ -1,0 +1,83 @@
+<resources>
+    <string name="known_android_issue">
+    <![CDATA[
+        Dies ist ein bekanntes Android-Problem, das bereits dem Android-Team gemeldet wurde, eine Lösung steht noch aus. <br>
+        <br>
+        Siehe die Ursache und die Umgehung hier: <br>
+         <a href=\"%s\">%s</a>
+    ]]>
+    </string>
+    <string name="import_numbers">Nummern importieren</string>
+    <string name="faq_import_numbers">
+    <![CDATA[
+        Importieren Sie Nummern aus lokalen oder Remote-Dateien mithilfe von Workflows. <br>
+        <br>
+        <title><b>Ein typisches Setup</b></title>: <br>
+        <br>
+        1. <minor><b>Datei lesen</b></minor> / <minor><b>Http-Anfrage</b></minor> <br>
+          &ensp; Den Dateiinhalt abrufen. <br>
+          <br>
+        2. <minor><b>CSV parsen</b></minor> / <minor><b>XML parsen</b></minor> / <minor><b>Regex extrahieren</b></minor> <br>
+          &ensp; Analysieren Sie es und erhalten Sie eine Liste von Nummern. <br>
+          <br>
+        3. <minor><b>Nummer ersetzen</b></minor> (optional) <br>
+          &ensp; Das Nummernformat ändern <br>
+          &ensp; Anwendungsfall: <br>
+          <sample>
+            &emsp; Beim Migrieren von Nummern aus anderen Apps, Formate wie <b>123#####</b> in Regex <b>123.....</b> oder <b>123.*</b> konvertieren <br>
+          </sample>
+          <br>
+        4. <minor><b>In Spam-Datenbank importieren</b></minor> / <minor><b>In Regex-Regel importieren</b></minor> <br>
+        <br>
+        <br>
+        <title><b>Beispiele</b></title>: <br>
+          - Die Voreinstellung <no_translate><b>FTC-DNC</b></no_translate> <br>
+        <br>
+        Weitere Online-Beispiele: <br>
+          - <a href=\"%s\">Klartext</a> <br>
+          - <a href=\"%s\">CSV</a> <br>
+          - <a href=\"%s\">XML</a> <br>
+          - <a href=\"%s\">JSON</a> - JsonPath wird noch nicht unterstützt, verwenden Sie stattdessen <minor><b>Regex extrahieren</b></minor>.
+    ]]>
+    </string>
+    <string name="faq_regex">
+    <![CDATA[
+        Ein Regex-Tutorial für Nicht-Programmierer. <br>
+        <br>
+        <title><b>Einsteigerlevel - Platzhalter</b></title> <br>
+        &ensp; Wann immer Sie einen Platzhalter <sample><b>*</b></sample> verwenden möchten, setzen Sie einen Punkt <sample><b>.</b></sample> davor, wie <sample><b>.*</b></sample>, dies sollte die meisten Anwendungsfälle abdecken. <br>
+        <br>
+        <title><b>Fortgeschritten - KI nutzen</b></title> <br>
+        &ensp; Um beispielsweise den folgenden Regex für SMS-Bestätigungen zu erhalten: <br>
+        &ensp; <sample>.*(verification|validation).*code.*\\d{5,6}.*</sample> <br>
+        <br>
+        Fragen Sie die KI: <br>
+        <sample>
+        %s
+        </sample>
+        <br>
+        <br>
+        <highlight><b>Online testen</b></highlight> <br>
+          &ensp; 1. <a href=\"copy\"><big>Die obige Eingabe kopieren</big></a> <br>
+          &ensp; 2. <a href=\"try_it\"><big>Die Online-KI starten</big></a> <br>
+    ]]>
+    </string>
+    <string name="ai_regex_prompt">
+    <![CDATA[
+        Geben Sie einen einfachen Regex mit vollständiger Übereinstimmung für Kotlin an, um SMS-Bestätigungscodes zu erfassen. <br>
+        <br>
+        Anforderungen: <br>
+        - Er muss das Wort \"verification\" oder \"validation\" enthalten, gefolgt von \"code\" und anschließend einer 5- oder 6-stelligen Zahl. <br>
+        - Verwenden Sie .* für variablen Text vor, zwischen oder nach diesen Elementen, damit die gesamte Nachricht übereinstimmt. <br>
+        - Groß-/Kleinschreibung, Zeilenumbrüche sowie die Anker ^ und $ müssen nicht berücksichtigt werden. <br>
+        - Vermeiden Sie fortgeschrittene Regex-Funktionen. <br>
+        - Setzen Sie den finalen Regex in Backticks (``) und geben Sie nur den Regex selbst aus. <br>
+        <br>
+        Er muss übereinstimmen mit: <br>
+        - "Your verification code is 123456, expires after 5 minutes." <br>
+        - "Your validation code: [12345]"
+    ]]>
+    </string>
+    <string name="copied_to_clipboard">In die Zwischenablage kopiert</string>
+    <string name="api_query_timeout">API-Abfrage-Timeout</string>
+</resources>

@@ -1,0 +1,83 @@
+<resources>
+    <string name="known_android_issue">
+    <![CDATA[
+        Aquest és un problema conegut d\'Android, ja notificat a l\'equip d\'Android, encara s\'espera una solució. <br>
+        <br>
+        Vegeu la causa i la solució alternativa aquí: <br>
+         <a href=\"%s\">%s</a>
+    ]]>
+    </string>
+    <string name="import_numbers">Importar números</string>
+    <string name="faq_import_numbers">
+    <![CDATA[
+        Importa números de fitxers locals o remots mitjançant fluxos de treball. <br>
+        <br>
+        <title><b>Una configuració típica</b></title>: <br>
+        <br>
+        1. <minor><b>Llegir fitxer</b></minor> / <minor><b>Petició HTTP</b></minor> <br>
+          &ensp; Obté el contingut del fitxer. <br>
+          <br>
+        2. <minor><b>Analitzar CSV</b></minor> / <minor><b>Analitzar XML</b></minor> / <minor><b>Extreure Regex</b></minor> <br>
+          &ensp; Analitza\'ls i obté una llista de números. <br>
+          <br>
+        3. <minor><b>Reemplaçar número</b></minor> (opcional) <br>
+          &ensp; Modifica el format del número <br>
+          &ensp; Cas d\'ús: <br>
+          <sample>
+            &emsp; En migrar números d\'altres aplicacions, converteix formats com <b>123#####</b> a l\'expressió regular <b>123.....</b> o <b>123.*</b> <br>
+          </sample>
+          <br>
+        4. <minor><b>Importar a la base de dades de spam</b></minor> / <minor><b>Importar a la regla Regex</b></minor> <br>
+        <br>
+        <br>
+        <title><b>Exemples</b></title>: <br>
+          - La predefinició <no_translate><b>FTC-DNC</b></no_translate> <br>
+        <br>
+        Més exemples en línia: <br>
+          - <a href=\"%s\">Text pla</a> <br>
+          - <a href=\"%s\">CSV</a> <br>
+          - <a href=\"%s\">XML</a> <br>
+          - <a href=\"%s\">JSON</a> - JsonPath encara no és compatible, utilitza <minor><b>Regex Extract</b></minor> en el seu lloc.
+    ]]>
+    </string>
+    <string name="faq_regex">
+    <![CDATA[
+        Un tutorial d\'expressions regulars per a no programadors. <br>
+        <br>
+        <title><b>Nivell inicial - Comodí</b></title> <br>
+        &ensp; Sempre que vulguis utilitzar un comodí <sample><b>*</b></sample>, posa un punt <sample><b>.</b></sample> abans, com <sample><b>.*</b></sample>, això hauria de cobrir la majoria de casos d\'ús. <br>
+        <br>
+        <title><b>Avançat - Utilitzant IA</b></title> <br>
+        &ensp; Per exemple, per obtenir la següent expressió regular per a verificacions SMS: <br>
+        &ensp; <sample>.*(verification|validation).*code.*\\d{5,6}.*</sample> <br>
+        <br>
+        Pregunta a la IA: <br>
+        <sample>
+        %s
+        </sample>
+        <br>
+        <br>
+        <highlight><b>Prova-ho en línia</b></highlight> <br>
+          &ensp; 1. <a href=\"copy\"><big>Copia el prompt anterior</big></a> <br>
+          &ensp; 2. <a href=\"try_it\"><big>Inicia la IA en línia</big></a> <br>
+    ]]>
+    </string>
+    <string name="ai_regex_prompt">
+    <![CDATA[
+        Proporciona una expressió regular simple de coincidència completa per a Kotlin per capturar codis de verificació SMS. <br>
+        <br>
+        Requisits: <br>
+        - Ha de contenir la paraula \"verification\" o \"validation\", seguida de \"code\" i després d\'un número de 5 o 6 dígits. <br>
+        - Fes servir .* per gestionar qualsevol text variable abans, entre o després d\'aquests elements perquè coincideixi amb tot el missatge. <br>
+        - No cal tenir en compte la sensibilitat entre majúscules i minúscules, els salts de línia ni els ancoratges ^ o $. <br>
+        - Evita les funcions avançades d\'expressions regulars. <br>
+        - Envolta la regex final amb backticks (``) i mostra només la regex. <br>
+        <br>
+        Ha de coincidir amb: <br>
+        - "Your verification code is 123456, expires after 5 minutes." <br>
+        - "Your validation code: [12345]"
+    ]]>
+    </string>
+    <string name="copied_to_clipboard">Copiat al porta-retalls</string>
+    <string name="api_query_timeout">Temps d\'espera de la consulta API</string>
+</resources>

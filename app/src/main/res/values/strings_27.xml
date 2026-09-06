@@ -1,0 +1,135 @@
+<resources>
+    <string name="normal_text">Normal Text</string>
+    <string name="info_feature">Information / Feature</string>
+    <string name="success_allow">Success / Allow</string>
+    <string name="error_block">Error / Block</string>
+    <string name="disable">Disable</string>
+    <string name="dialog_bg">Dialog Background</string>
+    <string name="app_bg">App Background</string>
+    <string name="should_import_as_instant_query">
+        <![CDATA[
+        This seems to be an \"API query\" workflow, it should be imported to the above section \"Instant Query\".
+        ]]>
+    </string>
+    <string name="at_time">At Time</string>
+    <string name="interval">Interval</string>
+    <string name="contact_prefix">Contact Prefix</string>
+    <string name="help_regex_mode_contact_prefix">
+        <![CDATA[
+        <title><b>Contact Prefix</b></title>:<br>
+        &ensp; Allow calls based on contact prefix matching, ideal for organizations using
+          sequential numbers, e.g., clinics or law firms. <br>
+        <br>
+        <warn>This regex must end with dots</warn>, in this regex mode, these trailing dots represent the variable digits. <br>
+        <br>
+        <b>For example:</b> <br>
+        &ensp; <sample><b>.*..</b></sample> <br>
+        &ensp; It matches any contact with the same prefix, allowing for a 2-digit variation at the end.<br>
+        &ensp; If you have <sample>1111<b>22</b></sample> saved as a contact, a call from <sample>1111<b>33</b></sample> will also be allowed.<br>
+        <br>
+        <b>Another example:</b> <br>
+        &ensp; <sample><b>(?!(04|03))\d{5}..</b></sample> <br>
+        Breakdown: <br>
+        &ensp; - <b><sample>(?!(03|04))</sample></b> <br>
+        &emsp;   Exclude numbers starting with 03 or 04 <br>
+        &ensp; - <b><sample>\d{5}</sample></b> <br>
+        &emsp;   The number should be 7 digits in total, including the 2-digit variable suffix <br>
+        &ensp; - <b><sample>..</sample></b> <br>
+        &emsp;   2-digit variable suffix <br>
+        ]]>
+    </string>
+    <string name="help_regex_preset_contact_prefix">
+        <![CDATA[
+        Match contacts by prefix, allowing for variation in the last <minor><b>2</b></minor> digits, ideal for organizations using
+          sequential numbers, e.g., clinics or law firms. <br>
+        <br>
+        <b>For example</b>: <br>
+        &ensp; If you have <sample>111111</sample><highlight>22</highlight> saved as a contact, a call from <sample>111111</sample><highlight>33</highlight> will also be allowed.
+        ]]>
+    </string>
+    <string name="caller_id">Caller ID</string>
+    <string name="help_caller_id">
+        <![CDATA[
+        Show caller ID in a floating window. <br>
+        <br>
+        Drag to move it. <br>
+        <br>
+        <b>Note</b> <br>
+        You might notice a system alert appears in your notification shade while the floating window is active,
+          indicating this app is displaying window over other apps.
+        That\'s because the floating window has been historically abused by malware to draw fake login screens. <br>
+        Just ignore this alert, it will vanish along with the floating window.
+        ]]>
+    </string>
+    <string name="perm_show_overlay">Show Overlay</string>
+    <string name="preview">Preview</string>
+    <string name="content_template">Content Template</string>
+    <string name="help_caller_id_template">
+        <![CDATA[
+        The content displayed in the caller ID window, in HTML format. <br>
+        <br>
+        A dash (-) is displayed if the value is empty, for example, when there is no carrier information for the number.
+        <br>
+        <title>Supported tags</title>: <br>
+        - <minor>{reason}</minor> <br>
+        &emsp; Why the call was allowed, same as displayed in call history. <br>
+        - <minor>{geolocation}</minor> <br>
+        &emsp; The number\'s geolocation. <br>
+        - <minor>{carrier}</minor> <br>
+        &emsp; The number\'s carrier name. <br>
+        <br>
+        <title>Supported HTML tags</title>: <br>
+        See: <a href="%s">link</a>
+        ]]>
+    </string>
+    <string name="background_color">Background Color</string>
+    <string name="wait">Wait</string>
+    <string name="help_action_wait">
+        <![CDATA[
+        Delay N seconds. <br>
+        <br>
+        <b>Use case</b>: <br>
+        <sample>
+        For the feature <b>SMS Alert</b>, messages sometimes arrive simultaneously with
+         or a few seconds after a call, adding a 2~3 second call screening delay can prevent such issues.
+        </sample>
+        ]]>
+    </string>
+    <string name="comment_identifier">Comment Identifier</string>
+    <string name="hint_comment_identifier">
+        E.g.: \"comment\":\"(.+?)\"
+    </string>
+    <string name="help_comment_identifier">
+        <![CDATA[
+        Extract the <title>comment</title> from the query result for displaying in the notification and history log. (optional)<br>
+        <br>
+        For example, for this query result: <br>
+        <sample>
+        { <br>
+          &ensp; \"type\": \"MARKETING\", <br>
+          &ensp; \"comment\": \"Better call Saul\", <br>
+          &ensp;  … <br>
+        } <br>
+        </sample>
+        <br>
+        Extract it with: <br>
+        &ensp; <sample>\"comment\": \"(.+?)\"</sample> <br>
+        ]]>
+    </string>
+    <string name="carrier">Carrier</string>
+    <string name="carrier_rule">Carrier Rule</string>
+    <string name="help_regex_mode_carrier">
+        <![CDATA[
+        <title><b>Carrier</b></title>:<br>
+        &ensp; The regex applies to the number\'s carrier name. <br>
+        <br>
+        <warn>Note</warn> <br>
+        &ensp; Carrier information is based on the initial registration and may
+         be inaccurate if the number has been transferred (ported). <br>
+        <br>
+        For example: <br>
+        &ensp; Block numbers from <no_translate><sample>Verizon Wireless</sample></no_translate>
+         with regex <no_translate><error>verizon.*</error></no_translate> <br>
+        ]]>
+    </string>
+</resources>

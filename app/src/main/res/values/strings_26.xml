@@ -1,0 +1,84 @@
+<resources>
+    <string name="known_android_issue">
+    <![CDATA[
+        This is a known Android issue, already reported to the Android team, a fix is still awaited. <br>
+        <br>
+        See the cause and workaround here: <br>
+         <a href=\"%s\">%s</a>
+    ]]>
+    </string>
+    <string name="import_numbers">Import Numbers</string>
+    <string name="faq_import_numbers">
+    <![CDATA[
+        Import numbers from local or remote files using workflows. <br>
+        <br>
+        <title><b>A typical setup</b></title>: <br>
+        <br>
+        1. <minor><b>Read File</b></minor> / <minor><b>Http Request</b></minor> <br>
+          &ensp; Get the file content. <br>
+          <br>
+        2. <minor><b>Parse CSV</b></minor> / <minor><b>Parse XML</b></minor> / <minor><b>Regex Extract</b></minor> <br>
+          &ensp; Parse it and get a list of numbers. <br>
+          <br>
+        3. <minor><b>Replace Number</b></minor> (optional) <br>
+          &ensp; Modify the number format <br>
+          &ensp; Use case: <br>
+          <sample>
+            &emsp; When migrating numbers from other apps, convert formats like <b>123#####</b> to regex <b>123.....</b> or <b>123.*</b> <br>
+          </sample>
+          <br>
+        4. <minor><b>Import to Spam Database</b></minor> / <minor><b>Import to Regex Rule</b></minor> <br>
+        <br>
+        <br>
+        <title><b>Examples</b></title>: <br>
+          - The preset <no_translate><b>FTC-DNC</b></no_translate> <br>
+        <br>
+        More online examples: <br>
+          - <a href=\"%s\">Plain text</a> <br>
+          - <a href=\"%s\">CSV</a> <br>
+          - <a href=\"%s\">XML</a> <br>
+          - <a href=\"%s\">JSON</a> - JsonPath isn\'t supported yet, use <minor><b>Regex Extract</b></minor> instead.
+    ]]>
+    </string>
+    <string name="faq_regex">
+    <![CDATA[
+        A regex tutorial for non-programmers. <br>
+        <br>
+        <title><b>Entry Level - Wildcard</b></title> <br>
+        &ensp; Whenever you want to use a wildcard <sample><b>*</b></sample>, put a dot <sample><b>.</b></sample>
+          before it, like <sample><b>.*</b></sample>, this should cover most use cases. <br>
+        <br>
+        <title><b>Advanced - Using AI</b></title> <br>
+        &ensp; For example, to get the following regex for SMS verifications: <br>
+        &ensp; <sample>.*(verification|validation).*code.*\\d{5,6}.*</sample> <br>
+        <br>
+        Ask AI: <br>
+        <sample>
+        %s
+        </sample>
+        <br>
+        <br>
+        <highlight><b>Try it online</b></highlight> <br>
+          &ensp; 1. <a href=\"copy\"><big>Copy the prompt above</big></a> <br>
+          &ensp; 2. <a href=\"try_it\"><big>Launch the online AI</big></a> <br>
+    ]]>
+    </string>
+    <string name="ai_regex_prompt">
+    <![CDATA[
+		Provide a simple, full-match regex for Kotlin to capture SMS verification codes. <br>
+		<br>
+		Requirements: <br>
+		- Must contain the word \"verification\" or \"validation\", followed by \"code\", followed by a 5 or 6-digit number. <br>
+		- Use .* to handle any varying text before, between, or after these elements so it matches the entire message. <br>
+		- No need to take care case sensitivity, line breaks, and ^ or $ anchors. <br>
+		- Avoid advanced regex features. <br>
+		- Wrap the final regex in backticks (``) and output only the regex itself. <br>
+
+		It must match: <br>
+		- "Your verification code is 123456, expires after 5 minutes." <br>
+		- "Your validation code: [12345]"
+    ]]>
+    </string>
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+    <string name="api_query_timeout">Api query timeout</string>
+</resources>

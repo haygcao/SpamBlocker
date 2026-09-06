@@ -6,7 +6,7 @@
 
     <string name="notification">Notification</string>
     <string name="type">Type</string>
-    <string name="times">Fois</string>
+
     <plurals name="days">
         <item quantity="one">%d jour</item>
         <item quantity="two">%d jours</item>
@@ -31,32 +31,36 @@
     <string name="help_for_particular_number">Lorsque cette option est activée, la règle s’applique uniquement lorsque le numéro et le contenu correspondent.</string>
     <string name="help_dialed">
         <![CDATA[
-        Autoriser les appels provenant de numéros précédemment composés.<br>
+        Autoriser les appels provenant des numéros précédemment composés.<br>
         <br>
         <b>Options :</b><br>
         <br>
-        <h6><font color="#00BFFF">- Dans les jours</font></h6>
-        Les appels qui ont eu lieu avant <font color="cyan">%s jours</font> sont ignorés.<br>
+        <h6><title>- Plage de temps</title></h6>
+        &ensp; - <minor>Tout le temps</minor> <br>
+        &emsp; Autoriser toujours les numéros composés.<br>
+        &ensp; - <minor>Dans les jours</minor> <br>
+        &emsp; Les appels antérieurs à X jours sont ignorés.<br>
         <br>
-        <h6><font color="#00BFFF">- Inclure les SMS</font></h6>
-        Lorsque cette option est activée, l\'envoi de SMS à ce numéro compte également.<br>
+        <h6><title>- Inclure SMS</title></h6>
+        Lorsqu\'activé, l\'envoi de SMS à ce numéro est également pris en compte.<br>
         <br>
-        <font color="#ea86ff"><b>Priorité : 10</b></font>
+        <priority><b>Priorité : 10</b></priority>
         ]]>
     </string>
     <string name="help_recent_apps">
         <![CDATA[
-        Tout appel passera si une application de la liste a été utilisée récemment. <br>
+        Tout appel serait autorisé si une application de la liste a été utilisée récemment.<br>
         <br>
-        Cas d’utilisation typique : <br>
-        &emsp; Vous venez de commander une pizza dans PizzaApp, ils vous appellent bientôt pour un remboursement car ils ferment. Cet appel passera si PizzaApp est activé ici. <br>
+        Cas d\'utilisation :<br>
+        <sample>
+          &ensp; Une commande PizzaApp déclenche un appel de remboursement immédiat en raison de la fermeture du restaurant, cet appel passe si PizzaApp est activé ici. <br>
+        </sample>
         <br>
-        Le paramètre par défaut <font color="03DAC5"><b>5 min</b></font> signifie que tout appel passera si l’une des applications a été utilisée au cours des 5 dernières minutes,
-        par « utilisé », il faut entendre activé, désactivé, réduit au minimum ou tué. <br>
+        Le paramètre par défaut <highlight><b>5 Min</b></highlight> signifie que tous les appels passent si l\'une des applications a été utilisée dans les 5 minutes, par « <b>utilisée</b> » cela signifie : <highlight>activée, désactivée, réduite ou terminée</highlight>.<br>
         <br>
-        Ne s’applique qu’aux appels, <b>pas</b> aux messages texte. <br>
+        S\'applique uniquement aux appels, pas aux messages texte. <br>
         <br>
-        <font color="#ea86ff"><b>Priorité : 10</b></font>
+        <priority><b>Priorité : 10</b></priority>
         ]]>
     </string>
     <string name="help_hang_up_delay">Le délai avant que l\'appel ne soit raccroché.</string>
@@ -67,21 +71,21 @@
     </string-array>
     <string name="help_block_type">
         <![CDATA[
-        - <font color="#00BFFF"><b>Rejeter</b></font> : <br>
+        - <title><b>Rejeter</b></title> : <br>
          Équivalent à appuyer sur le bouton de refus. Fonctionne en toute discrétion, l\'écran de verrouillage ne s\'allumera pas.<br>
         <br>
-        - <font color="#00BFFF"><b>Mettre en silence</b></font> : <br>
-         L\'appel sonnera silencieusement en arrière-plan, donnant l\'impression à l\'appelant que vous étiez indisponible et avez manqué l\'appel. <br>
+        - <title><b>Mettre en silence</b></title> : <br>
+        L\'appel est instantanément rejeté de votre côté mais continue de sonner pour l\'appelant, donnant l\'impression que vous n\'êtes pas disponible. <br>
         <br>
-         Cela peut également aider si vous recevez des appels de spam répétés ; cela prolongera la durée de l\'appel, le rendant moins efficace pour les spammeurs, les décourageant potentiellement de vous rappeler.<br>
+        Cela peut également aider à réduire les appels indésirables répétés. Cela prolonge la durée de l\'appel, les rendant moins efficaces et potentiellement décourageant les spameurs de vous rappeler.<br>
         <br>
-        - <font color="#00BFFF"><b>Raccrocher</b></font> : <br>
+        - <title><b>Raccrocher</b></title> : <br>
         Répondre puis raccrocher l\'appel pour l\'empêcher d\'aller à la messagerie vocale. <br>
         <br>
         Lorsqu\'un appel de spam est reçu pendant un appel en cours, le système passera en mode \"Rejeter\"
          pour éviter de raccrocher l\'appel en cours. <br>
         <br>
-        <font color="#FFA500">Note</font> L\'écran de verrouillage peut s\'allumer brièvement,
+        <warn>Note</warn> L\'écran de verrouillage peut s\'allumer brièvement,
         vous pourriez également entendre une tonalité de fin d\'appel (certains téléphones offrent une option pour désactiver ce son). <br>
         <br>
         - Le <b>délai</b> : <br>
@@ -90,4 +94,6 @@
         &emsp; Si vous souhaitez enregistrer des appels, installez une application d\'enregistrement d\'appels et augmentez le délai en conséquence.
         ]]>
     </string>
+    <string name="time_range">Plage de temps</string>
+    <string name="all_time">Tout le temps</string>
 </resources>

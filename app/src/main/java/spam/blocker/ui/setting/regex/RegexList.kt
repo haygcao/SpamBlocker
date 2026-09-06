@@ -1,5 +1,6 @@
 package spam.blocker.ui.setting.regex
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -31,15 +31,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CoroutineScope
 import spam.blocker.Events
+import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.db.RegexRule
 import spam.blocker.db.ruleTableForType
 import spam.blocker.ui.M
 import spam.blocker.ui.maxScreenHeight
 import spam.blocker.ui.screenHeightDp
-import spam.blocker.ui.setting.LabeledRow
-import spam.blocker.ui.theme.LocalPalette
-import spam.blocker.ui.theme.Salmon
+import spam.blocker.ui.widgets.ConfigExportDialog
 import spam.blocker.ui.widgets.DividerItem
 import spam.blocker.ui.widgets.DropdownWrapper
 import spam.blocker.ui.widgets.GreyIcon20
@@ -56,6 +55,7 @@ import spam.blocker.ui.widgets.SnackBar
 import spam.blocker.ui.widgets.Str
 import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.ui.widgets.SwipeInfo
+import spam.blocker.util.PermissivePrettyNoDefaultsJson
 import spam.blocker.util.spf
 
 
@@ -80,92 +80,91 @@ fun RegexSettingsPopup(
     vm: RegexViewModel,
 ) {
     val ctx = LocalContext.current
-    var dirty by rememberSaveable { mutableStateOf(false) }
+    var anythingChanged by rememberSaveable { mutableStateOf(false) }
 
     PopupDialog(
         trigger = trigger,
         onDismiss = {
-            if (dirty)
+            if (anythingChanged)
                 vm.reloadDb(ctx)
         }
     ) {
         val spf = spf.RegexOptions(ctx)
 
         // max none scroll items: []
-        LabeledRow(
-            labelId = null,
-            helpTooltip = Str(R.string.help_max_none_scroll_items)
-        ) {
-            var max by remember { mutableIntStateOf(spf.getMaxNoneScrollRows()) }
-            NumberInputBox(
-                intValue = max,
-                label = { Text(Str(R.string.label_max_none_scroll_items)) },
-                onValueChange = { newVal, hasError ->
-                    if (!hasError) {
-                        max = newVal!!
-                        spf.setMaxNoneScrollRows(max)
-                        dirty = true
-                    }
+        var max by remember { mutableIntStateOf(spf.maxNoneScrollRows) }
+        NumberInputBox(
+            intValue = max,
+            labelId = R.string.label_max_none_scroll_items,
+            helpTooltipId = R.string.help_max_none_scroll_items,
+            onValueChange = { newVal, hasError ->
+                if (!hasError) {
+                    max = newVal!!
+                    spf.maxNoneScrollRows = max
+                    anythingChanged = true
                 }
-            )
-        }
+            }
+        )
 
         // max scroll height: []
-        LabeledRow(
-            labelId = null,
-            helpTooltip = Str(R.string.help_max_scroll_height)
-        ) {
-            var height by remember { mutableIntStateOf(spf.getRuleListHeightPercentage()) }
-            NumberInputBox(
-                intValue = height,
-                label = { Text(Str(R.string.label_max_scroll_height)) },
-                onValueChange = { newVal, hasError ->
-                    if (!hasError) {
-                        height = newVal!!
-                        spf.setRuleListHeightPercentage(height)
-                        dirty = true
-                    }
+        var height by remember { mutableIntStateOf(spf.ruleListHeightPercentage) }
+        NumberInputBox(
+            intValue = height,
+            labelId = R.string.label_max_scroll_height,
+            helpTooltipId = R.string.help_max_scroll_height,
+            onValueChange = { newVal, hasError ->
+                if (!hasError) {
+                    height = newVal!!
+                    spf.ruleListHeightPercentage = height
+                    anythingChanged = true
                 }
-            )
-        }
+            }
+        )
 
         // max regex lines: []
-        LabeledRow(
-            labelId = null,
-            helpTooltip = Str(R.string.help_max_regex_lines)
-        ) {
-            var rows by remember { mutableIntStateOf(spf.getMaxRegexRows()) }
-            NumberInputBox(
-                intValue = rows,
-                label = { Text(Str(R.string.label_max_regex_lines)) },
-                onValueChange = { newVal, hasError ->
-                    if (!hasError) {
-                        rows = newVal!!
-                        spf.setMaxRegexRows(rows)
-                        dirty = true
-                    }
+        var maxRegexRows by remember { mutableIntStateOf(spf.maxRegexRows) }
+        NumberInputBox(
+            intValue = maxRegexRows,
+            labelId = R.string.label_max_regex_lines,
+            helpTooltipId = R.string.help_max_regex_lines,
+            onValueChange = { newVal, hasError ->
+                if (!hasError) {
+                    maxRegexRows = newVal!!
+                    spf.maxRegexRows = maxRegexRows
+                    anythingChanged = true
                 }
-            )
-        }
+            }
+        )
 
         // max description lines: []
-        LabeledRow(
-            labelId = null,
-            helpTooltip = Str(R.string.help_max_desc_lines)
-        ) {
-            var rows by remember { mutableIntStateOf(spf.getMaxDescRows()) }
-            NumberInputBox(
-                intValue = rows,
-                label = { Text(Str(R.string.label_max_desc_lines)) },
-                onValueChange = { newVal, hasError ->
-                    if (!hasError) {
-                        rows = newVal!!
-                        spf.setMaxDescRows(rows)
-                        dirty = true
-                    }
+        var maxDescRows by remember { mutableIntStateOf(spf.maxDescRows) }
+        NumberInputBox(
+            intValue = maxDescRows,
+            labelId = R.string.label_max_desc_lines,
+            helpTooltipId = R.string.help_max_desc_lines,
+            onValueChange = { newVal, hasError ->
+                if (!hasError) {
+                    maxDescRows = newVal!!
+                    spf.maxDescRows = maxDescRows
+                    anythingChanged = true
                 }
-            )
-        }
+            }
+        )
+
+        // max text box limit
+        var textboxLimit by remember { mutableIntStateOf(spf.textboxLimit)}
+        NumberInputBox(
+            intValue = textboxLimit,
+            labelId = R.string.textbox_limit,
+            helpTooltipId = R.string.help_rule_textbox_limit,
+            onValueChange = { newVal, hasError ->
+                if (!hasError) {
+                    textboxLimit = newVal!!
+                    spf.textboxLimit = newVal
+                    anythingChanged = true
+                }
+            }
+        )
     }
 }
 
@@ -173,6 +172,8 @@ fun RegexSettingsPopup(
 fun RegexList(
     vm: RegexViewModel,
 ) {
+    val C = G.palette
+
     val forType = vm.forType
     val ctx = LocalContext.current
     val spf = spf.RegexOptions(ctx)
@@ -197,7 +198,7 @@ fun RegexList(
             onSave = { updatedRule ->
                 // 1. update in db
                 val table = ruleTableForType(forType)
-                table.updateRuleById(ctx, updatedRule.id, updatedRule)
+                table.updateById(ctx, updatedRule.id, updatedRule)
 
                 // 2. reload from db
                 vm.reloadDb(ctx)
@@ -211,7 +212,7 @@ fun RegexList(
         trigger = confirmDeleteAll,
         content = { GreyLabel(text = Str(R.string.confirm_delete_all_rule), fontSize = 18.sp) },
         buttons = {
-            StrokeButton(label = Str(R.string.delete), color = Salmon) {
+            StrokeButton(label = Str(R.string.delete), color = C.error) {
                 confirmDeleteAll.value = false
 
                 val table = ruleTableForType(forType)
@@ -249,7 +250,7 @@ fun RegexList(
             }
         },
         buttons = {
-            StrokeButton(label = Str(R.string.delete), color = Salmon) {
+            StrokeButton(label = Str(R.string.delete), color = C.error) {
                 confirmDeleteDuplicated.value = false
 
                 val table = ruleTableForType(forType)
@@ -275,7 +276,18 @@ fun RegexList(
         HtmlText(Str(R.string.suggest_to_swipe))
     }
 
+    val exportTrigger = remember { mutableStateOf(false) }
+    if (exportTrigger.value) {
+        ConfigExportDialog(
+            trigger = exportTrigger,
+            initialText = PermissivePrettyNoDefaultsJson.encodeToString(
+                clickedRule.value.copy(id = 0) // ignore `id`
+            )
+        )
+    }
+
     val icons = listOf(
+        R.drawable.ic_export,
         R.drawable.ic_find,
         R.drawable.ic_copy,
         R.drawable.ic_recycle_bin,
@@ -286,33 +298,36 @@ fun RegexList(
         ctx.resources.getStringArray(R.array.rule_dropdown_menu).mapIndexed { menuIndex, label ->
             LabelItem(
                 label = when (menuIndex) {
-                    4 -> label.format(vm.table.count(ctx)) // Delete All(%d) Rules
+                    5 -> label.format(vm.table.count(ctx)) // Delete All(%d) Rules
                     else -> label
                 },
                 leadingIcon = { GreyIcon20(icons[menuIndex]) }
             ) {
                 when (menuIndex) {
-                    0 -> { // search rule
+                    0 -> { // Export
+                        exportTrigger.value = true
+                    }
+                    1 -> { // search rule
                         vm.searchEnabled.value = true
                     }
 
-                    1 -> { // clone rule
+                    2 -> { // clone rule
                         // 1. add to db
-                        vm.table.addNewRule(ctx, clickedRule.value)
+                        vm.table.addNew(ctx, clickedRule.value)
 
                         // 2. refresh gui
                         vm.reloadDb(ctx)
                     }
 
-                    2 -> { // delete a rule
+                    3 -> { // delete a rule
                         // Show prompt for swipe right
                         suggestSwipeToDelTrigger.value = true
                     }
-                    3 -> { // delete duplicated rules
+                    4 -> { // delete duplicated rules
                         confirmDeleteDuplicated.value = true
                     }
 
-                    4 -> { // delete all rules
+                    5 -> { // delete all rules
                         confirmDeleteAll.value = true
                     }
                 }
@@ -326,17 +341,17 @@ fun RegexList(
         ruleSettingsTrigger.value = true
     }
 
-    // Nested scrollable Column/LazyColumn is forbidden in jetpack compose, to workaround this:
+    // Nested scrollable Column/LazyColumn is forbidden in jetpack compose, to work around this:
     // when < 10 rules:
     //   show as normal Column (dynamic height)
     // else
     //   show as LazyColumn (Fixed height)
-    val useLazy = vm.rules.size > spf.getMaxNoneScrollRows()
+    val useLazy = vm.rules.size > spf.maxNoneScrollRows
     if (useLazy) { // LazyColumn
         val lazyState = rememberLazyListState()
 
         // Calculate x% of the screen height
-        val percentage = spf.getRuleListHeightPercentage()
+        val percentage = spf.ruleListHeightPercentage
 
         LazyScrollbar(
             state = lazyState,
@@ -376,6 +391,7 @@ fun RegexList(
 
 
 // A wrapper for RuleCard to make it swipeable and clickable(short and long)
+@SuppressLint("LocalContextGetResourceValueCall")
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun RegexItem(
@@ -389,7 +405,7 @@ fun RegexItem(
     contextMenuItems: List<IMenuItem>,
 ) {
     val ctx = LocalContext.current
-    val C = LocalPalette.current
+    val C = G.palette
 
     DropdownWrapper(items = contextMenuItems) { contextMenuExpanded ->
         LeftDeleteSwipeWrapper(
@@ -412,7 +428,7 @@ fun RegexItem(
                         ruleToDel.pattern,
                         ctx.getString(R.string.undelete),
                     ) {
-                        table.addRuleWithId(ctx, ruleToDel)
+                        table.addWithId(ctx, ruleToDel)
                         ruleList.add(index, ruleToDel)
                     }
                 }

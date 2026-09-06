@@ -1,16 +1,14 @@
 <resources>
     <string name="start_time">Başlangıç Zaman</string>
     <string name="end_time">Bitiş Zamanı</string>
-    <string name="switch_mode">Modu Değiştir</string>
+    <string name="regex_mode">Regex modu</string>
     <string name="contact_group">İletişim Grubu</string>
-    <string name="text_too_long">Metin çok uzun, düzenleme devre dışı</string>
-    <string name="follow_system">Sistemi Takip Et</string>
+    <string name="text_too_long">Metin %s karakteri aşıyor, performans nedenleriyle düzenleme devre dışı bırakıldı. Limiti artırmak için:</string>
+    <string name="increase_text_limit">Bir kurala uzun basın -> Ayarlar -> Metin Kutusu Limiti</string>
+    <string name="system"><short>Sist</short></string>
     <string name="theme">Tema</string>
-    <string-array name="theme_list">
-        <item>Aydınlık</item>
-        <item>Karanlık</item>
-    </string-array>
     <string-array name="rule_dropdown_menu">
+        <item>Dışa Aktar</item>
         <item>Kural Ara</item>
         <item>Kuralı Kopyala</item>
         <item>Kuralı Sil</item>
@@ -26,26 +24,26 @@
     </string>
     <string name="help_regex_mode_phone_number">
         <![CDATA[
-        <font color="#00BFFF"><b>Telefon Numarası</b></font>:<br>
+        <title><b>Telefon Numarası</b></title>:<br>
         &ensp; Varsayılan moddur, regex telefon numarasıyla eşleşecektir.<br>
         ]]>
     </string>
     <string name="help_regex_mode_contact">
         <![CDATA[
-        <font color="#00BFFF"><b>Kişiler</b></font>:<br>
+        <title><b>Kişiler</b></title>:<br>
         &ensp; Regex, gelen numarayla ilişkili kişi adıyla eşleşecektir.<br>
         &ensp;  - Kullanım durumu:<br>
-        &emsp; <font color="#888888">Hafta sonu tüm rehber dışı numaraları `.*` regex\'iyle engelle. </font><br>
+        &emsp; <sample>Hafta sonu tüm rehber dışı numaraları `.*` regex\'iyle engelle. </sample><br>
         ]]>
     </string>
     <string name="help_regex_mode_contact_group">
         <![CDATA[
-        <font color="#00BFFF"><b>Kişi Grubu</b></font>:<br>
+        <title><b>Kişi Grubu</b></title>:<br>
         &ensp; Regex, gelen numarayla ilişkili kişi grubu adıyla eşleşecektir,
                  bu gruptaki tüm kişileri etkiler, böylece onları tek tek eklemenize gerek kalmaz,
                  ve personel değişiklikleri olduğunda bile güncellemene gerek olmaz.<br>
         &ensp;  - Kullanım durumu:<br>
-        &emsp; <font color="#888888">Hafta sonu \"iş\" kişi grubunu engelleyerek tüm iş arkadaşlarını engelle. </font> <br>
+        &emsp; <sample>Hafta sonu \"iş\" kişi grubunu engelleyerek tüm iş arkadaşlarını engelle. </sample> <br>
         ]]>
     </string>
 </resources>

@@ -40,13 +40,13 @@ import spam.blocker.service.bot.MyWorkManager
 import spam.blocker.service.bot.Schedule
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.regex.DisableNestedScrolling
-import spam.blocker.ui.theme.LocalPalette
 import spam.blocker.ui.widgets.ConfigExportDialog
 import spam.blocker.ui.widgets.CustomItem
 import spam.blocker.ui.widgets.DividerItem
 import spam.blocker.ui.widgets.DropdownWrapper
 import spam.blocker.ui.widgets.GreyIcon20
 import spam.blocker.ui.widgets.GreyLabel
+import spam.blocker.ui.widgets.HtmlText
 import spam.blocker.ui.widgets.IMenuItem
 import spam.blocker.ui.widgets.LabelItem
 import spam.blocker.ui.widgets.LeftDeleteSwipeWrapper
@@ -56,11 +56,11 @@ import spam.blocker.ui.widgets.SnackBar
 import spam.blocker.ui.widgets.Str
 import spam.blocker.ui.widgets.SwipeInfo
 import spam.blocker.util.A
-import spam.blocker.util.BotPrettyJson
+import spam.blocker.util.MarkupText
+import spam.blocker.util.MyPrettyJson
 import spam.blocker.util.PermissiveJson
-import spam.blocker.util.SaveableLogger
-import spam.blocker.util.Util
-import spam.blocker.util.applyAnnotatedMarkups
+import spam.blocker.util.TimeUtils.durationString
+import spam.blocker.util.TimeUtils.formatTime
 import spam.blocker.util.formatAnnotated
 import java.time.Duration
 import java.time.Instant
@@ -90,7 +90,7 @@ fun CountdownMenuItem(bot: Bot) {
 
             "$stateStr\n$stopReasonStr"
         } else { // Show countdown if it's still running
-            Util.durationString(
+            durationString(
                 ctx,
                 Duration.between(Instant.now(), Instant.ofEpochMilli(nextTick))
             )
@@ -142,8 +142,8 @@ fun BotLog(
 
     val annotatedLog = remember {
         try {
-            val logger = PermissiveJson.decodeFromString<SaveableLogger>(logJson)
-            logger.text.applyAnnotatedMarkups(logger.markups)
+            val t = PermissiveJson.decodeFromString<MarkupText>(logJson)
+            t.toAnnotatedString()
         } catch (_: Exception) {
             AnnotatedString("")
         }
@@ -153,15 +153,19 @@ fun BotLog(
     PopupDialog(
         trigger = trigger,
     ) {
-        Text(
-            text = if (logTime == 0L) {
-                Str(R.string.not_executed_yet).A()
-            } else {
-                "${Str(R.string.executed_at)} ${Util.formatTime(ctx, logTime)}\n\n"
+        if (logTime == 0L) {
+            Text(
+                text = Str(R.string.not_executed_yet).A(),
+                color = G.palette.textGrey,
+            )
+        } else {
+            Text(
+                text = "${Str(R.string.executed_at)} ${formatTime(ctx, logTime)}\n\n"
                     .formatAnnotated(annotatedLog)
-            },
-            color = LocalPalette.current.textGrey,
-        )
+                ,
+                color = G.palette.textGrey,
+            )
+        }
     }
 }
 
@@ -178,6 +182,12 @@ fun BotList() {
     }
 
     var clickedBot by rememberSaveableBotState(Bot())
+
+    var isClickedBotScheduleTrigger by remember(clickedBot.trigger) {
+        mutableStateOf(
+            clickedBot.trigger is Schedule
+        )
+    }
 
     // Edit
     val editTrigger = rememberSaveable { mutableStateOf(false) }
@@ -212,13 +222,17 @@ fun BotList() {
             logTime = log.second,
         )
     }
+    val notScheduleWarning = remember { mutableStateOf(false) }
+    PopupDialog(notScheduleWarning) {
+        HtmlText(Str(R.string.last_log_only_for_schedule_trigger))
+    }
 
     // Export
     val exportTrigger = remember { mutableStateOf(false) }
     if (exportTrigger.value) {
         ConfigExportDialog(
             trigger = exportTrigger,
-            initialText = BotPrettyJson.encodeToString(clickedBot),
+            initialText = MyPrettyJson.encodeToString(clickedBot),
         )
     }
 
@@ -235,7 +249,7 @@ fun BotList() {
     )
     val icons = listOf(
         R.drawable.ic_log,
-        R.drawable.ic_backup_export,
+        R.drawable.ic_export,
     )
     labels.forEachIndexed { menuIndex, label ->
         contextMenuItems += LabelItem(
@@ -243,7 +257,12 @@ fun BotList() {
             leadingIcon = { GreyIcon20(icons[menuIndex]) }
         ) {
             when (menuIndex) {
-                0 -> { logTrigger.value = true } // View log
+                0 -> { // Last Log
+                    if (isClickedBotScheduleTrigger)
+                        logTrigger.value = true
+                    else
+                        notScheduleWarning.value = true
+                }
                 1 -> { exportTrigger.value = true } // Export
             }
         }
@@ -278,7 +297,7 @@ fun BotList() {
                                     ctx.getString(R.string.undelete),
                                 ) {
                                     // 1. add to db
-                                    BotTable.addRecordWithId(ctx, bot)
+                                    BotTable.addWithId(ctx, bot)
                                     // 2. add to UI
                                     vm.bots.add(index, bot)
                                     // 3. re-schedule

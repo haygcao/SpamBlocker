@@ -1,31 +1,4 @@
 <resources>
-    <string name="api_preset_groq">Groq</string>
-    <string name="help_api_preset_groq">
-        <![CDATA[
-        <b>Groq AI</b>を使ってSMSの内容を確認します。メールアドレスのアカウントのみが必要です。
-        ]]>
-    </string>
-    <string name="help_api_preset_groq_authorization">
-        <![CDATA[
-        1. 登録とログイン：<br>
-         <a href="https://console.groq.com/login">https://console.groq.com/login</a><br>
-         <br>
-        2. APIページを開く：<br>
-         <a href="https://console.groq.com/keys">https://console.groq.com/keys</a><br>
-        <br>
-        3. <translate>\"Create API key\"</translate>ボタンを押します。<br>
-        <br>
-        4. キーをコピーし、下に貼り付けます。
-        ]]>
-    </string>
-    <string name="spam_sms_prompt_template">
-        このSMSメッセージを政治、詐欺、アンケート、マーケティングのいずれかに分類してください。
-        該当するものがない場合は「有効」と回答してください。それ以外の場合は、カテゴリのみを回答し、他の何も回答しないでください。
-        SMSメッセージは次のとおりです。
-        {sms}
-    </string>
-    <string name="spam_sms_negative_category"><translate>(政治|詐欺|アンケート|マーケティング)</translate></string>
-    <string name="spam_sms_positive_category">有効</string>
     <string name="last_log">最終ログ</string>
     <string name="executed_at">実行日時：</string>
     <string name="not_executed_yet">まだ実行されていません</string>
@@ -35,10 +8,6 @@
         <br>
         一目で、履歴レコードがルールによってカバーされているかどうかを簡単に確認できるため、個別にテストする必要はありません。<br>
         <br>
-
-        <font color="#ffa500">注:</font><br>
-        正規表現ルールが多すぎると、パフォーマンスに影響を与える可能性があります。<br>
-        <br>
         <b>例:</b> <br>
         <br>
         <img src=\'ic_history_indicator_1\'/> <br>
@@ -46,7 +15,7 @@
         &ensp; - 2番目の赤いSMSアイコンは、このSMSコンテンツがコンテンツルールによってブロックされることを示します。<br>
         &ensp; - 3番目の赤いデータベースアイコンは、この電話番号が迷惑電話番号データベースに存在することを示します。<br>
         <br>
-        これらのアイコンは<font color="#ea86ff"><b>優先順位</b></font>によって配置されており、<b>最初の</b>アイコンが全体の結果を示します。その電話番号ルールの方が優先度が高く、最終的にSMSメッセージはそのルールによって許可されます。<br>
+        これらのアイコンは<priority><b>優先順位</b></priority>によって配置されており、<b>最初の</b>アイコンが全体の結果を示します。その電話番号ルールの方が優先度が高く、最終的にSMSメッセージはそのルールによって許可されます。<br>
         <br>
         <img src=\'ic_history_indicator_2\'/> <br>
         &ensp; - コンテンツルールによって許可されます。<br>
@@ -57,6 +26,11 @@
         <br>
         <img src=\'ic_history_indicator_3\'/> <br>
         電話番号ルールは一致せず、SMSルールとデータベースのみが一致します。そしてSMSルールによってブロックされます。<br>
+        <br>
+        <br>
+        <warn>注</warn> <br>
+        番号の色（<img src=\'ic_history_indicator_4\'/>）ではなく、先頭のアイコンに基づいてルールを調整してください。
+        番号の色は過去の着信判定結果のみを反映し、変わることはありません。
         ]]>
     </string>
     <string name="rule_indicator">ルールインジケーター</string>
@@ -64,7 +38,7 @@
         <![CDATA[
         MMSメッセージは通常スパムです。実際に使用しない限り、有効にする必要はありません。<br>
         <br>
-        <font color="#ffa500">注：</font><br>
+        <warn>注：</warn><br>
         グループメッセージはSMSではなく、MMSです。<br>
         <br>
         MMSはSMSとして扱われ、テキストコンテンツのみが処理されます。
@@ -73,8 +47,6 @@
         2つの権限が必要です：RECEIVE_MMSとREAD_SMS
         ]]>
     </string>
-    <string name="unknown_error">不明なエラー。</string>
-    <string name="checking_auth_credential">認証情報を確認しています。</string>
     <string name="sms_bomb"><short>SMS爆撃</short></string>
     <string name="help_sms_bomb">
         <![CDATA[
@@ -83,27 +55,27 @@
         OTP（ワンタイムパスワード）認証を主とするSMSメッセージの大量かつ継続的な洪水攻撃を防ぎます。<br>
         <br>
         例えば、次のようなSMSメッセージ：<br>
-        &ensp; <font color="#888888">あなたのOTPは：1234です。</font><br>
-        &ensp; <font color="#888888">これはあなたの確認コードです：1234。</font><br>
-        &ensp; <font color="#888888">1234はあなたの認証コードです。</font><br>
+        &ensp; <sample>あなたのOTPは：1234です。</sample><br>
+        &ensp; <sample>これはあなたの確認コードです：1234。</sample><br>
+        &ensp; <sample>1234はあなたの認証コードです。</sample><br>
         <br>
-        <h5><font color="#00BFFF">- コンテンツの正規表現</font></h5>
+        <h5><title>- コンテンツの正規表現</title></h5>
         この機能は、この正規表現に一致するメッセージにのみ適用されます。一般的な正規表現は次のとおりです： <br>
-        <font color="#fa7f71">.*(otp|code).*</font><br>
+        <error>.*(otp|code).*</error><br>
         <br>
-        <h5><font color="#00BFFF">- 間隔</font></h5>
+        <h5><title>- 間隔</title></h5>
         後続のOTPメッセージがこの時間間隔内に到着した場合、爆撃攻撃の一部と見なされ、ブロックされます。<br>
         （デフォルト：30秒）<br>
         <br>
         これは、最初の1つを除いて、後続のすべての爆弾をブロックします。<br>
         <br>
-        <h5><font color="#00BFFF">- ロックスクリーン保護</font></h5>
+        <h5><title>- ロックスクリーン保護</title></h5>
         これを有効にすると、最初の爆弾を含め、ロックスクリーンモードですべての爆弾をブロックします。 <br>
         <br>
         通常、確認コードを待っている間、画面のロックが解除されているはずです。
         デバイスがロックスクリーンモードになっているときにそのようなメッセージが届いた場合、それは爆弾である可能性があります。<br>
         <br>
-        <font color="#ea86ff"><b>優先度：20</b></font>
+        <priority><b>優先度：20</b></priority>
         ]]>
     </string>
     <string name="lockscreen_protection"><short>ロック画面保護</short></string>
@@ -125,7 +97,8 @@
     </string>
     <string name="help_history_expiry">
         <![CDATA[
-            有効にすると、履歴記録はN日後に期限切れとなり、期限切れの記録は自動的に削除されます。
+                有効にすると、履歴記録はN日後に自動的に削除されます。 <br>
+                クリーンアップ処理は毎日00:00に実行されます。
         ]]>
     </string>
 </resources>

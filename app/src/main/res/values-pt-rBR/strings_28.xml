@@ -1,0 +1,151 @@
+<resources>
+    <string name="perm_access_dir">Acessar Pasta</string>
+    <string name="dir_not_specified">Pasta não especificada.</string>
+    <string name="no_access_to_dir">Sem acesso à pasta: %s.</string>
+    <string name="grant_access_to_dir">
+        <![CDATA[
+        Conceder acesso à pasta: <br>
+        <highlight>%s</highlight>
+        ]]>
+    </string>
+    <string name="comment">Comentário</string>
+    <string name="database_prefix">Prefixo do banco de dados</string>
+    <string name="help_regex_mode_database_prefix">
+        <![CDATA[
+        <title><b>Prefixo do banco de dados</b></title>:<br>
+        &ensp; Bloqueio por intervalo para números de telefone no banco de dados.<br>
+        <br>
+        <warn>Esta regex deve terminar com pontos</warn>, neste modo regex esses pontos finais representam os dígitos variáveis. <br>
+        <br>
+        <b>Por exemplo:</b> <br>
+        &ensp; <sample><b>.{5,}..</b></sample> exige que o prefixo tenha pelo menos 5 dígitos, permitindo uma variação de 2 dígitos no final.
+        ]]>
+    </string>
+    <string name="help_regex_preset_database_prefix">
+        <![CDATA[
+        Corresponde aos números de telefone no banco de dados pelo prefixo; o prefixo deve ter pelo menos <minor><b>5</b></minor> dígitos, permitindo uma variação de <minor><b>2</b></minor> dígitos no final. <br>
+        <br>
+        <b>Por exemplo</b>: <br>
+        &ensp; Se <sample>12345678</sample><error>00</error> existir no banco de dados, uma chamada de <sample>12345678</sample><error>99</error> também será bloqueada.
+        ]]>
+    </string>
+    <string name="api_preset_remote_llm">LLM remoto</string>
+    <string name="help_api_preset_remote_llm">
+        <![CDATA[
+            Verifica o conteúdo de SMS usando modelos de linguagem grandes remotos. <br>
+            <br>
+            Isto é fornecido apenas para <warn>fins de demonstração</warn>.<br>
+            <br>
+            Toque para abrir a página wiki com instruções.
+        ]]>
+    </string>
+    <string name="found_existing_auth_token">Token de autenticação existente encontrado</string>
+    <string name="use_this_token">Usar este token</string>
+    <string name="login_and_get_a_token">Registre-se e entre no site para obter seu token.</string>
+    <string name="get_a_new_token">Obter um novo token</string>
+    <string name="token">Token</string>
+    <string name="enter_token_manually_desc">Se você já possui um token, insira-o manualmente.</string>
+    <string name="enter_token_manually">Inserir token manualmente</string>
+    <string name="others">Outros</string>
+    <string name="api_settings">Configurações da API</string>
+    <string name="include_settings">Configurações de inclusão</string>
+    <string name="exclude_settings">Configurações de exclusão</string>
+    <string name="backup_missing_category">Esta configuração está ausente no arquivo de backup e não pode ser restaurada.</string>
+    <string name="warning_priority_conflict">
+        <![CDATA[
+        <highlight>As regras da lista branca</highlight> e da <error>lista negra</error> não devem ter a mesma prioridade<br>
+        <br>
+        Regras em conflito:
+        ]]>
+    </string>
+    <string name="checking_template_new">%s Verificando: %s</string>
+    <string name="textbox_limit">Limite da caixa de texto</string>
+    <string name="help_rule_textbox_limit">
+        <![CDATA[
+        O máximo de caracteres permitidos na caixa de entrada. Exceder esse limite desativa a edição,
+          pois um texto excessivamente longo irá congelar a interface do usuário. <br>
+          <br>
+        Padrão: <b>10000</b> caracteres
+        ]]>
+    </string>
+    <string name="clear_history">Limpar histórico</string>
+    <string name="tip_clear_history">Se o app travar na inicialização e não abrir, tente limpar os registros do histórico usando o botão abaixo.</string>
+    <string name="direct_verdict">Veredito direto</string>
+    <string name="formula">Fórmula</string>
+    <string name="strategy">Estratégia</string>
+    <string name="help_api_result_strategy">
+        <![CDATA[
+        <title>Veredito direto</title> <br>
+        O servidor retorna uma categoria de spam explícita, comum em serviços de API. <br>
+        <br>
+        Por exemplo, o servidor retorna: <br>
+        &ensp; <sample><no_translate>{ …, \"type\": \"fraud\", … }</no_translate></sample> <br>
+        Corresponda-o com uma regex: <br>
+        &ensp; <sample><no_translate>\"type\": \"(fraud|scam|political)\"</no_translate></sample> <br>
+        <br>
+        <title>Fórmula</title> <br>
+        Personalize sua própria lógica de bloqueio com base na contagem de avaliações positivas/negativas retornadas pelo servidor. <br>
+        <br>
+        Por exemplo, bloquear quando: <br>
+        &ensp; <sample><no_translate>(negative &gt; 5) &amp; (negative / positive &gt; 120%)</no_translate></sample> <br>
+        ]]>
+    </string>
+    <string name="hint_positive_identifier_strategy_formula">Ex.: (\\d+) positivo</string>
+    <string name="hint_negative_identifier_strategy_formula">Ex.: (\\d+) negativo</string>
+    <string name="help_positive_identifier_strategy_formula">
+        <![CDATA[
+        Esta regex serve para extrair a contagem de avaliações positivas; um grupo de captura é necessário, ou seja, deve conter
+         <sample>(</sample> e <sample>)</sample>, com valor padrão 0 se nenhuma correspondência for encontrada. <br>
+        <br>
+        Por exemplo: <br>
+        &ensp; <sample>(\\d+) positivo</sample>
+        ]]>
+    </string>
+    <string name="help_negative_identifier_strategy_formula">
+        <![CDATA[
+        Esta regex serve para extrair a contagem de avaliações negativas; um grupo de captura é necessário, ou seja, deve conter
+         <sample>(</sample> e <sample>)</sample>, com valor padrão 0 se nenhuma correspondência for encontrada. <br>
+        <br>
+        Por exemplo: <br>
+        &ensp; <sample>(\\d+) negativo</sample>
+        ]]>
+    </string>
+    <string name="positive_condition">Condição positiva</string>
+    <string name="negative_condition">Condição negativa</string>
+    <string name="help_positive_condition">
+        <![CDATA[
+        O número será <highlight>permitido</highlight> se esta condição for atendida.
+        ]]>
+    </string>
+    <string name="help_negative_condition">
+        <![CDATA[
+        O número será <error>bloqueado</error> se esta condição for atendida.
+        ]]>
+    </string>
+    <string name="supported_formula_syntax" formatted="false">
+        <![CDATA[
+        <title>Sintaxe compatível</title> <br>
+        <minor>positive &ensp; p &ensp; negative &ensp; n</minor> <br>
+        &ensp; Marcadores que serão substituídos pelas contagens reais de avaliações. <br>
+        <minor>+ &ensp; - &ensp; * &ensp; /</minor> <br>
+        &ensp; Operações matemáticas básicas (N/0=N) <br>
+        <minor>%</minor> <br>
+        &ensp; Porcentagem <br>
+        <minor>&lt; &ensp; &gt; &ensp; &lt;= &ensp; &gt;=</minor> <br>
+        &ensp; Comparações <br>
+        <minor>& &ensp; |</minor> <br>
+        &ensp; AND/OR lógico <br>
+        <minor>( &ensp; )</minor> <br>
+        &ensp; Parênteses <br>
+        <br>
+        <b>Exemplos</b> <br>
+        &ensp; <sample>negative &gt; positive</sample> <br>
+        &ensp; <sample>P - N &gt; 5</sample> (não diferencia maiúsculas de minúsculas) <br>
+        &ensp; <sample>p &gt; 3 & n &gt; 2 & (n / p &gt;= 120%)</sample> <br>
+        ]]>
+    </string>
+    <string name="missing_brackets">A regex não tem um grupo de captura (), veja a dica para detalhes.</string>
+    <string name="negative_identifier_matches">Correspondências do identificador negativo</string>
+    <string name="positive_identifier_matches">Correspondências do identificador positivo</string>
+    <string name="rating_count_template">Avaliações positivas: %s, avaliações negativas: %s</string>
+</resources>

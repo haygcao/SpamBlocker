@@ -1,15 +1,20 @@
 package spam.blocker.ui.history
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import spam.blocker.G
 import spam.blocker.R
@@ -18,27 +23,41 @@ import spam.blocker.service.bot.Daily
 import spam.blocker.service.bot.MyWorkManager
 import spam.blocker.service.bot.PruneHistory
 import spam.blocker.service.bot.serialize
+import spam.blocker.ui.history.HistoryOptions.forceShowSIM
+import spam.blocker.ui.history.HistoryOptions.historyTimeColors
+import spam.blocker.ui.history.HistoryOptions.showHistoryBlocked
+import spam.blocker.ui.history.HistoryOptions.showHistoryCarrier
+import spam.blocker.ui.history.HistoryOptions.showHistoryGeoLocation
+import spam.blocker.ui.history.HistoryOptions.showHistoryIndicator
+import spam.blocker.ui.history.HistoryOptions.showHistoryPassed
+import spam.blocker.ui.history.HistoryOptions.showHistoryTimeColor
 import spam.blocker.ui.setting.LabeledRow
-import spam.blocker.ui.theme.LocalPalette
-import spam.blocker.ui.theme.Salmon
-import spam.blocker.ui.theme.SkyBlue
 import spam.blocker.ui.widgets.AnimatedVisibleV
+import spam.blocker.ui.widgets.ColorPickerButton
 import spam.blocker.ui.widgets.ComboBox
+import spam.blocker.ui.widgets.DurationButton
 import spam.blocker.ui.widgets.Fab
+import spam.blocker.ui.widgets.FlowRowSpaced
 import spam.blocker.ui.widgets.GreyButton
 import spam.blocker.ui.widgets.GreyLabel
-import spam.blocker.ui.widgets.GreyText
+import spam.blocker.ui.widgets.HtmlText
 import spam.blocker.ui.widgets.LabelItem
+import spam.blocker.ui.widgets.MultiColorButton
 import spam.blocker.ui.widgets.NumberInputBox
+import spam.blocker.ui.widgets.Placeholder
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.PopupSize
 import spam.blocker.ui.widgets.RowVCenterSpaced
 import spam.blocker.ui.widgets.Section
 import spam.blocker.ui.widgets.Str
+import spam.blocker.ui.widgets.StrInputBox
 import spam.blocker.ui.widgets.StrokeButton
 import spam.blocker.ui.widgets.SwitchBox
+import spam.blocker.util.A
+import spam.blocker.util.Lambda2
 import spam.blocker.util.Permission
 import spam.blocker.util.PermissionWrapper
+import spam.blocker.util.TimeUtils.FreshnessColor
 import spam.blocker.util.spf
 
 
@@ -49,9 +68,9 @@ fun reScheduleHistoryCleanup(ctx: Context) {
 
     val spf = spf.HistoryOptions(ctx)
 
-    val loggingEnabled = spf.isLoggingEnabled()
-    val expiryEnabled = spf.isExpiryEnabled()
-    val ttl = spf.getTTL()
+    val loggingEnabled = spf.isLoggingEnabled
+    val expiryEnabled = spf.isExpiryEnabled
+    val ttl = spf.ttl
 
     if (loggingEnabled && expiryEnabled && ttl >= 0) {
         MyWorkManager.schedule(
@@ -63,28 +82,161 @@ fun reScheduleHistoryCleanup(ctx: Context) {
     }
 }
 
+@Composable
+fun EditSingleTimeColorsDialog(
+    trigger: MutableState<Boolean>,
+    initial: FreshnessColor,
+    onResult: Lambda2<FreshnessColor?, Boolean> // Pair<new item, isDelete, isAddOrEdit>
+) {
+    val C = G.palette
 
+    var dur by remember(initial) { mutableStateOf(initial.durationMin) }
+    var color by remember(initial) { mutableStateOf(Color(initial.argb)) }
+
+    PopupDialog(
+        trigger = trigger,
+        buttons = {
+            RowVCenterSpaced(8) {
+                StrokeButton(
+                    label = Str(R.string.delete),
+                    color = C.error,
+                ) {
+                    trigger.value = false
+                    onResult(null, true)
+                }
+                StrokeButton(
+                    label = Str(R.string.save),
+                    color = C.teal200,
+                ) {
+                    trigger.value = false
+
+                    val r = FreshnessColor(dur, color.toArgb())
+                    if (r.isValid())
+                        onResult(r, false)
+                    else
+                        onResult(null, false)
+                }
+            }
+        }
+    ) {
+        StrInputBox(
+            text = initial.durationMin,
+            label = { Text(Str(R.string.duration)) },
+            leadingIconId = R.drawable.ic_duration,
+            supportingText = if(!FreshnessColor(dur).isValid()) Str(R.string.invalid_value_see_tooltip).A(C.error) else null,
+            placeholder = { Placeholder("10min") },
+            helpTooltip = Str(R.string.help_time_color_values),
+            onValueChange = { dur = it }
+        )
+        LabeledRow(
+            labelId = R.string.time_color,
+        ) {
+            ColorPickerButton(
+                color = color,
+                okLabel = Str(R.string.ok)
+            ) {
+                it?.let { color = it }
+            }
+        }
+    }
+}
+
+@Composable
+fun EditTimeColorsDialog(
+    trigger: MutableState<Boolean>,
+    timeColors: SnapshotStateList<FreshnessColor>,
+) {
+    val ctx = LocalContext.current
+    val spf = spf.HistoryOptions(ctx)
+
+    var editing by remember { mutableStateOf(FreshnessColor()) }
+    var editingIndex by remember { mutableStateOf<Int?>(null) }
+
+    val editSingleTrigger = remember { mutableStateOf(false) }
+
+    EditSingleTimeColorsDialog(
+        trigger = editSingleTrigger,
+        initial = editing,
+        onResult = { newFc, isDeleted ->
+            if (isDeleted) {
+                editingIndex?.let {
+                    timeColors.removeAt(it)
+                }
+            } else {
+                newFc?.let {
+                    if (newFc.isValid()) {
+                        // 1. update the list
+                        if (editingIndex != null) { // override
+                            timeColors[editingIndex!!] = newFc
+                        } else { // add
+                            timeColors.add(newFc)
+                        }
+                        timeColors.sort()
+                    }
+                }
+            }
+
+            // save to spf
+            spf.saveTimeColors(timeColors)
+        }
+    )
+
+    PopupDialog(
+        trigger = trigger,
+        buttons = {
+            StrokeButton(
+                label = "+",
+                color = G.palette.textGrey,
+            ) {
+                editing = FreshnessColor()
+                editingIndex = null
+                editSingleTrigger.value = true
+            }
+        }
+    ) {
+
+        // time color buttons
+        FlowRowSpaced(
+            space = 20,
+            vSpace = 30,
+        ) {
+            timeColors.forEachIndexed { index, fc ->
+                StrokeButton(
+                    label = fc.durationMin,
+                    color = Color(fc.argb),
+                ) {
+                    editing = fc
+                    editingIndex = index
+                    editSingleTrigger.value = true
+                }
+            }
+        }
+    }
+}
+
+@SuppressLint("LocalContextGetResourceValueCall")
 @Composable
 fun HistoryFabs(
     modifier: Modifier,
     visible: Boolean,
     vm: HistoryViewModel,
 ) {
-    val C = LocalPalette.current
+    val C = G.palette
     val ctx = LocalContext.current
     val spf = spf.HistoryOptions(ctx)
 
-    var loggingEnabled by remember { mutableStateOf(spf.isLoggingEnabled()) }
-    var expiryEnabled by remember { mutableStateOf(spf.isExpiryEnabled()) }
-    var ttl by rememberSaveable { mutableIntStateOf(spf.getTTL()) }
-    var logSmsContent by rememberSaveable { mutableStateOf(spf.isLogSmsContentEnabled()) }
-    var rows by rememberSaveable { mutableStateOf<Int?>(spf.getInitialSmsRowCount()) }
+    var loggingEnabled by remember { mutableStateOf(spf.isLoggingEnabled) }
+    var expiryEnabled by remember { mutableStateOf(spf.isExpiryEnabled) }
+    var ttl by remember { mutableIntStateOf(spf.ttl) }
+    var logSmsContent by remember { mutableStateOf(spf.isLogSmsContentEnabled) }
+    var rows by remember { mutableStateOf<Int?>(spf.initialSmsRowCount) }
 
-    val settingPopupTrigger = rememberSaveable { mutableStateOf(false) }
+
+    val settingPopupTrigger = remember { mutableStateOf(false) }
 
     PopupDialog(
         trigger = settingPopupTrigger,
-        popupSize = PopupSize(percentage = 0.8f, minWidth = 340, maxWidth = 500),
+        popupSize = PopupSize(maxWidthPercentage = 0.9f, minWidthDp = 340, maxWidthDp = 500),
         content = {
             Column {
                 // Logging enabled / TTL
@@ -99,7 +251,7 @@ fun HistoryFabs(
                         ) {
                             // Enabled
                             SwitchBox(checked = loggingEnabled, onCheckedChange = { isOn ->
-                                spf.setLoggingEnabled(isOn)
+                                spf.isLoggingEnabled = isOn
                                 loggingEnabled = isOn
 
                                 reScheduleHistoryCleanup(ctx)
@@ -107,7 +259,7 @@ fun HistoryFabs(
                         }
 
                         // Log SMS Content
-                        AnimatedVisibleV(loggingEnabled && vm.forType == Def.ForSms) {
+                        AnimatedVisibleV(loggingEnabled) {
                             LabeledRow(
                                 labelId = R.string.sms_content,
                                 helpTooltip = Str(R.string.help_log_sms_content)
@@ -120,7 +272,7 @@ fun HistoryFabs(
                                         onValueChange = { newVal, hasError ->
                                             if (!hasError) {
                                                 rows = newVal
-                                                spf.setInitialSmsRowCount(rows!!)
+                                                spf.initialSmsRowCount = rows!!
                                                 vm.reload(ctx)
                                             }
                                         }
@@ -133,7 +285,7 @@ fun HistoryFabs(
                                 }
                                 SwitchBox(checked = logSmsContent, onCheckedChange = { isOn ->
                                     logSmsContent = isOn
-                                    spf.setLogSmsContentEnabled(isOn)
+                                    spf.isLogSmsContentEnabled = isOn
                                     vm.reload(ctx)
                                 })
                             }
@@ -141,49 +293,28 @@ fun HistoryFabs(
 
                         // Expiry
                         AnimatedVisibleV(loggingEnabled) {
-                            val trigger = remember { mutableStateOf(false) }
-                            PopupDialog(
-                                trigger = trigger,
-                            ) {
-                                // Expiry Enabled
-                                LabeledRow(R.string.expiry) {
-                                    SwitchBox(checked = expiryEnabled, onCheckedChange = { isOn ->
-                                        spf.setExpiryEnabled(isOn)
-                                        expiryEnabled = isOn
-                                        reScheduleHistoryCleanup(ctx)
-                                    })
-                                }
-
-                                // Expiry days
-                                if (expiryEnabled) {
-                                    NumberInputBox(
-                                        intValue = ttl,
-                                        onValueChange = { newValue, hasError ->
-                                            if (!hasError) {
-                                                ttl = newValue!!
-                                                spf.setTTL(newValue)
-                                                reScheduleHistoryCleanup(ctx)
-                                            }
-                                        },
-                                        labelId = R.string.days,
-                                        leadingIconId = R.drawable.ic_recycle_bin,
-                                    )
-                                }
-                            }
-
                             LabeledRow(
                                 labelId = R.string.expiry,
                                 helpTooltip = Str(R.string.help_history_expiry)
                             ) {
-                                GreyButton(
-                                    label = if (expiryEnabled) {
-                                        ctx.resources.getQuantityString(R.plurals.days, ttl, ttl)
-                                    } else {
-                                        Str(R.string.never_expire)
-                                    }
-                                ) {
-                                    trigger.value = true
-                                }
+                                DurationButton(
+                                    alwaysEnabled = !expiryEnabled,
+                                    alwaysLabelId = R.string.never_expire,
+                                    onEnableChange = { isOn ->
+                                        spf.isExpiryEnabled = !isOn
+                                        expiryEnabled = !isOn
+                                        reScheduleHistoryCleanup(ctx)
+                                    },
+                                    duration = ttl,
+                                    onDurationChange = { newValue, hasError ->
+                                        if (!hasError) {
+                                            ttl = newValue!!
+                                            spf.ttl = newValue
+                                            reScheduleHistoryCleanup(ctx)
+                                        }
+                                    },
+                                    durationLabelId = R.string.days,
+                                )
                             }
                         }
                     }
@@ -196,16 +327,16 @@ fun HistoryFabs(
                     Column {
                         // Allowed
                         LabeledRow(labelId = R.string.allowed_records) {
-                            SwitchBox(checked = G.showHistoryPassed.value, onCheckedChange = { isOn ->
-                                spf.setShowPassed(isOn)
-                                G.showHistoryPassed.value = isOn
+                            SwitchBox(checked = showHistoryPassed.value, onCheckedChange = { isOn ->
+                                spf.showPassed = isOn
+                                showHistoryPassed.value = isOn
                             })
                         }
                         // Blocked
                         LabeledRow(labelId = R.string.blocked_records) {
-                            SwitchBox(checked = G.showHistoryBlocked.value, onCheckedChange = { isOn ->
-                                spf.setShowBlocked(isOn)
-                                G.showHistoryBlocked.value = isOn
+                            SwitchBox(checked = showHistoryBlocked.value, onCheckedChange = { isOn ->
+                                spf.showBlocked = isOn
+                                showHistoryBlocked.value = isOn
                             })
                         }
 
@@ -214,9 +345,9 @@ fun HistoryFabs(
                             labelId = R.string.rule_indicator,
                             helpTooltip = Str(R.string.help_show_rule_indicator),
                         ) {
-                            SwitchBox(checked = G.showHistoryIndicator.value, onCheckedChange = { isOn ->
-                                spf.setShowIndicator(isOn)
-                                G.showHistoryIndicator.value = isOn
+                            SwitchBox(checked = showHistoryIndicator.value, onCheckedChange = { isOn ->
+                                spf.showIndicator = isOn
+                                showHistoryIndicator.value = isOn
                             })
                         }
 
@@ -231,8 +362,8 @@ fun HistoryFabs(
                                         LabelItem(label = ctx.getString(strId)) {
                                             when (idx) {
                                                 0 -> {
-                                                    spf.setForceShowSim(false)
-                                                    G.forceShowSIM.value = false
+                                                    spf.forceShowSim = false
+                                                    forceShowSIM.value = false
                                                 }
                                                 1 -> {
                                                     G.permissionChain.ask(
@@ -240,8 +371,8 @@ fun HistoryFabs(
                                                         listOf(PermissionWrapper(Permission.phoneState))
                                                     ) { granted ->
                                                         if (granted) {
-                                                            spf.setForceShowSim(true)
-                                                            G.forceShowSIM.value = true
+                                                            spf.forceShowSim = true
+                                                            forceShowSIM.value = true
                                                         }
                                                     }
                                                 }
@@ -249,9 +380,9 @@ fun HistoryFabs(
                                         }
                                     }
                             }
-                            var selected by remember(G.forceShowSIM.value) {
+                            var selected by remember(forceShowSIM.value) {
                                 mutableIntStateOf(
-                                    if (G.forceShowSIM.value) 1 else 0
+                                    if (forceShowSIM.value) 1 else 0
                                 )
                             }
                             ComboBox(
@@ -260,13 +391,44 @@ fun HistoryFabs(
                             )
                         }
 
-                        // Geo Location
+                        // Geolocation
                         LabeledRow(
-                            labelId = R.string.geo_location,
+                            labelId = R.string.geolocation,
                         ) {
-                            SwitchBox(checked = G.showHistoryGeoLocation.value, onCheckedChange = { isOn ->
-                                spf.setShowGeoLocation(isOn)
-                                G.showHistoryGeoLocation.value = isOn
+                            SwitchBox(checked = showHistoryGeoLocation.value, onCheckedChange = { isOn ->
+                                spf.showGeoLocation = isOn
+                                showHistoryGeoLocation.value = isOn
+                            })
+                        }
+
+                        // Carrier
+                        LabeledRow(
+                            labelId = R.string.carrier,
+                        ) {
+                            SwitchBox(checked = showHistoryCarrier.value, onCheckedChange = { isOn ->
+                                spf.showCarrier = isOn
+                                showHistoryCarrier.value = isOn
+                            })
+                        }
+
+                        // Time Color
+                        val timeColorTrigger = remember { mutableStateOf(false) }
+                        EditTimeColorsDialog(timeColorTrigger, historyTimeColors)
+                        LabeledRow(
+                            labelId = R.string.time_color,
+                            helpTooltip = Str(R.string.help_time_color)
+                        ) {
+                            if (showHistoryTimeColor.value) {
+                                MultiColorButton(
+                                    colors = historyTimeColors.map { it.argb },
+                                    emptyColor = if (historyTimeColors.isNotEmpty()) Color.Unspecified else C.textGrey
+                                ) {
+                                    timeColorTrigger.value = true
+                                }
+                            }
+                            SwitchBox(checked = showHistoryTimeColor.value, onCheckedChange = { isOn ->
+                                spf.showTimeColor = isOn
+                                showHistoryTimeColor.value = isOn
                             })
                         }
                     }
@@ -279,7 +441,7 @@ fun HistoryFabs(
         Fab(
             visible = visible,
             iconId = R.drawable.ic_settings,
-            bgColor = SkyBlue
+            bgColor = C.infoBlue
         ) {
             settingPopupTrigger.value = true
         }
@@ -289,7 +451,7 @@ fun HistoryFabs(
         PopupDialog(
             trigger = deleteConfirm,
             buttons = {
-                StrokeButton(label = Str(R.string.delete), color = Salmon) {
+                StrokeButton(label = Str(R.string.delete), color = C.error) {
                     deleteConfirm.value = false
                     when (vm.forType) {
                         Def.ForNumber -> {
@@ -305,12 +467,12 @@ fun HistoryFabs(
                 }
             }
         ) {
-            GreyText(Str(R.string.confirm_delete_all_records))
+            HtmlText(Str(R.string.confirm_delete_all_records))
         }
         Fab(
             visible = visible,
             iconId = R.drawable.ic_recycle_bin,
-            bgColor = Salmon
+            bgColor = C.error
         ) {
             deleteConfirm.value = true
         }

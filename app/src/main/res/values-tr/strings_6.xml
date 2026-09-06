@@ -1,8 +1,11 @@
 <resources>
     <string name="crash_title">
-        Üzgünüm, uygulama çöktü.\n\n
-        Lütfen aşağıdaki içeriği kopyalayın ve bu sorunu GitHub\'da bildirin,
-        raporlamadan önce hassas bilgileri kaldırın.
+    <![CDATA[
+        Üzgünüz, uygulama çöktü. <br>
+        <br>
+        Lütfen aşağıdaki içeriği kopyalayın ve bu sorunu GitHub\'ta bildirin,
+        raporlamadan önce herhangi bir hassas bilgiyi kaldırın.
+    ]]>
     </string>
     <string-array name="weekdays_abbrev">
         <item>Paz</item>
@@ -16,18 +19,16 @@
 
 
 
-    <string name="confirm_delete_all_records">Tüm kayıtları silmek için onaylıyor musunuz?</string>
+    <string name="confirm_delete_all_records">
+        <![CDATA[
+        <error>Tüm</error> kayıtları silmek için onaylıyor musunuz?
+        ]]>
+    </string>
     <string name="expiry">Son kullanma tarihi</string>
     <string name="days">Günler</string>
     <string name="help_log_sms_content">
         <![CDATA[
-        Açık olduğunda, SMS içeriği de veritabanına kaydedilecek ve bu listede görüntülenecektir; kapalı olduğunda ise veritabanına kaydedilmeyecektir.<br>
-        <br>
-        - Etkinleştirildiğinde:<br>
-        &emsp; <b>Tap</b> tam mesajı genişletmek/küçültmek için.<br>
-        <br>
-        - Devre dışı bırakıldığında:<br>
-        &emsp; <b>Tap</b> konuşmayı varsayılan uygulamada açmak için.
+        Açık olduğunda, SMS içeriği de veritabanına kaydedilecek ve bu listede görüntülenecektir; kapalı olduğunda ise veritabanına kaydedilmeyecektir.
         ]]>
     </string>
 
@@ -42,21 +43,40 @@
     <string name="repeated_call">Tekrarlanan Arama</string>
     <string name="help_repeated_call">
         <![CDATA[
-        Çağrı belirli bir süre içinde tekrarlanırsa izin verin, bu bir spam çağrısından ziyade önemli olabilir. <br>
+        Tekrarlanan aramalara izin verin, bunların spamdan ziyade acil olma olasılığı daha yüksektir. <br>
+        <br>
+        Varsayılan olarak, <highlight><b>5 dakika</b></highlight> içindeki ikinci aramaya izin verilir. <br>
         <br>
         <b>Seçenekler:</b><br>
         <br>
-        <h6><font color="#00BFFF">- Frekans</h6>
-        Varsayılan ayar <font color="#03DAC5"><b>1 / 5 Dakika</b></font>, 5 dakika içinde ikinci çağrıya izin verileceği anlamına gelir. <br>
+        - <title><b>Maks. Aralık</b></title> <br>
+        Yalnızca bu zaman dilimi içindeki aramalar tekrar olarak kabul edilir. <br>
         <br>
-        <h6><font color="#00BFFF">- SMS Dahil Et</font></h6>
-        Etkinleştirildiğinde, o numaradan SMS mesajları almak da sayılır.<br>
+        - <title><b>Min. Aralık</b></title> <br>
+        Bir numara bundan daha kısa sürede tekrar ararsa görmezden gelinecektir. Spam arama botları genellikle anında yeniden arar, bu durumda bu değeri artırın. Engelleme modunu \"Sessiz\" olarak ayarlamak da yardımcı olabilir, ayrıntılar için araç ipucuna bakın. <br>
         <br>
-        <font color="#ea86ff"><b>Öncelik: 10</b></font>
+        - <title><b>Tekrar Sayısı</b></title> <br>
+        Minimum tekrar sayısı. <br>
+        Örneğin: <br>
+        <sample>
+        2 olarak ayarlandığında, bir arama iki kez tekrarlanmalıdır. Toplamda üç arama gerekir: <br>
+         &ensp; - yoksay <br>
+         &ensp; - yoksay <br>
+         &ensp; - izin ver <br>
+        </sample>
+        <br>
+        - <title><b>SMS\'leri Dahil Et</b></title> <br>
+        Etkinleştirildiğinde, o numaradan gelen SMS mesajlarını almak da sayılır. <br>
+        <br>
+        <priority><b>Öncelik: 10</b></priority>
         ]]>
     </string>
 
 
+    <string name="max_interval_min">Maksimum Aralık (Dak)</string>
+    <string name="min_interval_sec">Minimum Aralık (Sn)</string>
+    <string name="repeat_times">Tekrar Sayısı</string>
+    <string name="call_repeated_too_soon">Bu numaradan gelen son aramadan bu yana sadece %s milisaniye geçti, gerekli minimum %s milisaniyedir, yoksay.</string>
     <string name="about">Hakkında</string>
     <string name="version">Sürüm</string>
     <string name="source_code">Kaynak Kodu</string>
@@ -69,9 +89,9 @@
         <item>.csv\'yi birden fazla kural olarak içe aktar</item>
     </string-array>
     <string name="open_settings">Ayarları Aç</string>
-    <string name="remove_db_number">Numarayı spam veritabanından sil</string>
+    <string name="remove_from_db">Veritabanından sil</string>
     <string name="copy_number">Numarayı kopyala</string>
-    <string name="add_num_to_regex_rule">Numarayı regex kuralına ekle</string>
-    <string name="add_num_to_db">Numarayı spam veritabanına ekle</string>
-    <string name="mark_all_as_read">Tümünü okundu olarak işaretle</string>
+    <string name="add_to_regex_rule">Regex kuralına ekle</string>
+    <string name="edit_regex_rule">Regex kuralını düzenle</string>
+    <string name="add_to_db">Veritabanına ekle</string>
 </resources>

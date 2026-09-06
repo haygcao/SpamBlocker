@@ -4,12 +4,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.provider.Telephony
+import spam.blocker.BuildConfig
 import spam.blocker.Events
 import spam.blocker.db.HistoryRecord
 import spam.blocker.db.Notification.ChannelTable
 import spam.blocker.db.SmsTable
 import spam.blocker.service.checker.Checker
 import spam.blocker.service.checker.ICheckResult
+import spam.blocker.service.reporting.maybeAutoReportSMS
 import spam.blocker.ui.NotificationTrampolineActivity
 import spam.blocker.util.Contacts
 import spam.blocker.util.ILogger
@@ -17,6 +19,7 @@ import spam.blocker.util.Notification
 import spam.blocker.util.Notification.ShowType
 import spam.blocker.util.Notification.missingChannel
 import spam.blocker.util.Now
+import spam.blocker.util.SaveableLogger
 import spam.blocker.util.Util.isDeviceLocked
 import spam.blocker.util.Util.isSmsAppInForeground
 import spam.blocker.util.logi
@@ -47,135 +50,174 @@ open class SmsReceiver : BroadcastReceiver() {
     override fun onReceive(ctx: Context, intent: Intent) {
         logi("Received SMS")
 
-        if (!spf.Global(ctx).isGloballyEnabled() || !spf.Global(ctx).isSmsEnabled()) {
+        // Only handle incoming messages
+        if (intent.action != Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
             return
         }
-        val action = intent.action
-        if (action != Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
+
+        val spf = spf.Global(ctx)
+
+        if (!spf.isGloballyEnabled) {
             return
         }
+
         val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
         // A single long message can be split into multiple parts due to character
         // limitations of SMS messages. These parts are then reassembled by the
         // phone and delivered together.
         val messageBody = messages.fold("") { acc, it -> acc + it.messageBody }
+
+        // When SMS screening is not enabled, only check if it matches SMS Alert
+        if (!spf.isSmsEnabled) {
+            checkSmsAlert(ctx, messageBody)
+            return
+        }
+
         val rawNumber = messages[0].originatingAddress!!
 
         val simSlot = getSimSlotFromSmsIntent(ctx, intent)
 
-        processSms(ctx, rawNumber, messageBody, simSlot, isTest = false)
+        processSms(ctx, rawNumber = rawNumber, messageBody = messageBody, simSlot = simSlot,
+            isTest = false, logger = SaveableLogger())
     }
 
-    fun processSms(
-        ctx: Context,
-        rawNumber: String,
-        messageBody: String,
-        simSlot: Int?,
-        isTest: Boolean,
-        logger: ILogger? = null,
-    ): ICheckResult {
-        logi("process Sms")
-
-        val r = Checker.checkSms(
-            ctx, rawNumber = rawNumber, messageBody = messageBody, simSlot = simSlot, logger = logger)
-
-        run {
-            // 1. log to history db
-            val spf = spf.HistoryOptions(ctx)
-            val isLogEnabled = spf.isLoggingEnabled()
-            if (isLogEnabled) {
-                val recordId = SmsTable().addNewRecord(
-                    ctx, HistoryRecord(
-                        peer = rawNumber,
-                        time = System.currentTimeMillis(),
-                        result = r.type,
-                        reason = r.reasonToDb(),
-                        simSlot = simSlot,
-                        extraInfo = if (spf.isLogSmsContentEnabled()) messageBody else null,
-                        isTest = isTest,
-                    )
-                )
-
-                // 2. broadcast new sms to add a new item in history page
-                Events.onNewSMS.fire(recordId)
-            }
-        }
-
-        // 3. update SmsAlert timestamp to SharedPref if it's enabled
-        run {
+    companion object {
+        // Update SmsAlert timestamp in SharedPref if it's enabled
+        fun checkSmsAlert(ctx: Context, messageBody: String) {
             val spf = spf.SmsAlert(ctx)
-            val regex = spf.getRegexStr()
-            if (spf.isEnabled()) {
-                val flags = spf.getRegexFlags()
+            val regex = spf.regexStr
+            if (spf.isEnabled) {
+                val flags = spf.regexFlags
                 val matches = regex.regexMatches(messageBody, flags)
                 if (matches) {
-                    spf.setTimestamp(Now.currentMillis())
+                    spf.timestamp = Now.currentMillis()
                 }
             }
         }
 
+        // This function checks the message and does 3 extra things:
+        //   log to db / show notification / handle sms alert
+        fun processSms(
+            ctx: Context,
+            rawNumber: String,
+            messageBody: String,
+            simSlot: Int?,
+            isTest: Boolean,
+            logger: ILogger? = null,
 
-        // 4. show notification
-        val showName = Contacts.findContactByRawNumber(ctx, rawNumber)?.name ?: rawNumber
+            showNotification: Boolean = true, // no notification for sms-screening-provider mode
+        ): ICheckResult {
+            logi("process Sms")
 
-        if (r.shouldBlock()) {
+            val (r, fullScreeningLog, anythingWrong) = Checker.checkSms(
+                ctx, rawNumber = rawNumber, messageBody = messageBody, simSlot = simSlot, logger = logger)
 
-            val intent = Intent(ctx, NotificationTrampolineActivity::class.java).apply {
-                putExtra("type", "sms")
-                putExtra("blocked", true)
-            }.setAction("action_sms_block")
+            // 1. log to history db
+            val spfHistory = spf.HistoryOptions(ctx)
+            val isLogEnabled = spfHistory.isLoggingEnabled
 
-            val toCopy = Checker.checkQuickCopy(
-                ctx, rawNumber, messageBody, false, true
-            )
+            val recordId = if (isLogEnabled) {
+                SmsTable().addNew(
+                    ctx, HistoryRecord(
+                        peer = rawNumber,
+                        time = System.currentTimeMillis(),
+                        result = r.byType,
+                        reason = r.reasonToDb(),
+                        simSlot = simSlot,
+                        extraInfo = if (spfHistory.isLogSmsContentEnabled) messageBody else null,
+                        isTest = isTest,
+                        fullScreeningLog = fullScreeningLog,
+                        anythingWrongScreening = anythingWrong
+                    )
+                )
+            } else {
+                null
+            }
+            if (isLogEnabled) {
+                // 2. broadcast new sms to add a new item in history page
+                Events.onNewSMS.fire(recordId)
+            }
 
-            Notification.show(
-                ctx,
-                showType = ShowType.SPAM_SMS,
-                channel = r.getNotificationChannel(ctx, showType = ShowType.SPAM_SMS),
-                title = showName,
-                body = messageBody,
-                intent = intent,
-                toCopy = toCopy,
-            )
+            // 3. Update SmsAlert timestamp, it's necessary to check it here, so testing would also work.
+            this.checkSmsAlert(ctx, messageBody)
 
-        } else { // passed
+            // 4. show notification
+            if (showNotification) {
+                val showName = Contacts.findContactByRawNumber(ctx, rawNumber)?.name ?: rawNumber
 
-            // handle clicking of the notification body:
-            //  - launch sms app, open conversation with that number
-            //  - cancel all notifications
-            val intent = Intent(ctx, NotificationTrampolineActivity::class.java).apply {
-                putExtra("type", "sms")
-                putExtra("blocked", false)
-                putExtra("rawNumber", rawNumber)
-            }.setAction("action_sms_non_block")
+                if (r.shouldBlock()) {
 
-            val toCopy = Checker.checkQuickCopy(
-                ctx, rawNumber, messageBody, false, false
-            )
+                    val intent = Intent(ctx, NotificationTrampolineActivity::class.java).apply {
+                        putExtra("type", "sms")
+                        putExtra("blocked", true)
+                    }.setAction("action_sms_block")
+
+                    val toCopy = Checker.checkQuickCopy(
+                        ctx, rawNumber, messageBody, isCall = false, isBlocked = true
+                    )
+
+                    Notification.show(
+                        ctx,
+                        showType = ShowType.SPAM_SMS,
+                        channel = r.getNotificationChannel(ctx, showType = ShowType.SPAM_SMS),
+                        title = showName,
+                        body = messageBody,
+                        intent = intent,
+                        toCopy = toCopy,
+                    )
+
+                } else { // passed
+
+                    // handle clicking of the notification body:
+                    //  - launch sms app, open conversation with that number
+                    //  - cancel all notifications
+                    val intent = Intent(ctx, NotificationTrampolineActivity::class.java).apply {
+                        putExtra("type", "sms")
+                        putExtra("blocked", false)
+                        putExtra("rawNumber", rawNumber)
+                    }.setAction("action_sms_non_block")
+
+                    val toCopy = Checker.checkQuickCopy(
+                        ctx, rawNumber, messageBody, false, false
+                    )
 
 
-            // silence it when actively SMS chat
-            val isActiveSmsChat = !isDeviceLocked(ctx) && isSmsAppInForeground(ctx)
+                    // silence it for active SMS chat
+                    val isActiveSmsChat = !isDeviceLocked(ctx) && isSmsAppInForeground(ctx)
 
-            Notification.show(
-                ctx,
-                showType = ShowType.VALID_SMS,
-                channel = if (isActiveSmsChat) {
-                    val activeChannelId = spf.Notification(ctx).getActiveSmsChatChannelId()
+                    Notification.show(
+                        ctx,
+                        showType = ShowType.VALID_SMS,
+                        channel = if (isActiveSmsChat) {
+                            val activeChannelId = spf.Notification(ctx).smsChatChannelId
 
-                    ChannelTable.findByChannelId(ctx, activeChannelId)
-                        ?: missingChannel()
-                } else {
-                    r.getNotificationChannel(ctx, ShowType.VALID_SMS)
-                },
-                title = showName,
-                body = messageBody,
-                intent = intent,
-                toCopy = toCopy,
-            )
+                            ChannelTable.findByChannelId(ctx, activeChannelId)
+                                ?: missingChannel()
+                        } else {
+                            r.getNotificationChannel(ctx, ShowType.VALID_SMS)
+                        },
+                        title = showName,
+                        body = messageBody,
+                        intent = intent,
+                        toCopy = toCopy,
+                    )
+                }
+            }
+
+            // 5. Report SMS when:
+            //  - Blocked and
+            //    - not testing or
+            //    - developing
+            if (r.shouldBlock() &&
+                (!isTest || BuildConfig.DEBUG)
+            ) {
+                maybeAutoReportSMS(
+                    ctx, checkResult = r, rawNumber = rawNumber, smsContent = messageBody, recordId = recordId
+                )
+            }
+
+            return r
         }
-
-        return r
     }
+
 }

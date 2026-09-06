@@ -1,0 +1,133 @@
+<resources>
+    <string name="normal_text">Normal Metin</string>
+    <string name="info_feature">Bilgi / Özellik</string>
+    <string name="success_allow">Başarı / İzin Ver</string>
+    <string name="error_block">Hata / Engelle</string>
+    <string name="disable">Devre Dışı Bırak</string>
+    <string name="dialog_bg">Diyalog Arka Planı</string>
+    <string name="app_bg">Uygulama Arka Planı</string>
+    <string name="should_import_as_instant_query">
+        <![CDATA[
+        Bu, bir \"API sorgusu\" iş akışı gibi görünüyor, yukarıdaki \"Anlık Sorgu\" bölümüne aktarılmalıdır.
+        ]]>
+    </string>
+    <string name="at_time">Saat</string>
+    <string name="interval">Aralık</string>
+    <string name="contact_prefix">Kişi Öneki</string>
+    <string name="help_regex_mode_contact_prefix">
+        <![CDATA[
+        <title><b>Kişi Öneki</b></title>:<br>
+        &ensp; Kişi öneki eşleşmesine göre aramalara izin verir, sıralı numaralar kullanan
+          kuruluşlar için idealdir; örneğin klinikler veya hukuk büroları. <br>
+        <br>
+        <warn>Bu regex nokta ile bitmelidir</warn>, bu regex modunda sondaki noktalar değişken rakamları temsil eder. <br>
+        <br>
+        <b>Örneğin:</b> <br>
+        &ensp; <sample><b>.*..</b></sample> <br>
+        &ensp; Aynı öneke sahip herhangi bir kişiyle eşleşir ve sondaki 2 rakamın değişmesine izin verir.<br>
+        &ensp; <sample>1111<b>22</b></sample> numarasını kişi olarak kaydettiyseniz, <sample>1111<b>33</b></sample> numarasından gelen aramaya da izin verilir.<br>
+        <br>
+        <b>Başka bir örnek:</b> <br>
+        &ensp; <sample><b>(?!(04|03))\d{5}..</b></sample> <br>
+        Açıklama: <br>
+        &ensp; - <b><sample>(?!(03|04))</sample></b> <br>
+        &emsp;   03 veya 04 ile başlayan numaraları hariç tut <br>
+        &ensp; - <b><sample>\d{5}</sample></b> <br>
+        &emsp;   Numara, değişken 2 rakamlı son ek dahil toplam 7 rakam olmalıdır <br>
+        &ensp; - <b><sample>..</sample></b> <br>
+        &emsp;   Değişken 2 rakamlı son ek <br>
+        ]]>
+    </string>
+    <string name="help_regex_preset_contact_prefix">
+        <![CDATA[
+        Kişileri öneke göre eşleştirir ve son <minor><b>2</b></minor> rakamda farklılığa izin verir, sıralı numaralar kullanan kuruluşlar (örneğin klinikler veya hukuk büroları) için idealdir. <br>
+        <br>
+        <b>Örneğin</b>: <br>
+        &ensp; <sample>111111</sample><highlight>22</highlight> numarasını kişi olarak kaydettiyseniz, <sample>111111</sample><highlight>33</highlight> numarasından gelen aramaya da izin verilir.
+        ]]>
+    </string>
+    <string name="caller_id">Arayan ID</string>
+    <string name="help_caller_id">
+        <![CDATA[
+        Arayan kimliğini yüzen pencerede gösterir. <br>
+        <br>
+        Taşımak için sürükleyin. <br>
+        <br>
+        <b>Not</b> <br>
+        Yüzen pencere etkinken bildirim alanında, bu uygulamanın diğer uygulamaların üzerinde bir pencere gösterdiğini belirten bir sistem uyarısı görebilirsiniz.
+        Bunun nedeni, yüzen pencerenin geçmişte kötü amaçlı yazılımlar tarafından sahte oturum açma ekranları göstermek için kötüye kullanılmış olmasıdır. <br>
+        Bu uyarıyı yok sayın; yüzen pencereyle birlikte kaybolacaktır.
+        ]]>
+    </string>
+    <string name="perm_show_overlay">Kaplamayı Göster</string>
+    <string name="preview">Önizleme</string>
+    <string name="content_template">İçerik Şablonu</string>
+    <string name="help_caller_id_template">
+        <![CDATA[
+        Arayan kimliği penceresinde gösterilen içerik, HTML biçimindedir. <br>
+        <br>
+        Değer boşsa, örneğin numara için operatör bilgisi olmadığında, tire (-) gösterilir.
+        <br>
+        <title>Desteklenen etiketler</title>: <br>
+        - <minor>{reason}</minor> <br>
+        &emsp; Aramaya neden izin verildiği, çağrı geçmişinde gösterilen nedenin aynısı. <br>
+        - <minor>{geolocation}</minor> <br>
+        &emsp; Telefon numarasının coğrafi konumu. <br>
+        - <minor>{carrier}</minor> <br>
+        &emsp; Telefon numarasının operatör adı. <br>
+        <br>
+        <title>Desteklenen HTML etiketleri</title>: <br>
+        Bkz: <a href="%s">link</a>
+        ]]>
+    </string>
+    <string name="background_color">Arka Plan Rengi</string>
+    <string name="wait">Bekle</string>
+    <string name="help_action_wait">
+        <![CDATA[
+        N saniye geciktirir. <br>
+        <br>
+        <b>Kullanım durumu</b>: <br>
+        <sample>
+        <b>SMS Uyarısı</b> özelliğinde mesajlar bazen aramayla aynı anda
+         veya aramadan birkaç saniye sonra gelir; arama taramasına 2~3 saniyelik bir gecikme eklemek bu tür sorunları önleyebilir.
+        </sample>
+        ]]>
+    </string>
+    <string name="comment_identifier">Yorum Tanımlayıcı</string>
+    <string name="hint_comment_identifier">
+        Örn.: \"comment\":\"(.+?)\"
+    </string>
+    <string name="help_comment_identifier">
+        <![CDATA[
+        Sorgu sonucundan <title>yorumu</title> bildirimde ve geçmiş günlüğünde göstermek için çıkarın. (isteğe bağlı)<br>
+        <br>
+        Örneğin, bu sorgu sonucu için: <br>
+        <sample>
+        { <br>
+          &ensp; \"type\": \"MARKETING\", <br>
+          &ensp; \"comment\": \"Better call Saul\", <br>
+          &ensp;  … <br>
+        } <br>
+        </sample>
+        <br>
+        Bunu şu şekilde çıkarın: <br>
+        &ensp; <sample>\"comment\": \"(.+?)\"</sample> <br>
+        ]]>
+    </string>
+    <string name="carrier">Operatör</string>
+    <string name="carrier_rule">Operatör Kuralı</string>
+    <string name="help_regex_mode_carrier">
+        <![CDATA[
+        <title><b>Operatör</b></title>:<br>
+        &ensp; Regex, telefon numarasının operatör adıyla eşleşecektir. <br>
+        <br>
+        <warn>Not</warn> <br>
+        &ensp; Operatör bilgisi ilk kayda dayanır ve numara başka bir operatöre
+        taşındıysa hatalı olabilir. <br>
+        <br>
+        Örneğin: <br>
+        &ensp; <no_translate><sample>Verizon Wireless</sample></no_translate> numaralarını
+        <no_translate><error>verizon.*</error></no_translate> regex ile engelle <br>
+        ]]>
+    </string>
+</resources>

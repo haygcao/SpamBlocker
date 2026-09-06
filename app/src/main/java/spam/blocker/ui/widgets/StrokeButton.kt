@@ -1,12 +1,14 @@
 package spam.blocker.ui.widgets
 
+import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,24 +18,36 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.ui.M
-import spam.blocker.ui.theme.DarkOrange
-import spam.blocker.ui.theme.LocalPalette
+import spam.blocker.ui.setting.LabeledRow
+import spam.blocker.ui.thenIf
 import spam.blocker.util.Lambda
 import spam.blocker.util.Lambda1
+import spam.blocker.util.Lambda2
+import spam.blocker.util.PermissionType
+import spam.blocker.util.PermissionWrapper
 import spam.blocker.util.Util.inRange
+import spam.blocker.util.hasFolderAccess
+import spam.blocker.util.toFolderDisplayName
 
 const val BUTTON_CORNER_RADIUS = 4
 const val BUTTON_H_PADDING = 12
+const val BUTTON_H = 26
 
 // The built-in Button is based on Surface, which has a minimal width as 48dp,
 //  as: minimumInteractiveComponentSize
@@ -42,28 +56,34 @@ const val BUTTON_H_PADDING = 12
 @Composable
 fun Button(
     content: @Composable RowScope.() -> Unit,
-    modifier: Modifier = M.height(26.dp),
+    modifier: Modifier = M.heightIn(min = BUTTON_H.dp),
     onLongClick: Lambda? = null,
     enabled: Boolean = true,
-    borderColor: Color = LocalPalette.current.textGrey,
+    borderWidth: Dp = 1.dp,
+    borderColor: Color = G.palette.textGrey,
+    backgroundColor: Color = Color.Unspecified,
     shape: Shape = RoundedCornerShape(BUTTON_CORNER_RADIUS.dp),
     contentPadding: PaddingValues = PaddingValues(BUTTON_H_PADDING.dp, 0.dp),
-    onClick: () -> Unit,
+    onClick: Lambda? = null,
 ) {
-    val C = LocalPalette.current
+    val C = G.palette
 
     Box(
         modifier = modifier
             .border(
-                width = 2.dp,
+                width = borderWidth,
                 color = if (enabled) borderColor else C.disabled,
                 shape = shape
             )
+            .clip(RoundedCornerShape(BUTTON_CORNER_RADIUS.dp))
+            .background(backgroundColor)
 
-            .combinedClickable(
-                onClick = { if (enabled) onClick() },
-                onLongClick = { if (enabled) onLongClick?.invoke() }
-            ),
+            .thenIf(enabled) {
+                combinedClickable(
+                    onClick = { onClick?.let { it() } },
+                    onLongClick = { onLongClick?.invoke() }
+                )
+            },
         propagateMinConstraints = true
     ) {
         RowCenter(
@@ -85,10 +105,10 @@ fun StrokeButton(
     shape: RoundedCornerShape = RoundedCornerShape(BUTTON_CORNER_RADIUS.dp),
     contentPadding: PaddingValues = PaddingValues(BUTTON_H_PADDING.dp, 0.dp),
     enabled: Boolean = true,
-    onClick: Lambda,
+    onClick: Lambda? = null,
 ) {
     Button(
-        modifier = modifier.height(26.dp),
+        modifier = modifier.heightIn(min = BUTTON_H.dp),
         enabled = enabled,
         onLongClick = onLongClick,
         contentPadding = contentPadding,
@@ -114,11 +134,11 @@ fun GreyButton(
     // optional
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    onClick: Lambda,
+    onClick: Lambda? = null,
 ) {
     StrokeButton(
         label = label,
-        color = LocalPalette.current.textGrey,
+        color = G.palette.textGrey,
         modifier = modifier,
         enabled = enabled,
         onClick = onClick,
@@ -129,7 +149,7 @@ fun GreyButton(
 @Composable
 fun FooterButton(
     label: String? = null,
-    color: Color = LocalPalette.current.textGrey,
+    color: Color = G.palette.textGrey,
     icon: (@Composable () -> Unit)? = null,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -140,9 +160,9 @@ fun FooterButton(
     footerOffset: Pair<Int, Int> = Pair(-3, -3),
 
     onLongClick: Lambda? = null,
-    onClick: Lambda,
+    onClick: Lambda? = null,
 ) {
-    val C = LocalPalette.current
+    val C = G.palette
 
     Box(
         modifier = modifier.wrapContentSize()
@@ -202,9 +222,9 @@ fun ComboBox(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     displayType: ComboDisplayType = ComboDisplayType.Label, // show label/icon/both
-    color: Color = LocalPalette.current.textGrey,
+    color: Color = G.palette.textGrey,
     warning: (@Composable () -> Unit)? = {
-        ResIcon(R.drawable.ic_question, color = DarkOrange, modifier = M.size(18.dp))
+        ResIcon(R.drawable.ic_question_circle, color = G.palette.warning, modifier = M.size(18.dp))
     },
     footerOffset: Pair<Int, Int> = Pair(-4, -4),
     footerSize: Int = 6,
@@ -255,7 +275,7 @@ fun MenuButton(
     label: String,
     items: List<IMenuItem>,
     modifier: Modifier = Modifier,
-    color: Color = LocalPalette.current.textGrey,
+    color: Color = G.palette.textGrey,
 ) {
     DropdownWrapper(items = items) { expanded ->
         FooterButton(
@@ -280,7 +300,7 @@ fun MenuButton(
     longTapItems: List<IMenuItem>,
     modifier: Modifier = Modifier,
     footerIconId: Int = R.drawable.ic_time_slot,
-    color: Color = LocalPalette.current.textGrey,
+    color: Color = G.palette.textGrey,
 ) {
     DropdownWrapper(items = items) { expandedForTap ->
         DropdownWrapper(items = longTapItems) { expandedForLongTap ->
@@ -298,6 +318,97 @@ fun MenuButton(
                     expandedForLongTap.value = true
                 }
             )
+        }
+    }
+}
+
+
+/*
+  A setting button that typically contains two options:
+   - a switchbox, e.g. "Never Expire"
+   - a number inputbox for duration, hidden when the switch is on
+ */
+@Composable
+fun DurationButton(
+    alwaysEnabled: Boolean,
+    alwaysLabelId: Int,
+    onEnableChange: Lambda1<Boolean>,
+
+    duration: Int?,
+    onDurationChange: Lambda2<Int?, Boolean>,
+    durationLabelId: Int,
+    unitLabelId: Int = R.plurals.days
+) {
+    val trigger = remember { mutableStateOf(false) }
+    PopupDialog(
+        trigger = trigger,
+    ) {
+        // switchbox enabled
+        LabeledRow(alwaysLabelId) {
+            SwitchBox(checked = alwaysEnabled, onCheckedChange = onEnableChange)
+        }
+
+        // duration days
+        if (!alwaysEnabled) {
+            NumberInputBox(
+                intValue = duration,
+                onValueChange = onDurationChange,
+                labelId = durationLabelId,
+                leadingIconId = R.drawable.ic_duration,
+            )
+        }
+    }
+
+    GreyButton(
+        label = if (!alwaysEnabled) {
+            PluralStr(duration!!, unitLabelId)
+        } else {
+            Str(alwaysLabelId)
+        }
+    ) {
+        trigger.value = true
+    }
+}
+
+/*
+  A button for choosing dir, the param `uri` will be updated after a dir is selected.
+ */
+@Composable
+fun DirButton(
+    uri: MutableState<Uri?>,
+) {
+    val ctx = LocalContext.current
+
+    StrokeButton(
+        label = if (uri.value == null)
+            Str(R.string.choose)
+        else
+            uri.value!!.toFolderDisplayName(),
+
+        icon = if (uri.value?.hasFolderAccess(ctx) == true)
+            null
+        else if (uri.value == null) {
+            null
+        } else {
+            { ResIcon(R.drawable.ic_lock, modifier = M.size(16.dp), color = G.palette.warning) }
+        },
+
+        color = G.palette.textGrey,
+    ) {
+        val perm = PermissionType.SafDirAccess(uri = uri.value)
+
+        G.permissionChain.ask(
+            ctx,
+            listOf(PermissionWrapper(perm))
+        ) { granted ->
+            if (granted) {
+                // After a dir is selected, the `perm.uri` is the selected Uri
+
+                // Make sure `uri` is changed, to force this button to recompose, otherwise the lock icon won't disappear
+                uri.value = null
+
+                uri.value = perm.uri
+            }
         }
     }
 }

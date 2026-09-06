@@ -1,0 +1,134 @@
+<resources>
+    <string name="normal_text">Text normal</string>
+    <string name="info_feature">Informació / Funcionalitat</string>
+    <string name="success_allow">Èxit / Permetre</string>
+    <string name="error_block">Error / Bloqueig</string>
+    <string name="disable">Desactivar</string>
+    <string name="dialog_bg">Fons del diàleg</string>
+    <string name="app_bg">Fons de l\'aplicació</string>
+    <string name="should_import_as_instant_query">
+        <![CDATA[
+        Sembla que aquest és un flux de treball \"API query\", hauria d\'importar-se a la secció anterior \"Instant Query\".
+        ]]>
+    </string>
+    <string name="at_time">A l\'hora</string>
+    <string name="interval">Interval</string>
+    <string name="contact_prefix">Prefix del contacte</string>
+    <string name="help_regex_mode_contact_prefix">
+        <![CDATA[
+        <title><b>Prefix del contacte</b></title>:<br>
+        &ensp; Permet les trucades segons la coincidència del prefix del contacte, ideal per a organitzacions que utilitzen
+          números seqüencials, com ara clíniques o despatxos d\'advocats. <br>
+        <br>
+        <warn>Aquesta expressió regular ha d\'acabar amb punts</warn>, en aquest mode d\'expressió regular, aquests punts finals representen els dígits variables. <br>
+        <br>
+        <b>Per exemple:</b> <br>
+        &ensp; <sample><b>.*..</b></sample> <br>
+        &ensp; Coincideix amb qualsevol contacte amb el mateix prefix, permetent una variació de 2 dígits al final.<br>
+        &ensp; Si tens <sample>1111<b>22</b></sample> desat com a contacte, també es permetrà una trucada entrant de <sample>1111<b>33</b></sample>.<br>
+        <br>
+        <b>Un altre exemple:</b> <br>
+        &ensp; <sample><b>(?!(04|03))\d{5}..</b></sample> <br>
+        Desglossament: <br>
+        &ensp; - <b><sample>(?!(03|04))</sample></b> <br>
+        &emsp;   Exclou els números que comencen per 03 o 04 <br>
+        &ensp; - <b><sample>\d{5}</sample></b> <br>
+        &emsp;   El número ha de tenir 7 dígits en total, inclòs el sufix variable de 2 dígits <br>
+        &ensp; - <b><sample>..</sample></b> <br>
+        &emsp;   Sufix variable de 2 dígits <br>
+        ]]>
+    </string>
+    <string name="help_regex_preset_contact_prefix">
+        <![CDATA[
+        Fa coincidir els contactes pel prefix, permetent variació en els <minor><b>2</b></minor> últims dígits, ideal per a organitzacions que utilitzen números seqüencials, per exemple, clíniques o bufets d\'advocats. <br>
+        <br>
+        <b>Per exemple</b>: <br>
+        &ensp; Si tens <sample>111111</sample><highlight>22</highlight> desat com a contacte, també es permetrà una trucada de <sample>111111</sample><highlight>33</highlight>.
+        ]]>
+    </string>
+    <string name="caller_id">ID trucador</string>
+    <string name="help_caller_id">
+        <![CDATA[
+        Mostra l\'identificador del trucador en una finestra flotant. <br>
+        <br>
+        Arrossegueu-la per moure-la. <br>
+        <br>
+        <b>Nota</b> <br>
+        És possible que aparegui un avís del sistema a la safata de notificacions mentre la finestra flotant estigui activa,
+          indicant que aquesta aplicació mostra una finestra sobre altres aplicacions.
+        Això és perquè la finestra flotant ha estat utilitzada històricament per programari maliciós per mostrar pantalles d\'inici de sessió falses. <br>
+        Simplement ignoreu aquest avís; desapareixerà juntament amb la finestra flotant.
+        ]]>
+    </string>
+    <string name="perm_show_overlay">Mostrar superposició</string>
+    <string name="preview">Vista prèvia</string>
+    <string name="content_template">Plantilla del contingut</string>
+    <string name="help_caller_id_template">
+        <![CDATA[
+        El contingut que es mostra a la finestra de l\'identificador del trucador, en format HTML. <br>
+        <br>
+        Es mostra un guionet (-) si el valor és buit, per exemple quan no hi ha informació de l\'operador per al número.
+        <br>
+        <title>Etiquetes compatibles</title>: <br>
+        - <minor>{reason}</minor> <br>
+        &emsp; Per què es va permetre la trucada, el mateix motiu que es mostra a l\'historial de trucades. <br>
+        - <minor>{geolocation}</minor> <br>
+        &emsp; La geolocalització del número de telèfon. <br>
+        - <minor>{carrier}</minor> <br>
+        &emsp; El nom de l\'operador del número de telèfon. <br>
+        <br>
+        <title>Etiquetes HTML compatibles</title>: <br>
+        Vegeu: <a href="%s">link</a>
+        ]]>
+    </string>
+    <string name="background_color">Color de fons</string>
+    <string name="wait">Esperar</string>
+    <string name="help_action_wait">
+        <![CDATA[
+        Retarda N segons. <br>
+        <br>
+        <b>Cas d\'ús</b>: <br>
+        <sample>
+        Per a la funció <b>Alerta SMS</b>, els missatges de vegades arriben alhora que la trucada
+         o uns segons després, i afegir un retard de 2~3 segons al filtratge de trucades pot evitar aquests problemes.
+        </sample>
+        ]]>
+    </string>
+    <string name="comment_identifier">Identificador de comentari</string>
+    <string name="hint_comment_identifier">
+        Ex.: \"comment\":\"(.+?)\"
+    </string>
+    <string name="help_comment_identifier">
+        <![CDATA[
+        Extreu el <title>comentari</title> del resultat de la consulta per mostrar-lo a la notificació i al registre d\'historial. (opcional)<br>
+        <br>
+        Per exemple, per a aquest resultat de consulta: <br>
+        <sample>
+        { <br>
+          &ensp; \"type\": \"MARKETING\", <br>
+          &ensp; \"comment\": \"Better call Saul\", <br>
+          &ensp;  … <br>
+        } <br>
+        </sample>
+        <br>
+        Extreu-lo amb: <br>
+        &ensp; <sample>\"comment\": \"(.+?)\"</sample> <br>
+        ]]>
+    </string>
+    <string name="carrier">Operador</string>
+    <string name="carrier_rule">Regla de l\'operador</string>
+    <string name="help_regex_mode_carrier">
+        <![CDATA[
+        <title><b>Operador</b></title>:<br>
+        &ensp; L\'expressió regular coincidirà amb el nom de l\'operador del número. <br>
+        <br>
+        <warn>Nota</warn> <br>
+        &ensp; La informació de l\'operador es basa en el registre inicial i pot ser
+        inexacta si el número ha estat transferit a un altre operador. <br>
+        <br>
+        Per exemple: <br>
+        &ensp; Bloqueja números de <no_translate><sample>Verizon Wireless</sample></no_translate>
+        amb l\'expressió regular <no_translate><error>verizon.*</error></no_translate> <br>
+        ]]>
+    </string>
+</resources>

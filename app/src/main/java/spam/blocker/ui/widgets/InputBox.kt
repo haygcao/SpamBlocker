@@ -1,5 +1,6 @@
 package spam.blocker.ui.widgets
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -41,30 +43,25 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import spam.blocker.G
 import spam.blocker.R
-import spam.blocker.def.Def
 import spam.blocker.def.Def.FLAG_REGEX_CASE_SENSITIVE
 import spam.blocker.def.Def.FLAG_REGEX_IGNORE_CC
 import spam.blocker.def.Def.FLAG_REGEX_RAW_NUMBER
 import spam.blocker.def.Def.MAP_REGEX_FLAGS
-import spam.blocker.def.Def.REGEX_FLAGS_RIC
 import spam.blocker.ui.M
-import spam.blocker.ui.theme.ColdGrey
-import spam.blocker.ui.theme.LightMagenta
-import spam.blocker.ui.theme.LocalPalette
-import spam.blocker.ui.theme.Orange
-import spam.blocker.ui.theme.Salmon
-import spam.blocker.ui.theme.SkyBlue
-import spam.blocker.ui.theme.Teal200
+import spam.blocker.util.A
 import spam.blocker.util.Lambda
 import spam.blocker.util.Lambda1
 import spam.blocker.util.Lambda2
 import spam.blocker.util.Util
 import spam.blocker.util.Util.regexWildcardNotSupported
+import spam.blocker.util.enabledRegexFlagsStr
+import spam.blocker.util.formatAnnotated
 import spam.blocker.util.hasFlag
 import spam.blocker.util.regexMatchesNumber
 import spam.blocker.util.setFlag
-import spam.blocker.util.toFlagStr
+import spam.blocker.util.truncate
 
 
 // Code copied from OutlinedInputBox, modifications:
@@ -72,8 +69,6 @@ import spam.blocker.util.toFlagStr
 //      defaultMinSize( minHeight = 36.dp ),
 //  - reduce the content padding-top:
 //      contentPadding = PaddingValues( 16.dp, 12.dp ),
-
-const val MAX_STR_LEN = 1000
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,19 +80,18 @@ private fun InputBox(
     enabled: Boolean = true,
     readOnly: Boolean = false,
     textStyle: TextStyle = TextStyle(
-        color = LocalPalette.current.textGrey,
+        color = G.palette.textGrey,
         fontWeight = FontWeight.SemiBold,
     ),
-    limitTextLength: Boolean = false,
+    maxTextLength: Int? = null,
     label: @Composable (() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null, // size should be 18.dp by default
     trailingIcon: @Composable (() -> Unit)? = null,
     prefix: @Composable (() -> Unit)? = null,
     suffix: @Composable (() -> Unit)? = null,
-    supportingTextStr: String? = null,
-    supportingTextColor: Color = Salmon,
-    warnings: SnapshotStateList<String> = mutableStateListOf<String>(),
+    supportingText: AnnotatedString? = null,
+    warnings: SnapshotStateList<AnnotatedString> = mutableStateListOf(),
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -107,31 +101,32 @@ private fun InputBox(
     shape: Shape = OutlinedTextFieldDefaults.shape,
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
         // leading icon
-        focusedLeadingIconColor = ColdGrey,
-        unfocusedLeadingIconColor = ColdGrey.copy(alpha = 0.9f),
+        focusedLeadingIconColor = G.palette.disabled,
+        unfocusedLeadingIconColor = G.palette.disabled.copy(alpha = 0.9f),
 
         // label
-        focusedLabelColor = SkyBlue,
-        unfocusedLabelColor = ColdGrey.copy(alpha = 0.9f),
+        focusedLabelColor = G.palette.infoBlue,
+        unfocusedLabelColor = G.palette.disabled.copy(alpha = 0.9f),
 
         // border
-        focusedBorderColor = SkyBlue,
-        unfocusedBorderColor = LocalPalette.current.textGrey,
+        focusedBorderColor = G.palette.infoBlue,
+        unfocusedBorderColor = G.palette.textGrey,
 
         // error
-        errorBorderColor = Salmon,
-        errorPlaceholderColor = Salmon,
-        errorTextColor = Salmon,
-        errorCursorColor = Salmon,
-        errorSupportingTextColor = Salmon,
-        errorLabelColor = Salmon,
+        errorBorderColor = G.palette.error,
+        errorPlaceholderColor = G.palette.error,
+        errorTextColor = G.palette.error,
+        errorCursorColor = G.palette.error,
+        errorSupportingTextColor = G.palette.error,
+        errorLabelColor = G.palette.error,
     ),
 ) {
+    val C = G.palette
 
     // The input box will freeze for super long text, to solve this, if the input text exceeds
     // this length, the text will be truncated to this length, and the edit will be disabled.
     // There is no point to edit such long text, it has to be a imported rule.
-    val exceedsMaxLen = limitTextLength && (value.text.length > MAX_STR_LEN)
+    val exceedsMaxLen = (maxTextLength != null) && (value.text.length > maxTextLength)
 
     Column(
         modifier = if (label != null) {
@@ -146,7 +141,7 @@ private fun InputBox(
     ) {
         BasicTextField(
             value = if (exceedsMaxLen)
-                value.copy(text = value.text.substring(0, MAX_STR_LEN))
+                value.copy(text = value.text.substring(0, maxTextLength))
             else
                 value,
             modifier = M
@@ -159,7 +154,7 @@ private fun InputBox(
             readOnly = readOnly,
             textStyle = textStyle,
             cursorBrush = SolidColor(
-                if (isError) Salmon else LocalPalette.current.textGrey
+                if (isError) C.error else C.textGrey
             ),
             visualTransformation = visualTransformation,
             keyboardOptions = keyboardOptions,
@@ -207,12 +202,13 @@ private fun InputBox(
         val warningList = warnings.toMutableList()
 
         if (exceedsMaxLen) {
-            warningList += Str(R.string.text_too_long)
+            warningList += Str(R.string.text_too_long).formatAnnotated(maxTextLength.toString().A(C.teal200)).A(C.warning) +
+                    "\n".A() +
+                    Str(R.string.increase_text_limit).A(C.disabled)
         }
         warningList.forEach {
             Text(
                 text = it,
-                color = Orange,
                 fontSize = 14.sp,
                 lineHeight = 14.sp,
                 modifier = M.padding(4.dp),
@@ -220,10 +216,9 @@ private fun InputBox(
         }
 
         // Errors, red text
-        if (supportingTextStr != null) {
+        if (supportingText != null) {
             Text(
-                text = supportingTextStr,
-                color = supportingTextColor,
+                text = supportingText,
                 fontSize = 14.sp,
                 lineHeight = 14.sp,
                 modifier = M.padding(4.dp),
@@ -304,11 +299,23 @@ fun NumberInputBox(
         placeholder = placeholder,
         leadingIcon = leadingIcon,
         enabled = enabled,
-        supportingTextStr = if (hasError) Str(R.string.invalid_number) else null,
+        supportingText = if (hasError) Str(R.string.invalid_number).A(G.palette.error) else null,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         singleLine = true,
         trailingIcon = {
-            RowVCenter {
+            // Trailing icons
+            // Material 3 expects trailingIcon to be a single slot, it's basically a centered 48dp box,
+            //   so paddingEnd disappears when there are multiple icons.
+            // Here's an ugly workaround, this adds 10.dp paddingEnd to the last icon when there are multiple icons.
+            var iconCount = 0
+
+            if ((lastText.isNotEmpty() && enabled)) iconCount++
+            if (helpTooltip != null) iconCount++
+
+            val paddingEnd = if (iconCount > 1) 10 else 0
+
+            RowVCenterSpaced(6, modifier = M.padding(end = paddingEnd.dp)) {
+
                 if (lastText.isNotEmpty() && enabled) {
                     GreyIcon16(
                         R.drawable.ic_clear,
@@ -354,7 +361,7 @@ fun NumberInputBox(
         },
         helpTooltip = {
             helpTooltipId?.let {
-                BalloonQuestionMark(LocalContext.current.getString(it))
+                BalloonQuestionMark(Str(it))
             }
         },
     )
@@ -368,11 +375,11 @@ fun StrInputBox(
     label: @Composable (() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
     leadingIconId: Int? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     helpTooltip: String? = null,
     enabled: Boolean = true,
-    supportingTextStr: String? = null,
-    supportingTextColor: Color = Salmon,
+    supportingText: AnnotatedString? = null,
     singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else 10,
     alwaysShowClear: Boolean = false,
@@ -415,17 +422,16 @@ fun StrInputBox(
         singleLine = singleLine,
         maxLines = maxLines,
         placeholder = placeholder,
-        leadingIcon = leadingIconId?.let {
+        leadingIcon = leadingIcon ?: leadingIconId?.let {
             { GreyIcon18(it) }
         },
         keyboardOptions = KeyboardOptions(),
-        supportingTextStr = supportingTextStr,
-        supportingTextColor = supportingTextColor,
+        supportingText = supportingText,
         trailingIcon = {
             // Trailing icons
-            // This is an ugly workaround for adding 10.dp paddingEnd to the last icon
-            //  when there are more than 1 icons. Because when there are more than 1 icons,
-            //  the paddingEnd becomes 0, no idea why.
+            // Material 3 expects trailingIcon to be a single slot, it's basically a centered 48dp box,
+            //   so paddingEnd disappears when there are multiple icons.
+            // Here's an ugly workaround, this adds x.dp paddingEnd to the last icon when there are multiple icons.
             var iconCount = 0
 
             if (alwaysShowClear || (lastText.isNotEmpty() && enabled)) iconCount++
@@ -465,7 +471,7 @@ fun TestRegexDialog(
     regexStr: String,
     regexFlags: Int,
 ) {
-    val C = LocalPalette.current
+    val C = G.palette
 
     val result: MutableState<Boolean?> = remember { mutableStateOf(null) }
 
@@ -480,7 +486,7 @@ fun TestRegexDialog(
                 BalloonQuestionMark(Str(R.string.help_test_regex))
                 StrokeButton(
                     label = Str(R.string.test),
-                    color = Teal200,
+                    color = C.teal200,
                     onClick = {
                         result.value = regexStr.regexMatchesNumber(regexTestString.value, regexFlags)
                     }
@@ -511,7 +517,7 @@ fun TestRegexDialog(
                         R.string.match_found else R.string.match_not_found
                 ),
                 color = if (result.value == true)
-                    C.pass else C.block
+                    C.success else C.error
             )
         }
     }
@@ -527,11 +533,13 @@ fun RegexInputBox(
     label: @Composable (() -> Unit)? = null,
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null, // it can be a clickable icon
-    showNumberFlags: Boolean = false, // enable 2 more flags
+    enableNumberFlags: Boolean = false, // enable 2 more flags
     helpTooltipId: Int? = null,
+    maxTextLength: Int? = null,
     testable: Boolean = false,
     showFlagsIcon: Boolean = true,
 ) {
+    val C = G.palette
     val ctx = LocalContext.current
 
     // Code learned from the built-in BasicTextField.kt
@@ -545,33 +553,46 @@ fun RegexInputBox(
     // CoreTextField's onValueChange is called multiple times without recomposition in between.
     var lastText by remember(regexStr) { mutableStateOf(regexStr) }
 
-    fun validateError(): String? {
+    @SuppressLint("LocalContextGetResourceValueCall")
+    fun validateError(): AnnotatedString? {
+
+        // The input is `+111` instead of `\+111`, leading `+` must be escaped
+        if (lastText.startsWith("+")) {
+            return ctx.getString(R.string.regex_starts_with_plus).formatAnnotated(
+                "+".A(C.error), ".+".A(C.disabled), "\\$lastText".truncate(10).A(C.teal200)
+            ).A(C.error)
+        }
+
         return Util.validateRegex(
             ctx,
-            lastText,
-            regexFlags.intValue.hasFlag(Def.FLAG_REGEX_RAW_NUMBER) ||
-                    regexFlags.intValue.hasFlag(Def.FLAG_REGEX_FOR_CONTACT_GROUP) ||
-                    regexFlags.intValue.hasFlag(Def.FLAG_REGEX_FOR_CONTACT) ||
-                    regexFlags.intValue.hasFlag(Def.FLAG_REGEX_FOR_CNAP) ||
-                    regexFlags.intValue.hasFlag(Def.FLAG_REGEX_FOR_GEO_LOCATION)
-        )
+            regexStr = lastText,
+            disableNumberOptimization = regexFlags.intValue.hasFlag(FLAG_REGEX_RAW_NUMBER)
+        )?.A(C.error)
     }
 
-    fun validateWarning(): List<String> {
+    @SuppressLint("LocalContextGetResourceValueCall")
+    fun validateWarning(): List<AnnotatedString> {
 
-        val ret = mutableListOf<String>()
+        val ret = mutableListOf<AnnotatedString>()
+
+        // The user is using wildcard `*` instead of `.*`, it could be a typo
         if (regexWildcardNotSupported(lastText)) {
-            ret += ctx.getString(R.string.waning_using_wildcard_as_regex)
+            ret += ctx.getString(R.string.waning_using_wildcard_as_regex).A(C.warning)
         }
         return ret
     }
 
-    var errorStr by remember(lastText) {
+    var errorStr by remember(lastText, regexFlags.intValue) {
         mutableStateOf(validateError())
     }
 
+    // When enabling `Raw Number`, error "regex mustn't start with 0" disappears, call the callback with `null` error
+    LaunchedEffect(errorStr) {
+        onRegexStrChange(lastText, errorStr != null)
+    }
+
     val warnings = remember(lastText) {
-        mutableStateListOf<String>().apply {
+        mutableStateListOf<AnnotatedString>().apply {
             addAll(validateWarning())
         }
     }
@@ -597,9 +618,9 @@ fun RegexInputBox(
         label = label,
         placeholder = placeholder,
         leadingIcon = leadingIcon,
-        limitTextLength = true,
+        maxTextLength = maxTextLength,
         warnings = warnings,
-        supportingTextStr = errorStr,
+        supportingText = errorStr,
         singleLine = false,
         maxLines = 10,
         trailingIcon = {
@@ -633,8 +654,8 @@ fun RegexInputBox(
                         CheckItem(
                             label = label,
                             enabled = when(idx) {
-                                0 -> showNumberFlags
-                                1 -> showNumberFlags
+                                0 -> enableNumberFlags
+                                1 -> enableNumberFlags
                                 else -> true
                             },
                             trailingIcon = {
@@ -644,7 +665,7 @@ fun RegexInputBox(
                                         1 -> MAP_REGEX_FLAGS[FLAG_REGEX_IGNORE_CC]!!
                                         else -> MAP_REGEX_FLAGS[FLAG_REGEX_CASE_SENSITIVE]!!
                                     },
-                                    color = Color.Magenta,
+                                    color = C.regexFlags,
                                     modifier = M
                                         .defaultMinSize(minWidth = 24.dp)
                                         .wrapContentWidth(Alignment.CenterHorizontally),
@@ -679,9 +700,9 @@ fun RegexInputBox(
             }
 
             // Trailing icons
-            // This is an ugly workaround for adding 10.dp paddingEnd to the last icon
-            //  when there are more than 1 icons. Because when there are more than 1 icons,
-            //  the paddingEnd becomes 0, no idea why.
+            // Material 3 expects trailingIcon to be a single slot, it's basically a centered 48dp box,
+            //   so paddingEnd disappears when there are multiple icons.
+            // Here's an ugly workaround, this adds x.dp paddingEnd to the last icon when there are multiple icons.
             var iconCount = 0
 
             if (showFlagsIcon) iconCount++
@@ -698,7 +719,7 @@ fun RegexInputBox(
                         items = dropdownItems,
                     ) { expanded ->
 
-                        val ric = (regexFlags.intValue and REGEX_FLAGS_RIC).toFlagStr() // ric: Raw-number, Ignore-country-code, Case-sensitive
+                        val ric = regexFlags.intValue.enabledRegexFlagsStr() // Raw-number, Ignore-country-code, Case-sensitive
                         val clickableModifier = M
                             .clickable {
                                 expanded.value = true
@@ -711,7 +732,7 @@ fun RegexInputBox(
                         } else {
                             Text(
                                 text = ric,
-                                color = Color.Magenta,
+                                color = C.regexFlags,
                                 modifier = clickableModifier
                                     .defaultMinSize(minWidth = 24.dp)
                                     .wrapContentWidth(Alignment.CenterHorizontally),
@@ -734,7 +755,7 @@ fun RegexInputBox(
 
                     ResIcon(
                         R.drawable.ic_tube,
-                        color = Teal200,
+                        color = C.teal200,
                         modifier = M
                             .clickable {
                                 trigger.value = true
@@ -745,7 +766,7 @@ fun RegexInputBox(
 
                 // Help question icon
                 helpTooltipId?.let {
-                    BalloonQuestionMark(LocalContext.current.getString(it))
+                    BalloonQuestionMark(Str(it))
                 }
             }
         }
@@ -764,7 +785,7 @@ fun PriorityBox(
         leadingIcon = {
             ResIcon(
                 iconId = R.drawable.ic_priority,
-                color = LightMagenta,
+                color = G.palette.priority,
                 modifier = M.size(18.dp)
             )
         }

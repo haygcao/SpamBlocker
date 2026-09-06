@@ -1,7 +1,9 @@
 package spam.blocker.util
 
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_DEFAULT
@@ -32,9 +34,9 @@ import spam.blocker.db.Notification.CHANNEL_MEDIUM
 import spam.blocker.db.Notification.CHANNEL_NONE
 import spam.blocker.db.Notification.Channel
 import spam.blocker.db.Notification.ChannelTable
+import spam.blocker.db.Notification.DefaultRepeatInterval
 import spam.blocker.service.CopyToClipboardReceiver
-import spam.blocker.ui.theme.DarkOrange
-import spam.blocker.ui.theme.Salmon
+import spam.blocker.service.NotificationRepeatReceiver
 import kotlin.random.Random
 
 
@@ -127,7 +129,7 @@ object Notification {
         return Channel(
             channelId = CHANNEL_HIGH,
             importance = IMPORTANCE_HIGH,
-            iconColor = DarkOrange.toArgb(),
+            iconColor = G.palette.warning.toArgb(),
         )
     }
 
@@ -214,8 +216,8 @@ object Notification {
     fun autoColor(channel: Channel, showType: ShowType) : Int {
         return channel.iconColor
             ?: when(showType) {
-                ShowType.SPAM_CALL -> Salmon.toArgb()
-                ShowType.SPAM_SMS -> Salmon.toArgb()
+                ShowType.SPAM_CALL -> G.palette.error.toArgb()
+                ShowType.SPAM_SMS -> G.palette.error.toArgb()
                 ShowType.VALID_SMS -> Color.Unspecified.toArgb()
             }
     }
@@ -226,6 +228,7 @@ object Notification {
             channel.sound.toUri()
     }
 
+    @SuppressLint("ScheduleExactAlarm")
     fun show(
         ctx: Context,
         showType: ShowType,
@@ -237,7 +240,7 @@ object Notification {
     ) {
 
         val chId = channel.channelId // 5 importance level <-> 5 channel id
-        val notificationId = System.currentTimeMillis().toInt()
+        val notificationId = Random.nextInt()
 
         // Use different requestCode for every pendingIntent, otherwise the
         //   previous pendingIntent will be canceled by FLAG_CANCEL_CURRENT, which causes
@@ -264,6 +267,7 @@ object Notification {
             .setChannelId(chId)
             .setContentTitle(title)
             .setContentText(body)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(body)) // show more than 2 lines
             .setSilent(shouldSilent)
             .setContentIntent(pendingIntent)
             .setGroup(group)
@@ -307,6 +311,7 @@ object Notification {
                 .setChannelId(chId)
                 .setContentTitle(title)
                 .setContentText(body)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(body)) // show more than 2 lines
                 .setSilent(shouldSilent)
                 .setGroup(group)
                 .setGroupSummary(true)
@@ -326,6 +331,28 @@ object Notification {
             // remove the notification group, previous notifications will appear again.
             val id = group.hashCode()
             mgr.notify(id, groupBuilder.build())
+        }
+
+        // repeat notification sound
+        if (channel.repeat && !channel.mute && Permission.scheduleAlarm.isGranted) {
+            val intervalMin = channel.repeatInterval ?: DefaultRepeatInterval
+            
+            val intent = Intent(ctx, NotificationRepeatReceiver::class.java).apply {
+                putExtra("notificationId", notificationId)
+                putExtra("intervalMin", intervalMin)
+            }
+            val pendingIntent = PendingIntent.getBroadcast(
+                ctx,
+                notificationId,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            val alarmManager = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis() + intervalMin * 60 * 1000L,
+                pendingIntent
+            )
         }
     }
 }

@@ -21,9 +21,9 @@
         - وإلا، فسيتوقف سير العمل.<br>
         <br>
         حالة الاستخدام: <br>
-        <font color="#888888">
+        <sample>
         &ensp; تبديل بعض القواعد بعد تلقي رسائل نصية (SMS) للتواجد في الخدمة أو الخروج منها. <br>
-        </font>
+        </sample>
         ]]>
     </string>
     <string name="sms_event_triggered">تم تشغيل حدث الرسائل النصية %s.</string>
@@ -31,8 +31,6 @@
     <string name="missing_permissions">الأذونات التالية مُنحت سابقًا ولكنها مفقودة حاليًا:</string>
     <string name="grant_permissions">منح الأذونات</string>
     <string name="perm_call_screening">فحص المكالمات</string>
-    <string name="perm_file_read">قراءة الملفات</string>
-    <string name="perm_file_write">كتابة الملفات</string>
     <string name="perm_contacts">جهات الاتصال</string>
     <string name="perm_receive_sms">استلام الرسائل النصية</string>
     <string name="perm_receive_mms">استلام رسائل الوسائط المتعددة</string>
@@ -51,18 +49,18 @@
         <![CDATA[
         السماح بالمكالمات من الأرقام التي تم الرد عليها سابقًا.<br>
         <br>
-        <h6><font color="#ffa500">تحذير</font></h6>
+        <h6><warn>تحذير</warn></h6>
         %s<br>
         <br>
         <b>الخيارات:</b><br>
         <br>
-        <h6><font color="#00BFFF">- خلال أيام</font></h6>
-        يتم تجاهل المكالمات التي حدثت قبل <font color="cyan">%d أيام</font>.<br>
+        <h6><title>- خلال أيام</title></h6>
+        يتم تجاهل المكالمات التي حدثت قبل <highlight>%d أيام</highlight>.<br>
         <br>
-        <h6><font color="#00BFFF">- المدة الدنيا</font></h6>
-        يتم تجاهل المكالمات التي استمرت أقل من <font color="cyan">%d ثانية</font>.<br>
+        <h6><title>- المدة الدنيا</title></h6>
+        يتم تجاهل المكالمات التي استمرت أقل من <highlight>%d ثانية</highlight>.<br>
         <br>
-        <font color="#ea86ff"><b>الأولوية: 10</b></font>
+        <priority><b>الأولوية: 10</b></priority>
         ]]>
     </string>
     <string name="answered_warning">لا تمكّن هذه الميزة لكبار السن أو أي شخص أقل قدرة على تحديد المكالمات الاحتيالية، حيث قد يعرضهم ذلك لمكالمات احتيالية متكررة.</string>
@@ -75,8 +73,8 @@
         تعديل قواعد التعبير النمطي مؤقتًا بناءً على أحداث التقويم. <br>
         <br>
         <b>حالة الاستخدام</b>:<br>
-        &ensp; <font color="#888888">يعمل عامل المناوبات نوبة النهار لمدة يومين، ثم نوبة الليل لليومين التاليين.<br>
-        &ensp; يجب تعطيل أو تمكين بعض القواعد خلال ساعات العمل المتغيرة.</font><br>
+        &ensp; <sample>يعمل عامل المناوبات نوبة النهار لمدة يومين، ثم نوبة الليل لليومين التاليين.<br>
+        &ensp; يجب تعطيل أو تمكين بعض القواعد خلال ساعات العمل المتغيرة.</sample><br>
         <br>
         سيؤدي هذا إلى إنشاء قاعدة تعبير نمطي وسير عمل، وسيتم تمكين القاعدة تلقائيًا أثناء حدث التقويم المحدد. <br>
         ]]>

@@ -1,0 +1,195 @@
+package spam.blocker.util
+
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
+import spam.blocker.db.IApi
+import spam.blocker.db.QueryApi
+import spam.blocker.db.ReportApi
+import spam.blocker.service.bot.BackupExport
+import spam.blocker.service.bot.BackupImport
+import spam.blocker.service.bot.CalendarEvent
+import spam.blocker.service.bot.CallEvent
+import spam.blocker.service.bot.CallScreened
+import spam.blocker.service.bot.CallThrottling
+import spam.blocker.service.bot.CategoryConfig
+import spam.blocker.service.bot.ConvertNumber
+import spam.blocker.service.bot.CopyTag
+import spam.blocker.service.bot.Daily
+import spam.blocker.service.bot.Delay
+import spam.blocker.service.bot.EnableApp
+import spam.blocker.service.bot.EnableWorkflow
+import spam.blocker.service.bot.FilterSpamResult
+import spam.blocker.service.bot.FindRules
+import spam.blocker.service.bot.GenerateTag
+import spam.blocker.service.bot.HttpRequest
+import spam.blocker.service.bot.IAction
+import spam.blocker.service.bot.ISchedule
+import spam.blocker.service.bot.ITriggerAction
+import spam.blocker.service.bot.ImportAsMultipleRegexRules
+import spam.blocker.service.bot.ImportAsRegexRule
+import spam.blocker.service.bot.ImportToSpamDB
+import spam.blocker.service.bot.InterceptCall
+import spam.blocker.service.bot.InterceptSms
+import spam.blocker.service.bot.LoadBotTag
+import spam.blocker.service.bot.Manual
+import spam.blocker.service.bot.ModifyNumber
+import spam.blocker.service.bot.ModifyRules
+import spam.blocker.service.bot.ParseCSV
+import spam.blocker.service.bot.ParseQueryResult
+import spam.blocker.service.bot.ParseXML
+import spam.blocker.service.bot.Periodically
+import spam.blocker.service.bot.PruneDatabase
+import spam.blocker.service.bot.PruneHistory
+import spam.blocker.service.bot.QuickTile
+import spam.blocker.service.bot.ReadFile
+import spam.blocker.service.bot.RegexExtract
+import spam.blocker.service.bot.Ringtone
+import spam.blocker.service.bot.SaveBotTag
+import spam.blocker.service.bot.Schedule
+import spam.blocker.service.bot.ScheduledAutoReportNumber
+import spam.blocker.service.bot.SendSms
+import spam.blocker.service.bot.SetTag
+import spam.blocker.service.bot.SmsEvent
+import spam.blocker.service.bot.SmsThrottling
+import spam.blocker.service.bot.TextReply
+import spam.blocker.service.bot.Wait
+import spam.blocker.service.bot.Weekly
+import spam.blocker.service.bot.WriteFile
+import spam.blocker.service.checker.ByAnsweredNumber
+import spam.blocker.service.checker.ByApiQuery
+import spam.blocker.service.checker.ByContact
+import spam.blocker.service.checker.ByDefault
+import spam.blocker.service.checker.ByDialedNumber
+import spam.blocker.service.checker.ByEmergencyCall
+import spam.blocker.service.checker.ByEmergencySituation
+import spam.blocker.service.checker.ByMeetingMode
+import spam.blocker.service.checker.ByNonContact
+import spam.blocker.service.checker.ByOffTime
+import spam.blocker.service.checker.ByPushAlert
+import spam.blocker.service.checker.ByRecentApp
+import spam.blocker.service.checker.ByRegexRule
+import spam.blocker.service.checker.ByRepeatedCall
+import spam.blocker.service.checker.BySTIR
+import spam.blocker.service.checker.BySmsAlert
+import spam.blocker.service.checker.BySmsBomb
+import spam.blocker.service.checker.BySpamDb
+import spam.blocker.service.checker.ICheckResult
+
+// This module contains ALL serializable classes in this app
+
+val myModule = SerializersModule {
+    // also add to below polymorphic(IAction:class)
+    polymorphic(ITriggerAction::class) {
+        subclass(Manual::class)
+        subclass(Schedule::class)
+        subclass(CallEvent::class)
+        subclass(SmsEvent::class)
+        subclass(CalendarEvent::class)
+        subclass(CallThrottling::class)
+        subclass(SmsThrottling::class)
+        subclass(Ringtone::class)
+        subclass(QuickTile::class)
+        subclass(CallScreened::class)
+    }
+    polymorphic(ISchedule::class) {
+        subclass(Daily::class)
+        subclass(Weekly::class)
+        subclass(Periodically::class)
+        subclass(Delay::class)
+    }
+    polymorphic(IAction::class) {
+        // Triggers
+        // also add to above polymorphic(ITriggerAction:class)
+        subclass(Manual::class)
+        subclass(Schedule::class)
+        subclass(CallEvent::class)
+        subclass(SmsEvent::class)
+        subclass(CalendarEvent::class)
+        subclass(CallThrottling::class)
+        subclass(SmsThrottling::class)
+        subclass(Ringtone::class)
+        subclass(QuickTile::class)
+        subclass(CallScreened::class)
+
+        // Actions
+        subclass(PruneHistory::class)
+        subclass(HttpRequest::class)
+        subclass(PruneDatabase::class)
+        subclass(BackupExport::class)
+        subclass(BackupImport::class)
+        subclass(ReadFile::class)
+        subclass(WriteFile::class)
+        subclass(ParseCSV::class)
+        subclass(ParseXML::class)
+        subclass(RegexExtract::class)
+        subclass(ImportToSpamDB::class)
+        subclass(ImportAsRegexRule::class)
+        subclass(ImportAsMultipleRegexRules::class)
+        subclass(ConvertNumber::class)
+        subclass(FindRules::class)
+        subclass(ModifyRules::class)
+        subclass(EnableWorkflow::class)
+        subclass(EnableApp::class)
+        subclass(ParseQueryResult::class)
+        subclass(FilterSpamResult::class)
+        subclass(InterceptCall::class)
+        subclass(InterceptSms::class)
+        subclass(ScheduledAutoReportNumber::class)
+        subclass(CategoryConfig::class)
+        subclass(ModifyNumber::class)
+        subclass(GenerateTag::class)
+        subclass(SaveBotTag::class)
+        subclass(LoadBotTag::class)
+        subclass(SetTag::class)
+        subclass(CopyTag::class)
+        subclass(Wait::class)
+        subclass(TextReply::class)
+        subclass(SendSms::class)
+    }
+    polymorphic(IApi::class) {
+        // the second param is only for being compatible with old serialized data `spam.blocker.db.QueryApi`
+        subclass(QueryApi::class, QueryApi.serializer())
+        subclass(ReportApi::class, ReportApi.serializer())
+    }
+
+    // Check Results
+    polymorphic(ICheckResult::class) {
+        subclass(ByAnsweredNumber::class, ByAnsweredNumber.serializer())
+        subclass(ByApiQuery::class, ByApiQuery.serializer())
+        subclass(ByContact::class, ByContact.serializer())
+        subclass(ByDefault::class, ByDefault.serializer())
+        subclass(ByDialedNumber::class, ByDialedNumber.serializer())
+        subclass(ByEmergencyCall::class, ByEmergencyCall.serializer())
+        subclass(ByEmergencySituation::class, ByEmergencySituation.serializer())
+        subclass(ByMeetingMode::class, ByMeetingMode.serializer())
+        subclass(ByNonContact::class, ByNonContact.serializer())
+        subclass(ByOffTime::class, ByOffTime.serializer())
+        subclass(ByPushAlert::class, ByPushAlert.serializer())
+        subclass(ByRecentApp::class, ByRecentApp.serializer())
+        subclass(ByRegexRule::class, ByRegexRule.serializer())
+        subclass(ByRepeatedCall::class, ByRepeatedCall.serializer())
+        subclass(BySTIR::class, BySTIR.serializer())
+        subclass(BySmsAlert::class, BySmsAlert.serializer())
+        subclass(BySmsBomb::class, BySmsBomb.serializer())
+        subclass(BySpamDb::class, BySpamDb.serializer())
+    }
+}
+
+// A json serializer that supports all interfaces(IAction, IApi, ...) in this app
+val MyJson =  Json {
+    this.serializersModule = myModule
+    encodeDefaults = true
+    classDiscriminator = "type"
+    ignoreUnknownKeys = true
+}
+
+val MyPrettyJson =  Json {
+    prettyPrint = true
+
+    this.serializersModule = myModule
+    encodeDefaults = true
+    classDiscriminator = "type"
+    ignoreUnknownKeys = true
+}

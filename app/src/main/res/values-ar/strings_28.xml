@@ -1,0 +1,151 @@
+<resources>
+    <string name="perm_access_dir">الوصول إلى المجلد</string>
+    <string name="dir_not_specified">لم يتم تحديد المجلد.</string>
+    <string name="no_access_to_dir">تعذر الوصول إلى المجلد: %s.</string>
+    <string name="grant_access_to_dir">
+        <![CDATA[
+        منح إذن الوصول إلى المجلد: <br>
+        <highlight>%s</highlight>
+        ]]>
+    </string>
+    <string name="comment">تعليق</string>
+    <string name="database_prefix">بادئة قاعدة البيانات</string>
+    <string name="help_regex_mode_database_prefix">
+        <![CDATA[
+        <title><b>بادئة قاعدة البيانات</b></title>:<br>
+        &ensp; حظر نطاقات أرقام الهاتف الموجودة في قاعدة البيانات.<br>
+        <br>
+        <warn>يجب أن ينتهي هذا التعبير النمطي بنقاط</warn>، وفي وضع التعبير النمطي هذا تمثل هذه النقاط اللاحقة الأرقام المتغيرة. <br>
+        <br>
+        <b>على سبيل المثال:</b> <br>
+        &ensp; يتطلب <sample><b>.{5,}..</b></sample> أن تكون البادئة بطول 5 أرقام على الأقل، مع السماح باختلاف رقمين في النهاية.
+        ]]>
+    </string>
+    <string name="help_regex_preset_database_prefix">
+        <![CDATA[
+        يطابق أرقام الهاتف في قاعدة البيانات حسب البادئة، ويجب أن تكون البادئة بطول <minor><b>5</b></minor> أرقام على الأقل، مع السماح باختلاف <minor><b>2</b></minor> رقمين في النهاية. <br>
+        <br>
+        <b>على سبيل المثال</b>: <br>
+        &ensp; إذا كان <sample>12345678</sample><error>00</error> موجودًا في قاعدة البيانات، فسيتم أيضًا حظر مكالمة من <sample>12345678</sample><error>99</error>.
+        ]]>
+    </string>
+    <string name="api_preset_remote_llm">نموذج لغوي كبير عن بعد</string>
+    <string name="help_api_preset_remote_llm">
+        <![CDATA[
+            فحص محتوى رسائل SMS باستخدام نماذج لغوية كبيرة عن بعد. <br>
+            <br>
+            يتم توفير هذا فقط <warn>لأغراض العرض التوضيحي</warn>.<br>
+            <br>
+            اضغط لفتح صفحة الويكي للحصول على التعليمات.
+        ]]>
+    </string>
+    <string name="found_existing_auth_token">تم العثور على رمز مصادقة موجود</string>
+    <string name="use_this_token">استخدم هذا الرمز</string>
+    <string name="login_and_get_a_token">سجل وأنشئ جلسة دخول إلى الموقع واحصل على الرمز الخاص بك.</string>
+    <string name="get_a_new_token">احصل على رمز جديد</string>
+    <string name="token">رمز</string>
+    <string name="enter_token_manually_desc">إذا كان لديك رمز بالفعل، فأدخله يدويًا.</string>
+    <string name="enter_token_manually">إدخال الرمز يدويًا</string>
+    <string name="others">أخرى</string>
+    <string name="api_settings">إعدادات API</string>
+    <string name="include_settings">إعدادات التضمين</string>
+    <string name="exclude_settings">إعدادات الاستبعاد</string>
+    <string name="backup_missing_category">هذا الإعداد مفقود من ملف النسخ الاحتياطي ولا يمكن استعادته.</string>
+    <string name="warning_priority_conflict">
+        <![CDATA[
+        <highlight>قواعد القائمة البيضاء</highlight> و<error>قواعد القائمة السوداء</error> يجب ألا تكون لها نفس الأولوية<br>
+        <br>
+        القواعد المتعارضة:
+        ]]>
+    </string>
+    <string name="checking_template_new">%s جارٍ التحقق: %s</string>
+    <string name="textbox_limit">حد مربع النص</string>
+    <string name="help_rule_textbox_limit">
+        <![CDATA[
+        الحد الأقصى لعدد الأحرف المسموح بها في مربع الإدخال. يؤدي تجاوز هذا الحد إلى تعطيل التحرير،
+          لأن النص الطويل جدًا سيؤدي إلى تجميد واجهة المستخدم. <br>
+          <br>
+        القيمة الافتراضية: <b>10000</b> حرف
+        ]]>
+    </string>
+    <string name="clear_history">مسح السجل</string>
+    <string name="tip_clear_history">إذا تعطّل التطبيق عند التشغيل ولم يفتح، فجرّب مسح سجلات السجل باستخدام الزر أدناه.</string>
+    <string name="direct_verdict">الحكم المباشر</string>
+    <string name="formula">الصيغة</string>
+    <string name="strategy">الاستراتيجية</string>
+    <string name="help_api_result_strategy">
+        <![CDATA[
+        <title>الحكم المباشر</title> <br>
+        يعيد الخادم فئة مكالمات مزعجة صريحة، وهذا شائع في خدمات API. <br>
+        <br>
+        على سبيل المثال، يعيد الخادم: <br>
+        &ensp; <sample><no_translate>{ …, \"type\": \"fraud\", … }</no_translate></sample> <br>
+        طابقها باستخدام regex: <br>
+        &ensp; <sample><no_translate>\"type\": \"(fraud|scam|political)\"</no_translate></sample> <br>
+        <br>
+        <title>الصيغة</title> <br>
+        خصص منطق الحظر الخاص بك بناءً على عدد التقييمات الإيجابية/السلبية التي يعيدها الخادم. <br>
+        <br>
+        على سبيل المثال، احظر عندما: <br>
+        &ensp; <sample><no_translate>(negative &gt; 5) &amp; (negative / positive &gt; 120%)</no_translate></sample> <br>
+        ]]>
+    </string>
+    <string name="hint_positive_identifier_strategy_formula">مثال: (\\d+) إيجابي</string>
+    <string name="hint_negative_identifier_strategy_formula">مثال: (\\d+) سلبي</string>
+    <string name="help_positive_identifier_strategy_formula">
+        <![CDATA[
+        هذا regex مخصص لاستخراج عدد التقييمات الإيجابية، ويتطلب مجموعة التقاط، أي يجب أن يحتوي على
+         <sample>(</sample> و <sample>)</sample>، وتكون القيمة الافتراضية 0 إذا لم يتم العثور على تطابق. <br>
+        <br>
+        على سبيل المثال: <br>
+        &ensp; <sample>(\\d+) إيجابي</sample>
+        ]]>
+    </string>
+    <string name="help_negative_identifier_strategy_formula">
+        <![CDATA[
+        هذا regex مخصص لاستخراج عدد التقييمات السلبية، ويتطلب مجموعة التقاط، أي يجب أن يحتوي على
+         <sample>(</sample> و <sample>)</sample>، وتكون القيمة الافتراضية 0 إذا لم يتم العثور على تطابق. <br>
+        <br>
+        على سبيل المثال: <br>
+        &ensp; <sample>(\\d+) سلبي</sample>
+        ]]>
+    </string>
+    <string name="positive_condition">الشرط الإيجابي</string>
+    <string name="negative_condition">الشرط السلبي</string>
+    <string name="help_positive_condition">
+        <![CDATA[
+        سيتم <highlight>السماح</highlight> بالرقم إذا تحقق هذا الشرط.
+        ]]>
+    </string>
+    <string name="help_negative_condition">
+        <![CDATA[
+        سيتم <error>حظر</error> الرقم إذا تحقق هذا الشرط.
+        ]]>
+    </string>
+    <string name="supported_formula_syntax" formatted="false">
+        <![CDATA[
+        <title>الصياغة المدعومة</title> <br>
+        <minor>positive &ensp; p &ensp; negative &ensp; n</minor> <br>
+        &ensp; عناصر نائبة سيتم استبدالها بأعداد التقييمات الفعلية. <br>
+        <minor>+ &ensp; - &ensp; * &ensp; /</minor> <br>
+        &ensp; العمليات الحسابية الأساسية (N/0=N) <br>
+        <minor>%</minor> <br>
+        &ensp; النسبة المئوية <br>
+        <minor>&lt; &ensp; &gt; &ensp; &lt;= &ensp; &gt;=</minor> <br>
+        &ensp; المقارنات <br>
+        <minor>& &ensp; |</minor> <br>
+        &ensp; AND/OR المنطقية <br>
+        <minor>( &ensp; )</minor> <br>
+        &ensp; الأقواس <br>
+        <br>
+        <b>أمثلة</b> <br>
+        &ensp; <sample>negative &gt; positive</sample> <br>
+        &ensp; <sample>P - N &gt; 5</sample> (غير حساس لحالة الأحرف) <br>
+        &ensp; <sample>p &gt; 3 & n &gt; 2 & (n / p &gt;= 120%)</sample> <br>
+        ]]>
+    </string>
+    <string name="missing_brackets">regex يفتقد مجموعة التقاط ()، راجع التلميح لمعرفة التفاصيل.</string>
+    <string name="negative_identifier_matches">مطابقات المعرف السلبي</string>
+    <string name="positive_identifier_matches">مطابقات المعرف الإيجابي</string>
+    <string name="rating_count_template">التقييمات الإيجابية: %s، التقييمات السلبية: %s</string>
+</resources>

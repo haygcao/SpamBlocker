@@ -1,13 +1,13 @@
 <resources>
     <string name="help_instant_query">
         <![CDATA[
-        Gelen numarayı gerçek zamanlı olarak çevrimiçi sorgula. <br>
+        Gerçek zamanlı olarak gelen numarayı çevrimiçi sorgula. <br>
         <br>
-        Birden fazla API uç noktası aynı anda sorgulanacak, ilk alınan sonuç kullanılacak ve sonraki tüm sonuçlar göz ardı edilecek. <br>
+        Birden fazla API uç noktası aynı anda sorgulanacak, alınan ilk sonuç kullanılacak ve sonraki tüm sonuçlar yok sayılacak. <br>
         <br>
-        Varsayılan olarak en düşük önceliğe sahiptir, yani yalnızca arama diğer tüm kuralları geçtiğinde tetiklenecektir.<br>
+        Varsayılan olarak en düşük önceliğe sahiptir, bu da çağrı tüm yerel kuralları geçtikten sonra tetikleneceği anlamına gelir.<br>
         <br>
-        <font color="#ea86ff"><b>Varsayılan Öncelik: -1</b></font>
+        <priority><b>Varsayılan Öncelik: -1</b></priority>
         ]]>
     </string>
     <string name="instant_query">Anında Sorgu</string>
@@ -35,23 +35,18 @@
     </string>
     <string name="help_category_identifier">
         <![CDATA[
-        Sorgu sonucundan <font color="#00BFFF">kategoriyi</font> ve <font color="#00BFFF">yorumları</font>
-         çıkarın ve bildirim ile geçmiş günlüğünde gösterin. (isteğe bağlı)<br>
+        Sorgu sonucundan <title>kategoriyi</title> bildirimde ve geçmiş günlüğünde göstermek için çıkarın. (isteğe bağlı)<br>
         <br>
         Örneğin, bu sorgu sonucu için: <br>
-        <font color="#888888">
+        <sample>
         { <br>
           &ensp; \"type\": \"MARKETING\", <br>
-          &ensp; \"comments\": \"Better call Saul\", <br>
           &ensp;  … <br>
         } <br>
-        </font>
+        </sample>
         <br>
-        - Yalnızca <font color="#00BFFF">kategoriyi</font> çıkarın: <br>
-        &ensp; <font color="#888888">\"type\": \"(.+?)\"</font> <br>
-        <br>
-        - Hem <font color="#00BFFF">kategoriyi</font> hem de <font color="#00BFFF">yorumları</font> çıkarın: <br>
-        &ensp; <font color="#888888">(?:\"type\":\"(.+?)\"|\"comments\":\"(.+?)\")</font><br>
+        Bunu şu şekilde çıkarın: <br>
+        &ensp; <sample>\"type\": \"(.+?)\"</sample> <br>
         ]]>
     </string>
     <string name="action_parse_query_result">Sonucu Ayrıştır</string>
@@ -62,22 +57,14 @@
         Spam kategorisini çıkarmak için ekstra bir regex kullanılabilir. (isteğe bağlı)
         ]]>
     </string>
-    <string name="action_intercept_call">Arayı Kes</string>
-    <string name="help_action_intercept_call">
+    <string name="action_parse_incoming_number">Numarayı Ayrıştır</string>
+    <string name="help_action_parse_incoming_number">
         <![CDATA[
-        Gelen arama numarası kesintiye uğrayacak ve farklı etiketlere ayrılacaktır:<br>
+        Gelen arama numarası farklı etiketlere ayrıştırılacaktır:<br>
         <br>
         %s
         <br>
-        Bu etiketler HTTP URL\'sini oluşturmak için kullanılacaktır, örneğin:<br>
-        <br>
-        1. <b>+122222</b> gibi uluslararası numaralar için, bunlar eşdeğerdir:<br>
-        - https://test.com/number=<b>{number}</b><br>
-        - https://test.com/number=<b>{cc}{domestic}</b><br>
-        Şu şekilde çözümlenecektir:<br>
-        https://test.com/number=<b>122222</b><br>
-        <br>
-        2. <b>12345</b> gibi yerel numaralar için, ülke kodunu ayarlar içinde sağlamanız veya uygulamanın otomatik olarak algılamasına izin vermeniz gerekir.<br>
+        Bu etiketler sonraki HTTP isteklerinde kullanılabilir.<br>
         ]]>
     </string>
     <string name="query_api">Sorgu API\'sı</string>
@@ -89,27 +76,36 @@
         Bu regex, numaraları buna göre filtreler, bu regex ile eşleşmeyen gelen numaralar kontrol edilmeden atlanacaktır.<br>
         <br>
         - Yalnızca <b>uluslararası numaraları</b> kontrol et:<br>
-        &ensp; <font color="#03DAC5"><b>\\+.*</b></font><br>
+        &ensp; <highlight><b>\\+.*</b></highlight><br>
         <br>
         - Yalnızca <b>yurtiçi numaraları</b> kontrol et:<br>
-        &ensp; <font color="#03DAC5"><b>0{1,2}.*</b></font><br>
+        &ensp; <highlight><b>0{1,2}.*</b></highlight><br>
         <br>
         - <b>Herhangi bir numarayı</b> kontrol et:<br>
-        &ensp; <font color="#03DAC5"><b>.*</b></font>
+        &ensp; <highlight><b>.*</b></highlight>
         ]]>
     </string>
-    <string name="checking_template">Kontrol ediliyor: %s, öncelik: %s</string>
+    <string name="content_filter">İçerik Filtresi</string>
+    <string name="help_content_filter">
+        <![CDATA[
+        SMS kuralları zaten bu içeriği süzdü, daha da daraltmak için bu ek filtreyi kullanabilirsiniz.
+        ]]>  
+    </string>
     <string name="skip_for_testing">Test için atla.</string>
     <string name="allowed_by">İzin verildi: %s</string>
-    <string name="blocked_by">Engellendi: %s</string>
-    <string name="outside_time_schedule">Zaman çizelgesinin dışında, atla.</string>
+    <string name="blocked_by_template">Engellendi: %s</string>
     <string name="android_ver_lower_than_11">Android sürümü 11\'den düşük, atla.</string>
     <string name="query">Sorgu</string>
     <string name="report_api">Rapor API\'sı</string>
-    <string name="action_intercept_sms">SMS\'i Engelleyin</string>
-    <string name="help_action_intercept_sms">
+    <string name="action_parse_incoming_sms">SMS\'i Ayrıştır</string>
+    <string name="help_action_parse_incoming_sms">
         <![CDATA[
-        Gelen SMS engellenecek ve içerik <b>{sms}</b> etiketine ayrıştırılacak,<br>bu da sonraki işlemler tarafından kullanılabilir.
+        Gelen SMS içeriği sonraki adımlar için kullanılmak üzere aşağıdaki etiketlere ayrıştırılacaktır: <br>
+        <br>
+        %s
+        <br>
+        - <title><b>{sms_content}</b></title> <br>
+        &ensp; SMS içeriği
         ]]>
     </string>
 </resources>

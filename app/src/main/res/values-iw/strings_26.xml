@@ -1,0 +1,83 @@
+<resources>
+    <string name="known_android_issue">
+    <![CDATA[
+        זהו בעיית Android ידועה, שכבר דווחה לצוות Android, ועדיין ממתינים לתיקון. <br>
+        <br>
+        ראו את הסיבה והפתרון כאן: <br>
+         <a href=\"%s\">%s</a>
+    ]]>
+    </string>
+    <string name="import_numbers">ייבא מספרים</string>
+    <string name="faq_import_numbers">
+    <![CDATA[
+        ייבוא מספרים מקבצים מקומיים או מרוחקים באמצעות זרימות עבודה. <br>
+        <br>
+        <title><b>הגדרה טיפוסית</b></title>: <br>
+        <br>
+        1. <minor><b>קריאת קובץ</b></minor> / <minor><b>בקשת Http</b></minor> <br>
+          &ensp; קבלת תוכן הקובץ. <br>
+          <br>
+        2. <minor><b>ניתוח CSV</b></minor> / <minor><b>ניתוח XML</b></minor> / <minor><b>חילוץ Regex</b></minor> <br>
+          &ensp; ניתוח וקבלת רשימת מספרים. <br>
+          <br>
+        3. <minor><b>החלפת מספר</b></minor> (אופציונלי) <br>
+          &ensp; שינוי פורמט המספר <br>
+          &ensp; מקרה שימוש: <br>
+        <sample>
+            &emsp; בעת העברת מספרים מאפליקציות אחרות, המר פורמטים כמו <b>123#####</b> ל-regex <b>123.....</b> או <b>123.*</b> <br>
+        </sample>
+          <br>
+        4. <minor><b>ייבוא למסד נתוני ספאם</b></minor> / <minor><b>ייבוא לכלל Regex</b></minor> <br>
+        <br>
+        <br>
+        <title><b>דוגמאות</b></title>: <br>
+          - הגדרה קבועה מראש <no_translate><b>FTC-DNC</b></no_translate> <br>
+        <br>
+        עוד דוגמאות מקוונות: <br>
+          - <a href=\"%s\">טקסט פשוט</a> <br>
+          - <a href=\"%s\">CSV</a> <br>
+          - <a href=\"%s\">XML</a> <br>
+          - <a href=\"%s\">JSON</a> - JsonPath עדיין לא נתמך, השתמש ב-<minor><b>חילוץ Regex</b></minor> במקום.
+    ]]>
+    </string>
+    <string name="faq_regex">
+    <![CDATA[
+        מדריך Regex למתחילים. <br>
+        <br>
+        <title><b>רמת מתחילים - תו כללי</b></title> <br>
+        &ensp; בכל פעם שברצונך להשתמש בתו כללי <sample><b>*</b></sample>, שים נקודה <sample><b>.</b></sample> לפניו, כמו <sample><b>.*</b></sample>, זה אמור לכסות את רוב מקרי השימוש. <br>
+        <br>
+        <title><b>מתקדם - שימוש בבינה מלאכותית</b></title> <br>
+        &ensp; למשל, כדי לקבל את ה-regex הבא לאימותי SMS: <br>
+        &ensp; <sample>.*(verification|validation).*code.*\\d{5,6}.*</sample> <br>
+        <br>
+        שאל בינה מלאכותית: <br>
+        <sample>
+        %s
+        </sample>
+        <br>
+        <br>
+        <highlight><b>נסה זאת באינטרנט</b></highlight> <br>
+          &ensp; 1. <a href=\"copy\"><big>העתק את ההנחיה למעלה</big></a> <br>
+          &ensp; 2. <a href=\"try_it\"><big>הפעל את הבינה המלאכותית המקוונת</big></a> <br>
+    ]]>
+    </string>
+    <string name="ai_regex_prompt">
+    <![CDATA[
+        ספק regex פשוט עם התאמה מלאה עבור Kotlin כדי ללכוד קודי אימות ב-SMS. <br>
+        <br>
+        דרישות: <br>
+        - הוא חייב להכיל את המילה \"verification\" או \"validation\", אחריה \"code\", ואחר כך מספר בן 5 או 6 ספרות. <br>
+        - השתמש ב-.* כדי לטפל בכל טקסט משתנה לפני, בין או אחרי הרכיבים האלה כך שכל ההודעה תותאם. <br>
+        - אין צורך להתחשב ברישיות, במעברי שורה או בעוגנים ^ ו-$. <br>
+        - הימנע מתכונות regex מתקדמות. <br>
+        - עטוף את ה-regex הסופי ב-backticks (``) והחזר רק את ה-regex עצמו. <br>
+        <br>
+        הוא חייב להתאים ל: <br>
+        - "Your verification code is 123456, expires after 5 minutes." <br>
+        - "Your validation code: [12345]"
+    ]]>
+    </string>
+    <string name="copied_to_clipboard">הועתק ללוח</string>
+    <string name="api_query_timeout">פסק זמן של שאילתת API</string>
+</resources>

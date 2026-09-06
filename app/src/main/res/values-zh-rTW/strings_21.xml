@@ -1,23 +1,10 @@
 <resources>
     <string name="perm_write_settings">寫入設定</string>
-    <string name="set_to">設定為</string>
-    <string name="help_set_ringtone_to">
-    <![CDATA[
-        為特定功能指定鈴聲，或將其靜音。<br>
-        <br>
-        例如要為某個正規表示式規則設定鈴聲：<br><br>
-        <font color="#888888">
-        &emsp; { \"regex\": \"rule_desc\" }
-        </font>
-        <br><br>
-        符合該規則並被允許的來電會播放指定鈴聲。<br>
-    ]]>
-    </string>
     <string name="ringtone">鈴聲</string>
     <string name="call_to_test_ringtone">請實際撥打一通電話測試鈴聲。</string>
     <string name="help_ringtone">
     <![CDATA[
-        為特定功能自訂鈴聲，被允許的來電會播放指定鈴聲。
+        為不同功能允許的來電設定不同的鈴聲。
     ]]>
     </string>
     <string name="help_preset_ringtone">
@@ -25,9 +12,9 @@
         為正則表達式規則自訂鈴聲，當來電被此規則允許時將播放指定的鈴聲。 <br>
         <br>
         <b>使用案例：<b> <br>
-        <font color="#888888">
-        &ensp; 為特定聯絡人、聯絡人群組或號碼範圍設定不同的鈴聲。
-        </font>
+        <sample>
+        &ensp; 為特定聯絡人、號碼範圍或重複呼叫設置不同的鈴聲。
+        </sample>
     ]]>
     </string>
     <string name="help_target_rule_desc">
@@ -37,7 +24,7 @@
         例如想套用到名稱為 <b>Work</b> 的規則，請在此欄位輸入 <b>Work</b>。<br>
     ]]>
     </string>
-    <string name="invalid_config">設定無效</string>
+
     <string name="custom">自訂</string>
     <string name="quick_tile">快速設定磁貼</string>
     <string name="help_quick_tile">
@@ -54,7 +41,6 @@
     ]]>
     </string>
     <string name="quick_tile_is_active">自訂快速設定磁貼已啟用。</string>
-    <string name="http_status_code_template">HTTP 狀態碼：%d</string>
     <string name="remote_setup">遠端設定</string>
     <string name="help_remote_setup">
     <![CDATA[
@@ -88,17 +74,13 @@
         <br>
         工作流程每日執行，首次執行時下載完整的 90 天資料集，之後的執行僅執行增量更新。 <br>
         <br>
-        <font color="#ffa500"><b>注意：</b></font> <br>
-        <font color="#888888">&ensp; 資料集通常在每個工作日的美東時間中午左右更新。 </font><br>
+        <warn><b>注意：</b></warn> <br>
+        <sample>&ensp; 資料集通常在每個工作日的美東時間中午左右更新。 </sample><br>
         <br>
         因此排程設定在 18:00，因為預計屆時資料集會可用。 <br>
     ]]>
     </string>
     <string name="csv_missing_column">
         缺少必需的欄位 %s。您可以使用標頭 %s 作為電話號碼欄位，或在「解析 CSV」中將現有標頭映射到 %s。
-    </string>
-    <string name="enable_reporting_number">啟用回報</string>
-    <string name="help_enable_reporting_number">
-        此 API 也支援回報電話號碼，啟用此選項以同時產生回報工作流程。
     </string>
 </resources>

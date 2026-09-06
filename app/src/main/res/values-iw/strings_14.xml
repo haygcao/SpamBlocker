@@ -13,7 +13,6 @@
         %s
         ]]>
     </string>
-    <string name="invalid_auth_credentials">אנא הכנס פרטי הרשאה חוקיים.</string>
     <string name="delay">השהיה</string>
     <string name="exclude_services">החרג שירותים</string>
     <string name="help_exclude_bg_service">
@@ -29,29 +28,36 @@
         ]]>
     </string>
     <string name="running_services">שירותים פועלים</string>
-    <string-array name="spam_categories">
-        <item>מספר תקין</item>
-        <item>הונאה</item>
-        <item>שיווק</item>
-        <item>סקר</item>
-        <item>פוליטי</item>
-        <item>ספאם אחר</item>
-    </string-array>
+    <string name="valid_number">מספר תקין</string>
+    <string name="valid_sms">הודעה טקסט תקינה</string>
+    <string name="fraud">הונאה</string>
+    <string name="promotional">קידום מכירות</string>
+    <string name="survey">סקר</string>
+    <string name="reminder">תזכורת</string>
     <string name="action_category_config">תצורת קטגוריה</string>
     <string name="help_action_category_config">
         <![CDATA[
-        רק קטגוריות הספאם הבאות נתמכות, כל קטגוריה אחרת מה-API צריכה להיות ממופה לאחת מהן.<br>
-        <br>
-         - <font color="#03DAC5"><b>{valid}</b></font><br>
-        &ensp; דווח כמספר תקין, לא כספאם.<br>
-        <br>
-         - <font color="#fa7f71"><b>{fraud}</b></font><br>
-         - <font color="#fa7f71"><b>{marketing}</b></font><br>
-         - <font color="#fa7f71"><b>{survey}</b></font><br>
-         - <font color="#fa7f71"><b>{political}</b></font><br>
-        <br>
-         - <font color="#fa7f71"><b>{other}</b></font><br>
-        &ensp; סוג הספאם החלופי, המשמש כאשר אף אחת מהקטגוריות הנ\"ל אינה חלה.<br>
+                רק הקטגוריות הבאות נתמכות:<br>
+                <br>
+                 - <highlight><b>{valid}</b></highlight><br>
+                &ensp; דווח כמספר טלפון תקין, לא כשיחת ספאם.<br>
+                <br>
+                 - <error><b>{fraud}</b></error><br>
+                 - <error><b>{promotional}</b></error><br>
+                 - <error><b>{survey}</b></error><br>
+                 - <error><b>{reminder}</b></error><br>
+                 - <error><b>{other}</b></error><br>
+                &ensp; סוג ברירת המחדל של שיחת ספאם, המשמש כאשר אף אחת מהקטגוריות שלעיל אינה חלה.<br>
+                <br>
+                הדבר יוצר את התגית <title>{category}</title>, שבה ניתן להשתמש בבקשות HTTP הבאות. <br>
+                <br>
+                לדוגמה, גוף בקשת POST: <br>
+                <sample>
+                { <br>
+                    &ensp; \"phone\": \"{number}\", <br>
+                    &ensp; \"rating\": \"{category}\" <br>
+                }
+                </sample>
         ]]>
     </string>
     <string name="missing_category">
@@ -76,20 +82,21 @@
         שירותים מסוימים ישלחו לך הודעת טקסט תחילה כדי להודיע לך על שיחה צפויה, בדרך כלל בתוך דקה.<br>
         <br>
         לדוגמה, הודעת SMS כזו:<br>
-        &ensp; <font color="#888888">[שירות מסוים] אנו מתקשרים אליך כדי להודיע ..., אנא הרגש חופשי לענות.</font><br>
+        &ensp; <sample>[שירות מסוים] אנו מתקשרים אליך כדי להודיע ..., אנא הרגש חופשי לענות.</sample><br>
         <br>
         ביטוי רגולרי עבור הודעה כזו יהיה: <br>
-        &ensp; <font color="#03DAC5"><b>.*אנא.*ענה.*</b></font> <br>
+        &ensp; <highlight><b>.*אנא.*ענה.*</b></highlight> <br>
         <br>
-        ההגדרה הסטנדרטית <font color="#03DAC5"><b>120 שניות</b></font> פירושה שכל השיחות יאושרו
+        ההגדרה הסטנדרטית <highlight><b>120 שניות</b></highlight> פירושה שכל השיחות יאושרו
         בשתי הדקות הבאות לאחר קבלת הודעה כזו.<br>
         <br>
         זה עובד גם עבור SMS רגיל וגם עבור SMS פלאש (SMS מסוג 0).<br>
         <br>
-        <font color="#ea86ff"><b>עדיפות: 10</b></font>
+        זה עובד גם בלי שסינון ה-SMS הגלובלי יהיה מופעל.<br>
+        <br>
+        <priority><b>עדיפות: 10</b></priority>
         ]]>
     </string>
     <string name="waning_using_wildcard_as_regex">תו כללי `*` משמש ללא נקודה קודמת, האם התכוונת ל-`.*` ?</string>
     <string name="import_as">ייבא כ-</string>
-    <string name="api_key">מפתח API</string>
 </resources>

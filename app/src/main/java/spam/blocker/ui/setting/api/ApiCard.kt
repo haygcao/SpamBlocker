@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,12 +12,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.db.IApi
 import spam.blocker.db.ReportApi
 import spam.blocker.def.Def
 import spam.blocker.ui.M
-import spam.blocker.ui.theme.LightMagenta
 import spam.blocker.ui.widgets.GreenDot
 import spam.blocker.ui.widgets.GreyLabel
 import spam.blocker.ui.widgets.NonLazyGrid
@@ -26,6 +25,7 @@ import spam.blocker.ui.widgets.OutlineCard
 import spam.blocker.ui.widgets.ResIcon
 import spam.blocker.ui.widgets.RowVCenterSpaced
 import spam.blocker.util.spf
+import kotlin.math.min
 
 
 @Composable
@@ -34,10 +34,11 @@ fun ApiCard(
     api: IApi,
     modifier: Modifier,
 ) {
+    val C = G.palette
     val ctx = LocalContext.current
 
     OutlineCard(
-        containerBg = MaterialTheme.colorScheme.background
+        containerBg = G.palette.background
     ) {
         RowVCenterSpaced(
             space = 10,
@@ -61,18 +62,20 @@ fun ApiCard(
 
                 // Auto report types icons
                 if (api is ReportApi) {
-                    AutoReportIcons(api.autoReportTypes)
+                    Column(modifier = Modifier.padding(start = 12.dp)) {
+                        AutoReportIcons(api.autoReportTypes)
+                    }
                 }
             }
 
             // [Priority]
             if (forType == Def.ForApiQuery) {
                 RowVCenterSpaced(6) {
-                    val priority = spf.ApiQueryOptions(ctx).getPriority()
-                    ResIcon(R.drawable.ic_priority, color = LightMagenta, modifier = M.size(18.dp).offset(6.dp))
+                    val priority = spf.ApiQueryOptions(ctx).priority
+                    ResIcon(R.drawable.ic_priority, color = C.priority, modifier = M.size(18.dp).offset(6.dp))
                     Text(
                         text = "$priority",
-                        color = LightMagenta,
+                        color = C.priority,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
                     )
@@ -82,7 +85,7 @@ fun ApiCard(
             // action icons
             NonLazyGrid(
                 columns = 3,
-                itemCount = api.actions.size,
+                itemCount = min(api.actions.size, 6),
             ) {
                 api.actions[it].Icon()
             }
