@@ -44,5 +44,6 @@
         Les journaux ne sont enregistrés que pour les flux de travail avec le type de déclencheur <highlight>Planification</highlight>.
         ]]>
     </string>
+    <string name="api_tokens">Jetons API</string>
 </resources>
 

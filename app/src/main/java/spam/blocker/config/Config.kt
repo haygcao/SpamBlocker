@@ -865,7 +865,8 @@ enum class Category(val labelId: Int) {
     LANGUAGE(R.string.language),
     THEME(R.string.theme),
     SPAM_NUMBERS(R.string.database),
-    HISTORY_LOGS(R.string.history_logs)
+    HISTORY_LOGS(R.string.history_logs),
+    API_TOKENS(R.string.api_tokens)
 }
 
 @Serializable
@@ -976,8 +977,10 @@ class Configs {
             blockType = BlockType().also { it.load(ctx) }
             notification = Notification().also { it.load(ctx) }
             callerID = CallerID().also { it.load(ctx) }
-            oauth = OAuth().also { it.load(ctx) }
             permissions = Permissions().also { it.load(ctx) }
+        }
+        if (categories.isSelected(Category.API_TOKENS)) {
+            oauth = OAuth().also { it.load(ctx) }
         }
         if (categories.isSelected(Category.REGEX_RULES)) {
             regexOptions = RegexOptions().also { it.load(ctx) }
@@ -1029,8 +1032,10 @@ class Configs {
             blockType?.apply(ctx)
             notification?.apply(ctx)
             callerID?.apply(ctx)
-            oauth?.apply(ctx)
             permissions?.apply(ctx)
+        }
+        if (categories.isSelected(Category.API_TOKENS)) {
+            oauth?.apply(ctx)
         }
         if (categories.isSelected(Category.REGEX_RULES)) {
             regexOptions?.apply(ctx)

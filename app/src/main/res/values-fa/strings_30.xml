@@ -44,5 +44,6 @@
         گزارش‌ها فقط برای جریان‌های کاری با نوع راه‌انداز <highlight>برنامه</highlight> ذخیره می‌شوند.
         ]]>
     </string>
+    <string name="api_tokens">توکن‌های API</string>
 </resources>
 

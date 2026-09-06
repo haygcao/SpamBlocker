@@ -44,5 +44,6 @@
         Os rexistros só se gardan para os fluxos de traballo co tipo de activador <highlight>Programación</highlight>.
         ]]>
     </string>
+    <string name="api_tokens">Tokens da API</string>
 </resources>
 

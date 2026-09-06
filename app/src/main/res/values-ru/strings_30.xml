@@ -44,5 +44,6 @@
         Записи сохраняются только для рабочих процессов с типом триггера <highlight>Расписание</highlight>.
         ]]>
     </string>
+    <string name="api_tokens">Токены API</string>
 </resources>
 

@@ -44,5 +44,6 @@
         Los registros solo se guardan para flujos de trabajo con el tipo de activador <highlight>Horario</highlight>.
         ]]>
     </string>
+    <string name="api_tokens">Tokens de API</string>
 </resources>
 

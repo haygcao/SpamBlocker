@@ -44,5 +44,6 @@
         Kayıtlar yalnızca tetikleyici türü <highlight>Takvim</highlight> olan iş akışları için kaydedilir.
         ]]>
     </string>
+    <string name="api_tokens">API Belirteçleri</string>
 </resources>
 

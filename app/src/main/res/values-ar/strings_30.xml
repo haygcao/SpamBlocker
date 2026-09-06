@@ -44,5 +44,6 @@
         يتم حفظ السجلات فقط لسير العمل الذي يحتوي على نوع المشغل <highlight>جدول</highlight>.
         ]]>
     </string>
+    <string name="api_tokens">رموز API</string>
 </resources>
 

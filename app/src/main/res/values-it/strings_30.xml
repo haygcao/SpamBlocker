@@ -44,5 +44,6 @@
         I log vengono salvati solo per i workflow con il tipo di attivatore <highlight>Programmazione</highlight>.
         ]]>
     </string>
+    <string name="api_tokens">Token API</string>
 </resources>
 

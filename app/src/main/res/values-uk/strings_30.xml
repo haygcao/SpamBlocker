@@ -44,5 +44,6 @@
         Записи зберігаються лише для робочих процесів із типом тригера <highlight>Розклад</highlight>.
         ]]>
     </string>
+    <string name="api_tokens">Токени API</string>
 </resources>
 

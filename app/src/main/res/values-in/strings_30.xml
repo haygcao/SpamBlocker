@@ -44,5 +44,6 @@
         Log hanya disimpan untuk alur kerja dengan tipe pemicu <highlight>Jadwal</highlight>.
         ]]>
     </string>
+    <string name="api_tokens">Token API</string>
 </resources>
 

@@ -44,5 +44,6 @@
         יומנים נשמרים רק עבור זרימות עבודה עם סוג הפעלה <highlight>לוח זמנים</highlight>.
         ]]>
     </string>
+    <string name="api_tokens">אסימוני API</string>
 </resources>
 

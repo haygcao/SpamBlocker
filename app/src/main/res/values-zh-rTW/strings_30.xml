@@ -44,5 +44,6 @@
         僅為觸發類型為<highlight>排程</highlight>的工作流程儲存日誌。
         ]]>
     </string>
+    <string name="api_tokens">API 權杖</string>
 </resources>
 

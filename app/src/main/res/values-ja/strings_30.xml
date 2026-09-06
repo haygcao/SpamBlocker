@@ -44,5 +44,6 @@
         ログはトリガータイプが<highlight>スケジュール</highlight>のワークフローでのみ保存されます。
         ]]>
     </string>
+    <string name="api_tokens">API トークン</string>
 </resources>
 

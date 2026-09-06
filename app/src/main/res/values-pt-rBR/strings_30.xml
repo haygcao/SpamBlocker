@@ -44,5 +44,6 @@
         Os logs são salvos apenas para fluxos de trabalho com o tipo de gatilho <highlight>Cronograma</highlight>.
         ]]>
     </string>
+    <string name="api_tokens">Tokens de API</string>
 </resources>
 

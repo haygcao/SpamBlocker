@@ -44,5 +44,6 @@
         仅为触发器类型为<highlight>时间安排</highlight>的工作流程保存日志。
         ]]>
     </string>
+    <string name="api_tokens">API 令牌</string>
 </resources>
 

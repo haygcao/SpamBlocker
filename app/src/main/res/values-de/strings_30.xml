@@ -44,5 +44,6 @@
         Protokolle werden nur für Workflows mit dem Auslösertyp <highlight>Zeitplan</highlight> gespeichert.
         ]]>
     </string>
+    <string name="api_tokens">API-Tokens</string>
 </resources>
 

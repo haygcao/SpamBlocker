@@ -44,5 +44,6 @@
         Els registres només es desen per als fluxos de treball amb el tipus d\'activador <highlight>Programació</highlight>.
         ]]>
     </string>
+    <string name="api_tokens">Testimonis de l\'API</string>
 </resources>
 
