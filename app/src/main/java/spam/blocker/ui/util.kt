@@ -1,6 +1,8 @@
 package spam.blocker.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -37,6 +39,7 @@ inline fun Modifier.thenIf(
     modifier: Modifier.() -> Modifier
 ): Modifier = if (condition) this.modifier() else this
 
+fun Modifier.showSplitter(): Modifier =  this.height(IntrinsicSize.Min)
 
 fun priorityInlineMap() = mapOf(
     "priority" to InlineTextContent(

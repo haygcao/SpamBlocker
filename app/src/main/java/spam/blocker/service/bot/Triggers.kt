@@ -574,7 +574,7 @@ class CallEvent(
 
     @Composable
     override fun Icon() {
-        GreyIcon(R.drawable.ic_incoming)
+        GreyIcon(R.drawable.ic_call_in)
     }
 
     @Composable

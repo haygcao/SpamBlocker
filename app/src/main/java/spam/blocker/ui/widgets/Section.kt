@@ -90,11 +90,11 @@ fun Section(
                             color = G.palette.textGrey,
                             lineHeight = 13.sp,
                         )
-                        if (isCollapsed?.value == true) {
-                            GreyIcon16(
-                                iconId = R.drawable.ic_dropdown_arrow,
-                            )
-                        }
+//                        if (isCollapsed?.value == true) {
+//                            GreyIcon16(
+//                                iconId = R.drawable.ic_dropdown_arrow,
+//                            )
+//                        }
                     }
                 }
             }

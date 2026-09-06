@@ -15,6 +15,8 @@ import spam.blocker.ui.setting.LabeledRow
 import spam.blocker.ui.widgets.DurationButton
 import spam.blocker.ui.widgets.GreyButton
 import spam.blocker.ui.widgets.GreyIcon16
+import spam.blocker.ui.widgets.GreyIcon18
+import spam.blocker.ui.widgets.GreyIcon20
 import spam.blocker.ui.widgets.PluralStr
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.Str
@@ -148,7 +150,7 @@ fun DialedSummary() {
                 Str(R.string.all_time)
             },
             color = G.palette.textGrey,
-            icon = { GreyIcon16(R.drawable.ic_dial_pad) },
+            icon = { GreyIcon20(R.drawable.ic_call_out) },
             enabled = false,
         )
     }

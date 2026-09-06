@@ -21,6 +21,7 @@ import spam.blocker.R
 import spam.blocker.ui.setting.LabeledRow
 import spam.blocker.ui.widgets.ColorPickerButton
 import spam.blocker.ui.widgets.FloatingWindow
+import spam.blocker.ui.widgets.GreyIcon16
 import spam.blocker.ui.widgets.GreyText
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.PopupSize
@@ -232,7 +233,8 @@ fun CallerIDSummary() {
     if (isEnabled) {
         val C = G.palette
         StrokeButton(
-            label = Str(R.string.preview),
+            label = "ID",
+            icon = { GreyIcon16(R.drawable.ic_call) },
             color = C.textGrey,
             enabled = false,
         )

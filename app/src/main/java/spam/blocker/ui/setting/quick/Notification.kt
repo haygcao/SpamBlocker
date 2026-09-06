@@ -37,6 +37,7 @@ import spam.blocker.db.Notification.DefaultRepeatInterval
 import spam.blocker.db.NumberRegexTable
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
+import spam.blocker.ui.showSplitter
 import spam.blocker.ui.widgets.AnimatedVisibleV
 import spam.blocker.ui.widgets.ColorPickerButton
 import spam.blocker.ui.widgets.ComboBox
@@ -576,7 +577,7 @@ fun NotificationSummary(
     val spamSmsChannelId = remember { spf.spamSmsChannelId }
     val validSmsChannelId = remember { spf.validSmsChannelId }
 
-    RowVCenterSpaced(4, modifier = M.height(IntrinsicSize.Min) ) {
+    RowVCenterSpaced(4, modifier = M.showSplitter() ) {
         // Call Button
         if (G.callEnabled.value) {
             val ch = G.notificationChannels.find {

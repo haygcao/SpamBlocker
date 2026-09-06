@@ -242,7 +242,7 @@ fun SettingScreen() {
                             RecentAppsSummary()
                             MeetingModeSummary()
 
-                            HorizontalDivider(modifier = M.padding(vertical = 2.dp), thickness = 1.dp, color = G.palette.background.slightDiff())
+                            HorizontalDivider(modifier = M.padding(vertical = 3.dp), thickness = 1.dp, color = G.palette.background.slightDiff())
 
                             BlockTypeSummary()
                             NotificationSummary()

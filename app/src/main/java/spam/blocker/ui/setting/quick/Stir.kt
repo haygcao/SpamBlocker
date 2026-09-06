@@ -20,6 +20,7 @@ import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.PriorityBox
 import spam.blocker.ui.widgets.PriorityLabel
 import spam.blocker.ui.widgets.ResIcon
+import spam.blocker.ui.widgets.ResIcon18
 import spam.blocker.ui.widgets.RowVCenterSpaced
 import spam.blocker.ui.widgets.Str
 import spam.blocker.ui.widgets.SwitchBox
@@ -32,7 +33,7 @@ fun StirSummaryIcons(
 ) {
     val C = G.palette
     RowVCenterSpaced(6) {
-        ResIcon(R.drawable.ic_incognito, color = C.error, modifier = M.size(16.dp))
+        ResIcon18(R.drawable.ic_incognito, color = C.error)
         if (includeUnverified) {
             ResIcon(
                 R.drawable.ic_question,

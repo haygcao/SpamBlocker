@@ -99,7 +99,7 @@ fun ExtraInfoWithDivider(text: AnnotatedString, maxLines: Int) {
                 text = text,
                 color = C.textGrey,
                 fontSize = 16.sp,
-                lineHeight = 16.sp,
+                lineHeight = 18.sp,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = maxLines
             )

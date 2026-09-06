@@ -165,7 +165,7 @@ fun AnsweredSummary() {
 
         StrokeButton(
             label = PluralStr(inXDay, R.plurals.days),
-            icon = { GreyIcon20(R.drawable.ic_incoming) },
+            icon = { GreyIcon20(R.drawable.ic_call_in) },
             color = G.palette.textGrey,
             enabled = false,
         )

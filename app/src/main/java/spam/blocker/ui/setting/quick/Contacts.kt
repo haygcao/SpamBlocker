@@ -16,8 +16,10 @@ import spam.blocker.G
 import spam.blocker.R
 import spam.blocker.ui.M
 import spam.blocker.ui.setting.LabeledRow
+import spam.blocker.ui.showSplitter
 import spam.blocker.ui.widgets.AnimatedVisibleV
 import spam.blocker.ui.widgets.GreyIcon16
+import spam.blocker.ui.widgets.GreyIcon18
 import spam.blocker.ui.widgets.PopupDialog
 import spam.blocker.ui.widgets.PriorityBox
 import spam.blocker.ui.widgets.PriorityLabel
@@ -37,10 +39,10 @@ fun ContactsButtonContent(
     priLenient: Int,
     priStrict: Int,
 ) {
-    RowVCenterSpaced(6) {
+    RowVCenterSpaced(6, M.showSplitter()) {
         // Contacts
         RowVCenterSpaced(2) {
-            GreyIcon16(R.drawable.ic_contact_square)
+            GreyIcon18(R.drawable.ic_contact_square)
             if (priLenient != 10) {
                 PriorityLabel(priLenient)
             }

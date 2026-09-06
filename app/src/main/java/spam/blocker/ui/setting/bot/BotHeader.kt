@@ -185,7 +185,7 @@ fun BotSummary(vm: BotViewModel) {
 
     val enabledBots = vm.bots.filter { it.trigger.isActivated() }
     if (enabledBots.isEmpty()) {
-        GreyText("N/A")
+//        GreyText("N/A")
     } else {
         FlowRowSpaced(4) {
             enabledBots.forEach { bot ->

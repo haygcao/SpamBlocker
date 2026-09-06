@@ -24,6 +24,7 @@ import spam.blocker.ui.widgets.DividerItem
 import spam.blocker.ui.widgets.FlowRowSpaced
 import spam.blocker.ui.widgets.GreyIcon
 import spam.blocker.ui.widgets.GreyIcon16
+import spam.blocker.ui.widgets.GreyIcon18
 import spam.blocker.ui.widgets.GreyText
 import spam.blocker.ui.widgets.LabelItem
 import spam.blocker.ui.widgets.MenuButton
@@ -177,12 +178,18 @@ fun ApiSummary(vm: ApiViewModel) {
 
     val enabledApis = vm.apis.filter { it.enabled }
     if (enabledApis.isEmpty()) {
-        GreyText("N/A")
+//        GreyText("N/A")
     } else {
         FlowRowSpaced(4) {
             enabledApis.forEach { api ->
                 StrokeButton(
                     label = api.summary(),
+                    icon = {
+                        GreyIcon18(
+                            if (vm.forType == Def.ForApiQuery)
+                                R.drawable.ic_find_check else R.drawable.ic_upload_to_cloud
+                        )
+                    },
                     color = C.textGrey,
                     enabled = false,
                 )
